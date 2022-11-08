@@ -25,4 +25,5 @@ export interface Question_Result {
   controllers: [QuestionController],
   providers: [QuestionService],
 })
+
 export class QuestionModule {}

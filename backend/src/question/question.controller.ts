@@ -18,7 +18,7 @@ export class QuestionController {
   }
 
   @Post()
-  save(@Body() { user_id, content, tags }): string {
+  createQuestion(@Body() { user_id, content, tags }): string {
     return ''
   }
-}
+} 

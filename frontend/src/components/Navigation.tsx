@@ -10,6 +10,8 @@ import {
     IonLabel,
 } from '@ionic/react';
 import { chatboxEllipses, trendingUp, videocam, newspaper, chatbubbles } from 'ionicons/icons';
+import styled from 'styled-components';
+import './Navigation.css';
 
 import Tab1 from '../pages/Tab1';
 import Discuss from '../pages/Discuss';
@@ -18,7 +20,6 @@ import AskQuestion from '../pages/AskQuestion';
 import SelectTags from '../pages/SelectTags';
 
 const Navigation: React.FC = () => {
-
     return (
         <IonReactRouter>
         <IonTabs>
@@ -32,24 +33,24 @@ const Navigation: React.FC = () => {
               <Redirect to="/tab1" />
             </Route>
           </IonRouterOutlet>
-          <IonTabBar slot="bottom">
-            <IonTabButton tab="tab1" href="/tab1">
+          <IonTabBar slot="bottom" className='tabBar' color="dark">
+            <IonTabButton tab="tab1" href="/tab1" className='tabButton'>
               <IonIcon icon={newspaper} />
               <IonLabel>資訊</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="tab2" href="/tab2">
+            <IonTabButton tab="tab2" href="/tab2" className='tabButton'>
               <IonIcon icon={trendingUp} />
               <IonLabel>市場</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="discuss" href="/discuss">
+            <IonTabButton tab="discuss" href="/discuss" className='tabButton'>
               <IonIcon icon={chatboxEllipses} />
               <IonLabel>討論區</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="tab4" href="/tab4">
+            <IonTabButton tab="tab4" href="/tab4" className='tabButton'>
               <IonIcon icon={chatbubbles} />
               <IonLabel>聊天室</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="tab5" href="/tab5">
+            <IonTabButton tab="tab5" href="/tab5" className='tabButton'>
               <IonIcon icon={videocam} />
               <IonLabel>直播</IonLabel>
             </IonTabButton>

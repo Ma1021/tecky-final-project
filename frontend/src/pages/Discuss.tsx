@@ -25,7 +25,7 @@ const Discuss: React.FC = () => {
         </IonToolbar>
       </IonHeader>
 
-      <SegmentTab value={segment} onIonChange={onSegmentChange} color="dark">
+      <SegmentTab value={segment} onIonChange={onSegmentChange} >
           <IonSegmentButton value="all">
             <IonLabel>所有問題</IonLabel>
           </IonSegmentButton>
@@ -38,7 +38,7 @@ const Discuss: React.FC = () => {
         </SegmentTab>
 
         <ToolContainer>
-            <SearchBar color="dark"></SearchBar>
+            <SearchBar></SearchBar>
             <QuestionBtn onClick={()=>{ history.push("/discuss/createQuestion")}}>提出問題</QuestionBtn>
         </ToolContainer>
 

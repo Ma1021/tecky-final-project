@@ -33,7 +33,7 @@ const Navigation: React.FC = () => {
               <Redirect to="/tab1" />
             </Route>
           </IonRouterOutlet>
-          <IonTabBar slot="bottom" className='tabBar' color="dark">
+          <IonTabBar slot="bottom" className='tabBar'>
             <IonTabButton tab="tab1" href="/tab1" className='tabButton'>
               <IonIcon icon={newspaper} />
               <IonLabel>資訊</IonLabel>

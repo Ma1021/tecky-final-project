@@ -71,7 +71,7 @@ const SelectTags: React.FC = memo(() => {
             </IonToolbar>
         </IonHeader>
         <IonContent>
-          <IonSearchbar onIonChange={(e)=>handelInputChange(e)} color="dark"></IonSearchbar>
+          <IonSearchbar onIonChange={(e)=>handelInputChange(e)}></IonSearchbar>
           <IonText style={{paddingLeft:15}}>熱門股票</IonText>
           <IonList>
             {tags.map((tag)=>{

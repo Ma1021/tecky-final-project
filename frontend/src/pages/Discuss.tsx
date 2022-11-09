@@ -26,15 +26,15 @@ const Discuss: React.FC = () => {
       </IonHeader>
 
       <SegmentTab value={segment} onIonChange={onSegmentChange} >
-          <IonSegmentButton value="all">
+          <SegmentButton value="all">
             <IonLabel>所有問題</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton value="question">
+          </SegmentButton>
+          <SegmentButton value="question">
             <IonLabel>我的問題</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton value="answer">
+          </SegmentButton>
+          <SegmentButton value="answer">
             <IonLabel>我的答題</IonLabel>
-          </IonSegmentButton>
+          </SegmentButton>
         </SegmentTab>
 
         <ToolContainer>
@@ -79,6 +79,13 @@ const QuestionBtn = styled(IonButton)`
 const SegmentTab = styled(IonSegment)`
   width:95%;
   margin: 10px;
+  color: #dedede;
+`
+
+const SegmentButton = styled(IonSegmentButton)`
+  --indicator-color: #ffa73c;
+  --color-checked: #fff;
+  font-weight: 800;
 `
 
 export default Discuss;

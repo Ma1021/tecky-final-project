@@ -76,6 +76,7 @@ const QuestionHeader = styled(IonCardHeader)`
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+    color: #dedede;
 `
 
 const QuestionContent = styled(IonCardContent)`
@@ -89,6 +90,8 @@ const QuestionContent = styled(IonCardContent)`
     display: flex;
     flex-direction: column;
     font-size: 14px;
+    background-color:#333;
+    color: #dedede;
 `
 
 const QuestionTag = styled.div`

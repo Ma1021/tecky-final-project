@@ -78,7 +78,7 @@ const SelectTags: React.FC = memo(() => {
             const price_color = tag.stock_change > 0 ? "#48BC89" : "#F56080"
               
             return <IonGrid key={tag.stock_id}>
-                    <StockContainer onClick={() => { history.replace({pathname:"/discuss/createQuestion/", state:{stock_id:tag.stock_id, stock_symbol: tag.stock_symbol}})}}>
+                    <StockContainer onClick={() => { history.replace({pathname:"/discuss/createQuestion", state:{stock_id:tag.stock_id, stock_symbol: tag.stock_symbol}})}}>
                       <StockInfo size='6'>
                         <IonText>{tag.stock_name}</IonText>
                         <IonText>{tag.stock_symbol}</IonText>
@@ -101,7 +101,8 @@ const SelectTags: React.FC = memo(() => {
 
 const StockContainer = styled(IonRow)`
   display:flex;
-  border-bottom: 1px solid #dedede;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  color: #dedede;
 `
 
 const StockInfo = styled(IonCol)`

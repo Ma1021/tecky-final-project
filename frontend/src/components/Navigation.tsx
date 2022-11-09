@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
 import {
@@ -9,8 +9,7 @@ import {
     IonIcon,
     IonLabel,
 } from '@ionic/react';
-import { chatboxEllipses, trendingUp, videocam, newspaper, chatbubbles } from 'ionicons/icons';
-import styled from 'styled-components';
+import { chatboxEllipses, trendingUp, videocam, newspaper, chatbubbles, newspaperOutline, chatboxEllipsesOutline, chatbubbleOutline, videocamOutline } from 'ionicons/icons';
 import './Navigation.css';
 
 import Tab1 from '../pages/Tab1';
@@ -20,6 +19,8 @@ import CreateQuestion from '../pages/CreateQuestion';
 import SelectTags from '../pages/SelectTags';
 
 const Navigation: React.FC = () => {
+    const [ selectedTab, setSelectedTab ] = useState("tab1");
+
     return (
         <IonReactRouter>
         <IonTabs>
@@ -33,9 +34,9 @@ const Navigation: React.FC = () => {
               <Redirect to="/tab1" />
             </Route>
           </IonRouterOutlet>
-          <IonTabBar slot="bottom" className='tabBar'>
+          <IonTabBar slot="bottom" className='tabBar' onIonTabsWillChange={e => setSelectedTab(e.detail.tab)}>
             <IonTabButton tab="tab1" href="/tab1" className='tabButton'>
-              <IonIcon icon={newspaper} />
+              <IonIcon icon={selectedTab === "tab1" ? newspaper : newspaperOutline}/>
               <IonLabel>資訊</IonLabel>
             </IonTabButton>
             <IonTabButton tab="tab2" href="/tab2" className='tabButton'>
@@ -43,15 +44,15 @@ const Navigation: React.FC = () => {
               <IonLabel>市場</IonLabel>
             </IonTabButton>
             <IonTabButton tab="discuss" href="/discuss" className='tabButton'>
-              <IonIcon icon={chatboxEllipses} />
+              <IonIcon icon={selectedTab === "discuss" ? chatboxEllipses : chatboxEllipsesOutline} />
               <IonLabel>討論區</IonLabel>
             </IonTabButton>
             <IonTabButton tab="tab4" href="/tab4" className='tabButton'>
-              <IonIcon icon={chatbubbles} />
+              <IonIcon icon={selectedTab === "tab4" ? chatbubbles : chatbubbleOutline} />
               <IonLabel>聊天室</IonLabel>
             </IonTabButton>
             <IonTabButton tab="tab5" href="/tab5" className='tabButton'>
-              <IonIcon icon={videocam} />
+              <IonIcon icon={selectedTab === "tab5" ? videocam : videocamOutline} />
               <IonLabel>直播</IonLabel>
             </IonTabButton>
           </IonTabBar>

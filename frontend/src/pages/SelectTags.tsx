@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState, memo } from 'react'
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonButtons, IonText, IonList, IonItem, IonLabel, IonSearchbar, IonGrid, IonRow, IonCol } from '@ionic/react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
 
-
-const SelectTags: React.FC = () => {
-  const [tags] = useState([
+const SelectTags: React.FC = memo(() => {
+  const data = [
     {
       stock_id:1,
       stock_symbol:"AAPL",
@@ -45,27 +45,40 @@ const SelectTags: React.FC = () => {
       stock_change:+3.32,
       stock_change_percent:+0.96
     },
-  ])
+  ]
+  const [tags, setTags] = useState([...data])
+
+  console.log('rendering...');
+
+  let handelInputChange = (e: Event) =>{
+    console.log('input changing');
+    let search = "";
+    const target = e.target as HTMLIonSearchbarElement;
+    if(target) search = target.value!.toLowerCase();
+    setTags(data.filter(tag => tag.stock_name.toLowerCase().includes(search) || tag.stock_symbol.toLowerCase().includes(search)));
+  }
+
+  const history = useHistory();
 
   return (
       <IonPage>
         <IonHeader translucent={true} collapse="fade">
             <IonToolbar>
                     <IonButtons slot="start">
-                        <IonBackButton defaultHref="/discuss/askQuestion"/>
+                        <IonBackButton defaultHref="/discuss/createQuestion"/>
                     </IonButtons>
                 <IonTitle>選擇標籤</IonTitle>
             </IonToolbar>
         </IonHeader>
         <IonContent>
-          <IonSearchbar></IonSearchbar>
+          <IonSearchbar onIonChange={(e)=>handelInputChange(e)} color="dark"></IonSearchbar>
           <IonText style={{paddingLeft:15}}>熱門股票</IonText>
           <IonList>
             {tags.map((tag)=>{
             const price_color = tag.stock_change > 0 ? "#48BC89" : "#F56080"
               
             return <IonGrid key={tag.stock_id}>
-                    <StockContainer>
+                    <StockContainer onClick={() => { history.replace({pathname:"/discuss/createQuestion/", state:{stock_id:tag.stock_id, stock_symbol: tag.stock_symbol}})}}>
                       <StockInfo size='6'>
                         <IonText>{tag.stock_name}</IonText>
                         <IonText>{tag.stock_symbol}</IonText>
@@ -84,10 +97,11 @@ const SelectTags: React.FC = () => {
         </IonContent>
       </IonPage>
   )
-}
+});
 
 const StockContainer = styled(IonRow)`
   display:flex;
+  border-bottom: 1px solid #dedede;
 `
 
 const StockInfo = styled(IonCol)`

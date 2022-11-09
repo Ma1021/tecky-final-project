@@ -16,7 +16,7 @@ import './Navigation.css';
 import Tab1 from '../pages/Tab1';
 import Discuss from '../pages/Discuss';
 import Tab2 from '../pages/Tab2';
-import AskQuestion from '../pages/AskQuestion';
+import CreateQuestion from '../pages/CreateQuestion';
 import SelectTags from '../pages/SelectTags';
 
 const Navigation: React.FC = () => {
@@ -27,8 +27,8 @@ const Navigation: React.FC = () => {
             <Route exact path="/tab1" component={Tab1}></Route>
             <Route exact path="/tab2" component={Tab2}></Route>
             <Route exact path="/discuss" component={Discuss}></Route>
-            <Route exact path="/discuss/askQuestion" component={AskQuestion}></Route>
-            <Route exact path="/discuss/askQuestion/selectTag" component={SelectTags}></Route>
+            <Route exact path="/discuss/createQuestion" component={CreateQuestion}></Route>
+            <Route exact path="/discuss/createQuestion/selectTag" component={SelectTags}></Route>
             <Route exact path="/">
               <Redirect to="/tab1" />
             </Route>

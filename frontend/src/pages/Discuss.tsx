@@ -25,8 +25,7 @@ const Discuss: React.FC = () => {
         </IonToolbar>
       </IonHeader>
 
-      <IonContent>
-        <SegmentTab value={segment} onIonChange={onSegmentChange}>
+      <SegmentTab value={segment} onIonChange={onSegmentChange} color="dark">
           <IonSegmentButton value="all">
             <IonLabel>所有問題</IonLabel>
           </IonSegmentButton>
@@ -39,14 +38,14 @@ const Discuss: React.FC = () => {
         </SegmentTab>
 
         <ToolContainer>
-            <SearchBar></SearchBar>
-            <QuestionBtn onClick={()=>{ history.push("/discuss/askQuestion")}}>提出問題</QuestionBtn>
+            <SearchBar color="dark"></SearchBar>
+            <QuestionBtn onClick={()=>{ history.push("/discuss/createQuestion")}}>提出問題</QuestionBtn>
         </ToolContainer>
 
+      <IonContent>
         {segment === "all" && <Allquestion/>}
         {segment === "question" && <MyQuestion/>}
         {segment === "answer" && <MyAnswer/>}
-        
       </IonContent>
     </IonPage>
   );
@@ -58,7 +57,7 @@ const ToolContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top:10px;
+    margin-bottom:10px;
     padding:0px 10px;
     gap:10px;
 ` 
@@ -79,7 +78,7 @@ const QuestionBtn = styled(IonButton)`
 
 const SegmentTab = styled(IonSegment)`
   width:95%;
-  margin: 0px 10px 0px 10px;
+  margin: 10px;
 `
 
 export default Discuss;

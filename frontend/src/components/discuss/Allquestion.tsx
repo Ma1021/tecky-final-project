@@ -62,7 +62,7 @@ const AllQuestionPage = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 11px;
+    padding: 0px 11px;
 `
 
 const QuestionCard = styled(IonCard)`

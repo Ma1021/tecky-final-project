@@ -20,6 +20,12 @@ export interface Question_Result {
     created_time: string
 }
 
+export interface Question_DTO {
+  asker_id: number,
+  content: string,
+  tag_id?:Array<number>
+}
+
 @Module({
   controllers: [QuestionController],
   providers: [QuestionService],

@@ -15,12 +15,6 @@ export async function seed(knex: Knex): Promise<void> {
         { type: "admin" }
     ]);
 
-    await knex("login_method").insert([
-        { method: "normal" },
-        { method: "google"},
-        { method: "apple"}
-    ])
-
     await knex("stocks").insert([
         { symbol: "QQQ", name: "Invesco QQQ Trust Series 1" },
         { symbol: "VOO", name: "Vanguard 500 Index Fund ETF" },

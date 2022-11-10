@@ -1,5 +1,5 @@
-import React, { useMemo, useState, memo } from 'react'
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonButtons, IonText, IonList, IonItem, IonLabel, IonSearchbar, IonGrid, IonRow, IonCol } from '@ionic/react';
+import React, { useState, memo } from 'react'
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonButtons, IonText, IonList, IonSearchbar, IonGrid, IonRow, IonCol } from '@ionic/react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 

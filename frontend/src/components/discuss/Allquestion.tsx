@@ -1,12 +1,11 @@
 import { IonText, IonCard, IonCardHeader, IonCardContent, IonButton, IonImg, IonRefresher, IonRefresherContent, RefresherEventDetail } from '@ionic/react';
-import { memo, useState } from 'react'
+import { memo } from 'react'
 import styled from 'styled-components';
 import { RootState } from '../../redux/state'
 import { useSelector } from 'react-redux';
 
 // memo 防止父組件更新時子組件也更新的問題，改善效能 （只能用在純html的component）
 const Allquestion: React.FC = memo(() => {
-    // const [questions, setQuestions] = useState(Question)
     let questions = useSelector((state: RootState) => state.questionList)
 
     function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
@@ -23,7 +22,7 @@ const Allquestion: React.FC = memo(() => {
             </IonRefresher>
             <AllQuestionPage>
                 {questions.map((question) => {
-                    return <QuestionCard key={question.id}>
+                    return <QuestionContainer key={question.id}>
                         <QuestionHeader>
                             <AskerInfo>
                                 <AskerAvatar src={question.asker_avatar}></AskerAvatar>
@@ -50,7 +49,7 @@ const Allquestion: React.FC = memo(() => {
                         </QuestionContent>
 
                         <AnswerBtn>答問題</AnswerBtn>
-                    </QuestionCard>
+                    </QuestionContainer>
                 })}
             </AllQuestionPage>
         </>
@@ -65,7 +64,7 @@ const AllQuestionPage = styled.div`
     padding: 0px 11px;
 `
 
-const QuestionCard = styled(IonCard)`
+const QuestionContainer = styled(IonCard)`
     padding: 5px;
     height:260px;
     width: 100%;
@@ -92,6 +91,7 @@ const QuestionContent = styled(IonCardContent)`
     font-size: 14px;
     background-color:#333;
     color: #dedede;
+
 `
 
 const QuestionTag = styled.div`

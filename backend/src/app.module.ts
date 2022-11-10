@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { QuestionModule } from './question/question.module';
-import { KnexModule } from 'nestjs-knex';
+import { KnexModule } from 'nest-knexjs';
 import { env } from "../env";
 
 @Module({

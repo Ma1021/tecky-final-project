@@ -3,9 +3,9 @@ import { QuestionService } from './question.service';
 import { Question_Result } from './question.module'
 
 interface Question_Post {
-    user_id: number,
+    asker_id: number,
     content: string,
-    tags?:Array<number>
+    tag_id?:Array<number>
 }
 
 @Controller('/question')
@@ -18,7 +18,7 @@ export class QuestionController {
   }
 
   @Post()
-  createQuestion(@Body() { user_id, content, tags }): string {
-    return ''
+  createQuestion(@Body() questions: Question_Post) {
+    return this.questionService.createQuestion(questions);
   }
 } 

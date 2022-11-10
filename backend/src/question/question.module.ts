@@ -21,9 +21,9 @@ export interface Question_Result {
 }
 
 @Module({
-  imports: [],
   controllers: [QuestionController],
   providers: [QuestionService],
 })
+
 
 export class QuestionModule {}

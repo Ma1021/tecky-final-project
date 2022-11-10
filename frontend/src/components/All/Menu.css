@@ -1,0 +1,13 @@
+ion-item.menu-username ion-label.grey {
+  color: grey;
+}
+
+ion-item.menu-userInfo ion-text.grey {
+  font-size: 0.8rem;
+  color: grey;
+}
+
+ion-accordion-group.menu ion-item {
+  padding-left: auto;
+  padding-right: auto;
+}

@@ -12,10 +12,11 @@ export interface Question_Result {
     answerer_username: string,
     answerer_avatar: string,
     answerer_content: string,
-    tags:
+    stocks:
     Array<{
-        tag_id: number,
-        tag_name: string
+        stock_id: number,
+        stock_name: string,
+        stock_symbol: string
     }>,
     created_time: string
 }
@@ -23,7 +24,8 @@ export interface Question_Result {
 export interface Question_DTO {
   asker_id: number,
   content: string,
-  tag_id?:Array<number>
+  stock_id?:Array<number>
+  tag_id?:number
 }
 
 @Module({

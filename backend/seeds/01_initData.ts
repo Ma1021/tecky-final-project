@@ -5,7 +5,6 @@ export async function seed(knex: Knex): Promise<void> {
     await knex("questions").del();
     await knex("users").del();
     await knex("stocks").del();
-    await knex("login_method").del();
     await knex("user_type").del();
 
     // Inserts seed entries
@@ -27,6 +26,7 @@ export async function seed(knex: Knex): Promise<void> {
         email: "admin@gmail.com",
         password_hash: "123",
         user_type_id: 1,
-        login_method_id: 1,
+        birthday: "2022-11-12T13:00",
+        gender:"female"
     })
 };

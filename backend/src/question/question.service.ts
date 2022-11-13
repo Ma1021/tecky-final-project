@@ -1,5 +1,4 @@
-import { Body, HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Question_Result } from './question.module'
+import { Injectable } from '@nestjs/common';
 import { Knex } from 'knex';
 import { InjectModel } from 'nest-knexjs';
 import { Question_DTO } from './question.module'
@@ -8,21 +7,47 @@ import { Question_DTO } from './question.module'
 export class QuestionService {
   constructor(@InjectModel() private readonly knex: Knex) {}
 
-  async getQuestions() {
-    return await this.knex('questions').select('*');
+  async findAll() {
+    const questions = await this.knex.raw
+    (`select questions.id, questions.content, questions.created_at, users.username as asker_username, users.avatar as asker_avatar, tag.tag_id, jsonb_agg(to_jsonb(stocks)) as stock 
+    from questions
+    inner join tag on questions.tag_id = tag.tag_id 
+    inner join stocks on tag.stock_id = stocks.id
+    inner join users on users.id = questions.asker_id
+    group by questions.id, users.username, users.avatar, tag.tag_id`);
+    
+    return questions.rows
   }
 
   // get one question by question id
-  async getQuestion(question_id: number) {
-    return await this.knex('questions').select('*').where('id', question_id);
+  async findOne(question_id: number) {
+    const question = await this.knex.raw
+    (`select questions.id, questions.content, questions.created_at, users.username as asker_username, users.avatar as asker_avatar, tag.tag_id, jsonb_agg(to_jsonb(stocks)) as stock
+    from questions
+    inner join tag on questions.tag_id = tag.tag_id 
+    inner join stocks on tag.stock_id = stocks.id
+    inner join users on users.id = questions.asker_id
+    where questions.id = ${question_id}
+    group by questions.id, users.username, users.avatar, tag.tag_id`);
+
+    return question.rows
   }
 
   // get one or all questions by asker id
-  async getAskerQuestions(asker_id: number) {
-    return await this.knex('questions').select('*').where('asker_id', asker_id);
+  async findAskerQuestions(asker_id: number) {
+    const questions = await this.knex.raw
+    (`select questions.id, questions.content, questions.created_at, users.username as asker_username, users.avatar as asker_avatar, tag.tag_id, jsonb_agg(to_jsonb(stocks)) as stock
+    from questions
+    inner join tag on questions.tag_id = tag.tag_id 
+    inner join stocks on tag.stock_id = stocks.id
+    inner join users on users.id = questions.asker_id
+    where questions.asker_id = ${asker_id}
+    group by questions.id, users.username, users.avatar, tag.tag_id`);
+
+    return questions.rows
   }
 
-  async createQuestion(questions: Question_DTO) {
+  async create(questions: Question_DTO) {
     const { asker_id, content, stock_id } = questions;
 
     const tag_number = await this.knex('tag').count("tag_id").first();    
@@ -48,7 +73,7 @@ export class QuestionService {
     }
   }
 
-  async updateQuestion(question_id: number,  questions: Question_DTO) {
+  async update(question_id: number,  questions: Question_DTO) {
 
     const { asker_id, content, tag_id } = questions
 
@@ -72,6 +97,10 @@ export class QuestionService {
       await this.knex('tag').insert({tag_id, stock_id})
     }
 
-    return await this.knex('questions').where('id', question_id).update({asker_id, content, tag_id});
+    return await this.knex('questions').where('id', question_id).update({asker_id, content, tag_id}).returning('*');
+  }
+
+  async delete(question_id: number) {
+    return await this.knex('questions').where('id', question_id).del();
   }
 }

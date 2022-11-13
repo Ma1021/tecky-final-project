@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Patch, Post, Put, UnprocessableEntityException } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Patch, Post, Put, Res, Response } from '@nestjs/common';
 import { QuestionService } from './question.service';
 import { Question_DTO } from './question.module'
 
@@ -8,7 +8,7 @@ export class QuestionController {
     
   @Get()
   async getQuestions() {
-    const questions = await this.questionService.getQuestions();
+    const questions = await this.questionService.findAll();
 
     if(questions.length <= 0) {
       throw new HttpException('Questions not found', HttpStatus.NOT_FOUND);
@@ -20,7 +20,7 @@ export class QuestionController {
   // get one question by question id
   @Get(':id')
   async getQuestion(@Param('id') question_id:string) {
-    const question = await this.questionService.getQuestion(+question_id);
+    const question = await this.questionService.findOne(+question_id);
 
     if(question.length <= 0) {
       throw new HttpException('Question not found', HttpStatus.NOT_FOUND);
@@ -36,7 +36,7 @@ export class QuestionController {
       throw new HttpException('Missing asker id', HttpStatus.BAD_REQUEST)
     }
 
-    const questions = await this.questionService.getAskerQuestions(+asker_id)
+    const questions = await this.questionService.findAskerQuestions(+asker_id)
 
     if(questions.length <= 0) {
       throw new HttpException('Question not found', HttpStatus.NOT_FOUND);
@@ -46,7 +46,7 @@ export class QuestionController {
   }
 
   @Post()
-  createQuestion(@Body() questions: Question_DTO) {
+  createQuestion(@Body() questions: Question_DTO, @Response() res) {
     const { asker_id, content, stock_id } = questions;
 
     if(!content) {
@@ -67,11 +67,14 @@ export class QuestionController {
       }
     }
 
-    return this.questionService.createQuestion(questions);
+    this.questionService.create(questions).then((response)=>{
+      const { id } = response[0]
+      res.status(HttpStatus.CREATED).json({message: 'Create question successfully', question_id:id})
+    })
   }
 
   @Put(':id')
-  async updateQuestion(@Param('id') question_id: string,  @Body() questions: Question_DTO) {
+  async updateQuestion(@Param('id') question_id: string,  @Body() questions: Question_DTO, @Response() res) {
     const { asker_id, content, stock_id } = questions;
 
     if(!content) {
@@ -97,12 +100,33 @@ export class QuestionController {
     }
 
     //checking the question is exist or not
-    const question = await this.questionService.getQuestion(+question_id);
+    const question = await this.questionService.findOne(+question_id);
 
     if(question.length <= 0) {
       throw new HttpException('Question not found', HttpStatus.NOT_FOUND);
     }
 
-    return this.questionService.updateQuestion(+question_id, questions);
+    this.questionService.update(+question_id, questions).then((response)=>{
+      console.log(response);
+      res.status(HttpStatus.ACCEPTED).json({message: 'Update question successfully'})
+    })
+  }
+
+  @Delete(':id')
+  async deleteQuestion(@Param('id') question_id: string, @Response() res) {
+    if(!question_id) {
+      throw new HttpException('Missing question id', HttpStatus.BAD_REQUEST)
+    }
+
+    //checking the question is exist or not
+    const question = await this.questionService.findOne(+question_id);
+
+    if(question.length <= 0) {
+      throw new HttpException('Question not found', HttpStatus.NOT_FOUND);
+    }
+
+    this.questionService.delete(+question_id).then(()=>{
+      res.status(HttpStatus.ACCEPTED).json({message:"Delete question successfully"})
+    })   
   }
 } 

@@ -2,13 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonButtons, IonImg, IonText, IonItem, IonLabel, IonInput, IonIcon, IonTextarea, IonButton } from '@ionic/react';
 import styled from 'styled-components';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
 import { addCircleOutline, closeCircleOutline } from 'ionicons/icons';
-
-type FormValues = {
-    tags: string[];
-    content: string;
-}
 
 type TagValues = {
     stock_id: number;
@@ -20,18 +14,12 @@ const CreateQuestion: React.FC = () => {
 
     const { state } = useLocation();
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors }
-    } = useForm<FormValues>();
-
     const history = useHistory();
 
     useEffect(()=>{
         if(state) {
             const { stock_id, stock_symbol } = state as TagValues
-        
+            
             if(selectTags.filter(tag => tag.stock_id === stock_id).length <= 0) {
                 setSelectTags([...selectTags, {stock_id, stock_symbol}])
             }
@@ -57,9 +45,8 @@ const CreateQuestion: React.FC = () => {
                     <UserIcon src="https://ionicframework.com/docs/img/demos/avatar.svg"/>
                     <IonText>Username</IonText>
                 </UserInfo>
-                <form onSubmit={handleSubmit((data) => {
-                console.log(data);
-            })}>
+                <div>
+
                 <IonItem lines='full'>
                     <IonText>標籤</IonText>
                     <TagContainer>
@@ -74,13 +61,10 @@ const CreateQuestion: React.FC = () => {
                 </IonItem>
                 <IonItem lines='full'>
                     <IonLabel>內容</IonLabel>
-                    <IonTextarea
-                        {...register('content', { required: "請輸入問題內容！" })}
-                    />
+                    <IonTextarea/>
                 </IonItem>
-                {errors.content && <p>{errors.content.message}</p>}
-                <IonButton type='submit'>Submit</IonButton>
-            </form>
+                <IonButton>Submit</IonButton>
+                </div>
             </IonContent>
         </IonPage>
     )

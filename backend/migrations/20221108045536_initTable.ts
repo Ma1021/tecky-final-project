@@ -2,7 +2,7 @@ import { Knex } from "knex";
 
 
 export async function up(knex: Knex): Promise<void> {
-    await knex.schema.createTable("user_type", (table)=>{
+    await knex.schema.createTable("user_types", (table)=>{
         table.increments("id");
         table.string("type").notNullable().unique();
     })
@@ -13,7 +13,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string("email").notNullable().unique();
         table.string("password_hash").notNullable().unique();
         table.integer("user_type_id").unsigned().notNullable();
-        table.foreign("user_type_id").references("user_type.id");
+        table.foreign("user_type_id").references("user_types.id");
         table.string("avatar");
         table.text("introduction");
         table.dateTime("last_login");
@@ -29,10 +29,10 @@ export async function up(knex: Knex): Promise<void> {
         table.timestamps(false, true);
     })
 
-    await knex.schema.createTable("tag", (table)=> {
+    await knex.schema.createTable("tags", (table)=> {
         table.increments("id");
         table.integer("tag_id").notNullable();
-        table.integer("stock_id").unsigned().notNullable();
+        table.integer("stock_id").unsigned();
         table.foreign("stock_id").references("stocks.id");
     })
 
@@ -40,7 +40,7 @@ export async function up(knex: Knex): Promise<void> {
         table.increments("id");
         table.integer("asker_id").unsigned().notNullable();
         table.foreign("asker_id").references("users.id");
-        table.string("content").notNullable();
+        table.string("content", 100).notNullable();
         table.integer("tag_id").notNullable();
         table.timestamps(false, true);
     })
@@ -48,9 +48,9 @@ export async function up(knex: Knex): Promise<void> {
 
 export async function down(knex: Knex): Promise<void> {
     await knex.schema.dropTableIfExists("questions");
-    await knex.schema.dropTableIfExists("tag");
+    await knex.schema.dropTableIfExists("tags");
     await knex.schema.dropTableIfExists("users");
     await knex.schema.dropTableIfExists("stocks");
-    await knex.schema.dropTableIfExists("user_type");
+    await knex.schema.dropTableIfExists("user_types");
 }
 

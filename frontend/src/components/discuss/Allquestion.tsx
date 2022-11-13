@@ -1,18 +1,51 @@
 import { IonText, IonCard, IonCardHeader, IonCardContent, IonButton, IonImg, IonRefresher, IonRefresherContent, RefresherEventDetail } from '@ionic/react';
-import { memo } from 'react'
+import { memo, useEffect, useState } from 'react'
 import styled from 'styled-components';
-import { RootState } from '../../redux/state'
-import { useSelector } from 'react-redux';
+// import { RootState } from '../../redux/state'
+// import { useSelector } from 'react-redux';
+
+interface Questions {
+    id: number
+    content: string
+    created_at: string
+    asker_username: string
+    asker_avatar: string
+    stock: Array<{
+        id: number,
+        name: string,
+        symbol: string,
+        created_at: string,
+        updated_at: string
+    }>
+    tag_id: number
+}
 
 // memo 防止父組件更新時子組件也更新的問題，改善效能 （只能用在純html的component）
 const Allquestion: React.FC = memo(() => {
-    let questions = useSelector((state: RootState) => state.questionList)
+    const [questions, setQuestions ] = useState(Array<Questions>);
+
+    const fetchData = async() => {
+        try {
+            const res = await fetch('http://localhost:8080/question', {
+                method:'GET',
+                headers:{'Content-Type': 'application/json'}
+            })
+            const json = await res.json();
+            setQuestions(json);
+        } catch(err) {
+            console.log("error", err);
+        }
+    }
+
+    useEffect(()=>{
+        fetchData();
+    },[])
 
     function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
         setTimeout(() => {
-
+            fetchData();
             event.detail.complete();
-        }, 2000);
+        }, 1000);
     }
 
     return (
@@ -28,24 +61,24 @@ const Allquestion: React.FC = memo(() => {
                                 <AskerAvatar src={question.asker_avatar}></AskerAvatar>
                                 <IonText>{question.asker_username}</IonText>
                             </AskerInfo>
-                            <IonText>{question.created_time}</IonText>
+                            <IonText style={{fontSize:12}}>{question.created_at.slice(0,10) + ' ' + question.created_at.slice(11,16)}</IonText>
                         </QuestionHeader>
 
                         <QuestionContent>
                             <AskerContent>
-                                <IonText>{question.asker_content}</IonText>
-                                <QuestionTag>
-                                    {question.tags.map((tag) => {
-                                        return <IonText key={tag.tag_id}>{tag.tag_name}</IonText>
+                                <IonText>{question.content}</IonText>
+                                <TagContainer>
+                                    {question.stock.map((stock) => {
+                                        return <StockTag key={stock.id}>#{stock.symbol}</StockTag>
                                     })}
-                                </QuestionTag>
+                                </TagContainer>
                             </AskerContent>
 
-                            <AnswererInfo>
+                            {/* <AnswererInfo>
                                 <IonText>{question.answerer_username}</IonText>
                                 <AnswererAvatar src={question.answerer_avatar}></AnswererAvatar>
                             </AnswererInfo>
-                            <AnswererContent>{question.answerer_content}</AnswererContent>
+                            <AnswererContent>{question.answerer_content}</AnswererContent> */}
                         </QuestionContent>
 
                         <AnswerBtn>答問題</AnswerBtn>
@@ -61,13 +94,11 @@ const AllQuestionPage = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0px 11px;
 `
 
 const QuestionContainer = styled(IonCard)`
-    padding: 5px;
     height:260px;
-    width: 100%;
+    width: 95%;
     margin: 10px;
 `
 
@@ -91,12 +122,22 @@ const QuestionContent = styled(IonCardContent)`
     font-size: 14px;
     background-color:#333;
     color: #dedede;
-
 `
 
-const QuestionTag = styled.div`
+const TagContainer = styled.div`
     display:flex;
     gap:10px;
+    margin-top:0.8rem;
+`
+
+const StockTag = styled(IonText)`
+    height: 1.8rem;
+    line-height:1.8rem;
+    padding: 0rem 0.5rem;
+    border-radius: 0.9rem;
+    text-align: center;
+    background-color: #F2B950;
+    color: #fff;
 `
 
 const AskerContent = styled.div`

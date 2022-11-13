@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
 import { UserModule } from 'src/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { LocalStrategy } from './local.strategy';
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
@@ -13,11 +13,10 @@ import { LocalStrategy } from './local.strategy';
     JwtModule.register({
       secret: jwtConstants.secret,
       // the key would be valid for 1day
-      signOptions: { expiresIn: '30d' },
+      signOptions: { expiresIn: '1d' },
     }),
   ],
-  controllers: [AuthController, LocalStrategy],
-  providers: [AuthService],
+  providers: [AuthService, LocalStrategy, JwtStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}

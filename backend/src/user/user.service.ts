@@ -13,13 +13,8 @@ export class UserService {
     return `This action returns all user`;
   }
 
-  async findOne(username: string) {
-    // return `This action returns #${username} user`;
-    return {
-      id: 1,
-      username: username,
-      password_hash: await hash('123456', 10),
-    };
+  async findOne(id: number) {
+    return `This action returns #${id} user`;
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

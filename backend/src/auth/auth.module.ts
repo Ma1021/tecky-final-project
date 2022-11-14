@@ -13,7 +13,7 @@ import { JwtStrategy } from './jwt.strategy';
     JwtModule.register({
       secret: jwtConstants.secret,
       // the key would be valid for 1day
-      signOptions: { expiresIn: '1d' },
+      signOptions: { expiresIn: '365d' },
     }),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],

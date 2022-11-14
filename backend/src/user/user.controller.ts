@@ -27,8 +27,8 @@ export class UserController {
 
   // should be updated as username or both username and id
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(id);
+  findOne(@Param('id') id: number) {
+    return this.userService.findOne(+id);
   }
 
   @Patch(':id')

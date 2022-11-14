@@ -10,7 +10,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       // take jwt from header everytime to take
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       // could ignore the expired time set on auth/auth.module.ts
-      ignoreExpiration: false,
+      ignoreExpiration: true,
       secretOrKey: jwtConstants.secret,
     });
   }

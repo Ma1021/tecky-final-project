@@ -29,6 +29,9 @@ import CreateQuestion from "../pages/question/CreateQuestion";
 import SelectTags from "../pages/question/SelectTags";
 import Menu from "./All/Menu";
 import UserInfo from "../pages/UserInfo";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
+import Home from "../pages/Home";
 import QuestionDetail from "../pages/question/QuestionDetail";
 
 const Navigation: React.FC = () => {
@@ -42,13 +45,19 @@ const Navigation: React.FC = () => {
         <Route exact path="/discuss/createQuestion" component={CreateQuestion}></Route>
         <Route exact path="/discuss/createQuestion/selectTag" component={SelectTags}></Route>
         <Route exact path="/question/:id" component={QuestionDetail}></Route>
+        <Route exact path="/">
+          <Redirect to="/home" />
+        </Route>
         <IonTabs>
           <IonRouterOutlet>
+            <Route exact path="/register" component={Register}></Route>
+            <Route exact path="/login" component={Login}></Route>
+            <Route exact path="/home" component={Home}></Route>
             <Route exact path="/tab1" component={Tab1}></Route>
             <Route exact path="/tab2" component={Tab2}></Route>
             <Route exact path="/discuss" component={Discuss}></Route>
             <Route exact path="/">
-              <Redirect to="/tab1" />
+              <Redirect to="/home" />
             </Route>
           </IonRouterOutlet>
           <IonTabBar

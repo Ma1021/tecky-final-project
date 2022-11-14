@@ -7,8 +7,12 @@ export async function up(knex: Knex): Promise<void> {
       .text('introduction')
       .defaultTo('此用戶沈迷股市﹐未有容餘更新自我介紹。')
       .alter();
-      table.
   });
 }
 
-export async function down(knex: Knex): Promise<void> {}
+export async function down(knex: Knex): Promise<void> {
+  knex.schema.alterTable('users', (table) => {
+    table.integer('user_type_id').alter();
+    table.text('introduction').alter();
+  });
+}

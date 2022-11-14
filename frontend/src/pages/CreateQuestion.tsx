@@ -38,17 +38,25 @@ const CreateQuestion: React.FC = () => {
 
     async function submit() {
         const stock_id:number[] = []
+        let obj = {}
 
-        for(let tag of selectTags) {
-            stock_id.push(tag.stock_id)
+        if(selectTags.length > 0) {
+            for(let tag of selectTags) {
+                stock_id.push(tag.stock_id)
+            }
+
+            obj = {
+                stock_id,
+                content,
+                asker_id:1,
+            }
+        } else {
+            obj = {
+                content,
+                asker_id:1
+            }
         }
 
-        const obj = {
-            stock_id,
-            content,
-            asker_id:1,
-        }
-        
         const res = await fetch('http://localhost:8080/question', {
             method: 'POST',
             headers:{'Content-Type': 'application/json'},

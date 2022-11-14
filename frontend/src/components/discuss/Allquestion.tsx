@@ -69,7 +69,9 @@ const Allquestion: React.FC = memo(() => {
                                 <IonText>{question.content}</IonText>
                                 <TagContainer>
                                     {question.stock.map((stock) => {
-                                        return <StockTag key={stock.id}>#{stock.symbol}</StockTag>
+                                        if(stock) {
+                                            return <StockTag key={stock.id}>#{stock.symbol}</StockTag>
+                                        }
                                     })}
                                 </TagContainer>
                             </AskerContent>

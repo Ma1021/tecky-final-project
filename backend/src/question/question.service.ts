@@ -12,7 +12,7 @@ export class QuestionService {
       (`select questions.id, questions.content, questions.created_at at time zone 'utc+8' as created_at, users.username as asker_username, users.avatar as asker_avatar, tags.tag_id, jsonb_agg(to_jsonb(stocks)) as stock 
     from questions
     inner join tags on questions.tag_id = tags.tag_id 
-    inner join stocks on tags.stock_id = stocks.id
+    full outer join stocks on tags.stock_id = stocks.id
     inner join users on users.id = questions.asker_id
     group by questions.id, users.username, users.avatar, tags.tag_id`)
 
@@ -25,7 +25,7 @@ export class QuestionService {
       (`select questions.id, questions.content, questions.created_at, users.username as asker_username, users.avatar as asker_avatar, tags.tag_id, jsonb_agg(to_jsonb(stocks)) as stock
     from questions
     inner join tags on questions.tag_id = tags.tag_id 
-    inner join stocks on tags.stock_id = stocks.id
+    full outer join stocks on tags.stock_id = stocks.id
     inner join users on users.id = questions.asker_id
     where questions.id = ${question_id}
     group by questions.id, users.username, users.avatar, tags.tag_id`);
@@ -39,7 +39,7 @@ export class QuestionService {
       (`select questions.id, questions.content, questions.created_at, users.username as asker_username, users.avatar as asker_avatar, tags.tag_id, jsonb_agg(to_jsonb(stocks)) as stock
     from questions
     inner join tags on questions.tag_id = tags.tag_id 
-    inner join stocks on tags.stock_id = stocks.id
+    full outer join stocks on tags.stock_id = stocks.id
     inner join users on users.id = questions.asker_id
     where questions.asker_id = ${asker_id}
     group by questions.id, users.username, users.avatar, tags.tag_id`);

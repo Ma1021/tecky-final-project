@@ -61,9 +61,11 @@ export class QuestionController {
       throw new HttpException('Invalid asker id', HttpStatus.BAD_REQUEST)
     }
 
-    for(let stockId of stock_id) {
-      if(typeof stockId !== 'number') {
-        throw new HttpException('Invalid tag id', HttpStatus.BAD_REQUEST)
+    if(stock_id) {
+      for(let stockId of stock_id) {
+        if(typeof stockId !== 'number') {
+          throw new HttpException('Invalid tag id', HttpStatus.BAD_REQUEST)
+        }
       }
     }
 

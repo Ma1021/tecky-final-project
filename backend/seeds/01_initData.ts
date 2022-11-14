@@ -5,10 +5,10 @@ export async function seed(knex: Knex): Promise<void> {
     await knex("questions").del();
     await knex("users").del();
     await knex("stocks").del();
-    await knex("user_type").del();
+    await knex("user_types").del();
 
     // Inserts seed entries
-    await knex("user_type").insert([
+    await knex("user_types").insert([
         { type: "normal" },
         { type: "kol" },
         { type: "admin" }
@@ -27,6 +27,7 @@ export async function seed(knex: Knex): Promise<void> {
         password_hash: "123",
         user_type_id: 1,
         birthday: "2022-11-12T13:00",
-        gender:"female"
+        gender:"female",
+        avatar:"https://images.fineartamerica.com/images-medium-large-5/wolf-baby-jeanlouis-wertz.jpg"
     })
 };

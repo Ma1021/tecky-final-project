@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonButtons, IonImg, IonText, IonItem, IonLabel, IonInput, IonIcon, IonTextarea, IonButton } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonButtons, IonImg, IonText, IonItem, IonLabel, IonInput, IonIcon, IonTextarea, IonButton, useIonToast } from '@ionic/react';
 import styled from 'styled-components';
 import { useHistory, useLocation } from 'react-router-dom';
 import { addCircleOutline, closeCircleOutline } from 'ionicons/icons';
@@ -11,8 +11,10 @@ type TagValues = {
 
 const CreateQuestion: React.FC = () => {
     const [ selectTags, setSelectTags] = useState(Array<TagValues>);
+    const [ content, setContent ] = useState('')
 
     const { state } = useLocation();
+    const [present, dismiss] = useIonToast();
 
     const history = useHistory();
 
@@ -28,6 +30,50 @@ const CreateQuestion: React.FC = () => {
 
     function removeTag(e: any, key?:number) {
         setSelectTags(selectTags.filter(tag => tag.stock_id !== key))
+    }
+
+    function handleContent(e: any) {
+        setContent((e.target as HTMLInputElement).value)
+    }
+
+    async function submit() {
+        const stock_id:number[] = []
+        let obj = {}
+
+        if(selectTags.length > 0) {
+            for(let tag of selectTags) {
+                stock_id.push(tag.stock_id)
+            }
+
+            obj = {
+                stock_id,
+                content,
+                asker_id:1,
+            }
+        } else {
+            obj = {
+                content,
+                asker_id:1
+            }
+        }
+
+        const res = await fetch('http://localhost:8080/question', {
+            method: 'POST',
+            headers:{'Content-Type': 'application/json'},
+            body:JSON.stringify(obj)
+        })
+
+        if(!res.ok) {
+            const message = await res.text()
+            console.log(message);
+            if(message === '{"statusCode":400,"message":"Missing content"}') {
+                present('請輸入內容', 1500)
+            }
+            return
+        } 
+
+        present('成功提出問題', 1500)
+        history.replace("/discuss")
     }
 
     return (
@@ -61,9 +107,9 @@ const CreateQuestion: React.FC = () => {
                 </IonItem>
                 <IonItem lines='full'>
                     <IonLabel>內容</IonLabel>
-                    <IonTextarea/>
+                    <IonTextarea value={content} onIonChange={handleContent}/>
                 </IonItem>
-                <IonButton>Submit</IonButton>
+                <IonButton onClick={submit}>Submit</IonButton>
                 </div>
             </IonContent>
         </IonPage>

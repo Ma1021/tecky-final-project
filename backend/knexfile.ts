@@ -9,7 +9,7 @@ const config: { [key: string]: Knex.Config } = {
     connection: {
       database: env.DB_NAME,
       user: env.DB_USERNAME,
-      password: env.DB_PASSWORD
+      password: env.DB_PASSWORD,
     },
     pool: {
       min: 2,

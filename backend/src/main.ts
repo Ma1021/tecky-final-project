@@ -20,6 +20,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerOptions);
   SwaggerModule.setup('doc', app, document); // localhost:8080/doc to open document
 
+  app.enableCors(); // 允許所有port存取
+
   await app.listen(8080);
 }
 

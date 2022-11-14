@@ -5,7 +5,7 @@ import { memo } from 'react'
 const MyAnswer: React.FC = memo(() => {
     return (
         <div>
-            <IonText>My answer</IonText>
+            <IonText>My question</IonText>
         </div>
     );
   });

@@ -14,10 +14,10 @@ import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
 // Components
-import Allquestion from "../components/discuss/Allquestion";
-import MyQuestion from "../components/discuss/Myquestion";
-import MyAnswer from "../components/discuss/Myanswer";
-import Title from "../components/All/Title";
+import Allquestion from "../../components/discuss/Allquestion";
+import MyAnswer from "../../components/discuss/MyAnswer";
+import MyQuestion from "../../components/discuss/MyQuestion";
+import Title from "../../components/All/Title";
 
 const Discuss: React.FC = () => {
   const [segment, setSegment] = useState("all");

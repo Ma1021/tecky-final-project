@@ -9,12 +9,17 @@ export class QuestionService {
 
   async findAll() {
     const questions = await this.knex.raw
-      (`select questions.id, questions.content, questions.created_at at time zone 'utc+8' as created_at, users.username as asker_username, users.avatar as asker_avatar, tags.tag_id, jsonb_agg(to_jsonb(stocks)) as stock 
-    from questions
-    inner join tags on questions.tag_id = tags.tag_id 
-    full outer join stocks on tags.stock_id = stocks.id
-    inner join users on users.id = questions.asker_id
-    group by questions.id, users.username, users.avatar, tags.tag_id`)
+      (`select questions.id, questions.content, questions.created_at at time zone 'utc+8' as created_at,
+      users.id as asker_id, users.username as asker_username, users.avatar as asker_avatar, tags.tag_id,
+      jsonb_agg(to_jsonb(stocks)) as stock 
+      from questions
+      inner join tags on questions.tag_id = tags.tag_id 
+      full outer join stocks on tags.stock_id = stocks.id
+      inner join users on users.id = questions.asker_id
+      group by questions.id, users.username, users.avatar, tags.tag_id, users.id
+      order by questions.created_at desc
+      `)
+    
 
     return questions.rows
   }
@@ -22,27 +27,35 @@ export class QuestionService {
   // get one question by question id
   async findOne(question_id: number) {
     const question = await this.knex.raw
-      (`select questions.id, questions.content, questions.created_at, users.username as asker_username, users.avatar as asker_avatar, tags.tag_id, jsonb_agg(to_jsonb(stocks)) as stock
-    from questions
-    inner join tags on questions.tag_id = tags.tag_id 
-    full outer join stocks on tags.stock_id = stocks.id
-    inner join users on users.id = questions.asker_id
-    where questions.id = ${question_id}
-    group by questions.id, users.username, users.avatar, tags.tag_id`);
-    
+      (`select questions.id, questions.content, questions.created_at at time zone 'utc+8' as created_at,
+      users.id as asker_id, users.username as asker_username, users.avatar as asker_avatar,
+      tags.tag_id, jsonb_agg(to_jsonb(stocks)) as stock
+      from questions
+      inner join tags on questions.tag_id = tags.tag_id 
+      full outer join stocks on tags.stock_id = stocks.id
+      inner join users on users.id = questions.asker_id
+      where questions.id = ${question_id}
+      group by questions.id, users.username, users.avatar, tags.tag_id, users.id
+      order by questions.created_at desc
+      `);
+
     return question.rows
   }
 
   // get one or all questions by asker id
   async findAskerQuestions(asker_id: number) {
     const questions = await this.knex.raw
-      (`select questions.id, questions.content, questions.created_at, users.username as asker_username, users.avatar as asker_avatar, tags.tag_id, jsonb_agg(to_jsonb(stocks)) as stock
-    from questions
-    inner join tags on questions.tag_id = tags.tag_id 
-    full outer join stocks on tags.stock_id = stocks.id
-    inner join users on users.id = questions.asker_id
-    where questions.asker_id = ${asker_id}
-    group by questions.id, users.username, users.avatar, tags.tag_id`);
+      (`select questions.id, questions.content, questions.created_at at time zone 'utc+8' as created_at,
+      users.id as asker_id, users.username as asker_username, users.avatar as asker_avatar, tags.tag_id,
+      jsonb_agg(to_jsonb(stocks)) as stock
+      from questions
+      inner join tags on questions.tag_id = tags.tag_id 
+      full outer join stocks on tags.stock_id = stocks.id
+      inner join users on users.id = questions.asker_id
+      where questions.asker_id = ${asker_id}
+      group by questions.id, users.username, users.avatar, tags.tag_id, users.id
+      order by questions.created_at desc
+      `);
 
     return questions.rows
   }
@@ -63,7 +76,7 @@ export class QuestionService {
           await this.knex('tags').insert({ tag_id: 1, stock_id: null });
         }
         // insert question to question table
-        return await this.knex('questions').insert({ asker_id, content, tag_id: 1 }).returning('id');  
+        return await this.knex('questions').insert({ asker_id, content, tag_id: 1 }).returning('id');
       } else {
         let { tag_id } = await this.knex('tags').select('tag_id').orderBy('tag_id', 'desc').first();
 
@@ -76,7 +89,7 @@ export class QuestionService {
           await this.knex('tags').insert({ tag_id: tag_id + 1, stock_id: null });
         }
         // insert question to question table
-        return await this.knex('questions').insert({ asker_id, content, tag_id: tag_id + 1 }).returning('id');        
+        return await this.knex('questions').insert({ asker_id, content, tag_id: tag_id + 1 }).returning('id');
       }
     } catch (err) {
       console.log('error:', err);

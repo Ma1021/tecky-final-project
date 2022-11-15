@@ -2,14 +2,24 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { hash } from 'bcrypt';
-import knex from 'knex';
-import { Interface } from 'readline';
+import { Knex } from 'nestjs-knex';
+import { InjectModel } from 'nest-knexjs';
 
 @Injectable()
 export class UserService {
+  constructor(@InjectModel() private readonly knex: Knex) {}
+
   async create(createUserDto: CreateUserDto) {
     // return 'This action adds a new user';
-    await knex('users').insert(createUserDto);
+    console.log('add new user');
+    createUserDto.password_hash = await hash(createUserDto.password, 10);
+    delete createUserDto.password;
+    const newUser = await this.knex('users')
+      .insert(createUserDto)
+      .returning('*');
+
+    console.log('new user created', newUser);
+    return newUser;
   }
 
   findAll() {

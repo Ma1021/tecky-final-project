@@ -5,7 +5,7 @@ export class CreateUserDto {
   username: string;
 
   @IsNotEmpty()
-  dob: Date;
+  birthday: Date;
 
   @IsNotEmpty()
   gender: 'M' | 'F';
@@ -15,5 +15,7 @@ export class CreateUserDto {
   email: string;
 
   @IsNotEmpty()
+  password_hash: string;
+
   password: string;
 }

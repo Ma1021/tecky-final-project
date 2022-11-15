@@ -1,4 +1,3 @@
-import { TestingModuleBuilder } from '@nestjs/testing';
 import { Knex } from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
@@ -6,7 +5,7 @@ export async function up(knex: Knex): Promise<void> {
     table.integer('user_type_id').defaultTo(1).alter();
     table
       .text('introduction')
-      .defaultTo('此用戶沈迷股市﹐未有容餘更新自我介紹。')
+      .defaultTo('此用戶沉迷股市﹐未有容餘更新自我介紹。')
       .alter();
   });
 }

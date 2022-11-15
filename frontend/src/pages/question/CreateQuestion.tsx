@@ -21,7 +21,7 @@ const CreateQuestion: React.FC = () => {
     useEffect(()=>{
         if(state) {
             const { stock_id, stock_symbol } = state as TagValues
-            
+        
             if(selectTags.filter(tag => tag.stock_id === stock_id).length <= 0) {
                 setSelectTags([...selectTags, {stock_id, stock_symbol}])
             }

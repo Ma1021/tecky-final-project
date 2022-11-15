@@ -42,8 +42,6 @@ const Navigation: React.FC = () => {
       <Menu />
       <IonRouterOutlet>
         <Route exact path="/userInfo" component={UserInfo}></Route>
-        <Route exact path="/discuss/createQuestion" component={CreateQuestion}></Route>
-        <Route exact path="/discuss/createQuestion/selectTag" component={SelectTags}></Route>
         <Route exact path="/question/:id" component={QuestionDetail}></Route>
         <Route exact path="/">
           <Redirect to="/home" />
@@ -56,6 +54,8 @@ const Navigation: React.FC = () => {
             <Route exact path="/tab1" component={Tab1}></Route>
             <Route exact path="/tab2" component={Tab2}></Route>
             <Route exact path="/discuss" component={Discuss}></Route>
+            <Route exact path="/discuss/createQuestion" component={CreateQuestion}></Route>
+            <Route exact path="/discuss/createQuestion/selectTag" component={SelectTags}></Route>
             <Route exact path="/">
               <Redirect to="/home" />
             </Route>

@@ -17,7 +17,7 @@ import {
   chatbubbles,
   newspaperOutline,
   chatboxEllipsesOutline,
-  chatbubbleOutline,
+  chatbubblesOutline,
   videocamOutline,
 } from "ionicons/icons";
 import "./Navigation.css";
@@ -87,7 +87,7 @@ const Navigation: React.FC = () => {
             </IonTabButton>
             <IonTabButton tab="tab4" href="/tab4" className="tabButton">
               <IonIcon
-                icon={selectedTab === "tab4" ? chatbubbles : chatbubbleOutline}
+                icon={selectedTab === "tab4" ? chatbubbles : chatbubblesOutline}
               />
               <IonLabel>聊天室</IonLabel>
             </IonTabButton>

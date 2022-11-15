@@ -23,7 +23,6 @@ const QuestionCard: React.FC<QuestionsProps> = memo((props:QuestionsProps)=>{
                         </AskerInfo>
                         <IonText style={{fontSize:12}}>{question.created_at.slice(0,10) + ' ' + question.created_at.slice(11,16)}</IonText>
                     </QuestionHeader>
-
                     <QuestionContent>
                         <AskerContent>
                             <IonText>{question.content}</IonText>
@@ -35,7 +34,6 @@ const QuestionCard: React.FC<QuestionsProps> = memo((props:QuestionsProps)=>{
                                 })}
                             </TagContainer>
                         </AskerContent>
-
                         {/* <AnswererInfo>
                             <IonText>{question.answerer_username}</IonText>
                             <AnswererAvatar src={question.answerer_avatar}></AnswererAvatar>
@@ -53,7 +51,7 @@ const QuestionCard: React.FC<QuestionsProps> = memo((props:QuestionsProps)=>{
 const QuestionContainer = styled(IonCard)`
     height:260px;
     width: 95%;
-    margin: 10px;
+    margin: 6px;
 `
 
 const QuestionHeader = styled(IonCardHeader)`

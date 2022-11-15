@@ -74,9 +74,8 @@ const ToolContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px;
   padding: 0px 10px;
-  gap: 10px;
+  gap: 8px;
 `;
 
 const SearchBar = styled(IonSearchbar)`
@@ -95,7 +94,7 @@ const QuestionBtn = styled(IonButton)`
 
 const SegmentTab = styled(IonSegment)`
   width: 95%;
-  margin: 10px;
+  margin: 8px 10px;
   color: #dedede;
 `;
 

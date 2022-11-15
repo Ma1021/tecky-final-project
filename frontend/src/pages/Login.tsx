@@ -13,6 +13,8 @@ import {
 } from "@ionic/react";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
+import { login } from "../redux/auth/actions";
+import { useAppDispatch } from "../redux/store";
 
 const Login: React.FC = () => {
   const {
@@ -24,6 +26,8 @@ const Login: React.FC = () => {
     mode: "onTouched",
     reValidateMode: "onChange",
   });
+
+  const dispatch = useAppDispatch();
 
   return (
     <IonPage id="main-content">
@@ -43,20 +47,39 @@ const Login: React.FC = () => {
           onSubmit={handleSubmit(async (data) => {
             try {
               console.log(process.env.REACT_APP_PUBLIC_URL);
+              console.log(JSON.stringify(data));
               // await register(data);
-              const res = await fetch(
+              let res = await fetch(
                 `${process.env.REACT_APP_PUBLIC_URL}/auth/login`,
                 {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
                   },
-                  body: JSON.stringify({ data }),
+                  body: JSON.stringify(data),
                 }
               );
-              const json = await res.json();
+              let json = await res.json();
               console.log(json);
-              alert(JSON.stringify(data));
+
+              let resProfile = await fetch(
+                `${process.env.REACT_APP_PUBLIC_URL}/profile`,
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${json.access_token}`,
+                  },
+                  body: JSON.stringify(data),
+                }
+              );
+              let jsonProfile = await resProfile.json();
+              console.log(jsonProfile);
+              let ans = dispatch(login(jsonProfile, json.token));
+              console.log(ans);
+              if (res.status === 200) {
+                alert(JSON.stringify(data));
+              }
             } catch (err) {
               console.log(err);
             }

@@ -15,8 +15,8 @@ import styled from "styled-components";
 
 // Components
 import Allquestion from "../../components/discuss/Allquestion";
-import MyAnswer from "../../components/discuss/MyAnswer";
-import MyQuestion from "../../components/discuss/MyQuestion";
+import MyAnswer from "../../components/discuss/Myanswer";
+import MyQuestion from "../../components/discuss/Myquestion";
 import Title from "../../components/All/Title";
 
 const Discuss: React.FC = () => {

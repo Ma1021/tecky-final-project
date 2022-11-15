@@ -46,7 +46,7 @@ const RegisterLoop: React.FC = () => {
           // through local strategy get the access_token
           onSubmit={handleSubmit(async (data) => {
             try {
-              data.dob = data.dob.toISOSTr
+              data.dob = data.dob.toISOSTr;
               console.log(process.env.REACT_APP_PUBLIC_URL);
               // await register(data);
               const res = await fetch(
@@ -106,6 +106,7 @@ const RegisterLoop: React.FC = () => {
                         border: "1px white solid",
                         borderRadius: "5px",
                       }}
+                      {...register("gender")}
                     ></IonRadio>
                   </IonItem>
                   <IonItem lines="none">
@@ -119,6 +120,7 @@ const RegisterLoop: React.FC = () => {
                         border: "1px white solid",
                         borderRadius: "5px",
                       }}
+                      {...register("gender")}
                     ></IonRadio>
                   </IonItem>
                 </div>
@@ -172,7 +174,7 @@ const RegisterLoop: React.FC = () => {
                     value:
                       /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/,
                     message:
-                      "密碼需要有8-16個字,包括最少一個數字, 一個大楷字母及一個小楷字母",
+                      "密碼需要有8-16個字,包括最少一個數字, 一個大楷字母, 一個小楷字母及符號",
                   },
                 })}
               ></IonInput>
@@ -195,7 +197,7 @@ const RegisterLoop: React.FC = () => {
                     value:
                       /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/,
                     message:
-                      "密碼需要有8-16個字,包括最少一個數字, 一個大楷字母及一個小楷字母",
+                      "密碼需要有8-16個字,包括最少一個數字, 一個大楷字母, 一個小楷字母及符號",
                   },
                 })}
               ></IonInput>
@@ -207,11 +209,9 @@ const RegisterLoop: React.FC = () => {
               as={<IonLabel style={{ color: "red" }}></IonLabel>}
             />
           </IonList>
-          <>
-            <IonButton expand="block" type="submit" className="ion-margin">
-              註冊
-            </IonButton>
-          </>
+          <IonButton onClick={submit} className="ion-margin">
+            註冊
+          </IonButton>
         </form>
       </IonContent>
     </IonPage>

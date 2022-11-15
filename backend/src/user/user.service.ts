@@ -12,8 +12,7 @@ export class UserService {
   async create(createUserDto: CreateUserDto) {
     // return 'This action adds a new user';
     console.log('add new user');
-    createUserDto.password_hash = await hash(createUserDto.password, 10);
-    delete createUserDto.password;
+    delete createUserDto.rePassword;
     const newUser = await this.knex('users')
       .insert(createUserDto)
       .returning('*');
@@ -23,7 +22,7 @@ export class UserService {
   }
 
   findAll() {
-    return `This action returns all user`;
+    return `This action returns hrer user`;
   }
 
   async findOne(username: string) {

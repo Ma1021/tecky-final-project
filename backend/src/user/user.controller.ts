@@ -24,6 +24,7 @@ export class UserController {
       delete createUserDto.password;
       return this.userService.create(createUserDto);
     } catch (err) {
+      // throw new HttpException('');
       return { error: 'error during creating user' };
     }
   }

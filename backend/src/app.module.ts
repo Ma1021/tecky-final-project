@@ -6,21 +6,12 @@ import { KnexModule } from 'nest-knexjs';
 import { env } from '../env';
 import { AuthModule } from './auth/auth.module';
 
+let profile = require('../knexfile')[env.NODE_ENV];
+
 @Module({
   imports: [
     QuestionModule,
-    KnexModule.forRoot({
-      config: {
-        client: 'pg',
-        useNullAsDefault: true,
-        connection: {
-          user: env.DB_USERNAME,
-          password: env.DB_PASSWORD,
-          database: env.DB_NAME,
-          charset: 'utf8',
-        },
-      },
-    }),
+    KnexModule.forRoot({ config: profile }),
     AuthModule,
   ],
   controllers: [AppController],

@@ -42,19 +42,6 @@ const Navigation: React.FC = () => {
       <Menu />
       <IonRouterOutlet>
         <Route exact path="/userInfo" component={UserInfo}></Route>
-<<<<<<< HEAD
-        <Route
-          exact
-          path="/discuss/createQuestion"
-          component={CreateQuestion}
-        ></Route>
-        <Route
-          exact
-          path="/discuss/createQuestion/selectTag"
-          component={SelectTags}
-        ></Route>
-=======
->>>>>>> c24637ff4f8dee8a53d1d3316a26ed13cea5481d
         <Route exact path="/question/:id" component={QuestionDetail}></Route>
         <Route exact path="/">
           <Redirect to="/home" />

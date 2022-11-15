@@ -11,7 +11,7 @@ type TagValues = {
 
 const CreateQuestion: React.FC = () => {
     const [ selectTags, setSelectTags] = useState(Array<TagValues>);
-    const [ content, setContent ] = useState('')
+    const [ content, setContent ] = useState('');
 
     const { state } = useLocation();
     const [present, dismiss] = useIonToast();

@@ -23,10 +23,30 @@ const RegisterLoop: React.FC = () => {
     handleSubmit,
     // watch,
     formState: { errors },
+    getValues,
   } = useForm({
     mode: "onTouched",
     reValidateMode: "onChange",
   });
+
+  let submit = async () => {
+    console.log("enter submit");
+    let data: any = getValues();
+    data.birthday = new Date(data.birthday).toISOString();
+    console.log(data);
+    console.log(process.env.REACT_APP_PUBLIC_URL);
+    // await register(data);
+    const res = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    const json = await res.json();
+    console.log(json);
+    alert(JSON.stringify(data));
+  };
 
   return (
     <IonPage id="main-content">
@@ -43,29 +63,7 @@ const RegisterLoop: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen>
         <form
-          // through local strategy get the access_token
-          onSubmit={handleSubmit(async (data) => {
-            try {
-              data.dob = data.dob.toISOSTr;
-              console.log(process.env.REACT_APP_PUBLIC_URL);
-              // await register(data);
-              const res = await fetch(
-                `${process.env.REACT_APP_PUBLIC_URL}/user`,
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({ data }),
-                }
-              );
-              const json = await res.json();
-              console.log(json);
-              alert(JSON.stringify(data));
-            } catch (err) {
-              console.log(err);
-            }
-          })}
+        // through local strategy get the access_token
         >
           <IonList>
             <IonItem>
@@ -82,7 +80,7 @@ const RegisterLoop: React.FC = () => {
               <IonInput
                 type="date"
                 // clearInput={true}
-                {...register("dob", {
+                {...register("birthday", {
                   required: { value: true, message: "請輸入出生日期" },
                 })}
               ></IonInput>

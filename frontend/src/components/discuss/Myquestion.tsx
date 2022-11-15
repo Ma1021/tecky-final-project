@@ -10,7 +10,7 @@ const MyQuestion: React.FC = memo(() => {
 
     const fetchData = async() => {
         try {
-            const res = await fetch(`http://localhost:8080/question/user/${user_id}`, {
+            const res = await fetch(`http://localhost:8080/question/${user_id}`, {
                 method:'GET',
                 headers:{'Content-Type': 'application/json'}
             })
@@ -38,7 +38,7 @@ const MyQuestion: React.FC = memo(() => {
                 <IonRefresherContent></IonRefresherContent>
             </IonRefresher>
             <QuestionContainer>
-                <QuestionCard questions={questions} user_id={user_id}/>
+                {questions.length > 0 ? <QuestionCard questions={questions} user_id={user_id} /> : <div style={{marginTop:10}}>沒有問題</div>}
             </QuestionContainer>
         </>
     );
@@ -51,4 +51,4 @@ const MyQuestion: React.FC = memo(() => {
     align-items: center;
 `
   
-export default MyQuestion;
+export default MyQuestion

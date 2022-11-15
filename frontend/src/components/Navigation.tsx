@@ -17,7 +17,7 @@ import {
   chatbubbles,
   newspaperOutline,
   chatboxEllipsesOutline,
-  chatbubbleOutline,
+  chatbubblesOutline,
   videocamOutline,
 } from "ionicons/icons";
 import "./Navigation.css";
@@ -42,6 +42,7 @@ const Navigation: React.FC = () => {
       <Menu />
       <IonRouterOutlet>
         <Route exact path="/userInfo" component={UserInfo}></Route>
+<<<<<<< HEAD
         <Route
           exact
           path="/discuss/createQuestion"
@@ -52,6 +53,8 @@ const Navigation: React.FC = () => {
           path="/discuss/createQuestion/selectTag"
           component={SelectTags}
         ></Route>
+=======
+>>>>>>> c24637ff4f8dee8a53d1d3316a26ed13cea5481d
         <Route exact path="/question/:id" component={QuestionDetail}></Route>
         <Route exact path="/">
           <Redirect to="/home" />
@@ -64,6 +67,8 @@ const Navigation: React.FC = () => {
             <Route exact path="/tab1" component={Tab1}></Route>
             <Route exact path="/tab2" component={Tab2}></Route>
             <Route exact path="/discuss" component={Discuss}></Route>
+            <Route exact path="/discuss/createQuestion" component={CreateQuestion}></Route>
+            <Route exact path="/discuss/createQuestion/selectTag" component={SelectTags}></Route>
             <Route exact path="/">
               <Redirect to="/home" />
             </Route>
@@ -95,7 +100,7 @@ const Navigation: React.FC = () => {
             </IonTabButton>
             <IonTabButton tab="tab4" href="/tab4" className="tabButton">
               <IonIcon
-                icon={selectedTab === "tab4" ? chatbubbles : chatbubbleOutline}
+                icon={selectedTab === "tab4" ? chatbubbles : chatbubblesOutline}
               />
               <IonLabel>聊天室</IonLabel>
             </IonTabButton>

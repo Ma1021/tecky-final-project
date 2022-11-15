@@ -61,7 +61,9 @@ const Allquestion: React.FC = memo(() => {
         <IonRefresherContent></IonRefresherContent>
       </IonRefresher>
       <QuestionContainer>
-        <QuestionCard questions={questions} user_id={user_id} />
+        {questions.length > 0 ? <QuestionCard questions={questions} user_id={user_id} /> : 
+        <div style={{marginTop:10}}>沒有問題</div>
+        }
       </QuestionContainer>
     </>
   );

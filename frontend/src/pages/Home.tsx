@@ -11,10 +11,18 @@ import {
 import logo from "../img/logo.jpeg";
 import { logoApple } from "ionicons/icons";
 import { useHistory } from "react-router";
+// import { Preferences } from "@capacitor/preferences";
 // import Notification from "../components/All/Notification";
 
 const Home: React.FC = () => {
   const history = useHistory();
+  // const auth = async () => {
+  //   await Preferences.get({ key: "auth" });
+  // };
+  const auth = localStorage.getItem("auth");
+
+  console.log("auth", auth);
+
   return (
     <>
       <IonPage>

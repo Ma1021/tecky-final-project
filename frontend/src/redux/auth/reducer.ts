@@ -13,6 +13,13 @@ export function authReducer(
         token: action.token,
         isAuthenticated: true,
       };
+    case "@@auth/REGISTER":
+      return {
+        ...state,
+        user: action.user,
+        token: action.token,
+        isAuthenticated: true,
+      };
     case "@@auth/LOGOUT":
       return {
         // why not false here??

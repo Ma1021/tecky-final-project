@@ -69,9 +69,10 @@ export class QuestionController {
       }
     }
 
-    this.questionService.create(questions).then((response)=>{
+    this.questionService.create(questions).then(async (response)=>{
       const { id } = response[0]
-      res.status(HttpStatus.CREATED).json({message: 'Create question successfully', question_id:id})
+      const question = await this.questionService.findOne(id)
+      res.status(HttpStatus.CREATED).json(question)
     })
   }
 

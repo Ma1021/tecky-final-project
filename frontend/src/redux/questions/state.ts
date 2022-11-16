@@ -1,21 +1,30 @@
-export type Question_Result = {
-    id: number,
-    asker_id: number,
-    asker_username: string,
-    asker_avatar: string,
-    asker_content: string,
-    answerer_id: number,
-    answerer_username: string,
-    answerer_avatar: string,
-    answerer_content: string,
-    tags:
-    Array<{
-        tag_id: number,
-        tag_name: string
-    }>,
-    created_time: string
+export interface Question {
+    id: number;
+    content: string;
+    created_at: string;
+    asker_id: number;
+    asker_username: string;
+    asker_avatar: string;
+    stock: Array<{
+      id: number;
+      name: string;
+      symbol: string;
+      created_at: string;
+      updated_at: string;
+    }>;
+    tag_id: number;
 }
 
-export type RootState = {
-    questionList: Question_Result[]
+export interface QuestionState {
+    question: {};
+    questionList: Question[];
+    loading: boolean;
+    errors: any;
+}
+
+export const initialState: QuestionState = {
+  question: {},
+  questionList: [],
+  loading: false,
+  errors: null
 }

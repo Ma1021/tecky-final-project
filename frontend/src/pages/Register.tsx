@@ -94,7 +94,8 @@ const RegisterLoop: React.FC = () => {
               >
                 <div className="d-flex">
                   <IonItem lines="none">
-                    <IonLabel className="ion-padding-right">男</IonLabel>
+                    <IonLabel>男</IonLabel>
+                    <div className="pl-1"></div>
                     <IonRadio
                       value="M"
                       style={{
@@ -108,7 +109,8 @@ const RegisterLoop: React.FC = () => {
                     ></IonRadio>
                   </IonItem>
                   <IonItem lines="none">
-                    <IonLabel className="ion-padding-right">女</IonLabel>
+                    <IonLabel>女</IonLabel>
+                    <div className="pl-1"></div>
                     <IonRadio
                       value="F"
                       style={{

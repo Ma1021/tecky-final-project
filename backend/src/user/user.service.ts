@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { hash } from 'bcrypt';
@@ -11,14 +11,21 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto) {
     // return 'This action adds a new user';
-    console.log('add new user');
-    delete createUserDto.rePassword;
-    const newUser = await this.knex('users')
-      .insert(createUserDto)
-      .returning('*');
-
-    console.log('new user created', newUser);
-    return newUser;
+    try {
+      const newUser = await this.knex('users')
+        .insert(createUserDto)
+        .returning('id');
+      console.log('User service: new user created', newUser[0].id);
+      return newUser[0].id;
+    } catch (error) {
+      if (error.message.includes('duplicate')) {
+        throw new HttpException('電郵已註冊', HttpStatus.CONFLICT);
+      }
+      throw new HttpException(
+        '註冊失敗: service problem',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   findAll() {

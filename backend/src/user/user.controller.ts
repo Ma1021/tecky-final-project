@@ -6,26 +6,36 @@ import {
   Patch,
   Param,
   Delete,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { hash } from 'bcrypt';
+import { AuthService } from 'src/auth/auth.service';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private authService: AuthService,
+  ) {}
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     try {
-      console.log('enter post create use');
       createUserDto.password_hash = await hash(createUserDto.password, 10);
       delete createUserDto.password;
-      return this.userService.create(createUserDto);
+      delete createUserDto.rePassword;
+      let user = { userId: await this.userService.create(createUserDto) };
+      console.log('user controller: user id returned', user);
+      if (user.userId) {
+        let token = this.authService.login(user);
+        return token;
+      }
     } catch (err) {
-      // throw new HttpException('');
-      return { error: 'error during creating user' };
+      throw new HttpException('註冊失敗', HttpStatus.BAD_REQUEST);
     }
   }
 

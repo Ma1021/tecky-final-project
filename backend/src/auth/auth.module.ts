@@ -12,7 +12,7 @@ import { JwtStrategy } from './jwt.strategy';
     // PassportModule,
     JwtModule.register({
       secret: jwtConstants.secret,
-      // the key would be valid for 1day
+      // the key would be valid for 1year
       signOptions: { expiresIn: '365d' },
     }),
   ],

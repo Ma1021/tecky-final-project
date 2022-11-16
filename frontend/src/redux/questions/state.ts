@@ -16,15 +16,17 @@ export interface Question {
 }
 
 export interface QuestionState {
-    question: {};
+    question: Question;
     questionList: Question[];
+    askerQuestionList: Question[];
     loading: boolean;
     errors: any;
 }
 
 export const initialState: QuestionState = {
-  question: {},
+  question: {} as Question,
   questionList: [],
+  askerQuestionList: [],
   loading: false,
   errors: null
 }

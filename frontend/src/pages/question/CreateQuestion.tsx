@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonButtons, IonImg, IonText, IonItem, IonLabel, IonInput, IonIcon, IonTextarea, IonButton, useIonToast } from '@ionic/react';
 import styled from 'styled-components';
 import { useHistory, useLocation } from 'react-router-dom';
 import { addCircleOutline, closeCircleOutline } from 'ionicons/icons';
+import { createQuestion } from "../../redux/questions/question"
+import { useAppDispatch } from '../../redux/store';
 
 type TagValues = {
     stock_id: number;
@@ -17,6 +19,7 @@ const CreateQuestion: React.FC = () => {
     const [present, dismiss] = useIonToast();
 
     const history = useHistory();
+    const dispatch = useAppDispatch();
 
     useEffect(()=>{
         if(state) {
@@ -26,7 +29,7 @@ const CreateQuestion: React.FC = () => {
                 setSelectTags([...selectTags, {stock_id, stock_symbol}])
             }
         }
-    }, [state])
+    }, [state]);
 
     function removeTag(e: any, key?:number) {
         setSelectTags(selectTags.filter(tag => tag.stock_id !== key))
@@ -36,7 +39,8 @@ const CreateQuestion: React.FC = () => {
         setContent((e.target as HTMLInputElement).value)
     }
 
-    async function submit() {
+    async function submit(e: any) {
+        e.preventDefault();
         const stock_id:number[] = []
         let obj = {}
 
@@ -62,21 +66,7 @@ const CreateQuestion: React.FC = () => {
             }
         }
 
-        const res = await fetch('http://localhost:8080/question', {
-            method: 'POST',
-            headers:{'Content-Type': 'application/json'},
-            body:JSON.stringify(obj)
-        })
-
-        if(!res.ok) {
-            const message = await res.text()
-            console.log(message);
-            if(message === '{"statusCode":400,"message":"Missing content"}') {
-                present('請輸入內容', 1500)
-            }
-            return
-        } 
-
+        dispatch(createQuestion(obj));
         present('成功提出問題', 1500)
         history.replace("/discuss")
     }

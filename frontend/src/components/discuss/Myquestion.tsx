@@ -1,54 +1,50 @@
-import { IonRefresher, IonRefresherContent, RefresherEventDetail } from '@ionic/react';
-import { memo, useEffect, useState } from 'react'
-import { Questions } from './Allquestion';
+import { IonRefresher, IonRefresherContent, RefresherEventDetail, IonSpinner } from '@ionic/react';
+import { memo } from 'react'
 import QuestionCard from './QuestionCard';
 import styled from 'styled-components';
+import { useAppSelector } from "../../redux/store";
 
-const MyQuestion: React.FC = memo(() => {
-    const [questions, setQuestions ] = useState(Array<Questions>);
+interface QuestionProps {
+    loadAskerQuestion: Function
+  }
+
+const MyQuestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
+    const { askerQuestionList, loading } = useAppSelector((state) => state.question)
     const user_id = 1;
 
-    const fetchData = async() => {
-        try {
-            const res = await fetch(`http://localhost:8080/question/user/${user_id}`, {
-                method:'GET',
-                headers:{'Content-Type': 'application/json'}
-            })
-            const json = await res.json();
-            setQuestions(json);
-        } catch(err) {
-            console.log("error", err);
-        }
-    }
-
-    useEffect(()=>{
-        fetchData();
-    },[])
-
     function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
-        setTimeout(() => {
-            fetchData();
+        props.loadAskerQuestion();
+        if(!loading) {
             event.detail.complete();
-        }, 1000);
+        }
     }
 
     return (
         <>
             <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
-                <IonRefresherContent></IonRefresherContent>
+                <IonRefresherContent pullingText="下拉更新"></IonRefresherContent>
             </IonRefresher>
+            {loading ? <LoadingScreen><IonSpinner name="circles"/> 載入中...</LoadingScreen> : 
             <QuestionContainer>
-                {questions.length > 0 ? <QuestionCard questions={questions} user_id={user_id} /> : <div style={{marginTop:10}}>沒有問題</div>}
-            </QuestionContainer>
+                {askerQuestionList.length > 0 ? <QuestionCard questions={askerQuestionList} user_id={user_id} /> : <div style={{marginTop:10}}>沒有問題</div>}
+            </QuestionContainer>}
         </>
     );
   });
 
-  const QuestionContainer = styled.div`
+const QuestionContainer = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+`
+
+const LoadingScreen = styled.div`
+  width: 100%;
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
   
 export default MyQuestion

@@ -28,11 +28,11 @@ export class UserController {
       createUserDto.password_hash = await hash(createUserDto.password, 10);
       delete createUserDto.password;
       delete createUserDto.rePassword;
-      let user = { userId: await this.userService.create(createUserDto) };
-      console.log('user controller: user id returned', user);
-      if (user.userId) {
-        let token = this.authService.login(user);
-        return token;
+      let userObj = { userId: await this.userService.create(createUserDto) };
+      if (userObj.userId) {
+        let token = await this.authService.login(userObj);
+        let returnObje = { user: { id: userObj.userId }, token };
+        return returnObje;
       }
     } catch (err) {
       throw new HttpException('註冊失敗', HttpStatus.BAD_REQUEST);
@@ -45,10 +45,10 @@ export class UserController {
   }
 
   // should be updated as username or both username and id
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.userService.findOne(id);
-  // }
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.userService.findOne(id);
+  }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {

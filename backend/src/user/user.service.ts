@@ -15,7 +15,6 @@ export class UserService {
       const newUser = await this.knex('users')
         .insert(createUserDto)
         .returning('id');
-      console.log('User service: new user created', newUser[0].id);
       return newUser[0].id;
     } catch (error) {
       if (error.message.includes('duplicate')) {

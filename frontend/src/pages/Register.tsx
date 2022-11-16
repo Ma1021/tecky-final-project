@@ -19,12 +19,29 @@ import { ErrorMessage } from "@hookform/error-message";
 import { useHistory } from "react-router";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { registerAuth } from "../redux/auth/actions";
-// import { useEffect } from "react";
+import { useEffect } from "react";
 // import { Preferences } from "@capacitor/preferences";
 
 const RegisterLoop: React.FC = () => {
   let history = useHistory();
   const dispatch = useAppDispatch();
+
+  const select = useAppSelector((state) => {
+    return state.auth;
+  });
+  useEffect(() => {
+    // phone version
+    // async () => {
+    //   await Preferences.set({ key: "auth", value: JSON.stringify(select) });
+    // };
+
+    // web version
+    localStorage.setItem("auth", JSON.stringify(select));
+    console.log(
+      "after useEffect and set localStorage",
+      localStorage.getItem("auth")
+    );
+  }, [select]);
 
   const {
     register,
@@ -45,13 +62,6 @@ const RegisterLoop: React.FC = () => {
     },
   });
 
-  // useEffect(
-  //   () =>
-  //     useAppSelector((state) => {
-  //       return state.auth;
-  //     }),
-  //   []
-  // );
   let submit = async () => {
     console.log("enter submit");
     let data: any = getValues();
@@ -67,16 +77,9 @@ const RegisterLoop: React.FC = () => {
     });
     const json = await res.json();
     console.log(json);
-    // { user: {id: userObj}, access_token: token}
+    //format of json return: { user: {id: userObj}, access_token: token}
     dispatch(registerAuth(json.user, json.token.access_token));
-    const selector = useAppSelector((state) => {
-      return state.auth;
-    });
-    localStorage.setItem("auth", JSON.stringify(selector));
-    // async () => {
-    //   await Preferences.set({ key: "auth", value: JSON.stringify(selector) });
-    // };
-
+    // console.log("register", localStorage.getItem("auth"));
     if (json) {
       history.replace("/discuss");
     }

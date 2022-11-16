@@ -9,9 +9,11 @@ import {
   IonSearchbar,
   IonButton,
 } from "@ionic/react";
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
+import { useAppDispatch } from "../../redux/store";
+import { loadQuestions } from "../../redux/questions/question";
 
 // Components
 import Allquestion from "../../components/discuss/Allquestion";
@@ -25,6 +27,15 @@ const Discuss: React.FC = () => {
   const onSegmentChange = (e: any) => {
     setSegment(e.detail.value);
   };
+
+  const dispatch = useAppDispatch();
+  const initQuestion = useCallback(async ()=>{
+    await dispatch(loadQuestions());
+  },[dispatch]);
+
+  useEffect(()=>{
+    initQuestion();
+  },[]);
 
   const history = useHistory();
 
@@ -60,7 +71,7 @@ const Discuss: React.FC = () => {
       </ToolContainer>
 
       <IonContent>
-        {segment === "all" && <Allquestion />}
+        {segment === "all" && <Allquestion loadQuestion={initQuestion}/>}
         {segment === "question" && <MyQuestion />}
         {segment === "answer" && <MyAnswer />}
       </IonContent>

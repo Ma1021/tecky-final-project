@@ -1,15 +1,7 @@
 import { Knex } from "knex";
 
 export async function up(knex: Knex): Promise<void> {
-    knex.schema.createTable("ans_likes", (table)=> {
-        table.increments("id");
-        table.integer("user_id").unsigned().notNullable();
-        table.foreign("user_id").references("users.id");
-        table.integer("answer_id").unsigned().notNullable();
-        table.foreign("answer_id").references("answers.id");
-    })
-
-    knex.schema.createTable("answers", (table) => {
+    await knex.schema.createTable("answers", (table) => {
         table.increments("id");
         table.integer("question_id").unsigned().notNullable();
         table.foreign("question_id").references("questions.id");
@@ -19,6 +11,14 @@ export async function up(knex: Knex): Promise<void> {
         table.boolean("is_ban").defaultTo("false");
         table.timestamps(false, true);
     });
+
+    await knex.schema.createTable("ans_likes", (table)=> {
+        table.increments("id");
+        table.integer("user_id").unsigned().notNullable();
+        table.foreign("user_id").references("users.id");
+        table.integer("answer_id").unsigned().notNullable();
+        table.foreign("answer_id").references("answers.id");
+    })
 }
 
 export async function down(knex: Knex): Promise<void> {

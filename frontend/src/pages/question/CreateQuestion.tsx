@@ -40,6 +40,11 @@ const CreateQuestion: React.FC = () => {
         const stock_id:number[] = []
         let obj = {}
 
+        if(content === '') {
+            present('請輸入內容', 1500)
+            return
+        }
+
         if(selectTags.length > 0) {
             for(let tag of selectTags) {
                 stock_id.push(tag.stock_id)

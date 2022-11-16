@@ -10,7 +10,7 @@ const MyQuestion: React.FC = memo(() => {
 
     const fetchData = async() => {
         try {
-            const res = await fetch(`http://localhost:8080/question/${user_id}`, {
+            const res = await fetch(`http://localhost:8080/question/user/${user_id}`, {
                 method:'GET',
                 headers:{'Content-Type': 'application/json'}
             })

@@ -16,14 +16,14 @@ export interface Question {
 }
 
 export interface QuestionState {
-    question: {};
+    question: Question;
     questionList: Question[];
     loading: boolean;
     errors: any;
 }
 
 export const initialState: QuestionState = {
-  question: {},
+  question: {} as Question,
   questionList: [],
   loading: false,
   errors: null

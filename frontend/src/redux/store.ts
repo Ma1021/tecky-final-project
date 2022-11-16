@@ -5,7 +5,7 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { TypedUseSelectorHook } from "react-redux";
-import questionReducer from "./questions/question";
+import questionReducer from "./questions/question"
 
 export type RootState = ReturnType<typeof store.getState>;
 

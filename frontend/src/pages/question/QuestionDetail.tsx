@@ -1,55 +1,64 @@
-import { IonButtons, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonContent, IonItem, IonImg, IonText, IonButton, IonIcon, IonInput, IonFooter } from '@ionic/react';
-import { memo, useEffect, useState } from 'react'
+import { IonButtons, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonContent, IonItem, IonImg, IonText, IonButton, IonIcon, IonInput, IonFooter, IonSpinner } from '@ionic/react';
+import { memo, useEffect, useCallback, useState } from 'react'
 import { useLocation } from 'react-router-dom';
-import { Questions } from '../../components/discuss/Allquestion'
 import styled from 'styled-components';
 import { heartCircle, chatboxEllipses, shareSocial, trash } from 'ionicons/icons';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
+import { loadQuestion } from '../../redux/questions/question'
+import { Question } from '../../redux/questions/state';
 
 const QuestionDetail: React.FC = memo(() => {
-  const [question, setQuestion] = useState<Array<Questions>>([]);
-  const fetchData = async (question_id: number) => {
-    try {
-      const res = await fetch(`http://localhost:8080/question/${question_id}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-      })
-      const json = await res.json();
-      setQuestion(json);
-    } catch (err) {
-      console.log("error", err);
-    }
-  }
+  // const [question, setQuestion] = useState<Array<Questions>>([]);
+  // const fetchData = async (question_id: number) => {
+  //   try {
+  //     const res = await fetch(`http://localhost:8080/question/${question_id}`, {
+  //       method: 'GET',
+  //       headers: { 'Content-Type': 'application/json' }
+  //     })
+  //     const json = await res.json();
+  //     setQuestion(json);
+  //   } catch (err) {
+  //     console.log("error", err);
+  //   }
+  // }
 
+  const { question, loading } = useAppSelector((state) => state.question);
   let location = useLocation();
+  const question_id = location.pathname.slice(10)  
+  
+  const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    const question_id = location.pathname.slice(10)
-    fetchData(+question_id);
-  }, [])
+  useEffect(()=>{
+    if(!question_id) return;
+    dispatch(loadQuestion(+question_id));
+  },[question_id]);
 
   function formatDate(date:string) {
     return date.slice(0,10) + ' ' + date.slice(11,16)
   }
 
+  if(question.id == undefined) {
+    return <></>
+  }
+
   return (
-    <>
-    {question.length > 0 ? 
     <IonPage id="main-content">
       <IonHeader >
         <IonToolbar>
           <IonButtons slot="start">
             <IonBackButton defaultHref="/discuss"/>
           </IonButtons>
-           <IonTitle>{question[0].asker_username}的問題</IonTitle>
+           <IonTitle>{question.asker_username}的問題</IonTitle>
            <IonIcon slot='end' className='pr-3' style={{fontSize:19}} icon={trash}/>
         </IonToolbar>
       </IonHeader>
       <IonContent>
+      {loading ? <LoadingScreen><IonSpinner name="circles"/> 載入中...</LoadingScreen> : <>
         <AskerContainer lines='full'>
-          <IonImg src={`${question[0].asker_avatar}`}/>
+          <IonImg src={`${question.asker_avatar}`}/>
           <div className='askerInfo'>
-            <IonText>{question[0].asker_username}</IonText>
-            <IonText style={{fontSize:10}}>{formatDate(question[0].created_at)}</IonText>
+            <IonText>{question.asker_username}</IonText>
+            <IonText style={{fontSize:10}}>{formatDate(question.created_at)}</IonText>
           </div>
           <IonButton className='subscribeBtn'>
             <IonIcon icon={heartCircle}/>
@@ -58,9 +67,9 @@ const QuestionDetail: React.FC = memo(() => {
         </AskerContainer>
         <ContentContainer>
           <div>
-            <IonText>{question[0].content}</IonText>
+            <IonText>{question.content}</IonText>
             <div className='tagContainer'>
-              {question[0].stock.map((stock)=>{
+              {question.stock.map((stock)=>{
                 if(stock) {
                   return <IonText className='stockTag' key={stock.id}>#{stock.symbol}</IonText>
                 }
@@ -93,7 +102,7 @@ const QuestionDetail: React.FC = memo(() => {
               </div>
           </div>
           
-        </AnswerContainer>
+        </AnswerContainer></>}
       </IonContent>
       <IonFooter>
           <ReplyContainer>
@@ -102,12 +111,18 @@ const QuestionDetail: React.FC = memo(() => {
           </ReplyContainer>
         </IonFooter>
     </IonPage>
-    : null }
-    </>
   )
 });
 
 export default QuestionDetail;
+
+const LoadingScreen = styled.div`
+  width: 100%;
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
 const AskerContainer = styled(IonItem)`
   width: 100%;

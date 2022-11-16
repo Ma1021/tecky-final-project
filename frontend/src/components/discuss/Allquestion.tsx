@@ -7,8 +7,7 @@ import {
 import { memo, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import QuestionCard from "./QuestionCard";
-import { RootState, useAppDispatch, useAppSelector } from "../../redux/store";
-import { loadQuestions } from "../../redux/questions/question";
+import { RootState, useAppSelector } from "../../redux/store";
 
 export interface Questions {
   id: number;
@@ -37,12 +36,10 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
   const user_id = 1;
 
   function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
-    setTimeout(() => {
       props.loadQuestion();
       if(!loading) {
         event.detail.complete();
       }
-    });
   }
 
   return (

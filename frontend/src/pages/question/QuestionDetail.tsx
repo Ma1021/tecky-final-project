@@ -1,32 +1,20 @@
-import { IonButtons, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonContent, IonItem, IonImg, IonText, IonButton, IonIcon, IonInput, IonFooter, IonSpinner } from '@ionic/react';
-import { memo, useEffect, useCallback, useState } from 'react'
-import { useLocation } from 'react-router-dom';
+import { IonButtons, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonContent, IonItem, IonImg, IonText, IonButton, IonIcon, IonInput, IonFooter, IonSpinner, useIonToast } from '@ionic/react';
+import { memo, useEffect } from 'react'
+import { useLocation, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { heartCircle, chatboxEllipses, shareSocial, trash } from 'ionicons/icons';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { loadQuestion } from '../../redux/questions/question'
-import { Question } from '../../redux/questions/state';
+import { deleteQuestion } from '../../redux/questions/question';
 
 const QuestionDetail: React.FC = memo(() => {
-  // const [question, setQuestion] = useState<Array<Questions>>([]);
-  // const fetchData = async (question_id: number) => {
-  //   try {
-  //     const res = await fetch(`http://localhost:8080/question/${question_id}`, {
-  //       method: 'GET',
-  //       headers: { 'Content-Type': 'application/json' }
-  //     })
-  //     const json = await res.json();
-  //     setQuestion(json);
-  //   } catch (err) {
-  //     console.log("error", err);
-  //   }
-  // }
-
   const { question, loading } = useAppSelector((state) => state.question);
   let location = useLocation();
   const question_id = location.pathname.slice(10)  
-  
+  const [present, dismiss] = useIonToast();
+  const history = useHistory();
   const dispatch = useAppDispatch();
+  const user_id = 1;
 
   useEffect(()=>{
     if(!question_id) return;
@@ -35,6 +23,19 @@ const QuestionDetail: React.FC = memo(() => {
 
   function formatDate(date:string) {
     return date.slice(0,10) + ' ' + date.slice(11,16)
+  }
+
+  async function handleDelete(e: any) {
+    e.preventDefault();
+
+    let obj = {
+      question_id: question.id,
+      user_id
+    }
+
+    dispatch(deleteQuestion(obj));
+    present('刪除問題成功', 1500)
+    history.replace("/discuss")
   }
 
   if(question.id == undefined) {
@@ -49,7 +50,7 @@ const QuestionDetail: React.FC = memo(() => {
             <IonBackButton defaultHref="/discuss"/>
           </IonButtons>
            <IonTitle>{question.asker_username}的問題</IonTitle>
-           <IonIcon slot='end' className='pr-3' style={{fontSize:19}} icon={trash}/>
+           {question.asker_id === user_id && <IonIcon slot='end' className='pr-3' style={{fontSize:19}} icon={trash} onClick={handleDelete}/>}
         </IonToolbar>
       </IonHeader>
       <IonContent>

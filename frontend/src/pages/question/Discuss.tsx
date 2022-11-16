@@ -13,7 +13,7 @@ import { useState, useCallback, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { useAppDispatch } from "../../redux/store";
-import { loadQuestions } from "../../redux/questions/question";
+import { loadAskerQuestions, loadQuestions } from "../../redux/questions/question";
 
 // Components
 import Allquestion from "../../components/discuss/Allquestion";
@@ -23,6 +23,7 @@ import Title from "../../components/All/Title";
 
 const Discuss: React.FC = () => {
   const [segment, setSegment] = useState("all");
+  const user_id = 1;
 
   const onSegmentChange = (e: any) => {
     setSegment(e.detail.value);
@@ -33,8 +34,13 @@ const Discuss: React.FC = () => {
     await dispatch(loadQuestions());
   },[dispatch]);
 
+  const initAskerQuestion = useCallback(async ()=>{
+    await dispatch(loadAskerQuestions(user_id));
+  }, [dispatch])
+
   useEffect(()=>{
     initQuestion();
+    initAskerQuestion();
   },[]);
 
   const history = useHistory();
@@ -72,7 +78,7 @@ const Discuss: React.FC = () => {
 
       <IonContent>
         {segment === "all" && <Allquestion loadQuestion={initQuestion}/>}
-        {segment === "question" && <MyQuestion />}
+        {segment === "question" && <MyQuestion loadAskerQuestion={initAskerQuestion}/>}
         {segment === "answer" && <MyAnswer />}
       </IonContent>
     </IonPage>

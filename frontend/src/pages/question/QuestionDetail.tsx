@@ -1,44 +1,86 @@
-import { IonButtons, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonContent, IonItem, IonImg, IonText, IonButton, IonIcon, IonInput, IonFooter, IonSpinner, useIonToast } from '@ionic/react';
-import { memo, useEffect } from 'react'
+import { IonButtons, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonContent, IonItem, IonImg, IonText, IonButton, IonIcon, IonInput, IonFooter, IonSpinner, useIonToast, useIonAlert } from '@ionic/react';
+import { memo, useEffect, useState } from 'react'
 import { useLocation, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { heartCircle, chatboxEllipses, shareSocial, trash, heartOutline } from 'ionicons/icons';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { loadQuestion } from '../../redux/questions/question'
-import { deleteQuestion } from '../../redux/questions/question';
+import { loadQuestion, createAnswer, deleteQuestion, deleteAnswer  } from '../../redux/questions/questionSlice';
 
 const QuestionDetail: React.FC = memo(() => {
   const { question, loading } = useAppSelector((state) => state.question);
   let location = useLocation();
   const question_id = location.pathname.slice(10)  
-  const [present, dismiss] = useIonToast();
+  const [toastPresent] = useIonToast();
+  const [alertPresent] = useIonAlert();
   const history = useHistory();
   const dispatch = useAppDispatch();
+  const [ replyContent, setReplyContent ] = useState('');
   const user_id = 1;
-
+  
   useEffect(()=>{
     if(!question_id) return;
     dispatch(loadQuestion(+question_id));
   },[question_id]);
 
   function formatDate(date:string) {
-    return date.slice(0,10) + ' ' + date.slice(11,16)
+    const time = new Date(date).toLocaleString([],{hour12: false, dateStyle:'medium', timeStyle:'short'})
+    return time
   }
 
-  async function handleDelete(e: any) {
-    e.preventDefault();
+  function handleInput(e: any) {
+    setReplyContent(e.target.value)
+  }
 
-    let obj = {
+  function handleDelete(e: any) {
+    e.preventDefault();
+    const obj = {
       question_id: question.id,
       user_id
     }
 
-    dispatch(deleteQuestion(obj));
-    present('刪除問題成功', 1500)
-    history.replace("/discuss")
+    alertPresent({
+              cssClass: 'my-css',
+              header: '提示',
+              message: '確定要刪除問題嗎？',
+              buttons: ['取消', { text: '確定', handler: () => dispatch(deleteQuestion(obj))
+              .then(()=> {
+                toastPresent('刪除問題成功', 1500)
+                history.replace("/discuss")
+              })}],
+    });
   }
 
-  if(question.id == undefined) {
+  function handleReplyDelete(e: any) {
+    e.preventDefault();
+    const obj = {
+      question_id: question.id,
+      answer_id: e.target.parentNode.parentNode.parentNode.dataset.answer_id
+    }
+    alertPresent({
+      cssClass: 'alert',
+      header: '提示',
+      message: '確定要刪除回應嗎？',
+      buttons: ['取消', { text: '確定', handler: () => dispatch(deleteAnswer(obj))
+      .then(()=> {
+        toastPresent('刪除回應成功', 1500)
+      })}],
+    });
+  }
+
+  function handleReplySubmit(e: any) {
+    e.preventDefault();
+    const obj = {
+      answerer_id: user_id,
+      question_id: question.id,
+      content: replyContent
+    }
+    dispatch(createAnswer(obj)).then(()=>{
+      toastPresent('發表回應成功', 1500)
+      setReplyContent('');
+    })
+  }
+
+  if(question.id === undefined) {
     return <></>
   }
 
@@ -80,39 +122,48 @@ const QuestionDetail: React.FC = memo(() => {
           <div className='buttonContainer'>
             <div style={{display:'flex', alignItems:'center', gap:5}}>
               <IonIcon icon={chatboxEllipses}/>
-              <IonText style={{fontSize:14}} >1</IonText>
+              <IonText style={{fontSize:14}} >{question.answer.length}</IonText>
             </div>
             <IonIcon icon={shareSocial}></IonIcon>
           </div>
         </ContentContainer>
 
-        <AnswerContainer>
-          <IonText>回答</IonText>
-          <div className='answerCard'>
-              <div className='answererAvatar'>
-                <IonImg src='https://wallpapercave.com/wp/wp8960168.jpg' />
-                <IonButton>關注</IonButton>
-              </div>
-              <div className='answerContent'>
-                <IonText className='username'>Username</IonText>
-                <IonText className='content'>ContentContentContentContentContentContentContentContentContentContent</IonText>
-                <div className='answerInfo'>
-                  <IonText className='answerDate'>2022-11-15</IonText>
-                  <IonText className='reportBtn'>檢舉</IonText>
-                </div>
-                <div className='answerLikes'>
-                  <IonIcon icon={heartOutline}/>
-                  <IonText>1</IonText>
-                </div>
-              </div>
-          </div>
-          
-        </AnswerContainer></>}
+        {question.answer.length > 0 &&  
+          <AnswerContainer>
+            <IonText>回答</IonText>
+          {question.answer.map((answer)=>{
+            return <div className='answerCard' key={answer.id} data-answer_id = {answer.id}>
+                      <div className='answererAvatar'>
+                        <IonImg src={answer.answers.avatar} />
+                        <IonButton>關注</IonButton>
+                      </div>
+                      <div className='answerContent'>
+                        <IonText className='username'>{answer.answers.username}</IonText>
+                        <IonText className='content'>{answer.content}</IonText>
+                        <div className='answerInfo' data-user_id={answer.answers.id}>
+                          <IonText className='answerDate'>{new Date(answer.created_at).toLocaleString([],{hour12: false, dateStyle:'medium', timeStyle:'short'})}</IonText>
+                          <IonText style={{fontWeight:600}}>檢舉</IonText>
+                          {answer.answers.id === user_id && <IonText style={{fontWeight:600}} onClick={handleReplyDelete}>刪除</IonText>}
+                        </div>
+                        <div className='answerLikes'>
+                          {answer.likes_user_id.includes(user_id) ? 
+                          <IonIcon icon={heartOutline}/> 
+                          : 
+                          <IonIcon icon={heartOutline}/>}
+                          <IonText>{answer.likes_user_id.length}</IonText>
+                        </div>
+                      </div>
+                  </div>
+          })} 
+          </AnswerContainer>
+        }
+        
+        </>}
       </IonContent>
       <IonFooter>
           <ReplyContainer>
-            <IonInput placeholder='發表回應' maxlength={100}></IonInput>
-            <IonText>發送</IonText>
+            <IonInput value={replyContent} placeholder='發表回應' maxlength={100} onIonChange={handleInput}></IonInput>
+            <IonText onClick={handleReplySubmit}>發送</IonText>
           </ReplyContainer>
         </IonFooter>
     </IonPage>
@@ -234,26 +285,23 @@ const AnswerContainer = styled.div`
       flex-direction: column;
       gap: 0.5rem;
       padding-left: 0.5rem;
+      margin-top: 0.3rem;
 
       .username {
-        font-size: 17px;
+        font-size: 16px;
         font-weight: 600;
       }
 
       .content {
-        font-size: 15px;
+        font-size: 14px;
       }
 
       .answerInfo {
         display: flex;
         align-items: center;
-        gap: 1rem;
-        font-size: 14px;
+        gap: 1.5rem;
+        font-size: 10px;
         color: #9e9e9e;
-
-        .reportBtn {
-          font-weight: 600;
-        }
       }
 
       .answerLikes {

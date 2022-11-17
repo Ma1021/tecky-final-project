@@ -1,8 +1,6 @@
 import {
   IonContent,
   IonHeader,
-  IonTitle,
-  IonToolbar,
   IonMenu,
   IonMenuToggle,
   IonAvatar,
@@ -11,9 +9,7 @@ import {
   IonGrid,
   IonIcon,
   IonButton,
-  IonButtons,
   IonText,
-  IonCol,
   IonAccordion,
   IonAccordionGroup,
   IonList,

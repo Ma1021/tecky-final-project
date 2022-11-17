@@ -13,7 +13,7 @@ import { useState, useCallback, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { useAppDispatch } from "../../redux/store";
-import { loadAskerQuestions, loadQuestions } from "../../redux/questions/question";
+import { loadAskerQuestions, loadQuestions } from "../../redux/questions/questionSlice";
 
 // Components
 import Allquestion from "../../components/discuss/Allquestion";

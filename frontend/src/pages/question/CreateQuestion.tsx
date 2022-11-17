@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonButtons, IonImg, IonText, IonItem, IonLabel, IonInput, IonIcon, IonTextarea, IonButton, useIonToast } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonButtons, IonImg, IonText, IonItem, IonLabel, IonIcon, IonTextarea, IonButton, useIonToast } from '@ionic/react';
 import styled from 'styled-components';
 import { useHistory, useLocation } from 'react-router-dom';
 import { addCircleOutline, closeCircleOutline } from 'ionicons/icons';
-import { createQuestion } from "../../redux/questions/question"
+import { createQuestion } from "../../redux/questions/questionSlice"
 import { useAppDispatch } from '../../redux/store';
 
 type TagValues = {
@@ -16,7 +16,7 @@ const CreateQuestion: React.FC = () => {
     const [ content, setContent ] = useState('');
 
     const { state } = useLocation();
-    const [present, dismiss] = useIonToast();
+    const [present] = useIonToast();
 
     const history = useHistory();
     const dispatch = useAppDispatch();

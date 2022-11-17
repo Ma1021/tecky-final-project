@@ -1,11 +1,11 @@
-import { legacy_createStore as createStore } from "redux";
+// import { legacy_createStore as createStore } from "redux";
 // import {combineReducers} from "redux"
 import { authReducer } from "./auth/reducer";
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { TypedUseSelectorHook } from "react-redux";
-import questionReducer from "./questions/question"
+import questionReducer from "./questions/questionSlice"
 
 export type RootState = ReturnType<typeof store.getState>;
 

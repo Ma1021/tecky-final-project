@@ -13,6 +13,17 @@ export interface Question {
       updated_at: string;
     }>;
     tag_id: number;
+    answer:Array<{
+      id: number
+      answers:{
+        id:number,
+        avatar: string,
+        username: string
+      },
+      content: string,
+      created_at: string,
+      likes_user_id: Array<Number>
+    }>
 }
 
 export interface QuestionState {

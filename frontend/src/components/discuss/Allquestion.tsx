@@ -4,7 +4,7 @@ import {
   RefresherEventDetail,
   IonSpinner
 } from "@ionic/react";
-import { memo, useCallback, useEffect } from "react";
+import { memo } from "react";
 import styled from "styled-components";
 import QuestionCard from "./QuestionCard";
 import { RootState, useAppSelector } from "../../redux/store";
@@ -24,6 +24,17 @@ export interface Questions {
     updated_at: string;
   }>;
   tag_id: number;
+  answer:Array<{
+    id: number
+    answers:{
+      id:number,
+      avatar: string,
+      username: string
+    },
+    content: string,
+    created_at: string,
+    likes_user_id: Array<Number>
+  }>
 }
 
 interface QuestionProps {
@@ -33,7 +44,7 @@ interface QuestionProps {
 // memo 防止父組件更新時子組件也更新的問題，改善效能 （只能用在純html的component）
 const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
   const { questionList, loading } = useAppSelector((state: RootState) => state.question)
-  const user_id = 1;
+  const user_id = 2;
 
   function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
       props.loadQuestion();

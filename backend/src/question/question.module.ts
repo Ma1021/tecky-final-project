@@ -8,10 +8,15 @@ export interface Question_Result {
     asker_username: string,
     asker_avatar: string,
     asker_content: string,
-    answerer_id: number,
-    answerer_username: string,
-    answerer_avatar: string,
-    answerer_content: string,
+    answers:Array<{
+      id: number,
+      answerer_id: number,
+      answerer_username: string,
+      answerer_avatar: string,
+      answerer_content: string,
+      created_at: string,
+      like_user_id: Array<number>
+    }>
     stocks:
     Array<{
         stock_id: number,
@@ -21,12 +26,6 @@ export interface Question_Result {
     created_time: string
 }
 
-export interface Question_DTO {
-  asker_id: number,
-  content: string,
-  stock_id?:Array<number>
-  tag_id?:number
-}
 
 @Module({
   controllers: [QuestionController],

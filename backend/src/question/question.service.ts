@@ -1,23 +1,38 @@
 import { Injectable } from '@nestjs/common';
 import { Knex } from 'knex';
 import { InjectModel } from 'nest-knexjs';
-import { Question_DTO } from './question.module';
+import { Question_DTO } from './question.dto';
 
 @Injectable()
 export class QuestionService {
   constructor(@InjectModel() private readonly knex: Knex) {}
-
+  
   async findAll() {
     const questions = await this.knex
-      .raw(`select questions.id, questions.content, questions.created_at at time zone 'utc+8' as created_at,
+      .raw(`
+      select questions.id, questions.content, questions.created_at at time zone 'utc+8' as created_at,
       users.id as asker_id, users.username as asker_username, users.avatar as asker_avatar, tags.tag_id,
-      jsonb_agg(to_jsonb(stocks)) as stock 
+      coalesce(jsonb_agg(to_jsonb(stocks)) filter (where stocks.* is not null), '[]') as stock,
+      coalesce(jsonb_agg(json_build_object(
+          'id', answers.id,
+          'content', answers.content,
+          'created_at', answers.created_at,
+          'answers', (SELECT json_build_object(
+              'id', users.id,
+              'avatar', users.avatar,
+              'username', users.username)
+              from users where users.id = answers.answerer_id),
+          'likes_user_id',(SELECT coalesce(jsonb_agg(to_jsonb(ans_likes.user_id))
+          filter (where ans_likes.* is not null), '[]') 
+          from ans_likes where ans_likes.answer_id = answers.id)
+      )) filter (where answers.* is not null), '[]') as answer
       from questions
       inner join tags on questions.tag_id = tags.tag_id 
       full outer join stocks on tags.stock_id = stocks.id
       inner join users on users.id = questions.asker_id
-      group by questions.id, users.username, users.avatar, tags.tag_id, users.id
-      order by questions.created_at desc
+      full outer join answers on questions.id = answers.question_id
+      group by questions.id, users.id, tags.tag_id
+      order by questions.created_at desc;
       `);
 
     return questions.rows;
@@ -25,17 +40,31 @@ export class QuestionService {
 
   // get one question by question id
   async findOne(question_id: number) {
-    const question = await this.knex.raw(
-      `select questions.id, questions.content, questions.created_at at time zone 'utc+8' as created_at,
-      users.id as asker_id, users.username as asker_username, users.avatar as asker_avatar,
-      tags.tag_id, jsonb_agg(to_jsonb(stocks)) as stock
+    const question = await this.knex.raw(`
+      select questions.id, questions.content, questions.created_at at time zone 'utc+8' as created_at,
+      users.id as asker_id, users.username as asker_username, users.avatar as asker_avatar, tags.tag_id,
+      coalesce(jsonb_agg(to_jsonb(stocks)) filter (where stocks.* is not null), '[]') as stock,
+      coalesce(jsonb_agg(json_build_object(
+          'id', answers.id,
+          'content', answers.content,
+          'created_at', answers.created_at,
+          'answers', (SELECT json_build_object(
+              'id', users.id,
+              'avatar', users.avatar,
+              'username', users.username)
+              from users where users.id = answers.answerer_id),
+          'likes_user_id',(SELECT coalesce(jsonb_agg(to_jsonb(ans_likes.user_id))
+          filter (where ans_likes.* is not null), '[]') 
+          from ans_likes where ans_likes.answer_id = answers.id)
+      )) filter (where answers.* is not null), '[]') as answer
       from questions
       inner join tags on questions.tag_id = tags.tag_id 
       full outer join stocks on tags.stock_id = stocks.id
       inner join users on users.id = questions.asker_id
+      full outer join answers on questions.id = answers.question_id
       where questions.id = ?
-      group by questions.id, users.username, users.avatar, tags.tag_id, users.id
-      order by questions.created_at desc
+      group by questions.id, users.id, tags.tag_id
+      order by questions.created_at desc;
       `,
       [question_id],
     );
@@ -45,17 +74,31 @@ export class QuestionService {
 
   // get one or all questions by asker id
   async findAskerQuestions(asker_id: number) {
-    const questions = await this.knex.raw(
-      `select questions.id, questions.content, questions.created_at at time zone 'utc+8' as created_at,
+    const questions = await this.knex.raw(`
+      select questions.id, questions.content, questions.created_at at time zone 'utc+8' as created_at,
       users.id as asker_id, users.username as asker_username, users.avatar as asker_avatar, tags.tag_id,
-      jsonb_agg(to_jsonb(stocks)) as stock
+      coalesce(jsonb_agg(to_jsonb(stocks)) filter (where stocks.* is not null), '[]') as stock,
+      coalesce(jsonb_agg(json_build_object(
+          'id', answers.id,
+          'content', answers.content,
+          'created_at', answers.created_at,
+          'answers', (SELECT json_build_object(
+              'id', users.id,
+              'avatar', users.avatar,
+              'username', users.username)
+              from users where users.id = answers.answerer_id),
+          'likes_user_id',(SELECT coalesce(jsonb_agg(to_jsonb(ans_likes.user_id))
+          filter (where ans_likes.* is not null), '[]') 
+          from ans_likes where ans_likes.answer_id = answers.id)
+      )) filter (where answers.* is not null), '[]') as answer
       from questions
       inner join tags on questions.tag_id = tags.tag_id 
       full outer join stocks on tags.stock_id = stocks.id
       inner join users on users.id = questions.asker_id
+      full outer join answers on questions.id = answers.question_id
       where questions.asker_id = ?
-      group by questions.id, users.username, users.avatar, tags.tag_id, users.id
-      order by questions.created_at desc
+      group by questions.id, users.id, tags.tag_id
+      order by questions.created_at desc;
       `,
       [asker_id],
     );

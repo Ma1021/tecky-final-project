@@ -17,16 +17,19 @@ import {
 // import "./Register.module.css";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
-import { useHistory } from "react-router";
+import { Redirect } from "react-router";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { registerAuth } from "../redux/auth/actions";
 import { useEffect } from "react";
+import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
+
 // import { Preferences } from "@capacitor/preferences";
 
 const RegisterLoop: React.FC = () => {
-  let history = useHistory();
   const dispatch = useAppDispatch();
   const [presentAlert] = useIonAlert();
+  const history = useHistory();
 
   const select = useAppSelector((state) => {
     return state.auth;
@@ -66,6 +69,7 @@ const RegisterLoop: React.FC = () => {
   let main = async (json: any) => {
     await dispatching(json);
     await gettingStorage();
+    // return <Redirect to="/discuss" />;
 
     history.replace("/discuss");
   };
@@ -85,6 +89,14 @@ const RegisterLoop: React.FC = () => {
     console.log("enter submit");
     let data: any = getValues();
     data.birthday = new Date(data.birthday).toISOString();
+    if (data.password !== data.rePassword) {
+      presentAlert({
+        header: "錯誤",
+        subHeader: "密碼不一致",
+        buttons: ["OK"],
+      });
+      return;
+    }
     // console.log(data);
     // console.log(process.env.REACT_APP_PUBLIC_URL);
     const res = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user`, {
@@ -104,7 +116,7 @@ const RegisterLoop: React.FC = () => {
       // console.log("register", localStorage.getItem("auth_stockoverflow"));
     } else {
       presentAlert({
-        header: "Error",
+        header: "錯誤",
         subHeader: json.message,
         buttons: ["OK"],
       });
@@ -276,6 +288,12 @@ const RegisterLoop: React.FC = () => {
             註冊
           </IonButton>
         </form>
+        <p className="ion-margin">
+          已有帳號? 可
+          <Link to="/login" replace>
+            登入
+          </Link>
+        </p>
       </IonContent>
     </IonPage>
   );

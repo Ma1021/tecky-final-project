@@ -16,26 +16,58 @@ import {
 // import "./Register.module.css";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
+import { useHistory } from "react-router";
+import { useAppDispatch, useAppSelector } from "../redux/store";
+import { registerAuth } from "../redux/auth/actions";
+import { useEffect } from "react";
+// import { Preferences } from "@capacitor/preferences";
 
 const RegisterLoop: React.FC = () => {
+  let history = useHistory();
+  const dispatch = useAppDispatch();
+
+  const select = useAppSelector((state) => {
+    return state.auth;
+  });
+  useEffect(() => {
+    // phone version
+    // async () => {
+    //   await Preferences.set({ key: "auth", value: JSON.stringify(select) });
+    // };
+
+    // web version
+    localStorage.setItem("auth", JSON.stringify(select));
+    console.log(
+      "after useEffect and set localStorage",
+      localStorage.getItem("auth")
+    );
+  }, [select]);
+
   const {
     register,
-    handleSubmit,
+    // handleSubmit,
     // watch,
     formState: { errors },
     getValues,
   } = useForm({
     mode: "onTouched",
     reValidateMode: "onChange",
+    defaultValues: {
+      username: "",
+      birthday: "",
+      gender: "",
+      email: "",
+      password: "",
+      rePassword: "",
+    },
   });
 
   let submit = async () => {
     console.log("enter submit");
     let data: any = getValues();
     data.birthday = new Date(data.birthday).toISOString();
-    console.log(data);
-    console.log(process.env.REACT_APP_PUBLIC_URL);
-    // await register(data);
+    // console.log(data);
+    // console.log(process.env.REACT_APP_PUBLIC_URL);
     const res = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user`, {
       method: "POST",
       headers: {
@@ -45,7 +77,12 @@ const RegisterLoop: React.FC = () => {
     });
     const json = await res.json();
     console.log(json);
-    alert(JSON.stringify(data));
+    //format of json return: { user: {id: userObj}, access_token: token}
+    dispatch(registerAuth(json.user, json.token.access_token));
+    // console.log("register", localStorage.getItem("auth"));
+    if (json) {
+      history.replace("/discuss");
+    }
   };
 
   return (

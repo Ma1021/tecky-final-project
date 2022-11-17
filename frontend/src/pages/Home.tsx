@@ -1,20 +1,23 @@
-import {
-  IonButton,
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonText,
-  IonTitle,
-  IonToolbar,
-  IonIcon,
-} from "@ionic/react";
+import { IonButton, IonContent, IonPage, IonText, IonIcon } from "@ionic/react";
 import logo from "../img/logo.jpeg";
 import { logoApple } from "ionicons/icons";
 import { useHistory } from "react-router";
+// import { Preferences } from "@capacitor/preferences";
 // import Notification from "../components/All/Notification";
 
 const Home: React.FC = () => {
   const history = useHistory();
+  // const auth = async () => {
+  //   await Preferences.get({ key: "auth" });
+  // };
+  const auth = localStorage.getItem("auth");
+  if (auth) {
+    const authJson = JSON.parse(auth);
+    if (authJson.isAuthenticated) {
+      history.replace("./discussion");
+    }
+  }
+
   return (
     <>
       <IonPage>

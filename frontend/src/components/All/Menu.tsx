@@ -1,6 +1,7 @@
 import {
   IonContent,
   IonHeader,
+  IonToolbar,
   IonMenu,
   IonMenuToggle,
   IonAvatar,
@@ -16,18 +17,43 @@ import {
 } from "@ionic/react";
 import img from "../../img/animal_stand_ookami.png";
 import { useHistory } from "react-router";
-import { pencilOutline, settingsOutline, logoWhatsapp } from "ionicons/icons";
+import {
+  pencilOutline,
+  settingsOutline,
+  logoWhatsapp,
+  logOutOutline,
+} from "ionicons/icons";
 import "./Menu.css";
+import { useAppDispatch } from "../../redux/store";
+import { logout } from "../../redux/auth/actions";
+// import { Redirect } from "react-router";
 
 interface MenuProps {}
 
 const Menu: React.FC<MenuProps> = () => {
   const history = useHistory();
+  const dispatch = useAppDispatch();
   const userInfo = {
     username: "user",
     userId: 123,
     email: "user@gmail.com",
     phone: 12345678,
+  };
+  const logoutPage = () => {
+    // phone version
+    // async () => {
+    //   await Preferences.set({ key: "auth_stockoverflow", value: "" });
+    // };
+    dispatch(logout());
+    // web version
+    localStorage.setItem("auth_stockoverflow", "");
+    // console.log(
+    //   "after useEffect and set localStorage",
+    //   localStorage.getItem("auth_stockoverflow")
+    // );
+
+    // return <Redirect to="/home" />;
+    history.replace("/home");
   };
 
   return (
@@ -36,102 +62,110 @@ const Menu: React.FC<MenuProps> = () => {
         className="menu pt-3 pb-3"
         onClick={() => history.push("/userInfo")}
       >
-        {/* <IonToolbar> */}
-        <IonMenuToggle className="w100">
-          <div className="pr-1">
-            {/* username id edit and name */}
-            <IonItem lines="none" className="menu-username menu">
-              <div className="d-flex">
-                <IonAvatar
-                  style={{
-                    backgroundColor: "pink",
-                    cursor: "pointer",
-                  }}
-                >
-                  <img
-                    src={img}
-                    alt="user icon"
+        <IonToolbar>
+          <IonMenuToggle className="w100">
+            <div className="pr-1">
+              {/* username id edit and name */}
+              <IonItem lines="none" className="menu-username menu">
+                <div className="d-flex">
+                  <IonAvatar
                     style={{
-                      width: "100%",
-                      objectFit: "cover",
+                      backgroundColor: "pink",
+                      cursor: "pointer",
                     }}
-                  />
-                </IonAvatar>
-                <div className="flex-column pl-3 pb-3">
+                  >
+                    <img
+                      src={img}
+                      alt="user icon"
+                      style={{
+                        width: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
+                  </IonAvatar>
+                  <div className="flex-column pl-3 pb-3">
+                    <div className="w100">
+                      <IonLabel>{userInfo.username}</IonLabel>
+                    </div>
+                    <div className="w100">
+                      <IonLabel className="grey">
+                        編輯帳號<IonIcon icon={pencilOutline}></IonIcon>
+                      </IonLabel>
+                    </div>
+                  </div>
+                </div>
+              </IonItem>
+              {/* username edit and name */}
+              {/* user id */}
+              <IonItem lines="none" className="menu-userId menu ">
+                <div className="d-flex w100 justify-content-between align-items-center ">
+                  <IonText>用戶碼: {userInfo.userId}</IonText>
+                  <IonButton>複製</IonButton>
+                </div>
+              </IonItem>
+              {/* user id */}
+              {/* user number and email*/}
+              <IonItem lines="none" className="menu-userInfo menu pt-0">
+                <IonGrid>
                   <div className="w100">
-                    <IonLabel>{userInfo.username}</IonLabel>
+                    <IonText className="grey">
+                      {userInfo.phone.toString().slice(0, 2) +
+                        "****" +
+                        userInfo.phone.toString().slice(6)}
+                    </IonText>
                   </div>
                   <div className="w100">
-                    <IonLabel className="grey">
-                      編輯帳號<IonIcon icon={pencilOutline}></IonIcon>
-                    </IonLabel>
+                    <IonText className="grey">
+                      {userInfo.email
+                        .toString()
+                        .split("@")[0]
+                        .slice(
+                          0,
+                          userInfo.email.toString().split("@")[0].length - 4
+                        ) +
+                        "****" +
+                        userInfo.email.toString().split("@")[1]}
+                    </IonText>
                   </div>
-                </div>
-              </div>
-            </IonItem>
-            {/* username edit and name */}
-            {/* user id */}
-            <IonItem lines="none" className="menu-userId menu ">
-              <div className="d-flex w100 justify-content-between align-items-center ">
-                <IonText>用戶碼: {userInfo.userId}</IonText>
-                <IonButton>複製</IonButton>
-              </div>
-            </IonItem>
-            {/* user id */}
-            {/* user number and email*/}
-            <IonItem lines="none" className="menu-userInfo menu pt-0">
-              <IonGrid>
-                <div className="w100">
-                  <IonText className="grey">
-                    {userInfo.phone.toString().slice(0, 2) +
-                      "****" +
-                      userInfo.phone.toString().slice(6)}
-                  </IonText>
-                </div>
-                <div className="w100">
-                  <IonText className="grey">
-                    {userInfo.email
-                      .toString()
-                      .split("@")[0]
-                      .slice(
-                        0,
-                        userInfo.email.toString().split("@")[0].length - 4
-                      ) +
-                      "****" +
-                      userInfo.email.toString().split("@")[1]}
-                  </IonText>
-                </div>
-              </IonGrid>
-            </IonItem>
-            {/* user number and email*/}
-          </div>
-        </IonMenuToggle>
-        {/* </IonToolbar> */}
+                </IonGrid>
+              </IonItem>
+              {/* user number and email*/}
+            </div>
+          </IonMenuToggle>
+        </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
         <div className="w100">
-          <IonList className="w100">
-            <IonAccordionGroup className="menu">
-              <IonAccordion value="first">
-                <IonItem className="menu" slot="header" color="light">
-                  <IonLabel>
-                    <IonIcon icon={logoWhatsapp}></IonIcon> 客戶服務
-                  </IonLabel>
-                </IonItem>
-                <div className="ion-padding" slot="content">
-                  申請成為KOL
-                </div>
-                <div className="ion-padding" slot="content">
-                  其他查詢
-                </div>
-              </IonAccordion>
-            </IonAccordionGroup>
-            <IonItem className="menu" lines="none">
-              <IonLabel>
-                <IonIcon icon={settingsOutline}></IonIcon> 系統設定
-              </IonLabel>
-            </IonItem>
-          </IonList>
+          <IonMenuToggle>
+            <IonList className="w100">
+              <IonAccordionGroup className="menu">
+                <IonAccordion value="first">
+                  <IonItem className="menu" slot="header" color="light">
+                    <IonLabel>
+                      <IonIcon icon={logoWhatsapp}></IonIcon> 客戶服務
+                    </IonLabel>
+                  </IonItem>
+                  <div className="ion-padding" slot="content">
+                    申請成為KOL
+                  </div>
+                  <div className="ion-padding" slot="content">
+                    其他查詢
+                  </div>
+                </IonAccordion>
+              </IonAccordionGroup>
+              <IonItem className="menu" lines="none">
+                <IonLabel>
+                  <IonIcon icon={settingsOutline}></IonIcon> 系統設定
+                </IonLabel>
+              </IonItem>
+              <IonItem className="menu" lines="none">
+                <IonLabel onClick={logoutPage}>
+                  <IonIcon icon={logOutOutline}></IonIcon>
+                  用戶登出
+                </IonLabel>
+              </IonItem>
+            </IonList>
+          </IonMenuToggle>
         </div>
       </IonContent>
     </IonMenu>

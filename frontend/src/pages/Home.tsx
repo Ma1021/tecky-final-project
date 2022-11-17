@@ -1,20 +1,21 @@
 import { IonButton, IonContent, IonPage, IonText, IonIcon } from "@ionic/react";
 import logo from "../img/logo.jpeg";
 import { logoApple } from "ionicons/icons";
-import { useHistory } from "react-router";
+import { Redirect, useHistory } from "react-router";
+// import { useEffect } from "react";
 // import { Preferences } from "@capacitor/preferences";
 // import Notification from "../components/All/Notification";
 
 const Home: React.FC = () => {
   const history = useHistory();
   // const auth = async () => {
-  //   await Preferences.get({ key: "auth" });
+  //   await Preferences.get({ key: "auth_stockoverflow" });
   // };
-  const auth = localStorage.getItem("auth");
+  const auth = localStorage.getItem("auth_stockoverflow");
   if (auth) {
     const authJson = JSON.parse(auth);
     if (authJson.isAuthenticated) {
-      history.replace("./discussion");
+      return <Redirect to="/discuss" />;
     }
   }
 

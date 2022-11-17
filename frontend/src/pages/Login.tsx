@@ -10,13 +10,18 @@ import {
   IonInput,
   IonButton,
   IonBackButton,
+  useIonAlert,
 } from "@ionic/react";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
-import { login } from "../redux/auth/actions";
-import { useAppDispatch } from "../redux/store";
+import { registerAuth } from "../redux/auth/actions";
+import { useAppDispatch, useAppSelector } from "../redux/store";
+import { useEffect } from "react";
+import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
 
 const Login: React.FC = () => {
+  let history = useHistory();
   const {
     register,
     handleSubmit,
@@ -26,8 +31,45 @@ const Login: React.FC = () => {
     mode: "onTouched",
     reValidateMode: "onChange",
   });
-
   const dispatch = useAppDispatch();
+  const [presentAlert] = useIonAlert();
+
+  const select = useAppSelector((state) => {
+    return state.auth;
+  });
+  useEffect(() => {
+    // phone version
+    // async () => {
+    //   await Preferences.set({ key: "auth_stockoverflow", value: JSON.stringify(select) });
+    // };
+
+    // web version
+    localStorage.setItem("auth_stockoverflow", JSON.stringify(select));
+    // console.log(
+    //   "after useEffect and set localStorage",
+    //   localStorage.getItem("auth_stockoverflow")
+    // );
+  }, [select]);
+  let main = async (json: any) => {
+    await dispatching(json);
+    await gettingStorage();
+    // () => <Redirect to="/discuss" />;
+    history.replace("/discuss");
+
+    // history.replace("/discuss");
+  };
+  let dispatching = (json: any) => {
+    dispatch(registerAuth(json.user, json.token));
+  };
+  let gettingStorage = () => {
+    // mobile version
+    // const auth = async () => {
+    //   await Preferences.get({ key: "auth_stockoverflow" });
+    // };
+
+    // web version
+    localStorage.getItem("auth_stockoverflow");
+  };
 
   return (
     <IonPage id="main-content">
@@ -46,8 +88,6 @@ const Login: React.FC = () => {
         <form
           onSubmit={handleSubmit(async (data) => {
             try {
-              console.log(process.env.REACT_APP_PUBLIC_URL);
-              console.log(JSON.stringify(data));
               // await register(data);
               let res = await fetch(
                 `${process.env.REACT_APP_PUBLIC_URL}/auth/login`,
@@ -62,26 +102,15 @@ const Login: React.FC = () => {
               let json = await res.json();
               console.log(json);
 
-              let resProfile = await fetch(
-                `${process.env.REACT_APP_PUBLIC_URL}/profile`,
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${json.access_token}`,
-                  },
-                  body: JSON.stringify(data),
-                }
-              );
-              let jsonProfile = await resProfile.json();
-              console.log(jsonProfile);
-              let ans = dispatch(login(jsonProfile, json.token));
-              console.log(ans);
-              if (res.status === 200) {
-                alert(JSON.stringify(data));
+              if (res.ok) {
+                main(json);
               }
             } catch (err) {
-              console.log(err);
+              presentAlert({
+                header: "錯誤",
+                subHeader: (err as any).message,
+                buttons: ["OK"],
+              });
             }
           })}
         >
@@ -90,7 +119,7 @@ const Login: React.FC = () => {
               <IonLabel position="floating">用戶電郵</IonLabel>
               <IonInput
                 // type="email"
-                {...register("username", {
+                {...register("email", {
                   required: { value: true, message: "請輸入電郵" },
                   //   pattern: {
                   //     value: /^[A-Z0-9._%+_]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
@@ -138,6 +167,12 @@ const Login: React.FC = () => {
             </IonButton>
           </>
         </form>
+        <p className="ion-margin">
+          未有帳號? 可
+          <Link to="/register" replace>
+            註冊
+          </Link>
+        </p>
       </IonContent>
     </IonPage>
   );

@@ -46,6 +46,9 @@ const Navigation: React.FC = () => {
         <Route exact path="/">
           <Redirect to="/home" />
         </Route>
+        <Route exact path="/redirect">
+          <Redirect to="/discuss" />
+        </Route>
         <IonTabs>
           <IonRouterOutlet>
             <Route exact path="/register" component={Register}></Route>

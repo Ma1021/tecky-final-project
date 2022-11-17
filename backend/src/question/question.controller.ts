@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Patch, Post, Put, Res, Response } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Response } from '@nestjs/common';
 import { QuestionService } from './question.service';
-import { Question_DTO } from './question.module'
+import { Question_DTO } from './question.dto'
 
 @Controller('/question')
 export class QuestionController {
@@ -13,7 +13,7 @@ export class QuestionController {
     if(questions.length <= 0) {
       throw new HttpException('Questions not found', HttpStatus.NOT_FOUND);
     }
-
+    
     return questions;
   }
 
@@ -129,7 +129,7 @@ export class QuestionController {
     }
 
     this.questionService.delete(+question_id).then(()=>{
-      res.status(HttpStatus.ACCEPTED).json({message:"Delete question successfully"})
+      res.status(HttpStatus.ACCEPTED).json({message:"Delete question successfully", question_id})
     })   
   }
 } 

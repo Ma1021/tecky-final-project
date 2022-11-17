@@ -2,7 +2,7 @@ import { IonButtons, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, Io
 import { memo, useEffect } from 'react'
 import { useLocation, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import { heartCircle, chatboxEllipses, shareSocial, trash } from 'ionicons/icons';
+import { heartCircle, chatboxEllipses, shareSocial, trash, heartOutline } from 'ionicons/icons';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { loadQuestion } from '../../redux/questions/question'
 import { deleteQuestion } from '../../redux/questions/question';
@@ -99,6 +99,10 @@ const QuestionDetail: React.FC = memo(() => {
                 <div className='answerInfo'>
                   <IonText className='answerDate'>2022-11-15</IonText>
                   <IonText className='reportBtn'>檢舉</IonText>
+                </div>
+                <div className='answerLikes'>
+                  <IonIcon icon={heartOutline}/>
+                  <IonText>1</IonText>
                 </div>
               </div>
           </div>
@@ -250,6 +254,14 @@ const AnswerContainer = styled.div`
         .reportBtn {
           font-weight: 600;
         }
+      }
+
+      .answerLikes {
+        align-self: flex-end;
+        display: flex;
+        align-items: center;
+        gap:0.5rem;
+        font-size: 16px;
       }
     }
   }

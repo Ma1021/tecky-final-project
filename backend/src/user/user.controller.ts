@@ -25,6 +25,9 @@ export class UserController {
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     try {
+      if (createUserDto.password !== createUserDto.rePassword) {
+        throw new Error('密碼不一致');
+      }
       createUserDto.password_hash = await hash(createUserDto.password, 10);
       delete createUserDto.password;
       delete createUserDto.rePassword;
@@ -35,7 +38,16 @@ export class UserController {
         return returnObje;
       }
     } catch (err) {
-      throw new HttpException('註冊失敗', HttpStatus.BAD_REQUEST);
+      console.log(err);
+      if (err.message.includes('duplicate')) {
+        throw new HttpException('此電郵已登記', HttpStatus.CONFLICT);
+      } else if (err.message.includes('密碼不一致')) {
+        throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+      }
+      throw new HttpException(
+        '註冊失敗, 請再試一次或聯絡客服',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 

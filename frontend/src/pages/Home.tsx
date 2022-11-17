@@ -8,13 +8,13 @@ import { useHistory } from "react-router";
 const Home: React.FC = () => {
   const history = useHistory();
   // const auth = async () => {
-  //   await Preferences.get({ key: "auth" });
+  //   await Preferences.get({ key: "auth_stockoverflow" });
   // };
-  const auth = localStorage.getItem("auth");
+  const auth = localStorage.getItem("auth_stockoverflow");
   if (auth) {
     const authJson = JSON.parse(auth);
-    if (authJson.isAuthenticated) {
-      history.replace("./discussion");
+    if (authJson.isAuthenticated === true) {
+      // history.replace("/discuss");
     }
   }
 

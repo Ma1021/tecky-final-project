@@ -12,6 +12,7 @@ import {
   IonBackButton,
   IonRadio,
   IonRadioGroup,
+  useIonAlert,
 } from "@ionic/react";
 // import "./Register.module.css";
 import { useForm } from "react-hook-form";
@@ -25,6 +26,7 @@ import { useEffect } from "react";
 const RegisterLoop: React.FC = () => {
   let history = useHistory();
   const dispatch = useAppDispatch();
+  const [presentAlert] = useIonAlert();
 
   const select = useAppSelector((state) => {
     return state.auth;
@@ -32,15 +34,15 @@ const RegisterLoop: React.FC = () => {
   useEffect(() => {
     // phone version
     // async () => {
-    //   await Preferences.set({ key: "auth", value: JSON.stringify(select) });
+    //   await Preferences.set({ key: "auth_stockoverflow", value: JSON.stringify(select) });
     // };
 
     // web version
-    localStorage.setItem("auth", JSON.stringify(select));
-    console.log(
-      "after useEffect and set localStorage",
-      localStorage.getItem("auth")
-    );
+    localStorage.setItem("auth_stockoverflow", JSON.stringify(select));
+    // console.log(
+    //   "after useEffect and set localStorage",
+    //   localStorage.getItem("auth_stockoverflow")
+    // );
   }, [select]);
 
   const {
@@ -61,7 +63,24 @@ const RegisterLoop: React.FC = () => {
       rePassword: "",
     },
   });
+  let main = async (json: any) => {
+    await dispatching(json);
+    await gettingStorage();
 
+    history.replace("/discuss");
+  };
+  let dispatching = (json: any) => {
+    dispatch(registerAuth(json.user, json.token.access_token));
+  };
+  let gettingStorage = () => {
+    // mobile version
+    // const auth = async () => {
+    //   await Preferences.get({ key: "auth_stockoverflow" });
+    // };
+
+    // web version
+    localStorage.getItem("auth_stockoverflow");
+  };
   let submit = async () => {
     console.log("enter submit");
     let data: any = getValues();
@@ -76,12 +95,19 @@ const RegisterLoop: React.FC = () => {
       body: JSON.stringify(data),
     });
     const json = await res.json();
-    console.log(json);
     //format of json return: { user: {id: userObj}, access_token: token}
-    dispatch(registerAuth(json.user, json.token.access_token));
-    // console.log("register", localStorage.getItem("auth"));
-    if (json) {
-      history.replace("/discuss");
+    console.log(json);
+    console.log(res);
+    if (res.ok) {
+      main(json);
+
+      // console.log("register", localStorage.getItem("auth_stockoverflow"));
+    } else {
+      presentAlert({
+        header: "Error",
+        subHeader: json.message,
+        buttons: ["OK"],
+      });
     }
   };
 

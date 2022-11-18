@@ -14,6 +14,7 @@ type TagValues = {
 const CreateQuestion: React.FC = () => {
     const [ selectTags, setSelectTags] = useState(Array<TagValues>);
     const [ content, setContent ] = useState('');
+    const user_id = 2;
 
     const { state } = useLocation();
     const [present] = useIonToast();
@@ -57,12 +58,12 @@ const CreateQuestion: React.FC = () => {
             obj = {
                 stock_id,
                 content,
-                asker_id:1,
+                asker_id:user_id,
             }
         } else {
             obj = {
                 content,
-                asker_id:1
+                asker_id:user_id
             }
         }
 

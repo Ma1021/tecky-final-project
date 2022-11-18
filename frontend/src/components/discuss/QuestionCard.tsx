@@ -1,4 +1,4 @@
-import { IonText, IonCard, IonCardHeader, IonCardContent, IonButton, IonImg, IonIcon } from '@ionic/react';
+import { IonText, IonCard, IonCardHeader, IonCardContent, IonImg, IonIcon } from '@ionic/react';
 import { memo } from 'react'
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
@@ -12,7 +12,18 @@ interface QuestionsProps {
 
 const QuestionCard: React.FC<QuestionsProps> = memo((props:QuestionsProps)=>{
     const history = useHistory();
-
+    let reverseAnswer: Array<{
+        id: number,
+        answers:{
+            id: number,
+            avatar: string,
+            username: string
+        },
+        content: string,
+        created_at: string,
+        likes_user_id: Number[]
+    }> = [];
+    
     function formatDate(date:string) {
         const time = new Date(date).toLocaleString([],{hour12: false, dateStyle:'medium', timeStyle:'short'})
         return time
@@ -21,8 +32,12 @@ const QuestionCard: React.FC<QuestionsProps> = memo((props:QuestionsProps)=>{
     return (
         <>
             {props.questions.map((question) => {
-                const reverseAnswer = [...question.answer].reverse();
-
+                if(Array.isArray(question.answer)) {
+                    reverseAnswer = [...question.answer].reverse()
+                } else {
+                    reverseAnswer.push(question.answer)
+                }
+                
                 return <QuestionContainer key={question.id} onClick={() => {history.push(`/question/${question.id}`)}}>
                     <QuestionHeader >
                         <AskerInfo>

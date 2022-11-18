@@ -21,7 +21,7 @@ export async function seed(knex: Knex): Promise<void> {
     { symbol: 'TSLA', name: 'Tesla, Inc. (TSLA)' },
   ]);
 
-  await knex('users').insert({
+  await knex('users').insert([{
     username: 'admin',
     email: 'admin@gmail.com',
     password_hash: '123',
@@ -30,5 +30,17 @@ export async function seed(knex: Knex): Promise<void> {
     gender: 'F',
     avatar:
       'https://images.fineartamerica.com/images-medium-large-5/wolf-baby-jeanlouis-wertz.jpg',
-  });
+  },
+  {
+    username: 'user',
+    email: 'user@gmail.com',
+    password_hash: '456',
+    user_type_id: 1,
+    birthday: '2022-11-12T13:00',
+    gender: 'F',
+    avatar:
+    'https://cdn5.vectorstock.com/i/1000x1000/54/19/gray-wolf-cartoon-wolf-grey-the-nature-vector-20325419.jpg',
+  }
+]);
+
 }

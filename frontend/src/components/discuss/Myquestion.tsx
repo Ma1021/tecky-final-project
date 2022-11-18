@@ -10,10 +10,10 @@ interface QuestionProps {
 
 const MyQuestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
     const { askerQuestionList, loading } = useAppSelector((state) => state.question)
-    const user_id = 1;
+    const user_id = 2;
 
     function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
-        props.loadAskerQuestion();
+        props.loadAskerQuestion(user_id);
         if(!loading) {
             event.detail.complete();
         }

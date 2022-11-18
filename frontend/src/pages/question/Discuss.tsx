@@ -13,7 +13,7 @@ import { useState, useCallback, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { useAppDispatch } from "../../redux/store";
-import { loadAskerQuestions, loadQuestions } from "../../redux/questions/questionSlice";
+import { loadAnswererQuestions, loadAskerQuestions, loadQuestions } from "../../redux/questions/questionSlice";
 
 // Components
 import Allquestion from "../../components/discuss/Allquestion";
@@ -23,13 +23,14 @@ import Title from "../../components/All/Title";
 
 const Discuss: React.FC = () => {
   const [segment, setSegment] = useState("all");
-  const user_id = 1;
+  const user_id = 2;
 
   const onSegmentChange = (e: any) => {
     setSegment(e.detail.value);
   };
 
   const dispatch = useAppDispatch();
+  
   const initQuestion = useCallback(async ()=>{
     await dispatch(loadQuestions());
   },[dispatch]);
@@ -38,9 +39,14 @@ const Discuss: React.FC = () => {
     await dispatch(loadAskerQuestions(user_id));
   }, [dispatch])
 
+  const initAnswererQuestion = useCallback(async ()=>{
+    await dispatch(loadAnswererQuestions(user_id));
+  }, [dispatch])
+
   useEffect(()=>{
     initQuestion();
     initAskerQuestion();
+    initAnswererQuestion();
   },[]);
 
   const history = useHistory();
@@ -79,7 +85,7 @@ const Discuss: React.FC = () => {
       <IonContent>
         {segment === "all" && <Allquestion loadQuestion={initQuestion}/>}
         {segment === "question" && <MyQuestion loadAskerQuestion={initAskerQuestion}/>}
-        {segment === "answer" && <MyAnswer />}
+        {segment === "answer" && <MyAnswer loadAnswererQuestion={initAnswererQuestion}/>}
       </IonContent>
     </IonPage>
   );

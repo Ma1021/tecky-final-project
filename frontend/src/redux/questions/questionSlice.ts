@@ -29,6 +29,20 @@ export const loadAskerQuestions = createAsyncThunk<Question[], number>("question
     }
 })
 
+// actions that get answerer question by user id
+export const loadAnswererQuestions = createAsyncThunk<Question[], number>("question/loadAnswererQuestions", async(id, thunkAPI)=>{
+    try {
+        const res:Response = await fetch(`http://localhost:8080/question/answerer/${id}`, {
+            method:'GET',
+            headers:{'Content-Type': 'application/json'}
+        })
+        const json = await res.json();
+        return json;
+    } catch(err) {
+        return thunkAPI.rejectWithValue(err);
+    }
+})
+
 // actions that get one question
 export const loadQuestion = createAsyncThunk<Question, number>("question/loadQuestion", async(id, thunkAPI)=>{
     try {
@@ -148,16 +162,27 @@ export const questionSlice = createSlice({
         builder.addCase(loadAskerQuestions.pending, (state, action)=>{
             state.loading = true;
         })
-
         builder.addCase(loadAskerQuestions.fulfilled, (state, action)=>{
             state.askerQuestionList = action.payload;
             state.loading = false;
         })
-
         builder.addCase(loadAskerQuestions.rejected, (state, action)=>{
             state.errors = action.payload;
             state.loading = false;
         })
+
+        builder.addCase(loadAnswererQuestions.pending, (state, action)=>{
+            state.loading = true;
+        })
+        builder.addCase(loadAnswererQuestions.fulfilled, (state, action)=>{
+            state.answererQuestionList = action.payload;
+            state.loading = false;
+        })
+        builder.addCase(loadAnswererQuestions.rejected, (state, action)=>{
+            state.errors = action.payload;
+            state.loading = false;
+        })
+
         builder.addCase(createQuestion.pending, (state)=>{
             state.loading = true;
         });      

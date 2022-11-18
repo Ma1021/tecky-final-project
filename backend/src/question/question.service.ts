@@ -125,19 +125,19 @@ export class QuestionService {
       'name', stocks.name,
       'symbol', stocks.symbol
     )) filter (where stocks.* is not null), '[]') as stock,
-    coalesce(jsonb_agg(DISTINCT jsonb_build_object(
-        'id', answers.id,
-        'content', answers.content,
-        'created_at', answers.created_at,
-        'answers', (SELECT json_build_object(
-            'id', users.id,
-            'avatar', users.avatar,
-            'username', users.username)
-            from users where users.id = answers.answerer_id),
+    (SELECT jsonb_build_object(
+      'id', answers.id,
+      'content', answers.content,
+      'created_at', answers.created_at,
+      'answers', (SELECT json_build_object(
+        'id', users.id,
+        'avatar', users.avatar,
+        'username', users.username
+        ) from users where users.id = answers.answerer_id),
         'likes_user_id',(SELECT coalesce(jsonb_agg(to_jsonb(ans_likes.user_id))
         filter (where ans_likes.* is not null), '[]')
-        from ans_likes where ans_likes.answer_id = answers.id))
-    ) filter (where answers.* is not null), '[]') as answer
+        from ans_likes where ans_likes.answer_id = answers.id
+    )) from answers where answers.answerer_id = $1 and answers.question_id = questions.id order by answers.created_at desc limit 1) as answer
     from questions
     inner join tags on questions.tag_id = tags.tag_id 
     full outer join stocks on tags.stock_id = stocks.id

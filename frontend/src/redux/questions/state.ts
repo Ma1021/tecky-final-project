@@ -30,6 +30,7 @@ export interface QuestionState {
     question: Question;
     questionList: Question[];
     askerQuestionList: Question[];
+    answererQuestionList: Question[];
     loading: boolean;
     errors: any;
 }
@@ -38,6 +39,7 @@ export const initialState: QuestionState = {
   question: {} as Question,
   questionList: [],
   askerQuestionList: [],
+  answererQuestionList: [],
   loading: false,
   errors: null
 }

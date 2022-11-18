@@ -15,7 +15,7 @@ const QuestionDetail: React.FC = memo(() => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const [ replyContent, setReplyContent ] = useState('');
-  const user_id = 1;
+  const user_id = 2;
   let reverseAnswer = [];
   
   useEffect(()=>{
@@ -107,10 +107,12 @@ const QuestionDetail: React.FC = memo(() => {
             <IonText>{question.asker_username}</IonText>
             <IonText style={{fontSize:10}}>{formatDate(question.created_at)}</IonText>
           </div>
-          <IonButton className='subscribeBtn'>
-            <IonIcon icon={heartCircle}/>
-            <IonText>關注</IonText>
-          </IonButton>
+          { question.asker_id !== user_id &&
+            <IonButton className='subscribeBtn'>
+              <IonIcon icon={heartCircle}/>
+              <IonText>關注</IonText>
+            </IonButton>
+          }
         </AskerContainer>
         <ContentContainer>
           <div>

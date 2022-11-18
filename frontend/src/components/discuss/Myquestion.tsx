@@ -6,7 +6,7 @@ import { useAppSelector } from "../../redux/store";
 
 interface QuestionProps {
     loadAskerQuestion: Function
-  }
+}
 
 const MyQuestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
     const { askerQuestionList, loading } = useAppSelector((state) => state.question)

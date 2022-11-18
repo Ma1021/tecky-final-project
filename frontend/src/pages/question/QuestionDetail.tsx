@@ -16,11 +16,13 @@ const QuestionDetail: React.FC = memo(() => {
   const dispatch = useAppDispatch();
   const [ replyContent, setReplyContent ] = useState('');
   const user_id = 1;
+  let reverseAnswer = [];
   
   useEffect(()=>{
     if(!question_id) return;
     dispatch(loadQuestion(+question_id));
   },[question_id]);
+
 
   function formatDate(date:string) {
     const time = new Date(date).toLocaleString([],{hour12: false, dateStyle:'medium', timeStyle:'short'})
@@ -82,6 +84,8 @@ const QuestionDetail: React.FC = memo(() => {
 
   if(question.id === undefined) {
     return <></>
+  } else {
+    reverseAnswer = [...question.answer].reverse();
   }
 
   return (
@@ -122,16 +126,16 @@ const QuestionDetail: React.FC = memo(() => {
           <div className='buttonContainer'>
             <div style={{display:'flex', alignItems:'center', gap:5}}>
               <IonIcon icon={chatboxEllipses}/>
-              <IonText style={{fontSize:14}} >{question.answer.length}</IonText>
+              <IonText style={{fontSize:14}} >{reverseAnswer.length}</IonText>
             </div>
             <IonIcon icon={shareSocial}></IonIcon>
           </div>
         </ContentContainer>
 
-        {question.answer.length > 0 &&  
+        {reverseAnswer.length > 0 &&  
           <AnswerContainer>
             <IonText>回答</IonText>
-          {question.answer.map((answer)=>{
+          {reverseAnswer.map((answer: any)=>{
             return <div className='answerCard' key={answer.id} data-answer_id = {answer.id}>
                       <div className='answererAvatar'>
                         <IonImg src={answer.answers.avatar} />

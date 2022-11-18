@@ -162,8 +162,8 @@ export const questionSlice = createSlice({
             state.loading = true;
         });      
         builder.addCase(createQuestion.fulfilled, (state, action)=>{
-            state.questionList.push(action.payload);
-            state.askerQuestionList.push(action.payload);
+            state.questionList.unshift(action.payload);
+            state.askerQuestionList.unshift(action.payload);
             state.loading = false;
         });
     }

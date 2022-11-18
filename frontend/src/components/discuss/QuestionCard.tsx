@@ -1,8 +1,9 @@
-import { IonText, IonCard, IonCardHeader, IonCardContent, IonButton, IonImg } from '@ionic/react';
+import { IonText, IonCard, IonCardHeader, IonCardContent, IonButton, IonImg, IonIcon } from '@ionic/react';
 import { memo } from 'react'
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { Questions } from './Allquestion'
+import { chatboxEllipses } from 'ionicons/icons';
 
 interface QuestionsProps {
     questions: Questions[]
@@ -12,19 +13,24 @@ interface QuestionsProps {
 const QuestionCard: React.FC<QuestionsProps> = memo((props:QuestionsProps)=>{
     const history = useHistory();
 
+    function formatDate(date:string) {
+        const time = new Date(date).toLocaleString([],{hour12: false, dateStyle:'medium', timeStyle:'short'})
+        return time
+    }
+
     return (
         <>
             {props.questions.map((question) => {
-                return <QuestionContainer key={question.id} onClick={() => {history.push(`/question/${question.id}`)}}>
-                    <QuestionHeader>
+                return <QuestionContainer key={question.id}>
+                    <QuestionHeader onClick={() => {history.push(`/question/${question.id}`)}}>
                         <AskerInfo>
                             <AskerAvatar src={question.asker_avatar}></AskerAvatar>
                             <IonText>{question.asker_username}</IonText>
                         </AskerInfo>
-                        <IonText style={{fontSize:12}}>{question.created_at.slice(0,10) + ' ' + question.created_at.slice(11,16)}</IonText>
+                        <IonText style={{fontSize:12}}>{formatDate(question.created_at)}</IonText>
                     </QuestionHeader>
                     <QuestionContent>
-                        <AskerContent>
+                        <AskerContent onClick={() => {history.push(`/question/${question.id}`)}}>
                             <IonText>{question.content}</IonText>
                             <TagContainer>
                                 {question.stock.map((stock) => {
@@ -34,14 +40,23 @@ const QuestionCard: React.FC<QuestionsProps> = memo((props:QuestionsProps)=>{
                                 })}
                             </TagContainer>
                         </AskerContent>
-                        {/* <AnswererInfo>
-                            <IonText>{question.answerer_username}</IonText>
-                            <AnswererAvatar src={question.answerer_avatar}></AnswererAvatar>
-                        </AnswererInfo>
-                        <AnswererContent>{question.answerer_content}</AnswererContent> */}
+
+                        {question.answer.length > 0 && 
+                        <>                          
+                            <AnswererInfo onClick={() => {history.push(`/question/${question.id}`)}}>
+                                <IonText>{question.answer[0].answers.username}</IonText>
+                                <AnswererAvatar src={question.answer[0].answers.avatar}></AnswererAvatar>
+                            </AnswererInfo>
+                            <AnswererContent>{question.answer[0].content}</AnswererContent>    
+                        </>
+                        }
+                        
+                        <AnswerBtn>
+                            <IonIcon icon={chatboxEllipses}/>
+                            <IonText>{question.answer.length}</IonText>
+                            {question.asker_id !== props.user_id && <IonButton>答問題</IonButton>}
+                        </AnswerBtn>
                     </QuestionContent>
-                    
-                    {question.asker_id !== props.user_id && <AnswerBtn>答問題</AnswerBtn>}
                 </QuestionContainer>
             })}
         </>
@@ -49,7 +64,6 @@ const QuestionCard: React.FC<QuestionsProps> = memo((props:QuestionsProps)=>{
 })
 
 const QuestionContainer = styled(IonCard)`
-    height:260px;
     width: 95%;
     margin: 6px;
 `
@@ -63,9 +77,9 @@ const QuestionHeader = styled(IonCardHeader)`
 
 const QuestionContent = styled(IonCardContent)`
     width: 70%;
-    position: absolute;
-    top: 55px;
-    left: 90px;
+    float:right;
+    position: relative;
+    margin: -2rem 1.8rem 1rem 0rem;
     background-color: #efefef;
     text-align: start;
     padding: 10px;
@@ -135,22 +149,24 @@ const AnswererContent = styled(IonText)`
     margin-top: 10px;
     padding-right: 3rem;
 `
-const AnswerBtn = styled(IonButton)`
-    position: absolute;
-    bottom: 0;
-    right: 1.2rem;
-    height: 2.5rem;
-    margin-bottom:1rem;
-    font-size:14px;
-`
+const AnswerBtn = styled.div`
+    height: 2rem;
+    margin-top:2rem;
+    margin-right: 0.4rem;
+    align-self: flex-end;
+    display: flex;
+    align-items: center;
+    gap:0.5rem;
 
-const DeleteBtn = styled(IonButton)`
-    position: absolute;
-    bottom: 0;
-    right: 6rem;
-    height: 2.5rem;
-    margin-bottom:1rem;
-    font-size:14px;
+    ion-button {
+        font-size: 14px;
+        height: 1.8rem;
+        margin:0;
+    }
+    
+    ion-icon {
+        font-size: 18px;
+    }
 `
 
 export default QuestionCard;

@@ -36,8 +36,7 @@ export const loadQuestion = createAsyncThunk<Question, number>("question/loadQue
           method: 'GET',
           headers: { 'Content-Type': 'application/json' }
         })
-        // thunkAPI.dispatch(loadQuestions());
-        const json = await res.json();
+        const json = await res.json();        
         return json[0];
       } catch (err) {
         return thunkAPI.rejectWithValue(err);
@@ -68,12 +67,46 @@ export const deleteQuestion = createAsyncThunk<Question, {question_id: number, u
         })
         const json = await res.json();
         thunkAPI.dispatch(loadQuestions());
-        thunkAPI.dispatch(loadAskerQuestions(data.user_id));
+        // thunkAPI.dispatch(loadAskerQuestions(data.user_id));
         return json;
     } catch(err) {
         return thunkAPI.rejectWithValue(err);
     }
 });
+
+// action that create answer in question
+export const createAnswer = createAsyncThunk<Question, {answerer_id: number, question_id: number, content: string}>(
+    "question/createAnswer",
+    async(data, thunkAPI) => {
+        try {
+            const res = await fetch('http://localhost:8080/answer/', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body:JSON.stringify(data)
+            })
+            const json = await res.json();
+            thunkAPI.dispatch(loadQuestion(data.question_id));
+            return json;
+        } catch(err) {
+            return thunkAPI.rejectWithValue(err);
+        }
+    }
+)
+
+// action that delete answer in question
+export const deleteAnswer = createAsyncThunk<Question, {question_id: number, answer_id: number}>("question/deleteAnswer", async(data, thunkAPI)=>{
+    try {
+        const res = await fetch(`http://localhost:8080/answer/${data.answer_id}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' }
+        })
+        const json = await res.json();
+        thunkAPI.dispatch(loadQuestion(data.question_id));
+        return json[0];
+      } catch (err) {
+        return thunkAPI.rejectWithValue(err);
+      }
+})
 
 // reducers, handle specific state, changes the state
 export const questionSlice = createSlice({

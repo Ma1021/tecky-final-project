@@ -39,6 +39,7 @@ const Menu: React.FC<MenuProps> = () => {
     email: "user@gmail.com",
     phone: 12345678,
   };
+
   const logoutPage = () => {
     // phone version
     // async () => {
@@ -56,12 +57,20 @@ const Menu: React.FC<MenuProps> = () => {
     history.replace("/home");
   };
 
+  const toEdit = (e: any) => {
+    e?.stopPropagation();
+    console.log("toEdit");
+    history.push("/user/edit");
+  };
+
+  const toInfo = () => {
+    console.log("toInfo");
+    history.push("/user/info");
+  };
+
   return (
     <IonMenu contentId="main-content">
-      <IonHeader
-        className="menu pt-3 pb-3"
-        onClick={() => history.push("/userInfo")}
-      >
+      <IonHeader className="menu pt-3 pb-3" onClick={toInfo}>
         <IonToolbar>
           <IonMenuToggle className="w100">
             <div className="pr-1">
@@ -88,7 +97,7 @@ const Menu: React.FC<MenuProps> = () => {
                       <IonLabel>{userInfo.username}</IonLabel>
                     </div>
                     <div className="w100">
-                      <IonLabel className="grey">
+                      <IonLabel className="grey" onClick={toEdit}>
                         編輯帳號<IonIcon icon={pencilOutline}></IonIcon>
                       </IonLabel>
                     </div>

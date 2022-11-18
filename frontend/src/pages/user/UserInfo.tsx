@@ -24,12 +24,12 @@ import {
   diamondOutline,
   happyOutline,
 } from "ionicons/icons";
-import img from "../img/animal_stand_ookami.png";
-import Notification from "../components/All/Notification";
+import img from "../../img/animal_stand_ookami.png";
+import Notification from "../../components/All/Notification";
 import { useState } from "react";
-import UserArticles from "../components/UserContent/UserArticles";
-import UserDiscussion from "../components/UserContent/UserDiscussion";
-import UserIntro from "../components/UserContent/UserIntro";
+import UserArticles from "../../components/UserContent/UserArticles";
+import UserDiscussion from "../../components/UserContent/UserDiscussion";
+import UserIntro from "../../components/UserContent/UserIntro";
 
 const UserInfo: React.FC = () => {
   const userInfo = {

@@ -15,6 +15,16 @@ const Home: React.FC = () => {
   if (auth) {
     const authJson = JSON.parse(auth);
     if (authJson.isAuthenticated) {
+      console.log("authJson", authJson);
+      fetch(
+        `${process.env.REACT_APP_PUBLIC_URL}/user/${authJson.user.id}`
+      ).then((res) => {
+        console.log("res", res);
+        res.json().then((json) => {
+          console.log("json", json);
+        });
+      });
+
       return <Redirect to="/discuss" />;
     }
   }
@@ -22,12 +32,6 @@ const Home: React.FC = () => {
   return (
     <>
       <IonPage>
-        {/* <IonHeader className="ion-no-border">
-          <IonToolbar>
-            <IonTitle></IonTitle>
-          </IonToolbar>
-        </IonHeader> */}
-
         <IonContent>
           <div className="d-flex flex-column align-items-center w100">
             <img

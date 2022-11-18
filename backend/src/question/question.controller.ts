@@ -36,7 +36,23 @@ export class QuestionController {
       throw new HttpException('Missing asker id', HttpStatus.BAD_REQUEST)
     }
 
-    const questions = await this.questionService.findAskerQuestions(+asker_id)
+    const questions = await this.questionService.findAskerQuestions(+asker_id);
+
+    if(questions.length <= 0) {
+      throw new HttpException('Question not found', HttpStatus.NOT_FOUND);
+    }
+
+    return questions;
+  }
+
+  // get one or all questions by answerer id
+  @Get('/answerer/:id')
+  async getAnswererQuestions(@Param('id') answerer_id: string) {
+    if(!answerer_id) {
+      throw new HttpException('Missing answerer id', HttpStatus.BAD_REQUEST)
+    }
+
+    const questions = await this.questionService.findAnswererQuestions(+answerer_id);
 
     if(questions.length <= 0) {
       throw new HttpException('Question not found', HttpStatus.NOT_FOUND);
@@ -110,7 +126,6 @@ export class QuestionController {
     }
 
     this.questionService.update(+question_id, questions).then((response)=>{
-      console.log(response);
       res.status(HttpStatus.ACCEPTED).json({message: 'Update question successfully'})
     })
   }
@@ -123,7 +138,7 @@ export class QuestionController {
 
     //checking the question is exist or not
     const question = await this.questionService.findOne(+question_id);
-
+    
     if(question.length <= 0) {
       throw new HttpException('Question not found', HttpStatus.NOT_FOUND);
     }

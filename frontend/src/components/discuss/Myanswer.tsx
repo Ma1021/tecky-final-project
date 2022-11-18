@@ -1,6 +1,9 @@
 import { IonText } from '@ionic/react';
 import { memo } from 'react'
 
+interface QuestionProps {
+    loadAskerQuestion: Function
+}
 
 const MyAnswer: React.FC = memo(() => {
     return (

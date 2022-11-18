@@ -21,8 +21,10 @@ const QuestionCard: React.FC<QuestionsProps> = memo((props:QuestionsProps)=>{
     return (
         <>
             {props.questions.map((question) => {
-                return <QuestionContainer key={question.id}>
-                    <QuestionHeader onClick={() => {history.push(`/question/${question.id}`)}}>
+                const reverseAnswer = [...question.answer].reverse();
+
+                return <QuestionContainer key={question.id} onClick={() => {history.push(`/question/${question.id}`)}}>
+                    <QuestionHeader >
                         <AskerInfo>
                             <AskerAvatar src={question.asker_avatar}></AskerAvatar>
                             <IonText>{question.asker_username}</IonText>
@@ -30,7 +32,7 @@ const QuestionCard: React.FC<QuestionsProps> = memo((props:QuestionsProps)=>{
                         <IonText style={{fontSize:12}}>{formatDate(question.created_at)}</IonText>
                     </QuestionHeader>
                     <QuestionContent>
-                        <AskerContent onClick={() => {history.push(`/question/${question.id}`)}}>
+                        <AskerContent>
                             <IonText>{question.content}</IonText>
                             <TagContainer>
                                 {question.stock.map((stock) => {
@@ -41,21 +43,20 @@ const QuestionCard: React.FC<QuestionsProps> = memo((props:QuestionsProps)=>{
                             </TagContainer>
                         </AskerContent>
 
-                        {question.answer.length > 0 && 
+                        {reverseAnswer.length > 0 && 
                         <>                          
-                            <AnswererInfo onClick={() => {history.push(`/question/${question.id}`)}}>
-                                <IonText>{question.answer[0].answers.username}</IonText>
-                                <AnswererAvatar src={question.answer[0].answers.avatar}></AnswererAvatar>
+                            <AnswererInfo>
+                                <AnswererAvatar src={reverseAnswer[0].answers.avatar}></AnswererAvatar>
+                                <IonText>{reverseAnswer[0].answers.username}</IonText>
                             </AnswererInfo>
-                            <AnswererContent>{question.answer[0].content}</AnswererContent>    
+                            <AnswererContent>{reverseAnswer[0].content}</AnswererContent>    
                         </>
                         }
                         
-                        <AnswerBtn>
+                        <AnswerAmount>
                             <IonIcon icon={chatboxEllipses}/>
-                            <IonText>{question.answer.length}</IonText>
-                            {question.asker_id !== props.user_id && <IonButton>答問題</IonButton>}
-                        </AnswerBtn>
+                            <IonText>{reverseAnswer.length}</IonText>
+                        </AnswerAmount>
                     </QuestionContent>
                 </QuestionContainer>
             })}
@@ -93,6 +94,7 @@ const QuestionContent = styled(IonCardContent)`
 const TagContainer = styled.div`
     display:flex;
     gap:10px;
+    flex-wrap: wrap;
     margin-top:0.8rem;
 `
 
@@ -129,7 +131,6 @@ const AskerAvatar = styled(IonImg)`
 const AnswererInfo = styled.div`
     display: flex;
     align-items: center;
-    justify-content: flex-end;
     gap: 10px;
     margin-top:10px
 `
@@ -144,12 +145,10 @@ const AnswererAvatar = styled(IonImg)`
 `
 
 const AnswererContent = styled(IonText)`
-    width:100%;
-    text-align: end;
-    margin-top: 10px;
-    padding-right: 3rem;
+    width:90%;
+    margin-left:21%;
 `
-const AnswerBtn = styled.div`
+const AnswerAmount = styled.div`
     height: 2rem;
     margin-top:2rem;
     margin-right: 0.4rem;
@@ -157,12 +156,6 @@ const AnswerBtn = styled.div`
     display: flex;
     align-items: center;
     gap:0.5rem;
-
-    ion-button {
-        font-size: 14px;
-        height: 1.8rem;
-        margin:0;
-    }
     
     ion-icon {
         font-size: 18px;

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Response, HttpException, HttpStatus, Param, Res } from "@nestjs/common";
+import { Body, Controller, Post, Response, HttpException, HttpStatus, Param, Delete } from "@nestjs/common";
 import { Answer_DTO } from "./answer.dto";
 import { AnswerService } from "./answer.service";
 
@@ -25,9 +25,20 @@ export class AnswerController {
         if(typeof question_id !== 'number') {
             throw new HttpException('Invalid question id', HttpStatus.BAD_REQUEST)
         }
-
+        
         this.answerService.create(answer).then(()=>{
             res.status(HttpStatus.CREATED).json({message:"Create answer successfully"});
+        })
+    }
+
+    @Delete(':id')
+    async deleteAnswer(@Param('id') answer_id: string, @Response() res) {
+        if(!answer_id) {
+            throw new HttpException('Missing answer id', HttpStatus.BAD_REQUEST)
+        }
+
+        this.answerService.delete(+answer_id).then(()=>{
+            res.status(HttpStatus.ACCEPTED).json({message:"Delete answer successfully"});
         })
     }
 }

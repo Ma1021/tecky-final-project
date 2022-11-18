@@ -14,7 +14,7 @@ import {
 } from "@ionic/react";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
-import { registerAuth } from "../redux/auth/actions";
+import { login } from "../redux/auth/actions";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { useEffect } from "react";
 import { useHistory } from "react-router";
@@ -55,11 +55,9 @@ const Login: React.FC = () => {
     await gettingStorage();
     // () => <Redirect to="/discuss" />;
     history.replace("/discuss");
-
-    // history.replace("/discuss");
   };
   let dispatching = (json: any) => {
-    dispatch(registerAuth(json.user, json.token));
+    dispatch(login(json.user, json.token));
   };
   let gettingStorage = () => {
     // mobile version

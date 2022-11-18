@@ -1,4 +1,12 @@
-export function login(user: { id: string }, token: string) {
+import { UserPort } from "./state";
+
+export function login(user: UserPort, token: string) {
+  console.log("login actions");
+  console.log({
+    type: "@@auth/LOGIN" as const,
+    user,
+    token,
+  });
   return {
     type: "@@auth/LOGIN" as const,
     user,
@@ -6,7 +14,7 @@ export function login(user: { id: string }, token: string) {
   };
 }
 
-export function registerAuth(user: { id: string }, token: string) {
+export function registerAuth(user: UserPort, token: string) {
   return {
     type: "@@auth/REGISTER" as const,
     user,

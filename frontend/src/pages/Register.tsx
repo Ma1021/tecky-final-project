@@ -17,7 +17,6 @@ import {
 // import "./Register.module.css";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
-import { Redirect } from "react-router";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { registerAuth } from "../redux/auth/actions";
 import { useEffect } from "react";

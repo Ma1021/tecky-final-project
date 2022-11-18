@@ -26,10 +26,6 @@ import {
 } from "ionicons/icons";
 import img from "../../img/animal_stand_ookami.png";
 import Notification from "../../components/All/Notification";
-import { useState } from "react";
-import UserArticles from "../../components/UserContent/UserArticles";
-import UserDiscussion from "../../components/UserContent/UserDiscussion";
-import UserIntro from "../../components/UserContent/UserIntro";
 
 const UserInfo: React.FC = () => {
   const userInfo = {
@@ -42,15 +38,6 @@ const UserInfo: React.FC = () => {
     isKOL: false,
   };
 
-  interface SegmentChangeEventDetail {
-    value?: string;
-  }
-
-  interface IonSegmentCustomEvent extends CustomEvent {
-    target: HTMLIonSegmentElement;
-    detail: SegmentChangeEventDetail;
-  }
-
   return (
     <IonPage>
       <IonHeader className="ion-no-border">
@@ -60,7 +47,7 @@ const UserInfo: React.FC = () => {
               <IonButtons>
                 <IonBackButton defaultHref="/"></IonBackButton>
               </IonButtons>
-              <div style={{ flexGrow: 1 }}>編輯用戶</div>
+              <div style={{ flexGrow: 1, textAlign: "center" }}>編輯用戶</div>
               <Notification />
             </div>
           </IonTitle>

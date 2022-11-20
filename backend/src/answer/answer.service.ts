@@ -3,16 +3,6 @@ import { InjectModel } from 'nest-knexjs';
 import { Knex } from "knex";
 import { Answer_DTO } from './answer.dto'
 
-interface Answer_Result {
-    id: number,
-    answerer_id: number,
-    answerer_username: string,
-    answerer_avatar: string,
-    answerer_content: string,
-    created_at: string,
-    like_user_id: Array<number>
-}
-
 @Injectable()
 export class AnswerService {
     constructor(@InjectModel() private readonly knex: Knex) {}

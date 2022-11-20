@@ -23,17 +23,24 @@ import {
 import "./Navigation.css";
 
 import Tab1 from "../pages/Tab1";
-import Discuss from "../pages/question/Discuss";
 import Tab2 from "../pages/Tab2";
+
+// discuss pages
+import Discuss from "../pages/question/Discuss";
 import CreateQuestion from "../pages/question/CreateQuestion";
 import SelectTags from "../pages/question/SelectTags";
-import Menu from "./All/Menu";
+import QuestionDetail from "../pages/question/QuestionDetail";
+
+// user pages
 import UserInfo from "../pages/user/UserInfo";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
-import Home from "../pages/Home";
-import QuestionDetail from "../pages/question/QuestionDetail";
 import UserEdit from "../pages/user/UserEdit";
+
+//common pages
+import Menu from "./All/Menu";
+import Home from "../pages/Home";
+import Inbox from "../pages/Inbox";
 
 const Navigation: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState("tab1");
@@ -45,6 +52,7 @@ const Navigation: React.FC = () => {
         <Route exact path="/user/info/" component={UserInfo}></Route>
         <Route exact path="/user/edit/" component={UserEdit}></Route>
         <Route exact path="/question/:id" component={QuestionDetail}></Route>
+        <Route exact path="/inbox/:id" component={Inbox}></Route>
         <Route exact path="/">
           <Redirect to="/home" />
         </Route>

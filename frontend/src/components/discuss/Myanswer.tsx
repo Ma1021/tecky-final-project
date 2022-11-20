@@ -1,17 +1,19 @@
 import { IonRefresher, IonRefresherContent, RefresherEventDetail, IonSpinner } from '@ionic/react';
-import { memo } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { useAppSelector } from "../../redux/store";
 import styled from 'styled-components';
 import QuestionCard from './QuestionCard';
-
+import { Questions } from './Allquestion'
 
 interface QuestionProps {
     loadAnswererQuestion: Function
+    keyword: string
 }
 
 const MyAnswer: React.FC<QuestionProps> = memo((props:QuestionProps) => {
     const { answererQuestionList, loading } = useAppSelector((state) => state.question)
     const user_id = 2;
+    const [filteredQuestions, setFilteredQuestions ] = useState(Array<Questions>);
 
     function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
         props.loadAnswererQuestion(user_id);
@@ -20,6 +22,17 @@ const MyAnswer: React.FC<QuestionProps> = memo((props:QuestionProps) => {
         }
     }
 
+    useEffect(()=>{
+        const word = props.keyword.replace(/\s/g,'').toLowerCase()
+        if(answererQuestionList.length > 0) {
+            setFilteredQuestions(answererQuestionList.filter(question => 
+                question.stock.some(stock=> stock.name.replace(/\s/g,'').toLowerCase().includes(word) || stock.symbol.toLowerCase().includes(word)) 
+                ||
+                question.content.replace(/\s/g,'').toLowerCase().includes(word)
+            ))  
+        }
+    }, [props.keyword])
+
     return (
         <>
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
@@ -27,7 +40,7 @@ const MyAnswer: React.FC<QuestionProps> = memo((props:QuestionProps) => {
         </IonRefresher>
         {loading ? <LoadingScreen><IonSpinner name="circles"/> 載入中...</LoadingScreen> : 
         <QuestionContainer>
-            {answererQuestionList.length > 0 ? <QuestionCard questions={answererQuestionList} user_id={user_id} /> : <div style={{marginTop:10}}>沒有問題</div>}
+            {answererQuestionList.length > 0 ? <QuestionCard questions={filteredQuestions.length > 0 ? filteredQuestions : answererQuestionList} user_id={user_id} /> : <div style={{marginTop:10}}>沒有問題</div>}
         </QuestionContainer>}
     </>
     );

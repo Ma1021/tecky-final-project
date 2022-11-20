@@ -5,14 +5,8 @@ export async function seed(knex: Knex): Promise<void> {
   await knex('questions').del();
   await knex('users').del();
   await knex('stocks').del();
-  await knex('user_types').del();
 
   // Inserts seed entries
-  await knex('user_types').insert([
-    { type: 'normal' },
-    { type: 'kol' },
-    { type: 'admin' },
-  ]);
 
   await knex('stocks').insert([
     { symbol: 'QQQ', name: 'Invesco QQQ Trust Series 1' },
@@ -25,7 +19,6 @@ export async function seed(knex: Knex): Promise<void> {
     username: 'admin',
     email: 'admin@gmail.com',
     password_hash: '123',
-    user_type_id: 1,
     birthday: '2022-11-12T13:00',
     gender: 'F',
     avatar:
@@ -35,7 +28,6 @@ export async function seed(knex: Knex): Promise<void> {
     username: 'user',
     email: 'user@gmail.com',
     password_hash: '456',
-    user_type_id: 1,
     birthday: '2022-11-12T13:00',
     gender: 'F',
     avatar:
@@ -43,4 +35,9 @@ export async function seed(knex: Knex): Promise<void> {
   }
 ]);
 
+  await knex("notification_type").insert([
+    {action_type:"create question", action_desc:"提出了問題"},
+    {action_type:"create answer", action_desc:"回答了問題"},
+    {action_type:"follow user", action_desc:"追隨了你"},
+  ])
 }

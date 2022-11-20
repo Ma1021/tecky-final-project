@@ -1,5 +1,13 @@
-export interface Answer_DTO {
-    answerer_id: number,
-    question_id: number,
-    content: string
+import { IsNumber, IsNotEmpty, IsString } from "class-validator"
+
+export class Answer_DTO {
+    @IsNotEmpty()
+    @IsNumber()
+    answerer_id: number;
+    @IsNotEmpty()
+    @IsNumber()
+    question_id: number;
+    @IsNotEmpty()
+    @IsString()
+    content: string;
 }

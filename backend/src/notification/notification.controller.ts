@@ -1,0 +1,35 @@
+import { Body, Controller, Post, HttpStatus, Response, Get, Param, HttpException, Put } from "@nestjs/common";
+import { Notification_DTO } from "./notification.dto";
+import { NotificationService } from "./notification.service";
+
+@Controller('/notification')
+export class NotificationController {
+    constructor(private readonly notificationService: NotificationService) {}
+
+    @Post()
+    createNotification(@Body() notification: Notification_DTO, @Response() res) {
+        this.notificationService.create(notification).then(()=>{
+            res.status(HttpStatus.ACCEPTED).json({message:"notification create successfully"});
+        });
+    }
+
+    @Get(':id')
+    findAllNotification(@Param('id') user_id: string) {
+        if(!user_id) {
+            throw new HttpException('Missing user id', HttpStatus.BAD_REQUEST);
+        }
+
+        return this.notificationService.findAll(+user_id);
+    }
+
+    @Put(':id')
+    async readNotification(@Param('id') notification_id: string, @Response() res) {
+        if(!notification_id) {
+            throw new HttpException('Missing notification id', HttpStatus.BAD_REQUEST);
+        }
+        const response = await this.notificationService.updateRead(+notification_id);
+        if(response.length > 0) {
+            res.status(HttpStatus.ACCEPTED).json({message:"notification update successfully"});
+        }
+    }
+}

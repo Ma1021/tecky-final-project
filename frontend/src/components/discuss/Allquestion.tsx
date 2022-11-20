@@ -4,7 +4,7 @@ import {
   RefresherEventDetail,
   IonSpinner
 } from "@ionic/react";
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import styled from "styled-components";
 import QuestionCard from "./QuestionCard";
 import { RootState, useAppSelector } from "../../redux/store";
@@ -39,12 +39,14 @@ export interface Questions {
 
 interface QuestionProps {
   loadQuestion: Function
+  keyword: string
 }
 
 // memo 防止父組件更新時子組件也更新的問題，改善效能 （只能用在純html的component）
 const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
   const { questionList, loading } = useAppSelector((state: RootState) => state.question)
   const user_id = 2;
+  const [filteredQuestions, setFilteredQuestions ] = useState(Array<Questions>);
 
   function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
       props.loadQuestion();
@@ -53,6 +55,16 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
       }
   }
 
+  useEffect(()=>{
+    const word = props.keyword.replace(/\s/g,'').toLowerCase()
+
+    setFilteredQuestions(questionList.filter(question => 
+      question.stock.some(stock=> stock.name.replace(/\s/g,'').toLowerCase().includes(word) || stock.symbol.toLowerCase().includes(word)) 
+      ||
+      question.content.replace(/\s/g,'').toLowerCase().includes(word)
+    ))    
+  }, [props.keyword])
+  
   return (
     <>
       <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
@@ -60,7 +72,7 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
       </IonRefresher>
       {loading ? <LoadingScreen><IonSpinner name="circles"/> 載入中...</LoadingScreen> : 
       <QuestionContainer>
-        { questionList.length > 0 ? <QuestionCard questions={questionList} user_id={user_id} /> : <div style={{marginTop:10}}>沒有問題</div> }
+        { questionList.length > 0 ? <QuestionCard questions={filteredQuestions.length > 0 ? filteredQuestions : questionList} user_id={user_id} /> : <div style={{marginTop:10}}>沒有問題</div> }
       </QuestionContainer>}
     </>
   );

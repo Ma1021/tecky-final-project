@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { heartCircle, chatboxEllipses, shareSocial, trash, heartOutline } from 'ionicons/icons';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { loadQuestion, createAnswer, deleteQuestion, deleteAnswer  } from '../../redux/questions/questionSlice';
+import { WhatsappShareButton } from 'react-share'
 
 const QuestionDetail: React.FC = memo(() => {
   const { question, loading } = useAppSelector((state) => state.question);
@@ -130,7 +131,9 @@ const QuestionDetail: React.FC = memo(() => {
               <IonIcon icon={chatboxEllipses}/>
               <IonText style={{fontSize:14}} >{reverseAnswer.length}</IonText>
             </div>
-            <IonIcon icon={shareSocial}></IonIcon>
+            <WhatsappShareButton url='分享問題： https://google.com'>
+              <IonIcon icon={shareSocial}></IonIcon>
+            </WhatsappShareButton>
           </div>
         </ContentContainer>
 
@@ -141,14 +144,18 @@ const QuestionDetail: React.FC = memo(() => {
             return <div className='answerCard' key={answer.id} data-answer_id = {answer.id}>
                       <div className='answererAvatar'>
                         <IonImg src={answer.answers.avatar} />
-                        <IonButton>關注</IonButton>
+                        { answer.answers.id !== user_id &&
+                          <IonButton>關注</IonButton>
+                        }
                       </div>
                       <div className='answerContent'>
                         <IonText className='username'>{answer.answers.username}</IonText>
                         <IonText className='content'>{answer.content}</IonText>
                         <div className='answerInfo' data-user_id={answer.answers.id}>
                           <IonText className='answerDate'>{new Date(answer.created_at).toLocaleString([],{hour12: false, dateStyle:'medium', timeStyle:'short'})}</IonText>
-                          <IonText style={{fontWeight:600}}>檢舉</IonText>
+                          { answer.answers.id !== user_id &&
+                            <IonText style={{fontWeight:600}}>檢舉</IonText>
+                          }
                           {answer.answers.id === user_id && <IonText style={{fontWeight:600}} onClick={handleReplyDelete}>刪除</IonText>}
                         </div>
                         <div className='answerLikes'>

@@ -8,6 +8,7 @@ import { Redirect, useHistory } from "react-router";
 
 const Home: React.FC = () => {
   const history = useHistory();
+
   // const auth = async () => {
   //   await Preferences.get({ key: "auth_stockoverflow" });
   // };

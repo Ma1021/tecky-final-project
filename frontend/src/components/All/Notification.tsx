@@ -37,9 +37,9 @@ const AmountTag = styled(IonBadge)`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 5px;
+  font-size: 10px;
   position: absolute;
   right:-5px;
-  top:-0px;
+  top:0px;
   z-index:1;
 `

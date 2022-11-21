@@ -14,3 +14,12 @@ export class Notification_DTO {
     @IsNumber({}, {each: true})
     notifiers: number[];
 }
+
+export class Notification_Delete_DTO {
+    @IsNotEmpty()
+    @IsNumber()
+    target_type_id: number;
+    @IsNotEmpty()
+    @IsNumber()
+    target_id: number;
+}

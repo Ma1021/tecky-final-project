@@ -1,24 +1,17 @@
 import { Knex } from "knex";
 
 
-export async function up(knex: Knex): Promise<void> {
-    await knex.schema.createTable("user_types", (table)=>{
-        table.increments("id");
-        table.string("type").notNullable().unique();
-    })
-    
+export async function up(knex: Knex): Promise<void> {    
     await knex.schema.createTable("users", (table)=>{
         table.increments("id");
         table.string("username").notNullable();
         table.string("email").notNullable().unique();
         table.string("password_hash").notNullable().unique();
-        table.integer("user_type_id").unsigned().notNullable();
-        table.foreign("user_type_id").references("user_types.id");
-        table.string("avatar");
-        table.text("introduction");
-        table.dateTime("last_login");
+        table.enu('user_type', ['normal', 'admin', 'kol']).defaultTo('normal');
+        table.text("avatar");
+        table.text("introduction").defaultTo('此用戶沉迷股市﹐未有容餘更新自我介紹。');
         table.date("birthday").notNullable();
-        table.string("gender").notNullable();
+        table.enu("gender", ["M", "F"]);
         table.timestamps(false, true);
     })
 
@@ -51,6 +44,5 @@ export async function down(knex: Knex): Promise<void> {
     await knex.schema.dropTableIfExists("tags");
     await knex.schema.dropTableIfExists("users");
     await knex.schema.dropTableIfExists("stocks");
-    await knex.schema.dropTableIfExists("user_types");
 }
 

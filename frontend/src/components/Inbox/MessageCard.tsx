@@ -28,6 +28,7 @@ interface MessageProps {
 
 const MessageCard: React.FC<MessageProps> = (props: MessageProps) => {
     const handleRead  = props.handleRead
+    
     let obj = {
         notification_id: props.notification.id,
         notification_type: props.notification.notification_type_id,

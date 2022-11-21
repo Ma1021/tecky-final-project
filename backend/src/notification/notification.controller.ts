@@ -1,5 +1,5 @@
-import { Body, Controller, Post, HttpStatus, Response, Get, Param, HttpException, Put } from "@nestjs/common";
-import { Notification_DTO } from "./notification.dto";
+import { Body, Controller, Post, HttpStatus, Response, Get, Param, HttpException, Put, Delete } from "@nestjs/common";
+import { Notification_DTO, Notification_Delete_DTO } from "./notification.dto";
 import { NotificationService } from "./notification.service";
 
 @Controller('/notification')
@@ -31,5 +31,14 @@ export class NotificationController {
         if(response.length > 0) {
             res.status(HttpStatus.ACCEPTED).json({message:"notification update successfully"});
         }
+    }
+
+    @Delete()
+    async notification (@Body() notification: Notification_Delete_DTO, @Response() res) {
+        const response = await this.notificationService.deleteNotification(notification);
+        if(response <= 0) {
+            res.status(HttpStatus.NOT_FOUND).json({message:"notification not found"});
+        }
+        return res       
     }
 }

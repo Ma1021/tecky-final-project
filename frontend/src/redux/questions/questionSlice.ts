@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { Question, initialState } from './state'
 
+const user_id = 2;
+
 // actions that get data 
 export const loadQuestions = createAsyncThunk<Question[]>("question/loadQuestions", async(_, thunkAPI)=>{
     try {
@@ -66,6 +68,29 @@ export const createQuestion = createAsyncThunk<Question, Object>("question/creat
           body:JSON.stringify(data)
         })
         const json = await res.json();
+        
+        // insert notification 
+        const followerRes = await fetch(`http://localhost:8080/user/subscriptions/${user_id}`)
+        const followerJson = await followerRes.json();
+        console.log(followerJson);
+        
+        for(let follower of followerJson) {
+            const notification = {
+                notification_type_id:1,
+                notification_target_id: json[0].id,
+                actor_id: user_id,
+                notifiers: follower.user_id
+            }
+            
+            await fetch('http://localhost:8080/notification/', {
+                method:'POST',
+                headers:{'Content-Type': 'application/json'},
+                body: JSON.stringify(notification)
+            })
+        }
+
+        thunkAPI.dispatch(loadQuestions());
+
         return json[0];
       } catch(err) {
         return thunkAPI.rejectWithValue(err);
@@ -80,6 +105,14 @@ export const deleteQuestion = createAsyncThunk<Question, {question_id: number, u
             headers: { 'Content-Type': 'application/json' }
         })
         const json = await res.json();
+
+        // delete notification
+        await fetch('http://localhost:8080/notification', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body:JSON.stringify({target_id: data.question_id, target_type_id: 1})
+        })
+
         thunkAPI.dispatch(loadQuestions());
         // thunkAPI.dispatch(loadAskerQuestions(data.user_id));
         return json;
@@ -110,7 +143,7 @@ export const createAnswer = createAsyncThunk<Question, {answerer_id: number, que
 // action that delete answer in question
 export const deleteAnswer = createAsyncThunk<Question, {question_id: number, answer_id: number}>("question/deleteAnswer", async(data, thunkAPI)=>{
     try {
-        const res = await fetch(`http://localhost:8080/answer/${data.answer_id}`, {
+        const res: Response = await fetch(`http://localhost:8080/answer/${data.answer_id}`, {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' }
         })
@@ -187,8 +220,13 @@ export const questionSlice = createSlice({
             state.loading = true;
         });      
         builder.addCase(createQuestion.fulfilled, (state, action)=>{
-            state.questionList.unshift(action.payload);
-            state.askerQuestionList.unshift(action.payload);
+            if(state.questionList.length > 1) {
+                state.questionList.unshift(action.payload);
+                state.askerQuestionList.unshift(action.payload);
+            } else {
+                state.questionList.push(action.payload);
+                state.askerQuestionList.push(action.payload);
+            }
             state.loading = false;
         });
     }

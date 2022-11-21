@@ -14,6 +14,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { hash } from 'bcrypt';
 import { AuthService } from 'src/auth/auth.service';
+import { SubscriptionDTO } from './dto/subscription.dto';
 
 @Controller('user')
 export class UserController {
@@ -71,4 +72,31 @@ export class UserController {
   remove(@Param('id') id: string) {
     return this.userService.remove(+id);
   }
+
+  // get all followers of user
+  @Get('/subscriptions/:id')
+  findSubscriptions(@Param('id') user_id: string) {
+    if(!user_id) {
+      throw new HttpException('Missing user id', HttpStatus.BAD_REQUEST);
+    }
+    return this.userService.findFollowers(+user_id);
+  }
+
+  // user following a user
+  @Post('/subscriptions')
+  createSubscription(@Body() subscription:SubscriptionDTO) {
+    if(subscription.user_id === subscription.following_id) {
+      throw new HttpException('follower id and following id can not be same', HttpStatus.CONFLICT);
+    }
+    return this.userService.createSubscription(subscription);
+  }
+
+  // user un following a user
+  @Delete('/subscriptions')
+  deleteSubscription(@Body() subscription:SubscriptionDTO) {
+
+  }
+ 
+
+
 }

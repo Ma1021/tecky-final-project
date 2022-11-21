@@ -1,7 +1,7 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { InjectModel } from 'nest-knexjs';
 import { Knex } from "knex";
-import { Notification_DTO } from "./notification.dto";
+import { Notification_DTO, Notification_Delete_DTO } from "./notification.dto";
 
 @Injectable()
 export class NotificationService {
@@ -10,7 +10,7 @@ export class NotificationService {
     async create(notification: Notification_DTO) {
         try {
             const { notification_type_id, notification_target_id, actor_id, notifiers } = notification;
-
+            
             // insert notification object
             const objectRes = await this.knex('notification_object').insert({
                 notification_type_id,
@@ -74,7 +74,25 @@ export class NotificationService {
 
     async updateRead(notification_id: number) {
         try {
-            return this.knex('notification').update({is_read: true}).where('id', notification_id).returning('*');
+            return await this.knex('notification').update({is_read: true}).where('id', notification_id).returning('*');
+        } catch(err) {
+            console.log(err);
+        }
+    }
+
+    async deleteNotification(notification:Notification_Delete_DTO) {
+        try {
+            const { target_id, target_type_id } = notification
+            // delete notification
+            const objectRes = await this.knex('notification_object').select('id').where('notification_target_id', target_id).andWhere('notification_type_id', target_type_id);        
+
+            for(let object of objectRes) {
+                await this.knex('notification').where('notification_object_id', object.id).del();
+            }
+
+            // delete notification_object
+            return await this.knex('notification_object').where('notification_target_id', target_id).del();
+
         } catch(err) {
             console.log(err);
         }

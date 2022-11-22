@@ -8,6 +8,7 @@
     "allowSyntheticDefaultImports": true,
     "target": "es2017",
     "sourceMap": true,
+    // to make the output will be at "dist" <-- should be handled by nestjs?
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,

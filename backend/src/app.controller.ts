@@ -1,4 +1,12 @@
-import { Controller, Get, Post, UseGuards, Request } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Request,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { AuthService } from './auth/auth.service';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
@@ -19,13 +27,46 @@ export class AppController {
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async login(@Request() req) {
-    // console.log('enter auth/login');
-    return this.authService.login(req.user);
+    try {
+      // console.log('enter auth/login');
+      console.log('/login', req.user);
+      let access_token = await this.authService.login(req.user);
+      let {
+        id,
+        username,
+        email,
+        avatar,
+        introduction,
+        birthday,
+        gender,
+        user_type,
+      } = req.user;
+      let returnObj = {
+        user: {
+          id,
+          username,
+          email,
+          avatar,
+          introduction,
+          birthday,
+          gender,
+          user_type,
+        },
+        token: access_token.access_token,
+      };
+      console.log('returnObj', returnObj);
+      //format of json return: { user: {id: userObj}, access_token: token}
+
+      return returnObj;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   async profile(@Request() req) {
+    console.log('/profile', req.user);
     return req.user;
   }
 }

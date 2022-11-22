@@ -34,6 +34,7 @@ import Register from "../pages/Register";
 import Home from "../pages/Home";
 import QuestionDetail from "../pages/question/QuestionDetail";
 import UserEdit from "../pages/user/UserEdit";
+import ChatroomList from "../pages/chatroom/ChatroomList";
 
 const Navigation: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState("tab1");
@@ -58,7 +59,7 @@ const Navigation: React.FC = () => {
             <Route exact path="/login" component={Login}></Route>
             <Route exact path="/home" component={Home}></Route>
             <Route exact path="/tab1" component={Tab1}></Route>
-            <Route exact path="/tab2" component={Tab2}></Route>
+            <Route exact path="/chatroomList" component={ChatroomList}></Route>
             <Route exact path="/discuss" component={Discuss}></Route>
             <Route
               exact
@@ -99,7 +100,11 @@ const Navigation: React.FC = () => {
               />
               <IonLabel>討論區</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="tab4" href="/tab4" className="tabButton">
+            <IonTabButton
+              tab="chatroomList"
+              href="/chatroomList"
+              className="tabButton"
+            >
               <IonIcon
                 icon={selectedTab === "tab4" ? chatbubbles : chatbubblesOutline}
               />

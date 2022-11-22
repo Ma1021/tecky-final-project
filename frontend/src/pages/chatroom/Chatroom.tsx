@@ -9,13 +9,17 @@ import {
   IonCardSubtitle,
   IonCardTitle,
   IonContent,
+  IonFooter,
   IonHeader,
   IonIcon,
+  IonInput,
   IonPage,
+  IonText,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { searchOutline } from "ionicons/icons";
+import { searchOutline, send } from "ionicons/icons";
+import styled from "styled-components";
 import img from "../../img/animal_stand_ookami.png";
 
 const Chatroom: React.FC = () => {
@@ -38,7 +42,7 @@ const Chatroom: React.FC = () => {
       </IonHeader>
       <IonContent>
         <div className="d-flex">
-          <div className="d-flex flex-column ion-margin">
+          <div className="d-flex flex-row ion-margin mr-0">
             <IonAvatar
               style={{
                 backgroundColor: "pink",
@@ -54,7 +58,14 @@ const Chatroom: React.FC = () => {
               />
             </IonAvatar>
           </div>
-          <IonCard style={{ maxWidth: "75%" }}>
+          <IonCard
+            className="ion-margin pb-0"
+            style={{
+              maxWidth: "75%",
+              borderRadius: "10px",
+              borderTopLeftRadius: "0px",
+            }}
+          >
             <IonCardHeader className="pt-1 pb-1">
               <IonCardSubtitle style={{ textTransform: "none" }}>
                 User name
@@ -63,15 +74,90 @@ const Chatroom: React.FC = () => {
 
             <IonCardContent className="pb-1">
               This is the content of the user
-              <p className="pt-1" style={{ fontSize: "0.7rem" }}>
+              <p className="pt-1 pb-0" style={{ fontSize: "0.7rem" }}>
+                內容只供參考, 不構成投資建議
+              </p>
+            </IonCardContent>
+          </IonCard>
+        </div>
+        <div className="d-flex flex-row-reverse">
+          <div className="d-flex flex-row ion-margin ml-0">
+            <IonAvatar
+              style={{
+                backgroundColor: "pink",
+              }}
+            >
+              <img
+                src={img}
+                alt="user icon"
+                style={{
+                  width: "100%",
+                  objectFit: "cover",
+                }}
+              />
+            </IonAvatar>
+          </div>
+          <IonCard
+            className="ion-margin pb-0"
+            style={{
+              maxWidth: "75%",
+              borderRadius: "10px",
+              borderTopRightRadius: "0px",
+            }}
+          >
+            <IonCardHeader className="pt-1 pb-1">
+              <IonCardSubtitle style={{ textTransform: "none" }}>
+                User name
+              </IonCardSubtitle>
+            </IonCardHeader>
+
+            <IonCardContent className="pb-1">
+              This is the content of the user
+              <p className="pt-1 pb-0" style={{ fontSize: "0.7rem" }}>
                 內容只供參考, 不構成投資建議
               </p>
             </IonCardContent>
           </IonCard>
         </div>
       </IonContent>
+      <IonFooter>
+        <ReplyContainer>
+          <IonInput
+            // value={replyContent}
+            placeholder="發表回應"
+            maxlength={100}
+            // onIonChange={handleInput}
+          ></IonInput>
+          <IonText>發送</IonText>
+        </ReplyContainer>
+      </IonFooter>
     </IonPage>
   );
 };
 
 export default Chatroom;
+
+const ReplyContainer = styled.div`
+  width: 100%;
+  height: 3.5rem;
+  background-color: #222;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0rem 0.8rem;
+
+  ion-input {
+    width: 90%;
+    background-color: #444;
+    color: #fff;
+    border-radius: 1rem;
+    --padding-start: 1rem;
+  }
+
+  ion-text {
+    width: 10%;
+    color: #ddd;
+    font-weight: 600;
+  }
+`;

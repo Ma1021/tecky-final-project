@@ -136,6 +136,7 @@ const QuestionDetail: React.FC = memo(() => {
 
   return (
     <>
+      <Menu />
       <IonPage id="main-content">
         <IonHeader>
           <IonToolbar>

@@ -49,7 +49,7 @@ const ChatroomRecommend: React.FC<ChatroomRecommendList> = (props) => {
                 />
               </IonAvatar>
               <div
-                className="head-count d-flex justify-content-between"
+                className="head-count d-flex justify-content-between align-content-center"
                 style={{
                   backgroundColor: "white",
                   borderRadius: "5px",

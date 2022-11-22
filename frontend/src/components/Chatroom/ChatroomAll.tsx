@@ -32,7 +32,7 @@ const ChatroomRecommend: React.FC<ChatroomRecommendList> = (props) => {
     <>
       {props.list.map((room: ChatroomRecommendProps) => {
         return (
-          <IonCard data-id={room.id} className="d-flex align-items-center ">
+          <IonCard data-id={room.id} className="d-flex align-items-center  ">
             <div className="d-flex flex-column ion-padding">
               <IonAvatar
                 style={{
@@ -49,7 +49,7 @@ const ChatroomRecommend: React.FC<ChatroomRecommendList> = (props) => {
                 />
               </IonAvatar>
               <div
-                className="head-count d-flex justify-content-between"
+                className="head-count d-flex justify-content-between align-content-center"
                 style={{
                   backgroundColor: "white",
                   borderRadius: "5px",

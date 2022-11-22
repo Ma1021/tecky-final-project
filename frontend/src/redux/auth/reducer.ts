@@ -27,6 +27,13 @@ export function authReducer(
         token: null,
         isAuthenticated: false,
       };
+    case "@@auth/DELETE":
+      return {
+        // why not false here??
+        user: null,
+        token: null,
+        isAuthenticated: false,
+      };
     default:
       return state;
   }

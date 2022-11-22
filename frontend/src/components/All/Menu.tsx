@@ -14,6 +14,7 @@ import {
   IonAccordion,
   IonAccordionGroup,
   IonList,
+  useIonRouter,
 } from "@ionic/react";
 import img from "../../img/animal_stand_ookami.png";
 import { useHistory } from "react-router";
@@ -22,17 +23,21 @@ import {
   settingsOutline,
   logoWhatsapp,
   logOutOutline,
+  trashOutline,
+  trash,
 } from "ionicons/icons";
 import "./Menu.css";
-import { useAppDispatch } from "../../redux/store";
-import { logout } from "../../redux/auth/actions";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { logout, deleteAcc } from "../../redux/auth/actions";
 // import { Redirect } from "react-router";
 
 interface MenuProps {}
 
 const Menu: React.FC<MenuProps> = () => {
   const history = useHistory();
+  const router = useIonRouter();
   const dispatch = useAppDispatch();
+  const selector = useAppSelector((state) => state.auth.user?.id);
   const userInfo = {
     username: "user",
     userId: 123,
@@ -54,7 +59,33 @@ const Menu: React.FC<MenuProps> = () => {
     // );
 
     // return <Redirect to="/home" />;
-    history.replace("/home");
+    // history.replace("/home");
+    // router.push("/home", "root", "pop");
+    router.push("/home", "forward", "push");
+  };
+
+  const deleteAccount = async () => {
+    // phone version
+    // async () => {
+    //   await Preferences.set({ key: "auth_stockoverflow", value: "" });
+    // };
+    // deleteAccount in backend
+    console.log("enter deleteAccount", selector);
+    await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/${selector}`, {
+      method: "DELETE",
+    });
+    dispatch(deleteAcc());
+    // web version
+    localStorage.setItem("auth_stockoverflow", "");
+    // console.log(
+    //   "after useEffect and set localStorage",
+    //   localStorage.getItem("auth_stockoverflow")
+    // );
+
+    // return <Redirect to="/home" />;
+    // history.replace("/home");
+    // router.push("/home", "root", "pop");
+    router.push("/home", "forward", "push");
   };
 
   const toEdit = (e: any) => {
@@ -171,6 +202,12 @@ const Menu: React.FC<MenuProps> = () => {
                 <IonLabel onClick={logoutPage}>
                   <IonIcon icon={logOutOutline}></IonIcon>
                   用戶登出
+                </IonLabel>
+              </IonItem>
+              <IonItem className="menu" lines="none">
+                <IonLabel onClick={deleteAccount}>
+                  <IonIcon icon={trashOutline}></IonIcon>
+                  刪除帳號
                 </IonLabel>
               </IonItem>
             </IonList>

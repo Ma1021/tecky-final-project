@@ -8,6 +8,7 @@ import {
   IonButton,
 } from "@ionic/react";
 import { people } from "ionicons/icons";
+import ChatroomAddCard from "./ChatroomAddCard";
 
 interface ChatroomRecommendList {
   list: ChatroomRecommendProps[];
@@ -31,56 +32,7 @@ const ChatroomRecommend: React.FC<ChatroomRecommendList> = (props) => {
   return (
     <>
       {props.list.map((room: ChatroomRecommendProps) => {
-        return (
-          <IonCard data-id={room.id} className="d-flex align-items-center ">
-            <div className="d-flex flex-column ion-padding">
-              <IonAvatar
-                style={{
-                  backgroundColor: "pink",
-                }}
-              >
-                <img
-                  src={room.avatar}
-                  alt="user icon"
-                  style={{
-                    width: "100%",
-                    objectFit: "cover",
-                  }}
-                />
-              </IonAvatar>
-              <div
-                className="head-count d-flex justify-content-between align-content-center"
-                style={{
-                  backgroundColor: "white",
-                  borderRadius: "5px",
-                  padding: "0.1rem 0.2rem",
-                  marginTop: "0.8rem",
-                }}
-              >
-                <IonIcon icon={people} className="pr-1"></IonIcon>
-                <span style={{ flexGrow: 1, textAlign: "center" }}>
-                  {room.head_count}
-                </span>
-              </div>
-            </div>
-
-            <div className="d-flex flex-column" style={{ flexGrow: 1 }}>
-              <IonCardHeader>
-                <IonCardTitle style={{ fontSize: "1.2rem" }}>
-                  {room.name}
-                </IonCardTitle>
-              </IonCardHeader>
-              <IonCardContent>
-                {room.introduction}
-                <div style={{ textAlign: "end" }}>
-                  <IonButton fill="outline" size="small">
-                    加入
-                  </IonButton>
-                </div>
-              </IonCardContent>
-            </div>
-          </IonCard>
-        );
+        return <ChatroomAddCard props={room} />;
       })}
     </>
   );

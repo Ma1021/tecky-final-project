@@ -275,6 +275,10 @@ body {
   align-items: center;
 }
 
+.align-items-start {
+  align-items: start;
+}
+
 .flex-nowrap {
   flex-wrap: nowrap;
 }

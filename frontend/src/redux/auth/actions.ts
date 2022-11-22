@@ -28,7 +28,14 @@ export function logout() {
   };
 }
 
+export function deleteAcc() {
+  return {
+    type: "@@auth/DELETE" as const,
+  };
+}
+
 export type AuthActions =
   | ReturnType<typeof login>
   | ReturnType<typeof logout>
+  | ReturnType<typeof deleteAcc>
   | ReturnType<typeof registerAuth>;

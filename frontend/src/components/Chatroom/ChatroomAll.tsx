@@ -66,7 +66,9 @@ const ChatroomRecommend: React.FC<ChatroomRecommendList> = (props) => {
 
             <div className="d-flex flex-column" style={{ flexGrow: 1 }}>
               <IonCardHeader>
-                <IonCardTitle>{room.name}</IonCardTitle>
+                <IonCardTitle style={{ fontSize: "1.2rem" }}>
+                  {room.name}
+                </IonCardTitle>
               </IonCardHeader>
               <IonCardContent>
                 {room.introduction}

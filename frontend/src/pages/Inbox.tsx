@@ -31,7 +31,7 @@ const Inbox: React.FC = () => {
     const history = useHistory();
 
     function fetchData() {
-        fetch(`http://localhost:8080/notification/${user_id}`)
+        fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/${user_id}`)
         .then(response => response.json())
         .then(data => setNotificationList(data));
     }
@@ -40,23 +40,22 @@ const Inbox: React.FC = () => {
         fetchData()
     }, [])
 
-    const handleRead = useCallback((obj:{notification_id: number, notification_type: number, target_id: number, is_read: boolean})=>{
-        console.log('enter handle read function', obj.notification_id);
+    const handleRead = useCallback((obj:{notification_id: number, notification_type: number, target_id: number, is_read: boolean})=>{        
         if(!obj.is_read) {
-            fetch(`http://localhost:8080/notification/${obj.notification_id}`, {
+            fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/${obj.notification_id}`, {
                 method:'PUT',
                 headers:{'Content-Type': 'application/json'}
             })
             .then(response => {
                 if(response.ok) {
                     fetchData()
-                    if(obj.notification_type === 1 || 2) {
+                    if(obj.notification_type === 1 || obj.notification_type === 2) {
                         history.push(`/question/${obj.target_id}`);
                     }
                 }
             })
         } else {
-            if(obj.notification_type === 1 || 2) {
+            if(obj.notification_type === 1 || obj.notification_type === 2) {
                 history.push(`/question/${obj.target_id}`);
             }
         }
@@ -76,10 +75,9 @@ const Inbox: React.FC = () => {
 
             <IonContent>
                 <IonSearchbar placeholder="搜索 用戶名稱/ 內容"></IonSearchbar>
-
-                <TodayContainer>
+                <MessageContainer>
                     <div className="todayHeader">
-                        <IonText>今日訊息</IonText>
+                        <IonText>訊息</IonText>
                         {amount > 0 && <IonBadge>未讀: {amount}</IonBadge>}
                         <IonFab horizontal="end"> 
                             <IonFabButton size="small">
@@ -102,8 +100,7 @@ const Inbox: React.FC = () => {
                         notificationList.map((notification:Notification)=> <MessageCard key={notification.id} notification={notification} handleRead={handleRead}/>) 
                         : <div>沒有訊息</div> }
                     </InboxMessageContainer>
-                </TodayContainer>
-
+                </MessageContainer>
             </IonContent>
         </IonPage>
     )
@@ -114,9 +111,12 @@ export default Inbox;
 const InboxMessageContainer = styled.div`
     width: 100%;
     margin-top: 0.7rem;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
 `
 
-const TodayContainer = styled.div`
+const MessageContainer = styled.div`
     border-radius: 1.5rem 1.5rem 0rem 0rem;
     background-color: #222;
     min-height: 93%;
@@ -130,7 +130,7 @@ const TodayContainer = styled.div`
 
         ion-badge {
             position: absolute;
-            left: 5.5rem;
+            left: 3.5rem;
         }
 
         ion-fab-button {

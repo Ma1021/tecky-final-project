@@ -8,25 +8,13 @@ export class QuestionController {
     
   @Get()
   async getQuestions() {
-    const questions = await this.questionService.findAll();
-
-    if(questions.length <= 0) {
-      throw new HttpException('Questions not found', HttpStatus.NOT_FOUND);
-    }
-    
-    return questions;
+    return await this.questionService.findAll();
   }
 
   // get one question by question id
   @Get(':id')
   async getQuestion(@Param('id') question_id:string) {
-    const question = await this.questionService.findOne(+question_id);
-
-    if(question.length <= 0) {
-      throw new HttpException('Question not found', HttpStatus.NOT_FOUND);
-    }
-
-    return question;
+    return await this.questionService.findOne(+question_id);
   }
 
   // get one or all questions by asker id
@@ -35,14 +23,7 @@ export class QuestionController {
     if(!asker_id) {
       throw new HttpException('Missing asker id', HttpStatus.BAD_REQUEST)
     }
-
-    const questions = await this.questionService.findAskerQuestions(+asker_id);
-
-    if(questions.length <= 0) {
-      throw new HttpException('Question not found', HttpStatus.NOT_FOUND);
-    }
-
-    return questions;
+    return await this.questionService.findAskerQuestions(+asker_id);
   }
 
   // get one or all questions by answerer id
@@ -52,17 +33,11 @@ export class QuestionController {
       throw new HttpException('Missing answerer id', HttpStatus.BAD_REQUEST)
     }
 
-    const questions = await this.questionService.findAnswererQuestions(+answerer_id);
-
-    if(questions.length <= 0) {
-      throw new HttpException('Question not found', HttpStatus.NOT_FOUND);
-    }
-
-    return questions;
+    return await this.questionService.findAnswererQuestions(+answerer_id);
   }
 
   @Post()
-  createQuestion(@Body() questions: Question_DTO, @Response() res) {
+  createQuestion(@Body() questions: Question_DTO, @Response() res) {    
     const { asker_id, content, stock_id } = questions;
 
     if(!content) {

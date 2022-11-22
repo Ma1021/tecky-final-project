@@ -1,10 +1,10 @@
 import { IonButtons, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonContent, IonItem, IonImg, IonText, IonButton, IonIcon, IonInput, IonFooter, IonSpinner, useIonToast, useIonAlert } from '@ionic/react';
-import { memo, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { useLocation, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { heartCircle, chatboxEllipses, shareSocial, trash, heartOutline } from 'ionicons/icons';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { loadQuestion, createAnswer, deleteQuestion, deleteAnswer  } from '../../redux/questions/questionSlice';
+import { loadQuestion, createAnswer, deleteQuestion, deleteAnswer, loadQuestions  } from '../../redux/questions/questionSlice';
 import { WhatsappShareButton } from 'react-share'
 
 const QuestionDetail: React.FC = memo(() => {
@@ -18,13 +18,32 @@ const QuestionDetail: React.FC = memo(() => {
   const [ replyContent, setReplyContent ] = useState('');
   const user_id = 2;
   let reverseAnswer = [];
-  
+  const [followings_id, setFollowings_id] = useState(Array<number>);
+
   useEffect(()=>{
     if(!question_id) return;
     dispatch(loadQuestion(+question_id));
   },[question_id]);
 
+  const fetchFollowing = useCallback(async ()=>{
+    const id_array: Array<number> = []
 
+    const res = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/followings/${user_id}`)
+    const data = await res.json();  
+
+    for(let following of data) {
+      if(!id_array.includes(following.user_id)) {
+        id_array.push(following.user_id)
+      } 
+    }
+    
+    setFollowings_id(id_array);
+  },[])
+  
+  useEffect(()=>{
+    fetchFollowing();
+  },[followings_id.length])
+  
   function formatDate(date:string) {
     const time = new Date(date).toLocaleString([],{hour12: false, dateStyle:'medium', timeStyle:'short'})
     return time
@@ -42,14 +61,16 @@ const QuestionDetail: React.FC = memo(() => {
     }
 
     alertPresent({
-              cssClass: 'my-css',
-              header: '提示',
-              message: '確定要刪除問題嗎？',
-              buttons: ['取消', { text: '確定', handler: () => dispatch(deleteQuestion(obj))
-              .then(()=> {
-                toastPresent('刪除問題成功', 1500)
-                history.replace("/discuss")
-              })}],
+        cssClass: 'my-css',
+        header: '提示',
+        message: '確定要刪除問題嗎？',
+        buttons: ['取消', { text: '確定', handler: () => dispatch(deleteQuestion(obj))
+        .then(()=> {
+          toastPresent('刪除問題成功', 1500)
+          dispatch(loadQuestions()).then(()=>{
+            history.replace("/discuss")
+          });
+        })}],
     });
   }
 
@@ -74,6 +95,7 @@ const QuestionDetail: React.FC = memo(() => {
     e.preventDefault();
     const obj = {
       answerer_id: user_id,
+      asker_id: question.asker_id,
       question_id: question.id,
       content: replyContent
     }
@@ -83,6 +105,42 @@ const QuestionDetail: React.FC = memo(() => {
     })
   }
 
+  async function handleSubscription(e:any) {
+      e.preventDefault();            
+        
+      const subscriptionRes = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/subscriptions`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({user_id, following_id:+e.target.parentNode.parentNode.dataset.user_id})
+      })
+      const subscription_json = await subscriptionRes.json();
+      const subscription_id = await subscription_json[0].id;
+      
+      // create notification
+      const notification = {
+        notification_type_id: 3,
+        notification_target_id: subscription_id,
+        actor_id: user_id,
+        notifiers: +e.target.parentNode.parentNode.dataset.user_id
+      }      
+
+      if(e.target.innerText === '取消關注') {
+        setFollowings_id(followings_id.filter(id => id !== +e.target.parentNode.parentNode.dataset.user_id))
+        await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body:JSON.stringify({target_id: subscription_id, target_type_id: 3})
+        })
+      } else {
+        setFollowings_id(prevState => [...prevState, +e.target.parentNode.parentNode.dataset.user_id]);
+        await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/`, {
+          method:'POST',
+          headers:{'Content-Type': 'application/json'},
+          body: JSON.stringify(notification)
+        })
+      }
+    }
+
   if(question.id === undefined) {
     return <></>
   } else {
@@ -91,7 +149,7 @@ const QuestionDetail: React.FC = memo(() => {
 
   return (
     <IonPage id="main-content">
-      <IonHeader >
+      <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
             <IonBackButton defaultHref="/discuss"/>
@@ -102,7 +160,7 @@ const QuestionDetail: React.FC = memo(() => {
       </IonHeader>
       <IonContent>
       {loading ? <LoadingScreen><IonSpinner name="circles"/> 載入中...</LoadingScreen> : <>
-        <AskerContainer lines='full'>
+        <AskerContainer lines='full' data-user_id={question.asker_id}>
           <IonImg src={`${question.asker_avatar}`}/>
           <div className='askerInfo'>
             <IonText>{question.asker_username}</IonText>
@@ -111,7 +169,7 @@ const QuestionDetail: React.FC = memo(() => {
           { question.asker_id !== user_id &&
             <IonButton className='subscribeBtn'>
               <IonIcon icon={heartCircle}/>
-              <IonText>關注</IonText>
+              {followings_id.length > 0 && followings_id.includes(question.asker_id) ? <IonText onClick={handleSubscription}>取消關注</IonText> : <IonText onClick={handleSubscription}>關注</IonText>}
             </IonButton>
           }
         </AskerContainer>
@@ -141,17 +199,17 @@ const QuestionDetail: React.FC = memo(() => {
           <AnswerContainer>
             <IonText>回答</IonText>
           {reverseAnswer.map((answer: any)=>{
-            return <div className='answerCard' key={answer.id} data-answer_id = {answer.id}>
+            return <div className='answerCard' key={answer.id} data-answer_id = {answer.id} data-user_id={answer.answers.id}>
                       <div className='answererAvatar'>
                         <IonImg src={answer.answers.avatar} />
-                        { answer.answers.id !== user_id &&
-                          <IonButton>關注</IonButton>
+                        {followings_id.includes(answer.answers.id) ?
+                          <IonButton onClick={handleSubscription}>取消關注</IonButton> : answer.answers.id !== user_id && <IonButton onClick={handleSubscription}>關注</IonButton>
                         }
                       </div>
                       <div className='answerContent'>
                         <IonText className='username'>{answer.answers.username}</IonText>
                         <IonText className='content'>{answer.content}</IonText>
-                        <div className='answerInfo' data-user_id={answer.answers.id}>
+                        <div className='answerInfo'>
                           <IonText className='answerDate'>{new Date(answer.created_at).toLocaleString([],{hour12: false, dateStyle:'medium', timeStyle:'short'})}</IonText>
                           { answer.answers.id !== user_id &&
                             <IonText style={{fontWeight:600}}>檢舉</IonText>
@@ -197,12 +255,12 @@ const AskerContainer = styled(IonItem)`
   width: 100%;
 
   ion-img {
-    width: 3rem;
-    height: 3rem;
+    width: 2.7rem;
+    height: 2.7rem;
     border-radius: 50%;
     overflow: hidden;
     object-fit: cover;
-    margin: 0.3rem 0rem;
+    margin: 0.4rem 0rem;
   }
 
   .askerInfo {
@@ -212,7 +270,6 @@ const AskerContainer = styled(IonItem)`
   }
 
   .subscribeBtn {
-    width: 3.8rem;
     height: 1.7rem;
     line-height: 1.7rem;
     display:flex;
@@ -244,6 +301,7 @@ const ContentContainer = styled.div`
       text-align: center;
       background-color: #F2B950;
       color: #fff;
+      font-size: 14px;
     }
   }
 
@@ -285,9 +343,10 @@ const AnswerContainer = styled.div`
       }
   
       ion-button {
-        width: 3rem;
+        max-width: 3.5rem;
         height: 1.5rem;
-        font-size: 14px;
+        font-size: 12px;
+
       }
     }
 

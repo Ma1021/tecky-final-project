@@ -35,7 +35,7 @@ export async function seed(knex: Knex): Promise<void> {
     'https://cdn5.vectorstock.com/i/1000x1000/54/19/gray-wolf-cartoon-wolf-grey-the-nature-vector-20325419.jpg',
   },
   {
-    username: 'kol',
+    username: '豹姐',
     user_type: 'kol',
     email: 'kol@gmail.com',
     password_hash: '789',

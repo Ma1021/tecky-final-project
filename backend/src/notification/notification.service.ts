@@ -48,19 +48,25 @@ export class NotificationService {
                     'username', users.username,
                     'avatar', users.avatar
                 ) as actor,
+                CASE notification_object.notification_type_id
+                WHEN 1 THEN 
                 (SELECT jsonb_build_object(
                     'question_id', questions.id,
                     'question_content', questions.content
-                ) from questions where notification_object.notification_type_id = 1 and questions.id = notification_object.notification_target_id
-                UNION
-                SELECT jsonb_build_object(
+                ) from questions where questions.id = notification_object.notification_target_id)
+                WHEN 2 THEN
+                (SELECT jsonb_build_object(
                     'answer_id', answers.id,
                     'answer_content', answers.content
-                ) from answers where notification_object.notification_type_id = 2 and answers.id = notification_object.notification_target_id
-                ) as target
+                ) from answers where answers.id = notification_object.notification_target_id)
+                WHEN 3 THEN
+                (SELECT jsonb_build_object(
+                    'subscription_id', subscriptions.id,
+                    'following_id', subscriptions.following_id
+                ) from subscriptions where subscriptions.id = notification_object.notification_target_id)
+                END target
                 from notification
                 inner join notification_object on notification.notification_object_id = notification_object.id
-                inner join questions on notification_object.notification_target_id = questions.id
                 inner join users on users.id = notification_object.actor_id
                 where notification.notifier_id = ?
                 order by notification.created_at desc
@@ -85,7 +91,7 @@ export class NotificationService {
             const { target_id, target_type_id } = notification
             // delete notification
             const objectRes = await this.knex('notification_object').select('id').where('notification_target_id', target_id).andWhere('notification_type_id', target_type_id);        
-
+            
             for(let object of objectRes) {
                 await this.knex('notification').where('notification_object_id', object.id).del();
             }

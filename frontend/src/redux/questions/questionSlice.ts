@@ -3,10 +3,10 @@ import { Question, initialState } from './state'
 
 const user_id = 2;
 
-// actions that get data 
+// actions that get data
 export const loadQuestions = createAsyncThunk<Question[]>("question/loadQuestions", async(_, thunkAPI)=>{
-    try {
-        const res = await fetch("http://localhost:8080/question", {
+    try {        
+        const res = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/question`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         });
@@ -20,7 +20,7 @@ export const loadQuestions = createAsyncThunk<Question[]>("question/loadQuestion
 // action that get asker question by user id
 export const loadAskerQuestions = createAsyncThunk<Question[], number>("question/loadAskerQuestions", async(id, thunkAPI)=>{
     try {
-        const res:Response = await fetch(`http://localhost:8080/question/user/${id}`, {
+        const res:Response = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/question/user/${id}`, {
             method:'GET',
             headers:{'Content-Type': 'application/json'}
         })
@@ -34,7 +34,7 @@ export const loadAskerQuestions = createAsyncThunk<Question[], number>("question
 // actions that get answerer question by user id
 export const loadAnswererQuestions = createAsyncThunk<Question[], number>("question/loadAnswererQuestions", async(id, thunkAPI)=>{
     try {
-        const res:Response = await fetch(`http://localhost:8080/question/answerer/${id}`, {
+        const res:Response = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/question/answerer/${id}`, {
             method:'GET',
             headers:{'Content-Type': 'application/json'}
         })
@@ -48,7 +48,7 @@ export const loadAnswererQuestions = createAsyncThunk<Question[], number>("quest
 // actions that get one question
 export const loadQuestion = createAsyncThunk<Question, number>("question/loadQuestion", async(id, thunkAPI)=>{
     try {
-        const res = await fetch(`http://localhost:8080/question/${id}`, {
+        const res: Response = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/question/${id}`, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' }
         })
@@ -56,13 +56,13 @@ export const loadQuestion = createAsyncThunk<Question, number>("question/loadQue
         return json[0];
       } catch (err) {
         return thunkAPI.rejectWithValue(err);
-      }
+    }
 })
 
 // actions that post data
 export const createQuestion = createAsyncThunk<Question, Object>("question/createQuestion", async(data, thunkAPI)=>{
     try {
-        const res:Response = await fetch('http://localhost:8080/question', {
+        const res:Response = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/question`, {
           method: 'POST',
           headers:{'Content-Type': 'application/json'},
           body:JSON.stringify(data)
@@ -70,23 +70,24 @@ export const createQuestion = createAsyncThunk<Question, Object>("question/creat
         const json = await res.json();
         
         // insert notification 
-        const followerRes = await fetch(`http://localhost:8080/user/subscriptions/${user_id}`)
+        const followerRes = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/followers/${user_id}`)
         const followerJson = await followerRes.json();
-        console.log(followerJson);
         
-        for(let follower of followerJson) {
-            const notification = {
-                notification_type_id:1,
-                notification_target_id: json[0].id,
-                actor_id: user_id,
-                notifiers: follower.user_id
+        if(followerJson.length > 0) {
+            for(let follower of followerJson) {
+                const notification = {
+                    notification_type_id:1,
+                    notification_target_id: json[0].id,
+                    actor_id: user_id,
+                    notifiers: follower.user_id
+                }
+                
+                await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/`, {
+                    method:'POST',
+                    headers:{'Content-Type': 'application/json'},
+                    body: JSON.stringify(notification)
+                })
             }
-            
-            await fetch('http://localhost:8080/notification/', {
-                method:'POST',
-                headers:{'Content-Type': 'application/json'},
-                body: JSON.stringify(notification)
-            })
         }
 
         thunkAPI.dispatch(loadQuestions());
@@ -100,14 +101,14 @@ export const createQuestion = createAsyncThunk<Question, Object>("question/creat
 // action that delete question by id
 export const deleteQuestion = createAsyncThunk<Question, {question_id: number, user_id: number}>("question/deleteQuestion", async(data, thunkAPI)=>{
     try {
-        const res = await fetch(`http://localhost:8080/question/${data.question_id}`, {
+        const res = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/question/${data.question_id}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }
         })
         const json = await res.json();
 
         // delete notification
-        await fetch('http://localhost:8080/notification', {
+        await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body:JSON.stringify({target_id: data.question_id, target_type_id: 1})
@@ -122,17 +123,34 @@ export const deleteQuestion = createAsyncThunk<Question, {question_id: number, u
 });
 
 // action that create answer in question
-export const createAnswer = createAsyncThunk<Question, {answerer_id: number, question_id: number, content: string}>(
+export const createAnswer = createAsyncThunk<Question, {answerer_id: number, asker_id: number, question_id: number, content: string}>(
     "question/createAnswer",
     async(data, thunkAPI) => {
         try {
-            const res = await fetch('http://localhost:8080/answer/', {
+            const res = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/answer/`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body:JSON.stringify(data)
             })
             const json = await res.json();
+            
+            // create notification
+            const notification = {
+                notification_type_id: 2,
+                notification_target_id: json.answer_id,
+                actor_id: user_id,
+                notifiers: data.asker_id
+            }
+
+            await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/`, {
+                method:'POST',
+                headers:{'Content-Type': 'application/json'},
+                body: JSON.stringify(notification)
+            })
+
             thunkAPI.dispatch(loadQuestion(data.question_id));
+            thunkAPI.dispatch(loadQuestions());
+
             return json;
         } catch(err) {
             return thunkAPI.rejectWithValue(err);
@@ -143,12 +161,22 @@ export const createAnswer = createAsyncThunk<Question, {answerer_id: number, que
 // action that delete answer in question
 export const deleteAnswer = createAsyncThunk<Question, {question_id: number, answer_id: number}>("question/deleteAnswer", async(data, thunkAPI)=>{
     try {
-        const res: Response = await fetch(`http://localhost:8080/answer/${data.answer_id}`, {
+        const res: Response = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/answer/${data.answer_id}`, {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' }
         })
         const json = await res.json();
+
+        // delete notification
+        await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body:JSON.stringify({target_id: +data.answer_id, target_type_id: 2})
+        })
+
         thunkAPI.dispatch(loadQuestion(data.question_id));
+        thunkAPI.dispatch(loadQuestions());
+
         return json[0];
       } catch (err) {
         return thunkAPI.rejectWithValue(err);

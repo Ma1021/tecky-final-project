@@ -35,6 +35,7 @@ import {
   deleteAnswer,
 } from "../../redux/questions/questionSlice";
 import { WhatsappShareButton } from "react-share";
+import Menu from "../../components/All/Menu";
 
 const QuestionDetail: React.FC = memo(() => {
   const { question, loading } = useAppSelector((state) => state.question);
@@ -135,7 +136,6 @@ const QuestionDetail: React.FC = memo(() => {
 
   return (
     <>
-      <Menu />
       <IonPage id="main-content">
         <IonHeader>
           <IonToolbar>

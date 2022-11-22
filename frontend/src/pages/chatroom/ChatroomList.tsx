@@ -103,7 +103,6 @@ const ChatroomList: React.FC = () => {
 
   return (
     <>
-      <Menu />
       <IonPage id="main-content">
         <IonHeader translucent={true} collapse="fade">
           <IonToolbar>

@@ -50,6 +50,7 @@ const Navigation: React.FC = () => {
 
   return (
     <IonReactRouter>
+      <Menu />
       <IonRouterOutlet>
         <Route exact path="/user/info/" component={UserInfo}></Route>
         <Route exact path="/user/edit/" component={UserEdit}></Route>

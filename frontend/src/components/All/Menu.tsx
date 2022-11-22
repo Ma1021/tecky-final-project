@@ -69,7 +69,7 @@ const Menu: React.FC<MenuProps> = () => {
   };
 
   return (
-    <IonMenu contentId="main-content">
+    <IonMenu disabled={false} contentId="main-content">
       <IonHeader className="menu pt-3 pb-3" onClick={toInfo}>
         <IonToolbar>
           <IonMenuToggle className="w100">

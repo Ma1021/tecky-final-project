@@ -60,8 +60,17 @@ export class UserService {
       .where('id', id);
   }
 
-  createSubscription(subscription: SubscriptionDTO) {
-    return this.knex('subscriptions').insert(subscription);
+  handleSubscription(subscription: SubscriptionDTO) {
+    return this.knex('subscriptions').select('*')
+    .where('user_id', subscription.user_id)
+    .andWhere('following_id', subscription.following_id)
+    .then(async subscriptionList => {
+      if(subscriptionList.length > 0) {
+        return await this.knex('subscriptions').where('user_id', subscription.user_id).andWhere('following_id', subscription.following_id).del().returning('id')
+      } else {
+        return await this.knex('subscriptions').insert(subscription).returning('id');
+      }
+    })
   }
 
   findFollowers(user_id: number) {
@@ -69,6 +78,14 @@ export class UserService {
     .select('subscriptions.id', 'users.id as user_id', 'users.username', 'users.avatar')
     .where('following_id', user_id)
     .innerJoin('users','users.id','subscriptions.user_id')
+    ;
+  }
+
+  findFollowings(user_id: number) {
+    return this.knex('subscriptions')
+    .select('subscriptions.id', 'users.id as user_id', 'users.username', 'users.avatar')
+    .where('user_id', user_id)
+    .innerJoin('users','users.id','subscriptions.following_id')
     ;
   }
 }

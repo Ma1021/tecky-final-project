@@ -13,6 +13,8 @@ INJECTED from /Users/hmkwong/Documents/tecky-final-project/frontend/android/capa
 		ADDED from /Users/hmkwong/Documents/tecky-final-project/frontend/android/capacitor-cordova-android-plugins/src/main/AndroidManifest.xml:3:1-59
 application
 ADDED from /Users/hmkwong/Documents/tecky-final-project/frontend/android/capacitor-cordova-android-plugins/src/main/AndroidManifest.xml:5:1-7:15
+	android:usesCleartextTraffic
+		ADDED from /Users/hmkwong/Documents/tecky-final-project/frontend/android/capacitor-cordova-android-plugins/src/main/AndroidManifest.xml:5:15-50
 uses-sdk
 INJECTED from /Users/hmkwong/Documents/tecky-final-project/frontend/android/capacitor-cordova-android-plugins/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/hmkwong/Documents/tecky-final-project/frontend/android/capacitor-cordova-android-plugins/src/main/AndroidManifest.xml

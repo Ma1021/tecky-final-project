@@ -7,7 +7,7 @@
         android:minSdkVersion="22"
         android:targetSdkVersion="32" />
 
-    <application>
+    <application android:usesCleartextTraffic="true" >
     </application>
 
 </manifest>

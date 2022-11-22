@@ -8,9 +8,9 @@ export class AnswerController {
 
     @Post()
     async createAnswer(@Body() answer: Answer_DTO, @Response() res) {        
-        this.answerService.create(answer).then(()=>{
-            res.status(HttpStatus.CREATED).json({message:"Create answer successfully"});
-        })
+        const response = await this.answerService.create(answer)
+        const id = response.id
+        res.status(HttpStatus.CREATED).json({message:"Create answer successfully", answer_id: id});
     }
 
     @Delete(':id')

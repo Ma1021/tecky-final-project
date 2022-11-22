@@ -11,7 +11,7 @@ const Notification: React.FC = memo(() => {
   const user_id = 1;
 
   useEffect(()=>{
-    fetch(`http://localhost:8080/notification/${user_id}`)
+    fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/${user_id}`)
     .then(response => response.json())
     .then(data => setAmount((data.filter((notification: any) => !notification.is_read).length)));
 }, [])
@@ -31,15 +31,15 @@ const Notification: React.FC = memo(() => {
 export default Notification;
 
 const AmountTag = styled(IonBadge)`
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 1rem;
+  height: 1rem;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 10px;
+  font-size: 8px;
   position: absolute;
-  right:-5px;
+  right:-4px;
   top:0px;
   z-index:1;
 `

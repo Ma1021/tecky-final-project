@@ -20,7 +20,8 @@ interface MessageProps {
             answer_content?: string,
             answer_id?: number,
             question_content?: string,
-            question_id?: number
+            question_id?: number,
+            subscription_id?: number
         }
     },
     handleRead: Function
@@ -32,7 +33,7 @@ const MessageCard: React.FC<MessageProps> = (props: MessageProps) => {
     let obj = {
         notification_id: props.notification.id,
         notification_type: props.notification.notification_type_id,
-        target_id: props.notification.target.answer_id || props.notification.target.question_id,
+        target_id: props.notification.target.answer_id || props.notification.target.question_id || props.notification.target.subscription_id,
         is_read: props.notification.is_read 
     }
 
@@ -51,6 +52,7 @@ const MessageCard: React.FC<MessageProps> = (props: MessageProps) => {
             </div>
             {props.notification.target.answer_content && <IonText>回覆了你: {props.notification.target.answer_content}</IonText>} 
             {props.notification.target.question_content && <IonText>提出了問題: {props.notification.target.question_content}</IonText>} 
+            {props.notification.target.subscription_id && <IonText>追蹤了你</IonText>} 
         </div>
        </MessageCardContainer> 
     )

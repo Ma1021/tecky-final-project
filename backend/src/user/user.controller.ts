@@ -97,28 +97,33 @@ export class UserController {
   }
 
   // get all followers of user
-  @Get('/subscriptions/:id')
-  findSubscriptions(@Param('id') user_id: string) {
+  @Get('/followers/:id')
+  findFollowers(@Param('id') user_id: string) {
     if(!user_id) {
       throw new HttpException('Missing user id', HttpStatus.BAD_REQUEST);
     }
     return this.userService.findFollowers(+user_id);
   }
 
-  // user following a user
+  // get all following of user
+  @Get('/followings/:id')
+  findFollowings(@Param('id') user_id: string) {
+    if(!user_id) {
+      throw new HttpException('Missing user id', HttpStatus.BAD_REQUEST);
+    }
+    return this.userService.findFollowings(+user_id);
+  }
+
+  // handle user following and unFollowing
   @Post('/subscriptions')
-  createSubscription(@Body() subscription:SubscriptionDTO) {
+  handleSubscription(@Body() subscription:SubscriptionDTO) {
     if(subscription.user_id === subscription.following_id) {
       throw new HttpException('follower id and following id can not be same', HttpStatus.CONFLICT);
     }
-    return this.userService.createSubscription(subscription);
+    return this.userService.handleSubscription(subscription);
   }
 
-  // user un following a user
-  @Delete('/subscriptions')
-  deleteSubscription(@Body() subscription:SubscriptionDTO) {
 
-  }
  
 
 

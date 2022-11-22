@@ -19,7 +19,7 @@ export let store = configureStore({
     question: questionReducer,
     chatroom: chatroomReducer,
     theme: themeReducer,
-    stockPage: pageReducer,
+    page: pageReducer,
   }),
 });
 

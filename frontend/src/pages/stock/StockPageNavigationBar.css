@@ -1,0 +1,17 @@
+.stock-page-navigation-bar-container {
+  display: flex;
+  justify-content: space-around;
+  padding: 0 1rem;
+  column-gap: 1rem;
+}
+
+a.stock-page-navigation {
+  color: white;
+  flex-grow: 1;
+  text-align: center;
+  border-radius: 1rem;
+}
+
+.current-page {
+  background-color: #ffa73c;
+}

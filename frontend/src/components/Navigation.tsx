@@ -8,6 +8,7 @@ import {
   IonTabButton,
   IonIcon,
   IonLabel,
+  IonSplitPane,
 } from "@ionic/react";
 import {
   chatboxEllipses,
@@ -49,7 +50,9 @@ const Navigation: React.FC = () => {
 
   return (
     <IonReactRouter>
-      <Menu />
+      <IonSplitPane>
+        <Menu />
+      </IonSplitPane>
       <IonRouterOutlet>
         <Route exact path="/user/info/" component={UserInfo}></Route>
         <Route exact path="/user/edit/" component={UserEdit}></Route>

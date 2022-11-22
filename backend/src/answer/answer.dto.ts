@@ -11,3 +11,12 @@ export class Answer_DTO {
     @IsString()
     content: string;
 }
+
+export class Answer_Like_DTO {
+    @IsNotEmpty()
+    @IsNumber()
+    answer_id: number;
+    @IsNotEmpty()
+    @IsNumber()
+    user_id: number;
+}

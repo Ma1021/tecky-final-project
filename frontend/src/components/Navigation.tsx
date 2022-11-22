@@ -117,7 +117,7 @@ const Navigation: React.FC = () => {
               className="tabButton"
             >
               <IonIcon
-                icon={selectedTab === "tab4" ? chatbubbles : chatbubblesOutline}
+                icon={selectedTab === "chatroomList" ? chatbubbles : chatbubblesOutline}
               />
               <IonLabel>聊天室</IonLabel>
             </IonTabButton>

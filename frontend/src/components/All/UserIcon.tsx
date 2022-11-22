@@ -13,6 +13,7 @@ const UserIcon: React.FC<UserIconProps> = () => {
           autoHide={false}
           onClick={(e) => {
             e.preventDefault();
+            e.stopPropagation();
           }}
         >
           {/* autoHide={false} */}

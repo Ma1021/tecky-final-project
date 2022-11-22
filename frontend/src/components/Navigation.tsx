@@ -50,7 +50,7 @@ const Navigation: React.FC = () => {
 
   return (
     <IonReactRouter>
-      <IonSplitPane>
+      <IonSplitPane contentId="main-content">
         <Menu />
       </IonSplitPane>
       <IonRouterOutlet>

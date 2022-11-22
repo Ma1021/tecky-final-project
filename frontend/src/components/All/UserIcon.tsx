@@ -9,7 +9,13 @@ const UserIcon: React.FC<UserIconProps> = () => {
   return (
     <>
       <IonButtons className="pl-1" slot="start">
-        <IonMenuToggle autoHide={false}>
+        <IonMenuToggle
+          autoHide={false}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+        >
           {/* autoHide={false} */}
           <IonButton
             style={{

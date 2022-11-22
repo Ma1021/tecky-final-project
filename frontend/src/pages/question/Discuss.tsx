@@ -13,17 +13,22 @@ import { useState, useCallback, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { useAppDispatch } from "../../redux/store";
-import { loadAnswererQuestions, loadAskerQuestions, loadQuestions } from "../../redux/questions/questionSlice";
+import {
+  loadAnswererQuestions,
+  loadAskerQuestions,
+  loadQuestions,
+} from "../../redux/questions/questionSlice";
 
 // Components
 import Allquestion from "../../components/discuss/Allquestion";
 import MyAnswer from "../../components/discuss/Myanswer";
 import MyQuestion from "../../components/discuss/Myquestion";
 import Title from "../../components/All/Title";
+import Menu from "../../components/All/Menu";
 
 const Discuss: React.FC = () => {
   const [segment, setSegment] = useState("all");
-  const [keyword, setKeyword] = useState('');
+  const [keyword, setKeyword] = useState("");
   const user_id = 2;
 
   const onSegmentChange = (e: any) => {
@@ -31,68 +36,87 @@ const Discuss: React.FC = () => {
   };
 
   function handleKeywordChange(e: any) {
-    setKeyword(e.target.value)
+    setKeyword(e.target.value);
   }
 
   const dispatch = useAppDispatch();
-  
-  const initQuestion = useCallback(async ()=>{
+
+  const initQuestion = useCallback(async () => {
     await dispatch(loadQuestions());
-  },[dispatch]);
+  }, [dispatch]);
 
-  const initAskerQuestion = useCallback(async ()=>{
+  const initAskerQuestion = useCallback(async () => {
     await dispatch(loadAskerQuestions(user_id));
-  }, [dispatch])
+  }, [dispatch]);
 
-  const initAnswererQuestion = useCallback(async ()=>{
+  const initAnswererQuestion = useCallback(async () => {
     await dispatch(loadAnswererQuestions(user_id));
-  }, [dispatch])
+  }, [dispatch]);
 
-  useEffect(()=>{
+  useEffect(() => {
     initQuestion();
     initAskerQuestion();
     initAnswererQuestion();
-  },[]);
+  }, []);
 
   const history = useHistory();
 
   return (
-    <IonPage id="main-content">
-      <IonHeader translucent={true} collapse="fade">
-        <IonToolbar>
-          <Title title="討論區" />
-        </IonToolbar>
-      </IonHeader>
+    <>
+      <Menu />
+      <IonPage id="main-content">
+        <IonHeader translucent={true} collapse="fade">
+          <IonToolbar>
+            <Title title="討論區" />
+          </IonToolbar>
+        </IonHeader>
 
-      <SegmentTab value={segment} onIonChange={onSegmentChange}>
-        <SegmentButton value="all">
-          <IonLabel>所有問題</IonLabel>
-        </SegmentButton>
-        <SegmentButton value="question">
-          <IonLabel>我的問題</IonLabel>
-        </SegmentButton>
-        <SegmentButton value="answer">
-          <IonLabel>我的答題</IonLabel>
-        </SegmentButton>
-      </SegmentTab>
+        <SegmentTab value={segment} onIonChange={onSegmentChange}>
+          <SegmentButton value="all">
+            <IonLabel>所有問題</IonLabel>
+          </SegmentButton>
+          <SegmentButton value="question">
+            <IonLabel>我的問題</IonLabel>
+          </SegmentButton>
+          <SegmentButton value="answer">
+            <IonLabel>我的答題</IonLabel>
+          </SegmentButton>
+        </SegmentTab>
 
-      <ToolContainer>
-        <SearchBar value={keyword} placeholder="輸入關鍵字搜索" onIonChange={handleKeywordChange}></SearchBar>
-        <QuestionBtn
-          onClick={() => {
-            history.push("/discuss/createQuestion");
-          }}
-        >
-          提出問題
-        </QuestionBtn>
-      </ToolContainer>
+        <ToolContainer>
+          <SearchBar
+            value={keyword}
+            placeholder="輸入關鍵字搜索"
+            onIonChange={handleKeywordChange}
+          ></SearchBar>
+          <QuestionBtn
+            onClick={() => {
+              history.push("/discuss/createQuestion");
+            }}
+          >
+            提出問題
+          </QuestionBtn>
+        </ToolContainer>
 
-      <IonContent>
-        {segment === "all" && <Allquestion loadQuestion={initQuestion} keyword={keyword}/>}
-        {segment === "question" && <MyQuestion loadAskerQuestion={initAskerQuestion} keyword={keyword}/>}
-        {segment === "answer" && <MyAnswer loadAnswererQuestion={initAnswererQuestion} keyword={keyword}/>}
-      </IonContent>
-    </IonPage>
+        <IonContent>
+          {segment === "all" && (
+            <Allquestion loadQuestion={initQuestion} keyword={keyword} />
+          )}
+          {segment === "question" && (
+            <MyQuestion
+              loadAskerQuestion={initAskerQuestion}
+              keyword={keyword}
+            />
+          )}
+          {segment === "answer" && (
+            <MyAnswer
+              loadAnswererQuestion={initAnswererQuestion}
+              keyword={keyword}
+            />
+          )}
+        </IonContent>
+      </IonPage>
+    </>
   );
 };
 

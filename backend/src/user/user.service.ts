@@ -11,38 +11,53 @@ export class UserService {
   constructor(@InjectModel() private readonly knex: Knex) {}
 
   async create(createUserDto: CreateUserDto) {
-    // return 'This action adds a new user';
-    // try {
-    const newUser = await this.knex('users')
-      .insert(createUserDto)
-      .returning('id');
-    return newUser[0].id;
-    //   } catch (error) {
-    //     if (error.message.includes('duplicate')) {
-    //       throw new Error('電郵已註冊');
-    //     }
-    //   }
+    const newUser = await this.knex.raw(
+      `
+        Insert Into users (username, birthday, gender, email, password_hash) Values (?,?,?,?,?) Returning *;
+        `,
+      [
+        createUserDto.username,
+        createUserDto.birthday,
+        createUserDto.gender,
+        createUserDto.email,
+        createUserDto.password_hash,
+      ],
+    );
+    let result = await newUser;
+    let rows = result.rows;
+    return rows[0];
   }
 
   findAll() {
     return `This action returns hrer user`;
   }
 
-  async findOne(username: string) {
+  async findOneId(id: string) {
     // return `This action returns #${username} user`;
-    return {
-      id: 1,
-      username: username,
-      password_hash: await hash('123456', 10),
-    };
+    const user = await this.knex('users').select('*').where('id', id);
+
+    console.log(user[0]);
+    return user[0];
+  }
+
+  async findOne(email: string) {
+    // return `This action returns #${username} user`;
+    const user = await this.knex('users')
+      .select('*')
+      .where('email', email)
+      .where('is_deleted', false);
+    return user[0];
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    // return `This action removes a #${id} user`;
+    const user = await this.knex('users')
+      .update({ is_deleted: true })
+      .where('id', id);
   }
 
   handleSubscription(subscription: SubscriptionDTO) {

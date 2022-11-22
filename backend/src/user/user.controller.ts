@@ -25,6 +25,7 @@ export class UserController {
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
+    console.log('enter create user');
     try {
       if (createUserDto.password !== createUserDto.rePassword) {
         throw new Error('密碼不一致');
@@ -32,15 +33,36 @@ export class UserController {
       createUserDto.password_hash = await hash(createUserDto.password, 10);
       delete createUserDto.password;
       delete createUserDto.rePassword;
-      let userObj = { userId: await this.userService.create(createUserDto) };
-      if (userObj.userId) {
+      let userObj = await this.userService.create(createUserDto);
+      if (userObj.id) {
+        let {
+          id,
+          username,
+          email,
+          avatar,
+          introduction,
+          birthday,
+          gender,
+          user_type,
+        } = userObj;
         let token = await this.authService.login(userObj);
-        let returnObje = { user: { id: userObj.userId }, token };
-        return returnObje;
+        let returnObj = {
+          user: {
+            id,
+            username,
+            email,
+            avatar,
+            introduction,
+            birthday,
+            gender,
+            user_type,
+          },
+          token,
+        };
+        return returnObj;
       }
     } catch (err) {
-      console.log(err);
-      if (err.message.includes('duplicate')) {
+      if (err.constraint == 'users_email_unique') {
         throw new HttpException('此電郵已登記', HttpStatus.CONFLICT);
       } else if (err.message.includes('密碼不一致')) {
         throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
@@ -59,8 +81,9 @@ export class UserController {
 
   // should be updated as username or both username and id
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const result = await this.userService.findOneId(id);
+    return result;
   }
 
   @Patch(':id')

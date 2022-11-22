@@ -8,6 +8,7 @@ import {
   IonTabButton,
   IonIcon,
   IonLabel,
+  IonSplitPane,
 } from "@ionic/react";
 import {
   chatboxEllipses,
@@ -36,23 +37,26 @@ import UserInfo from "../pages/user/UserInfo";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import UserEdit from "../pages/user/UserEdit";
+import ChatroomList from "../pages/chatroom/ChatroomList";
 
 //common pages
 import Menu from "./All/Menu";
 import Home from "../pages/Home";
 import Inbox from "../pages/Inbox";
+import Chatroom from "../pages/chatroom/Chatroom";
 
 const Navigation: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState("tab1");
 
   return (
     <IonReactRouter>
-      <Menu />
+      {/* <Menu /> */}
       <IonRouterOutlet>
         <Route exact path="/user/info/" component={UserInfo}></Route>
         <Route exact path="/user/edit/" component={UserEdit}></Route>
         <Route exact path="/question/:id" component={QuestionDetail}></Route>
         <Route exact path="/inbox/:id" component={Inbox}></Route>
+        <Route exact path="/chatroom/:id" component={Chatroom}></Route>
         <Route exact path="/">
           <Redirect to="/home" />
         </Route>
@@ -66,7 +70,7 @@ const Navigation: React.FC = () => {
             <Route exact path="/login" component={Login}></Route>
             <Route exact path="/home" component={Home}></Route>
             <Route exact path="/tab1" component={Tab1}></Route>
-            <Route exact path="/tab2" component={Tab2}></Route>
+            <Route exact path="/chatroomList" component={ChatroomList}></Route>
             <Route exact path="/discuss" component={Discuss}></Route>
             <Route
               exact
@@ -107,7 +111,11 @@ const Navigation: React.FC = () => {
               />
               <IonLabel>討論區</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="tab4" href="/tab4" className="tabButton">
+            <IonTabButton
+              tab="chatroomList"
+              href="/chatroomList"
+              className="tabButton"
+            >
               <IonIcon
                 icon={selectedTab === "tab4" ? chatbubbles : chatbubblesOutline}
               />

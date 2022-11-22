@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  web-server:
+  stockoverflow:
     environment:
       DB_HOST: db-server
       DB_PORT: 5432
@@ -11,7 +11,7 @@ services:
       - docker.env
     depends_on:
       - db-server
-    image: docker_image2:latest
+    image: server:latest
     ports:
       - 8100:8080
     build:
@@ -19,8 +19,12 @@ services:
       dockerfile: ./Dockerfile
     volumes:
       - ./public:/usr/src/server/public
+    restart: on-failure
   db-server:
     image: 'postgres:15.1-alpine3.16'
+    environment:
+      DB_HOST: db-server
+      DB_PORT: 5432
     env_file:
       - docker.env
     ports:

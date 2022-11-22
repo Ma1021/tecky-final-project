@@ -6,6 +6,7 @@ import { KnexModule } from 'nest-knexjs';
 import { env } from '../env';
 import { AuthModule } from './auth/auth.module';
 import { AnswerModule } from './answer/answer.module';
+import { NotificationModule } from './notification/notification.module';
 
 let profile = require('../knexfile')[env.NODE_ENV];
 
@@ -14,7 +15,8 @@ let profile = require('../knexfile')[env.NODE_ENV];
     QuestionModule,
     KnexModule.forRoot({ config: profile }),
     AuthModule,
-    AnswerModule
+    AnswerModule,
+    NotificationModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -48,10 +48,7 @@ const SelectTags: React.FC = memo(() => {
   ]
   const [tags, setTags] = useState([...data])
 
-  console.log('rendering...');
-
   let handelInputChange = (e: Event) =>{
-    console.log('input changing');
     let search = "";
     const target = e.target as HTMLIonSearchbarElement;
     if(target) search = target.value!.toLowerCase();

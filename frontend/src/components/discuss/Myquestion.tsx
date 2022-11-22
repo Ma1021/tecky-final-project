@@ -1,16 +1,19 @@
 import { IonRefresher, IonRefresherContent, RefresherEventDetail, IonSpinner } from '@ionic/react';
-import { memo } from 'react'
+import { memo, useEffect, useState } from 'react'
 import QuestionCard from './QuestionCard';
 import styled from 'styled-components';
 import { useAppSelector } from "../../redux/store";
+import { Questions } from './Allquestion'
 
 interface QuestionProps {
     loadAskerQuestion: Function
+    keyword: string
 }
 
 const MyQuestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
     const { askerQuestionList, loading } = useAppSelector((state) => state.question)
     const user_id = 2;
+    const [filteredQuestions, setFilteredQuestions ] = useState(Array<Questions>);
 
     function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
         props.loadAskerQuestion(user_id);
@@ -19,6 +22,17 @@ const MyQuestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
         }
     }
 
+    useEffect(()=>{
+        const word = props.keyword.replace(/\s/g,'').toLowerCase()
+        if(askerQuestionList.length > 0) {
+            setFilteredQuestions(askerQuestionList.filter(question => 
+                question.stock.some(stock=> stock.name.replace(/\s/g,'').toLowerCase().includes(word) || stock.symbol.toLowerCase().includes(word)) 
+                ||
+                question.content.replace(/\s/g,'').toLowerCase().includes(word)
+              ))  
+        }
+    }, [props.keyword])
+
     return (
         <>
             <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
@@ -26,7 +40,7 @@ const MyQuestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
             </IonRefresher>
             {loading ? <LoadingScreen><IonSpinner name="circles"/> 載入中...</LoadingScreen> : 
             <QuestionContainer>
-                {askerQuestionList.length > 0 ? <QuestionCard questions={askerQuestionList} user_id={user_id} /> : <div style={{marginTop:10}}>沒有問題</div>}
+                {askerQuestionList.length > 0 ? <QuestionCard questions={filteredQuestions.length > 0 ? filteredQuestions : askerQuestionList} user_id={user_id} /> : <div style={{marginTop:10}}>沒有問題</div>}
             </QuestionContainer>}
         </>
     );

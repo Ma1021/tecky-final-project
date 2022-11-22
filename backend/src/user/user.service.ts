@@ -4,6 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { hash } from 'bcrypt';
 import { Knex } from 'nestjs-knex';
 import { InjectModel } from 'nest-knexjs';
+import { SubscriptionDTO } from './dto/subscription.dto';
 
 @Injectable()
 export class UserService {
@@ -57,5 +58,17 @@ export class UserService {
     const user = await this.knex('users')
       .update({ is_deleted: true })
       .where('id', id);
+  }
+
+  createSubscription(subscription: SubscriptionDTO) {
+    return this.knex('subscriptions').insert(subscription);
+  }
+
+  findFollowers(user_id: number) {
+    return this.knex('subscriptions')
+    .select('subscriptions.id', 'users.id as user_id', 'users.username', 'users.avatar')
+    .where('following_id', user_id)
+    .innerJoin('users','users.id','subscriptions.user_id')
+    ;
   }
 }

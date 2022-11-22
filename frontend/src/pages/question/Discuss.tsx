@@ -23,11 +23,16 @@ import Title from "../../components/All/Title";
 
 const Discuss: React.FC = () => {
   const [segment, setSegment] = useState("all");
+  const [keyword, setKeyword] = useState('');
   const user_id = 2;
 
   const onSegmentChange = (e: any) => {
     setSegment(e.detail.value);
   };
+
+  function handleKeywordChange(e: any) {
+    setKeyword(e.target.value)
+  }
 
   const dispatch = useAppDispatch();
   
@@ -72,7 +77,7 @@ const Discuss: React.FC = () => {
       </SegmentTab>
 
       <ToolContainer>
-        <SearchBar></SearchBar>
+        <SearchBar value={keyword} placeholder="輸入關鍵字搜索" onIonChange={handleKeywordChange}></SearchBar>
         <QuestionBtn
           onClick={() => {
             history.push("/discuss/createQuestion");
@@ -83,9 +88,9 @@ const Discuss: React.FC = () => {
       </ToolContainer>
 
       <IonContent>
-        {segment === "all" && <Allquestion loadQuestion={initQuestion}/>}
-        {segment === "question" && <MyQuestion loadAskerQuestion={initAskerQuestion}/>}
-        {segment === "answer" && <MyAnswer loadAnswererQuestion={initAnswererQuestion}/>}
+        {segment === "all" && <Allquestion loadQuestion={initQuestion} keyword={keyword}/>}
+        {segment === "question" && <MyQuestion loadAskerQuestion={initAskerQuestion} keyword={keyword}/>}
+        {segment === "answer" && <MyAnswer loadAnswererQuestion={initAnswererQuestion} keyword={keyword}/>}
       </IonContent>
     </IonPage>
   );
@@ -99,6 +104,7 @@ const ToolContainer = styled.div`
   justify-content: center;
   padding: 0px 10px;
   gap: 8px;
+  margin-bottom: 0.5rem;
 `;
 
 const SearchBar = styled(IonSearchbar)`

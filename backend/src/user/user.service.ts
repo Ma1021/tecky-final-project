@@ -36,7 +36,7 @@ export class UserService {
     // return `This action returns #${username} user`;
     const user = await this.knex('users').select('*').where('id', id);
 
-    console.log(user[0]);
+    console.log('findOneId', user[0]);
     return user[0];
   }
 
@@ -57,35 +57,52 @@ export class UserService {
     // return `This action removes a #${id} user`;
     const user = await this.knex('users')
       .update({ is_deleted: true })
-      .where('id', id);
+      .where('id', id)
+      .returning('id');
+    return user[0];
   }
 
   handleSubscription(subscription: SubscriptionDTO) {
-    return this.knex('subscriptions').select('*')
-    .where('user_id', subscription.user_id)
-    .andWhere('following_id', subscription.following_id)
-    .then(async subscriptionList => {
-      if(subscriptionList.length > 0) {
-        return await this.knex('subscriptions').where('user_id', subscription.user_id).andWhere('following_id', subscription.following_id).del().returning('id')
-      } else {
-        return await this.knex('subscriptions').insert(subscription).returning('id');
-      }
-    })
+    return this.knex('subscriptions')
+      .select('*')
+      .where('user_id', subscription.user_id)
+      .andWhere('following_id', subscription.following_id)
+      .then(async (subscriptionList) => {
+        if (subscriptionList.length > 0) {
+          return await this.knex('subscriptions')
+            .where('user_id', subscription.user_id)
+            .andWhere('following_id', subscription.following_id)
+            .del()
+            .returning('id');
+        } else {
+          return await this.knex('subscriptions')
+            .insert(subscription)
+            .returning('id');
+        }
+      });
   }
 
   findFollowers(user_id: number) {
     return this.knex('subscriptions')
-    .select('subscriptions.id', 'users.id as user_id', 'users.username', 'users.avatar')
-    .where('following_id', user_id)
-    .innerJoin('users','users.id','subscriptions.user_id')
-    ;
+      .select(
+        'subscriptions.id',
+        'users.id as user_id',
+        'users.username',
+        'users.avatar',
+      )
+      .where('following_id', user_id)
+      .innerJoin('users', 'users.id', 'subscriptions.user_id');
   }
 
   findFollowings(user_id: number) {
     return this.knex('subscriptions')
-    .select('subscriptions.id', 'users.id as user_id', 'users.username', 'users.avatar')
-    .where('user_id', user_id)
-    .innerJoin('users','users.id','subscriptions.following_id')
-    ;
+      .select(
+        'subscriptions.id',
+        'users.id as user_id',
+        'users.username',
+        'users.avatar',
+      )
+      .where('user_id', user_id)
+      .innerJoin('users', 'users.id', 'subscriptions.following_id');
   }
 }

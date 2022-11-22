@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Response, HttpException, HttpStatus, Param, Delete } from "@nestjs/common";
-import { Answer_DTO } from "./answer.dto";
+import { Answer_DTO, Answer_Like_DTO } from "./answer.dto";
 import { AnswerService } from "./answer.service";
 
 @Controller('/answer')
@@ -22,5 +22,10 @@ export class AnswerController {
         this.answerService.delete(+answer_id).then(()=>{
             res.status(HttpStatus.ACCEPTED).json({message:"Delete answer successfully"});
         })
+    }
+
+    @Post('/like')
+    async likeAnswer(@Body() like:Answer_Like_DTO) {
+        return this.answerService.createLike(like);
     }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from 'nest-knexjs';
 import { Knex } from "knex";
-import { Answer_DTO } from './answer.dto'
+import { Answer_DTO, Answer_Like_DTO } from './answer.dto'
 
 @Injectable()
 export class AnswerService {
@@ -26,4 +26,22 @@ export class AnswerService {
             console.log(err);
         }
     }
+
+    async createLike(like: Answer_Like_DTO) {
+        try {
+            return this.knex('ans_likes').select('*')
+            .where('user_id', like.user_id)
+            .andWhere('answer_id', like.answer_id)
+            .then(async likeList => {
+                if(likeList.length > 0) {
+                    return await this.knex('ans_likes').where('user_id', like.user_id).andWhere('answer_id', like.answer_id).del().returning('id')
+                } else {
+                    return await this.knex('ans_likes').insert(like).returning('id');
+                }
+            })
+        } catch(err) {  
+            console.log(err);
+        }
+    }
+    
 }

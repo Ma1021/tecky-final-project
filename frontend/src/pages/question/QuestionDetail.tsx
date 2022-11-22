@@ -2,7 +2,7 @@ import { IonButtons, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, Io
 import { memo, useCallback, useEffect, useState } from 'react'
 import { useLocation, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import { heartCircle, chatboxEllipses, shareSocial, trash, heartOutline } from 'ionicons/icons';
+import { heartCircle, chatboxEllipses, shareSocial, trash, heartOutline, heart } from 'ionicons/icons';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { loadQuestion, createAnswer, deleteQuestion, deleteAnswer, loadQuestions  } from '../../redux/questions/questionSlice';
 import { WhatsappShareButton } from 'react-share'
@@ -140,6 +140,19 @@ const QuestionDetail: React.FC = memo(() => {
         })
       }
     }
+  
+    function handleLike(e:any) {
+      let obj = {
+        answer_id: +e.target.parentNode.parentNode.parentNode.dataset.answer_id,
+        user_id
+      }
+
+      fetch(`${process.env.REACT_APP_PUBLIC_URL}/answer/like`,{
+        method:'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(obj)
+      })
+    }
 
   if(question.id === undefined) {
     return <></>
@@ -169,7 +182,8 @@ const QuestionDetail: React.FC = memo(() => {
           { question.asker_id !== user_id &&
             <IonButton className='subscribeBtn'>
               <IonIcon icon={heartCircle}/>
-              {followings_id.length > 0 && followings_id.includes(question.asker_id) ? <IonText onClick={handleSubscription}>取消關注</IonText> : <IonText onClick={handleSubscription}>關注</IonText>}
+              {followings_id.length > 0 && followings_id.includes(question.asker_id) ? 
+              <IonText onClick={handleSubscription}>取消關注</IonText> : <IonText onClick={handleSubscription}>關注</IonText>}
             </IonButton>
           }
         </AskerContainer>
@@ -203,7 +217,8 @@ const QuestionDetail: React.FC = memo(() => {
                       <div className='answererAvatar'>
                         <IonImg src={answer.answers.avatar} />
                         {followings_id.includes(answer.answers.id) ?
-                          <IonButton onClick={handleSubscription}>取消關注</IonButton> : answer.answers.id !== user_id && <IonButton onClick={handleSubscription}>關注</IonButton>
+                          <IonButton onClick={handleSubscription}>取消關注</IonButton> 
+                          : answer.answers.id !== user_id && <IonButton onClick={handleSubscription}>關注</IonButton>
                         }
                       </div>
                       <div className='answerContent'>
@@ -218,9 +233,9 @@ const QuestionDetail: React.FC = memo(() => {
                         </div>
                         <div className='answerLikes'>
                           {answer.likes_user_id.includes(user_id) ? 
-                          <IonIcon icon={heartOutline}/> 
+                          <IonIcon icon={heart} onClick={handleLike}/> 
                           : 
-                          <IonIcon icon={heartOutline}/>}
+                          <IonIcon icon={heartOutline} onClick={handleLike}/>}
                           <IonText>{answer.likes_user_id.length}</IonText>
                         </div>
                       </div>

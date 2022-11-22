@@ -2,9 +2,6 @@
   "appId": "io.ionic.starter",
   "appName": "frontend",
   "webDir": "build",
-  "bundledWebRuntime": false,
-  "server": {
-    "url": "http://192.168.0.108:8100",
-    "cleartext": true
-  }
+  "bundledWebRuntime": false
 }
+

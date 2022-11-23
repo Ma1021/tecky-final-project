@@ -30,6 +30,7 @@ import { useState } from "react";
 import UserArticles from "../../components/UserContent/UserArticles";
 import UserDiscussion from "../../components/UserContent/UserDiscussion";
 import UserIntro from "../../components/UserContent/UserIntro";
+import UserBadge from "../../components/All/UserBadge";
 
 const UserInfo: React.FC = () => {
   const userInfo = {
@@ -39,7 +40,7 @@ const UserInfo: React.FC = () => {
     phone: 12345678,
     following: 4,
     followed: 0,
-    isKOL: false,
+    isKOL: true,
   };
 
   interface SegmentChangeEventDetail {
@@ -94,18 +95,8 @@ const UserInfo: React.FC = () => {
             </IonAvatar>
             <div className="d-flex flex-row  align-items-center">
               <IonText>{userInfo.username}</IonText>
-              {userInfo.isKOL === true ? (
-                <IonChip className="userBadge">
-                  <IonIcon icon={diamondOutline}></IonIcon>
-                  <IonLabel style={{ fontSize: "0.8rem" }}>超級股神</IonLabel>
-                </IonChip>
-              ) : (
-                <IonChip className="userBadge">
-                  <IonIcon icon={happyOutline}></IonIcon>
-                  <IonLabel>精明用家</IonLabel>
-                </IonChip>
-              )}
             </div>
+            <UserBadge isKOL={userInfo.isKOL} />
             <div className="flex-row pt-1 pb-1">
               <IonButton className="userInfo-button" size="small" shape="round">
                 <IonIcon slot="start" icon={personOutline}></IonIcon>

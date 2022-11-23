@@ -16,7 +16,7 @@ let profile = require('../knexfile')[env.NODE_ENV];
     KnexModule.forRoot({ config: profile }),
     AuthModule,
     AnswerModule,
-    NotificationModule
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

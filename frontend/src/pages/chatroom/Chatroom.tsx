@@ -19,10 +19,21 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { searchOutline, send } from "ionicons/icons";
+import { useState } from "react";
+import { useRouteMatch } from "react-router";
 import styled from "styled-components";
 import img from "../../img/animal_stand_ookami.png";
 
 const Chatroom: React.FC = () => {
+  const [reply, setReply] = useState("");
+
+  const routeMatch = useRouteMatch<{ id: string }>();
+  let chatroomId = routeMatch.params.id;
+
+  const handleReply = (e: any) => {
+    setReply(e.target.value);
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -30,12 +41,10 @@ const Chatroom: React.FC = () => {
           <IonTitle className="p-0">
             <div className=" d-flex justify-content-between align-items-center w100 ">
               <IonButtons>
-                <IonBackButton defaultHref="/home"></IonBackButton>
+                <IonBackButton defaultHref="/chatroomList"></IonBackButton>
               </IonButtons>
               Group name here
-              <IonButton>
-                <IonIcon icon={searchOutline}></IonIcon>
-              </IonButton>
+              <IonIcon className="pr-2" icon={searchOutline}></IonIcon>
             </div>
           </IonTitle>
         </IonToolbar>
@@ -121,15 +130,17 @@ const Chatroom: React.FC = () => {
         </div>
       </IonContent>
       <IonFooter>
-        <ReplyContainer>
+        <ChatReplyContainer>
           <IonInput
-            // value={replyContent}
+            value={reply}
             placeholder="發表回應"
-            maxlength={100}
-            // onIonChange={handleInput}
+            maxlength={255}
+            onIonChange={handleReply}
           ></IonInput>
-          <IonText>發送</IonText>
-        </ReplyContainer>
+          <IonButton>
+            <IonIcon icon={send}></IonIcon>
+          </IonButton>
+        </ChatReplyContainer>
       </IonFooter>
     </IonPage>
   );
@@ -137,7 +148,7 @@ const Chatroom: React.FC = () => {
 
 export default Chatroom;
 
-const ReplyContainer = styled.div`
+const ChatReplyContainer = styled.div`
   width: 100%;
   height: 3.5rem;
   background-color: #222;
@@ -155,9 +166,37 @@ const ReplyContainer = styled.div`
     --padding-start: 1rem;
   }
 
-  ion-text {
-    width: 10%;
+  ion-button {
+    --border-radius: 50%;
+    width: 2.2rem;
+    height: 2.2rem;
     color: #ddd;
     font-weight: 600;
+    --padding: 0;
+    position: relative;
+  }
+
+  ion-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1rem;
+  }
+`;
+
+const SearchBtn = styled.div`
+  ion-button {
+    --border-radius: 50%;
+    width: 2.2rem;
+    height: 2.2rem;
+    color: #ddd;
+    font-weight: 600;
+    --padding: 0;
+    position: relative;
+  }
+
+  ion-icon {
+    font-size: 2rem;
   }
 `;

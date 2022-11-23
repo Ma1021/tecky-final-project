@@ -18,7 +18,7 @@ import {
   IonSegmentButton,
   IonToolbar,
 } from "@ionic/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Title from "../../components/All/Title";
 import img from "../../img/animal_stand_ookami.png";
 import { people } from "ionicons/icons";
@@ -26,6 +26,7 @@ import ChatroomRecommend from "../../components/Chatroom/ChatroomRecommend";
 import ChatroomAll from "../../components/Chatroom/ChatroomAll";
 import ChatroomUser from "../../components/Chatroom/ChatroomUser";
 import Menu from "../../components/All/Menu";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 
 const ChatroomList: React.FC = () => {
   const [chatroomSegment, setChatroomSegment] = useState("entered");
@@ -38,22 +39,18 @@ const ChatroomList: React.FC = () => {
     target: HTMLIonSegmentElement;
     detail: SegmentChangeEventDetail;
   }
-  const onSegmentChange = (event: IonSegmentCustomEvent) => {
-    setChatroomSegment(event.detail.value || "userIntro");
-  };
-
-  // data
-  const chatroomEntered = [
+  const list = [
     {
       id: 1,
       host: "金牌豹姐",
       name: "豹姐炒股達人組",
       last_msg: "好彩無賭錢",
       last_time: "23:23",
+      last_user: "最後的人",
       avatar: img,
       head_count: 5124,
       introduction: "助大家發堀短﹑中﹑長線投資機會﹐一步步踏上財務自由之路",
-      last_user: "最後的人",
+      is_entered: true,
     },
     {
       id: 2,
@@ -65,6 +62,7 @@ const ChatroomList: React.FC = () => {
       head_count: 1170,
       introduction: "助大家發堀短﹑中﹑長線投資機會﹐一步步踏上財務自由之路",
       last_user: "最後的人",
+      is_entered: true,
     },
     {
       id: 3,
@@ -76,6 +74,7 @@ const ChatroomList: React.FC = () => {
       head_count: 4,
       introduction: "助大家發堀短﹑中﹑長線投資機會﹐一步步踏上財務自由之路",
       last_user: "最後的人",
+      is_entered: false,
     },
     {
       id: 4,
@@ -84,9 +83,10 @@ const ChatroomList: React.FC = () => {
       last_msg: "好彩無賭錢",
       last_time: "23:23",
       avatar: img,
-      head_count: 8124,
+      head_count: 154,
       introduction: "助大家發堀投資機會",
       last_user: "最後的人",
+      is_entered: false,
     },
     {
       id: 5,
@@ -98,9 +98,20 @@ const ChatroomList: React.FC = () => {
       head_count: 8124,
       introduction: "助大家發堀短﹑中﹑長線投資機會﹐一步步踏上財務自由之路",
       last_user: "最後的人",
+      is_entered: false,
     },
   ];
 
+  // const dispatch = useAppDispatch();
+  // const selector = useAppSelector(() => {
+  //   list;
+  // });
+
+  const onSegmentChange = (event: IonSegmentCustomEvent) => {
+    let value = event.detail.value;
+    setChatroomSegment(value || "userIntro");
+  };
+  useEffect(() => {});
   return (
     <>
       <Menu />
@@ -126,11 +137,11 @@ const ChatroomList: React.FC = () => {
         <IonContent>
           <IonList>
             {chatroomSegment === "entered" ? (
-              <ChatroomUser list={chatroomEntered} />
+              <ChatroomUser list={list} />
             ) : chatroomSegment === "recommendation" ? (
-              <ChatroomRecommend list={chatroomEntered} />
+              <ChatroomRecommend list={list} />
             ) : (
-              <ChatroomAll list={chatroomEntered} />
+              <ChatroomAll list={list} />
             )}
           </IonList>
         </IonContent>

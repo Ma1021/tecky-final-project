@@ -98,10 +98,16 @@ const Login: React.FC = () => {
                 }
               );
               let json = await res.json();
-              console.log(json);
+              console.log("register", json);
 
               if (res.ok) {
                 main(json);
+              } else {
+                presentAlert({
+                  header: "錯誤",
+                  subHeader: json.message,
+                  buttons: ["OK"],
+                });
               }
             } catch (err) {
               presentAlert({

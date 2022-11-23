@@ -25,7 +25,11 @@ const ChatroomDisplayCard: React.FC<ChatroomRecommendObjProps> = (props) => {
   };
   return (
     <>
-      <IonCard data-id={props.props.id}>
+      <IonCard
+        data-id={props.props.id}
+        className="d-flex flex-row align-items-center"
+        onClick={directChatroom}
+      >
         <div className="d-flex flex-row">
           <div className="ion-padding d-flex flex-column align-items-center">
             <IonAvatar
@@ -69,16 +73,20 @@ const ChatroomDisplayCard: React.FC<ChatroomRecommendObjProps> = (props) => {
               </span>
             </div>
           </div>
-          <div style={{ flexGrow: 1 }}>
-            <IonCardHeader className="d-flex flex-row align-items-center">
+          <div className="d-flex flex-column" style={{ flexGrow: 1 }}>
+            <IonCardHeader>
               <IonCardTitle style={{ fontSize: "1.2rem" }}>
                 {props.props.name}
               </IonCardTitle>
             </IonCardHeader>
             <IonCardContent>
-              <div className="d-flex flex-row">{props.props.introduction}</div>
-              <div style={{ textAlign: "end" }}>
-                <IonButton>加入</IonButton>
+              <IonCardSubtitle>{props.props.last_user}</IonCardSubtitle>
+              {props.props.last_msg}
+              <div
+                className="pr-3 pt-1"
+                style={{ textAlign: "start", fontSize: "0.6rem" }}
+              >
+                {props.props.last_time}
               </div>
             </IonCardContent>
           </div>

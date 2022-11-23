@@ -7,6 +7,8 @@ import { useSelector } from "react-redux";
 import { TypedUseSelectorHook } from "react-redux";
 import questionReducer from "./questions/questionSlice";
 import { chatroomReducer } from "./chatroom/reducer";
+import { themeReducer } from "./theme/theme.reducer";
+import { pageReducer } from "./stock/page.reducer";
 
 export type RootState = ReturnType<typeof store.getState>;
 
@@ -16,6 +18,8 @@ export let store = configureStore({
     auth: authReducer,
     question: questionReducer,
     chatroom: chatroomReducer,
+    theme: themeReducer,
+    page: pageReducer,
   }),
 });
 

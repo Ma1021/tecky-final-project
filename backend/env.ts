@@ -3,7 +3,7 @@ import populateEnv from 'populate-env';
 
 config();
 
-export let env = {
+export const env = {
   PORT: 8080,
   DB_NAME: '',
   DB_USERNAME: '',
@@ -14,3 +14,4 @@ export let env = {
 };
 
 populateEnv(env, { mode: 'halt' });
+console.log(env);

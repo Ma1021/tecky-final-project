@@ -44,6 +44,8 @@ import Menu from "./All/Menu";
 import Home from "../pages/Home";
 import Inbox from "../pages/Inbox";
 import Chatroom from "../pages/chatroom/Chatroom";
+import IndividualStockInfo from "../pages/stock/IndividualStockInfo";
+import StockList from "../pages/stock/StockList";
 
 const Navigation: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState("tab1");
@@ -57,6 +59,12 @@ const Navigation: React.FC = () => {
         <Route exact path="/question/:id" component={QuestionDetail}></Route>
         <Route exact path="/inbox/:id" component={Inbox}></Route>
         <Route exact path="/chatroom/:id" component={Chatroom}></Route>
+        {/* <Route exact path="/stockList" component={StockList}></Route> */}
+        {/* <Route
+          exact
+          path="/individualStockInfo/:id"
+          component={IndividualStockInfo}
+        ></Route> */}
         <Route exact path="/">
           <Redirect to="/home" />
         </Route>
@@ -117,7 +125,11 @@ const Navigation: React.FC = () => {
               className="tabButton"
             >
               <IonIcon
-                icon={selectedTab === "chatroomList" ? chatbubbles : chatbubblesOutline}
+                icon={
+                  selectedTab === "chatroomList"
+                    ? chatbubbles
+                    : chatbubblesOutline
+                }
               />
               <IonLabel>聊天室</IonLabel>
             </IonTabButton>

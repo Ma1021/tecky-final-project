@@ -15,7 +15,7 @@ export async function up(knex: Knex): Promise<void> {
     table.integer('member').unsigned().notNullable();
     table.foreign('member').references('users.id');
     table
-      .enu('status', ['approved', 'pending', 'declined'])
+      .enu('status', ['approved', 'pending', 'declined', 'invited'])
       .defaultTo('pending');
     table.integer('chatroom').unsigned().notNullable();
     table.foreign('chatroom').references('chatrooms.id');

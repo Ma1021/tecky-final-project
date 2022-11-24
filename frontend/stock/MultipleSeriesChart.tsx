@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { createChart } from "lightweight-charts";
+import { createChart, WhitespaceData } from "lightweight-charts";
 import {
   CandleStickData,
   LineData,

@@ -47,6 +47,15 @@ const RegisterLoop: React.FC = () => {
     // );
   }, [select]);
 
+  interface FormData {
+    username: string;
+    birthday: string;
+    gender: string;
+    email: string;
+    password: string;
+    rePassword: string;
+  }
+
   const {
     register,
     // handleSubmit,
@@ -85,8 +94,8 @@ const RegisterLoop: React.FC = () => {
     localStorage.getItem("auth_stockoverflow");
   };
   let submit = async () => {
-    console.log("enter submit");
-    let data: any = getValues();
+    console.log("enter submit register");
+    let data: FormData = getValues();
     data.birthday = new Date(data.birthday).toISOString();
     if (data.password !== data.rePassword) {
       presentAlert({

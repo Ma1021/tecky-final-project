@@ -7,7 +7,7 @@ import {
   LineElement,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { ResultObj } from "../../../../backend/src/stock/stock.interface";
+import { ResultObj } from "../../backend/src/stock/stock.interface";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement);
 

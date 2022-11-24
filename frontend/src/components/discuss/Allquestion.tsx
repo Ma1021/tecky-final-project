@@ -49,7 +49,7 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
   );
   const user_id = 2;
   const [filteredQuestions, setFilteredQuestions] = useState(Array<Questions>);
-
+  
   function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
     props.loadQuestion();
     if (!loading) {

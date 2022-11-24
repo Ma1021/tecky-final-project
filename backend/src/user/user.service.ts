@@ -74,11 +74,11 @@ export class UserService {
               .where('user_id', subscription.user_id)
               .andWhere('following_id', subscription.following_id)
               .del()
-              .returning('id');
+              .returning('*');
           } else {
             return await this.knex('subscriptions')
               .insert(subscription)
-              .returning('id');
+              .returning('*');
           }
         });
     } catch (err) {
@@ -93,6 +93,7 @@ export class UserService {
         'users.id as user_id',
         'users.username',
         'users.avatar',
+        'users.introduction'
       )
       .where('following_id', user_id)
       .innerJoin('users', 'users.id', 'subscriptions.user_id');
@@ -105,6 +106,7 @@ export class UserService {
         'users.id as user_id',
         'users.username',
         'users.avatar',
+        'users.introduction'
       )
       .where('user_id', user_id)
       .innerJoin('users', 'users.id', 'subscriptions.following_id');

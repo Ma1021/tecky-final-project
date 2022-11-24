@@ -38,17 +38,19 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import UserEdit from "../pages/user/UserEdit";
 import ChatroomList from "../pages/chatroom/ChatroomList";
+import Subscription from "../pages/user/Subscription";
 
 //common pages
 import Menu from "./All/Menu";
 import Home from "../pages/Home";
 import Inbox from "../pages/Inbox";
 import Chatroom from "../pages/chatroom/Chatroom";
-import IndividualStockInfo from "../pages/stock/IndividualStockInfo";
-import StockList from "../pages/stock/StockList";
+// import IndividualStockInfo from "../pages/stock/IndividualStockInfo";
+// import StockList from "../pages/stock/StockList";
 
 //live pages
 import Live from '../pages/live/live'
+import LiveRoom from "../pages/live/liveRoom";
 
 const Navigation: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState("tab1");
@@ -62,6 +64,7 @@ const Navigation: React.FC = () => {
         <Route exact path="/question/:id" component={QuestionDetail}></Route>
         <Route exact path="/inbox/:id" component={Inbox}></Route>
         <Route exact path="/chatroom/:id" component={Chatroom}></Route>
+        <Route exact path="/user/subscription/:id" component={Subscription}></Route>
         {/* <Route exact path="/stockList" component={StockList}></Route> */}
         {/* <Route
           exact
@@ -84,6 +87,7 @@ const Navigation: React.FC = () => {
             <Route exact path="/chatroomList" component={ChatroomList}></Route>
             <Route exact path="/discuss" component={Discuss}></Route>
             <Route exact path="/live" component={Live}></Route>
+            <Route exact path="/live/:id" component={LiveRoom}></Route>
             <Route
               exact
               path="/discuss/createQuestion"

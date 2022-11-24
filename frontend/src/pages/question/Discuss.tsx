@@ -38,7 +38,7 @@ const Discuss: React.FC = () => {
   function handleKeywordChange(e: any) {
     setKeyword(e.target.value);
   }
-
+  
   const dispatch = useAppDispatch();
 
   const initQuestion = useCallback(async () => {

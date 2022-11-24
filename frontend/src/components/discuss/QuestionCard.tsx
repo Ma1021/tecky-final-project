@@ -161,8 +161,13 @@ const AnswererAvatar = styled(IonImg)`
 `
 
 const AnswererContent = styled(IonText)`
-    width:90%;
+    width:80%;
     margin-left:21%;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `
 const AnswerAmount = styled.div`
     height: 2rem;

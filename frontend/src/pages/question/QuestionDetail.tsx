@@ -19,7 +19,7 @@ const QuestionDetail: React.FC = memo(() => {
   const user_id = 2;
   let reverseAnswer = [];
   const [followings_id, setFollowings_id] = useState(Array<number>);
-
+  
   useEffect(()=>{
     if(!question_id) return;
     dispatch(loadQuestion(+question_id));

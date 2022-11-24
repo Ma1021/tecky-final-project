@@ -16,5 +16,5 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "src/redux/user", "src/pages/user/subscription/.tsx"]
+  "include": ["src", "src/redux/user", "stock"]
 }

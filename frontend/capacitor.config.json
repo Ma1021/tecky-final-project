@@ -1,7 +1,6 @@
 {
-  "appId": "app.stockoverflow",
+  "appId": "com.stockoverflow.app",
   "appName": "frontend",
   "webDir": "build",
   "bundledWebRuntime": false
 }
-

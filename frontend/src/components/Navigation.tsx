@@ -48,6 +48,9 @@ import IndividualStockInfo from "../../stock/IndividualStockInfo";
 import StockList from "../../stock/StockList";
 import ChatroomForm from "../pages/chatroom/ChatroomForm";
 
+//live pages
+import Live from '../pages/live/live'
+
 const Navigation: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState("tab1");
 
@@ -82,6 +85,7 @@ const Navigation: React.FC = () => {
             <Route exact path="/tab1" component={Tab1}></Route>
             <Route exact path="/chatroomList" component={ChatroomList}></Route>
             <Route exact path="/discuss" component={Discuss}></Route>
+            <Route exact path="/live" component={Live}></Route>
             <Route
               exact
               path="/discuss/createQuestion"
@@ -135,7 +139,7 @@ const Navigation: React.FC = () => {
               />
               <IonLabel>聊天室</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="tab5" href="/tab5" className="tabButton">
+            <IonTabButton tab="tab5" href="/live" className="tabButton">
               <IonIcon
                 icon={selectedTab === "tab5" ? videocam : videocamOutline}
               />

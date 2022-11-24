@@ -1,4 +1,4 @@
-import { IonButtons, IonButton, IonIcon, IonBadge } from "@ionic/react";
+import { IonButtons, IonButton, IonIcon, IonBadge, useIonRouter } from "@ionic/react";
 import { notificationsOutline } from "ionicons/icons";
 import { useHistory } from "react-router";
 import { useEffect, useState, memo } from 'react';
@@ -6,9 +6,10 @@ import styled from "styled-components";
 
 const Notification: React.FC = memo(() => {
   const history = useHistory();
-  const [ amount, setAmount ] =useState(0);
+  const [ amount, setAmount ] = useState(0);
 
   const user_id = 1;
+  const router = useIonRouter();
 
   useEffect(()=>{
     fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/${user_id}`)
@@ -18,7 +19,7 @@ const Notification: React.FC = memo(() => {
 
   return (
     <>
-      <IonButtons className="pr-1 pt-1" onClick={() => history.push('/inbox/1')}>
+      <IonButtons className="pr-1 pt-1" onClick={() => router.push(`/inbox/${user_id}`, 'forward','push')}>
         <IonButton>
           {amount > 0 && <AmountTag>{amount}</AmountTag>}
           <IonIcon style={{color:'#fff'}} icon={notificationsOutline}></IonIcon>

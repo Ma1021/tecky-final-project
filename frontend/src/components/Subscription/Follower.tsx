@@ -1,7 +1,6 @@
-import { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import UserCard from "./UserCard";
-import { RootState, useAppSelector, useAppDispatch } from "../../redux/store";
+import { RootState, useAppSelector } from "../../redux/store";
 
 interface FollowerProps {
     keyword: string

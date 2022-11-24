@@ -45,14 +45,9 @@ import Menu from "./All/Menu";
 import Home from "../pages/Home";
 import Inbox from "../pages/Inbox";
 import Chatroom from "../pages/chatroom/Chatroom";
-<<<<<<< HEAD
-// import IndividualStockInfo from "../pages/stock/IndividualStockInfo";
-// import StockList from "../pages/stock/StockList";
-=======
 import IndividualStockInfo from "../../stock/IndividualStockInfo";
 import StockList from "../../stock/StockList";
 import ChatroomForm from "../pages/chatroom/ChatroomForm";
->>>>>>> eaf0a535263624ff977905edd8601919d9d1d811
 
 //live pages
 import Live from '../pages/live/live'
@@ -70,11 +65,8 @@ const Navigation: React.FC = () => {
         <Route exact path="/question/:id" component={QuestionDetail}></Route>
         <Route exact path="/inbox/:id" component={Inbox}></Route>
         <Route exact path="/chatroom/:id" component={Chatroom}></Route>
-<<<<<<< HEAD
         <Route exact path="/user/subscription/:id" component={Subscription}></Route>
-=======
         <Route exact path="/chatroom/create" component={ChatroomForm}></Route>
->>>>>>> eaf0a535263624ff977905edd8601919d9d1d811
         {/* <Route exact path="/stockList" component={StockList}></Route> */}
         {/* <Route
           exact

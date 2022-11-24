@@ -30,6 +30,7 @@ import Cropper from "react-easy-crop";
 import { Point, Area } from "react-easy-crop/types";
 import "./ChatroomForm.css";
 import getCroppedImg from "../../helper/cropImage";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 
 const ChatroomForm: React.FC = () => {
   const {
@@ -41,10 +42,22 @@ const ChatroomForm: React.FC = () => {
       name: "",
       introduction: "",
       icon: "",
+      host: 0,
     },
   });
 
+  const selector = useAppSelector((state) => state?.auth?.user?.id as number);
+
+  //   cropper below
+  const [imageCrop, setImageCrop] = useState("");
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [rotation, setRotation] = useState(0);
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [croppedImage, setCroppedImage] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+
+  // create chatroom +  update data
   const createChatroom = () => {
     console.log("todo");
     let data = getValues();
@@ -52,6 +65,7 @@ const ChatroomForm: React.FC = () => {
     if (croppedImage !== null) {
       data.icon = croppedImage;
     }
+    data.host = selector;
     console.log("data after edited", data);
 
     setCroppedImage(null);
@@ -79,14 +93,6 @@ const ChatroomForm: React.FC = () => {
   const clearFile = (e: any) => {
     e.target.value = null;
   };
-
-  //   cropper below
-  const [imageCrop, setImageCrop] = useState("");
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [rotation, setRotation] = useState(0);
-  const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
-  const [croppedImage, setCroppedImage] = useState(null);
 
   const onCropComplete = useCallback(
     (croppedArea: Area, croppedAreaPixels: Area) => {

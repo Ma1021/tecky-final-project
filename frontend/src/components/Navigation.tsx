@@ -20,6 +20,8 @@ import {
   chatboxEllipsesOutline,
   chatbubblesOutline,
   videocamOutline,
+  flame,
+  flameOutline
 } from "ionicons/icons";
 import "./Navigation.css";
 
@@ -49,9 +51,8 @@ import IndividualStockInfo from "../../stock/IndividualStockInfo";
 import StockList from "../../stock/StockList";
 import ChatroomForm from "../pages/chatroom/ChatroomForm";
 
-//live pages
-import Live from '../pages/live/live'
-import LiveRoom from "../pages/live/liveRoom";
+//KOL ranking pages
+import KOL from '../pages/ranking/ranking'
 
 const Navigation: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState("tab1");
@@ -60,6 +61,9 @@ const Navigation: React.FC = () => {
     <IonReactRouter>
       {/* <Menu /> */}
       <IonRouterOutlet>
+        <Route exact path="/register" component={Register}></Route>
+        <Route exact path="/login" component={Login}></Route>
+        <Route exact path="/home" component={Home}></Route>
         <Route exact path="/user/info/" component={UserInfo}></Route>
         <Route exact path="/user/edit/" component={UserEdit}></Route>
         <Route exact path="/question/:id" component={QuestionDetail}></Route>
@@ -82,14 +86,11 @@ const Navigation: React.FC = () => {
 
         <IonTabs>
           <IonRouterOutlet>
-            <Route exact path="/register" component={Register}></Route>
-            <Route exact path="/login" component={Login}></Route>
-            <Route exact path="/home" component={Home}></Route>
+
             <Route exact path="/tab1" component={Tab1}></Route>
             <Route exact path="/chatroomList" component={ChatroomList}></Route>
             <Route exact path="/discuss" component={Discuss}></Route>
-            <Route exact path="/live" component={Live}></Route>
-            <Route exact path="/live/:id" component={LiveRoom}></Route>
+            <Route exact path="/kol" component={KOL}></Route>
             <Route
               exact
               path="/discuss/createQuestion"
@@ -143,11 +144,11 @@ const Navigation: React.FC = () => {
               />
               <IonLabel>聊天室</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="tab5" href="/live" className="tabButton">
+            <IonTabButton tab="tab5" href="/kol" className="tabButton">
               <IonIcon
-                icon={selectedTab === "tab5" ? videocam : videocamOutline}
+                icon={selectedTab === "tab5" ? flame : flameOutline}
               />
-              <IonLabel>直播</IonLabel>
+              <IonLabel>排行榜</IonLabel>
             </IonTabButton>
           </IonTabBar>
         </IonTabs>

@@ -67,9 +67,10 @@ export class UserController {
       } else if (err.message.includes('密碼不一致')) {
         throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
       }
+      console.log(err.message);
       throw new HttpException(
         '註冊失敗, 請再試一次或聯絡客服',
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.CONFLICT,
       );
     }
   }

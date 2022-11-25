@@ -46,7 +46,7 @@ const ChatroomForm: React.FC = () => {
     },
   });
 
-  const selector = useAppSelector((state) => state?.auth?.user?.id as number);
+  const [intro, setIntro] = useState("");
 
   //   cropper below
   const [imageCrop, setImageCrop] = useState("");
@@ -57,17 +57,41 @@ const ChatroomForm: React.FC = () => {
   const [croppedImage, setCroppedImage] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
 
+  const selector = useAppSelector((state) => state?.auth?.user?.id as number);
   // create chatroom +  update data
-  const createChatroom = () => {
-    console.log("todo");
+  const createChatroom = (e: any) => {
+    e.preventDefault();
     let data = getValues();
     console.log("data befroe edited", data);
     if (croppedImage !== null) {
       data.icon = croppedImage;
     }
-    data.host = selector;
-    console.log("data after edited", data);
-
+    data.introduction = intro;
+    function dataURLToBlob(fileDataURL: string, filename: string) {
+      let arr = fileDataURL.split(","),
+        mime = (arr as any)[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, { type: mime });
+    }
+    let filename = `${new Date().toISOString()}_${data.host}`;
+    let file = dataURLToBlob(data.icon, filename);
+    let formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("introduction", data.introduction);
+    formData.append("host", selector.toString());
+    formData.append("icon", file);
+    fetch(`${process.env.REACT_APP_PUBLIC_URL}/chatroom`, {
+      method: "POST",
+      body: formData,
+    }).then((res) => {
+      console.log("entered fetch");
+      console.log(res);
+    });
     setCroppedImage(null);
   };
 
@@ -122,6 +146,10 @@ const ChatroomForm: React.FC = () => {
     setCroppedImage(null);
   }, []);
 
+  const textAreaChange = (e: any) => {
+    setIntro((e.target as HTMLInputElement).value);
+  };
+
   return (
     <>
       <IonPage>
@@ -141,93 +169,96 @@ const ChatroomForm: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          <IonItem lines="full">
-            <UploadIcon>
-              <label className="ion-margin">
-                {croppedImage == null ? (
-                  <>
-                    <span>圖示</span>
-                    <IonIcon size="large" icon={image}></IonIcon>
-                  </>
-                ) : (
-                  <div>
-                    <img src={croppedImage} />
-                  </div>
-                )}
-                <input
-                  type="file"
-                  onClick={clearFile}
-                  onInput={checkFile}
-                  {...register("icon")}
-                />
-              </label>
-            </UploadIcon>
-          </IonItem>
-          <IonModal isOpen={isOpen}>
-            <IonHeader>
-              <IonToolbar>
-                <IonButtons slot="start">
-                  <IonButton onClick={() => setIsOpen(false)}>關閉</IonButton>
-                </IonButtons>
-                <IonTitle>圖示</IonTitle>
-                <IonButtons slot="end">
-                  <IonButton onClick={saveIconInput}>儲存</IonButton>
-                </IonButtons>
-              </IonToolbar>
-            </IonHeader>
-            <IonContent className="ion-padding">
-              <div className="crop-container-wrapper">
-                <div className="crop-container">
-                  <Cropper
-                    image={imageCrop}
-                    crop={crop}
-                    zoom={zoom}
-                    aspect={1 / 1}
-                    onCropChange={setCrop}
-                    onCropComplete={onCropComplete}
-                    onZoomChange={setZoom}
-                    cropShape="round"
-                  />
-                </div>
-              </div>
-            </IonContent>
-          </IonModal>
-          <IonItem lines="full" counter={true}>
-            <IonLabel>名稱</IonLabel>
-            <IonInput
-              type="text"
-              maxlength={30}
-              {...register("name", {
-                required: { value: true, message: "請輸入聊天室名字" },
-                maxLength: 30,
-              })}
-            ></IonInput>
-          </IonItem>
-          <ErrorMessage
-            className="ion-padding"
-            errors={errors}
-            name="name"
-            as={<IonLabel style={{ color: "red" }}></IonLabel>}
-          />
-          <IonItem lines="full" counter={true}>
-            <IonLabel>介紹</IonLabel>
-            <IonTextarea
-              maxlength={500}
-              autoGrow={true}
-              {...(register("introduction"),
-              {
-                maxLength: 500,
-              })}
-            ></IonTextarea>
-          </IonItem>
-
-          <IonButton
-            onClick={createChatroom}
-            className="ion-margin"
-            expand="block"
+          <form
+            id="createChatroomForm"
+            action="/chatroom"
+            method="POST"
+            encType="multipart/form-data"
           >
-            開設
-          </IonButton>
+            <IonItem lines="full">
+              <UploadIcon>
+                <label className="ion-margin">
+                  {croppedImage == null ? (
+                    <>
+                      <span>圖示</span>
+                      <IonIcon size="large" icon={image}></IonIcon>
+                    </>
+                  ) : (
+                    <div>
+                      <img src={croppedImage} />
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    onClick={clearFile}
+                    onInput={checkFile}
+                    {...register("icon")}
+                  />
+                </label>
+              </UploadIcon>
+            </IonItem>
+            <IonModal isOpen={isOpen}>
+              <IonHeader>
+                <IonToolbar>
+                  <IonButtons slot="start">
+                    <IonButton onClick={() => setIsOpen(false)}>關閉</IonButton>
+                  </IonButtons>
+                  <IonTitle>圖示</IonTitle>
+                  <IonButtons slot="end">
+                    <IonButton onClick={saveIconInput}>儲存</IonButton>
+                  </IonButtons>
+                </IonToolbar>
+              </IonHeader>
+              <IonContent className="ion-padding">
+                <div className="crop-container-wrapper">
+                  <div className="crop-container">
+                    <Cropper
+                      image={imageCrop}
+                      crop={crop}
+                      zoom={zoom}
+                      aspect={1 / 1}
+                      onCropChange={setCrop}
+                      onCropComplete={onCropComplete}
+                      onZoomChange={setZoom}
+                      cropShape="round"
+                    />
+                  </div>
+                </div>
+              </IonContent>
+            </IonModal>
+            <IonItem lines="full" counter={true}>
+              <IonLabel>名稱</IonLabel>
+              <IonInput
+                type="text"
+                maxlength={30}
+                {...register("name", {
+                  required: { value: true, message: "請輸入聊天室名字" },
+                  maxLength: 30,
+                })}
+              ></IonInput>
+            </IonItem>
+            <ErrorMessage
+              className="ion-padding"
+              errors={errors}
+              name="name"
+              as={<IonLabel style={{ color: "red" }}></IonLabel>}
+            />
+            <IonItem lines="full" counter={true}>
+              <IonLabel>介紹</IonLabel>
+              <IonTextarea
+                maxlength={500}
+                onIonChange={textAreaChange}
+              ></IonTextarea>
+            </IonItem>
+
+            <IonButton
+              onClick={createChatroom}
+              className="ion-margin"
+              expand="block"
+            >
+              開設
+            </IonButton>
+          </form>
         </IonContent>
       </IonPage>
     </>

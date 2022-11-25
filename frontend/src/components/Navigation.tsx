@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
 import {
@@ -51,8 +51,14 @@ import IndividualStockInfo from "../../stock/IndividualStockInfo";
 import StockList from "../../stock/StockList";
 import ChatroomForm from "../pages/chatroom/ChatroomForm";
 
+<<<<<<< HEAD
 //KOL ranking pages
 import KOL from '../pages/ranking/ranking'
+=======
+//live pages
+import Live from "../pages/live/live";
+import LiveRoom from "../pages/live/liveRoom";
+>>>>>>> 25d46a52d230fe08980b06d815b7015c5cb29668
 
 const Navigation: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState("tab1");
@@ -69,7 +75,11 @@ const Navigation: React.FC = () => {
         <Route exact path="/question/:id" component={QuestionDetail}></Route>
         <Route exact path="/inbox/:id" component={Inbox}></Route>
         <Route exact path="/chatroom/:id" component={Chatroom}></Route>
-        <Route exact path="/user/subscription/:id" component={Subscription}></Route>
+        <Route
+          exact
+          path="/user/subscription/:id"
+          component={Subscription}
+        ></Route>
         <Route exact path="/chatroom/create" component={ChatroomForm}></Route>
         {/* <Route exact path="/stockList" component={StockList}></Route> */}
         {/* <Route

@@ -2,19 +2,13 @@ import { IsNotEmpty } from 'class-validator';
 
 export class CreateChatroomDto {
   @IsNotEmpty()
+  name: string;
+
+  @IsNotEmpty()
+  introduction: string;
+
+  icon: string;
+
+  @IsNotEmpty()
   host: number;
-
-  @IsNotEmpty()
-  birthday: Date;
-
-  @IsNotEmpty()
-  gender: 'M' | 'F';
-
-  @IsNotEmpty()
-  email: string;
-
-  password_hash: string;
-
-  password: string;
-  rePassword: string;
 }

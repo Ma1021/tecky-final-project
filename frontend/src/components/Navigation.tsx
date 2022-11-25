@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
 import {
@@ -49,7 +49,10 @@ import StockList from "../../stock/StockList";
 import ChatroomForm from "../pages/chatroom/ChatroomForm";
 
 //live pages
-import Live from '../pages/live/live'
+import Live from "../pages/live/live";
+import { useAppDispatch, useAppSelector } from "../redux/store";
+import { login } from "../redux/auth/actions";
+import { AuthState } from "../redux/auth/state";
 
 const Navigation: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState("tab1");

@@ -29,10 +29,10 @@ const Live: React.FC = () => {
                     <RecommendContainer>
                         <div className="ranking">
                             <div className="2nd">
-                                <IonImg className="icon" src="https://scontent-hkg4-1.xx.fbcdn.net/v/t39.30808-6/260252262_3121808114767525_3237799065672652954_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=0yJQyK_QPqcAX-M0XVp&_nc_ht=scontent-hkg4-1.xx&oh=00_AfCND-3quiMRdQ1LYFIeeJLF3Au_CNjefgda4jkmnsryBg&oe=637F5363" />
+                                <IonImg className="icon" src="https://scontent.fhkg10-1.fna.fbcdn.net/v/t39.30808-6/293487775_591967448961252_2293454378797054705_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=TVGCEZ_jPcYAX9o3nmb&_nc_ht=scontent.fhkg10-1.fna&oh=00_AfBPevGG1PKXmvTGDpSqdh5gBqj42G4RS2UXPb-RMs9nVg&oe=6381D9B8" />
                                 <div className="rankMark">
                                     <IonImg src={require("./2nd.png")} />
-                                    <IonText>豹姐</IonText>
+                                    <IonText>古天后</IonText>
                                 </div>
                                 <div className="liveAmount">
                                     <IonIcon icon={people} />

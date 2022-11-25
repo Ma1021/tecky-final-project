@@ -1,4 +1,4 @@
-import { IonButtons, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonContent, IonItem, IonImg, IonText, IonButton, IonIcon, IonInput, IonFooter, IonSpinner, useIonToast, useIonAlert, IonList } from '@ionic/react';
+import { IonButtons, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonContent, IonItem, IonImg, IonText, IonButton, IonIcon, IonInput, IonFooter, IonSpinner, useIonToast, useIonAlert } from '@ionic/react';
 import { memo, useCallback, useEffect, useState } from 'react'
 import { useLocation, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
@@ -16,10 +16,11 @@ const QuestionDetail: React.FC = memo(() => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const [ replyContent, setReplyContent ] = useState('');
-  const user_id = 2;
   let reverseAnswer = [];
   const [followings_id, setFollowings_id] = useState(Array<number>);
-
+  const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
+  const user_id = +user.id;
+  
   useEffect(()=>{
     if(!question_id) return;
     dispatch(loadQuestion(+question_id));

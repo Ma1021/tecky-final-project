@@ -7,7 +7,7 @@ export class CreateChatroomDto {
   @IsNotEmpty()
   introduction: string;
 
-  icon: File;
+  icon: string;
 
   @IsNotEmpty()
   host: number;

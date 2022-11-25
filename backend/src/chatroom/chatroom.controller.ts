@@ -16,6 +16,7 @@ import { FileInterceptor } from '@nestjs/platform-express/multer';
 import { S3Service } from 'src/s3.service';
 import { ChatroomService } from './chatroom.service';
 import { CreateChatroomDto } from './dto/create-chatroom.dto';
+import { JoinChatroomDto } from './dto/join-chatroom.dto';
 import { UpdateChatroomDto } from './dto/update-chatroom.dto';
 
 @Controller('chatroom')
@@ -51,18 +52,44 @@ export class ChatroomController {
         };
         let s3File = await this.s3Service.uploadFile(fileUpload);
         console.log(s3File);
+        if (s3File == 'error') {
+          throw new Error('圖片發生錯誤, 請重新輸入');
+        }
+        createChatroomDto.icon = s3File;
         // error when sending icon to s3
+      } else {
+        createChatroomDto.icon = null;
       }
-
       return await this.chatroomService.create(createChatroomDto);
     } catch (error) {
       console.log(error);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  @Post('/join')
+  async join(@Body() joinChatroomDto: JoinChatroomDto) {
+    await this.chatroomService.join(joinChatroomDto);
   }
 
   @Get()
   findAll() {
     return this.chatroomService.findAll();
+  }
+
+  @Get('/created')
+  findCreated() {
+    return this.chatroomService.findCreated();
+  }
+
+  @Get('/entered')
+  findEntered() {
+    return this.chatroomService.findEntered();
+  }
+
+  @Get('/recommend')
+  findRecommend() {
+    return this.chatroomService.findRecommend();
   }
 
   @Get(':id')

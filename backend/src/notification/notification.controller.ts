@@ -33,12 +33,29 @@ export class NotificationController {
         }
     }
 
+    // delete one notification
     @Delete()
-    async notification (@Body() notification: Notification_Delete_DTO, @Response() res) {
+    async deleteOne (@Body() notification: Notification_Delete_DTO, @Response() res) {
         const response = await this.notificationService.deleteNotification(notification);
         if(response <= 0) {
             res.status(HttpStatus.NOT_FOUND).json({message:"notification not found"});
         }
-        return res       
+        return response;
+    }
+
+    // delete all notification by user id
+    @Delete('/user/:id')
+    async deleteAll(@Param('id') user_id: string, @Response() res) {        
+        if(!user_id) {
+            throw new HttpException('Missing user id', HttpStatus.BAD_REQUEST);
+        }
+
+        const response = await this.notificationService.deleteAllNotification(+user_id);
+        
+        if(response.length === 0) {
+            res.status(HttpStatus.CONFLICT).json({message:"inbox is empty, nothing can be delete"});
+        }
+
+        return response;
     }
 }

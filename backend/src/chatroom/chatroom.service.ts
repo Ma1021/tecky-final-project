@@ -9,6 +9,7 @@ import { CreateChatroomDto } from './dto/create-chatroom.dto';
 import { UpdateChatroomDto } from './dto/update-chatroom.dto';
 import { Knex } from 'knex';
 import { InjectModel } from 'nest-knexjs';
+import { JoinChatroomDto } from './dto/join-chatroom.dto';
 
 @Injectable()
 export class ChatroomService {
@@ -32,6 +33,26 @@ export class ChatroomService {
       .returning('id');
     return result;
   }
+
+  async join(joinChatroomDto: JoinChatroomDto) {
+    let result = await this.knex('chatroom_user')
+      .insert([
+        {
+          member: joinChatroomDto.member,
+          chatroom: joinChatroomDto.chatroomId,
+          status: 'approved',
+        },
+      ])
+      .returning('id');
+    console.log('chatroom service join id ', result);
+    return result;
+  }
+
+  findCreated() {}
+
+  findEntered() {}
+
+  findRecommend() {}
 
   findAll() {
     return `This action returns all chatroom`;

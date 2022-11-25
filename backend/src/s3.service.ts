@@ -22,9 +22,8 @@ export class S3Service {
     fileName: string;
     fileMimetype: string;
   }) {
-    console.log(file.fileBuffer);
-
     // return the link of photo
+    console.log('entered s3 upload');
     return await this.s3_upload(
       file.fileBuffer,
       this.AWS_S3_BUCKET,
@@ -46,17 +45,15 @@ export class S3Service {
       },
     };
 
-    console.log(params);
-
     try {
       let s3Response = await this.s3.upload(params).promise();
 
-      console.log(s3Response);
+      console.log('link', s3Response.Location);
       return s3Response.Location;
       // return the link of photo
     } catch (e) {
       console.log(e);
-      return '';
+      return 'error';
     }
   }
 }

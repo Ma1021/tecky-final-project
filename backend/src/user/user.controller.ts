@@ -126,4 +126,16 @@ export class UserController {
     }
     return this.userService.handleSubscription(subscription);
   }
+
+  // handel kol followers counting
+  @Get('/follower/count')
+  async findFollowerCount() {
+    const res = await this.userService.countFollower();
+
+    if(res.length <= 0) {
+      throw new HttpException('Follower not found', HttpStatus.NOT_FOUND);
+    }
+
+    return res;
+  }
 }

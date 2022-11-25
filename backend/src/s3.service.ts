@@ -23,7 +23,6 @@ export class S3Service {
     fileMimetype: string;
   }) {
     // return the link of photo
-    console.log('entered s3 upload');
     let result = await this.s3_upload(
       file.fileBuffer,
       this.AWS_S3_BUCKET,

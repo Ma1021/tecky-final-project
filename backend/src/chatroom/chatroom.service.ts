@@ -16,10 +16,9 @@ export class ChatroomService {
   constructor(@InjectModel() private readonly knex: Knex) {}
 
   async create(createChatroomDto: CreateChatroomDto) {
-    if (!!createChatroomDto.icon) {
+    if (!createChatroomDto.icon) {
       createChatroomDto.icon = null;
     }
-    console.log('createChatroomDto in service', createChatroomDto);
 
     let result = await this.knex('chatrooms')
       .insert([
@@ -50,16 +49,44 @@ export class ChatroomService {
 
   findCreated() {}
 
-  findEntered() {}
+  async findEntered(enteringChatroomDto) {
+    let result = await this.knex.raw(
+      `select * from chatrooms where id IN (select chatroom from chatroom_user where member=?)`,
+      [enteringChatroomDto.user],
+    );
+    result = result.rows;
+    console.log('chatroom service findEntered result', result);
+    return result;
+  }
+
+  async findHosted(enteringChatroomDto) {
+    let result = await this.knex.raw(`select * from chatrooms where host = ?`, [
+      enteringChatroomDto.user,
+    ]);
+    result = result.rows;
+    // console.log('chatroom service findHosted result', result);
+    return result;
+  }
 
   findRecommend() {}
 
-  findAll() {
+  async findAll() {
+    let result = await this.knex.raw(`
+    select chatrooms.*, count(distinct chatroom_user.member) as member_count from chatrooms 
+    join chatroom_user on chatroom_user.chatroom = chatrooms.id 
+    group by chatrooms.id, chatroom_user.id
+    order by member_count;
+    `)
     return `This action returns all chatroom`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} chatroom`;
+  async findOne(data: { chatroomId: number; user: number }) {
+    // to do check if users is inside the group // is the host of the group
+    let result = await this.knex.raw(
+      `select * from chatroom_record where chatroom = ?`,
+      [data.chatroomId],
+    );
+    return `This action returns a #${data.chatroomId} chatroom`;
   }
 
   update(id: number, updateChatroomDto: UpdateChatroomDto) {

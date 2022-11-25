@@ -16,6 +16,7 @@ import { FileInterceptor } from '@nestjs/platform-express/multer';
 import { S3Service } from 'src/s3.service';
 import { ChatroomService } from './chatroom.service';
 import { CreateChatroomDto } from './dto/create-chatroom.dto';
+import { EnteringChatroomDto } from './dto/entering-chatroom.dto';
 import { JoinChatroomDto } from './dto/join-chatroom.dto';
 import { UpdateChatroomDto } from './dto/update-chatroom.dto';
 
@@ -33,7 +34,6 @@ export class ChatroomController {
     @Body() createChatroomDto: CreateChatroomDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    console.log('create new chatroom');
     let result;
     // return 'entered create';
     if (createChatroomDto.host === 0) {
@@ -54,14 +54,12 @@ export class ChatroomController {
           throw new Error('圖片發生錯誤, 請重新輸入');
         }
         createChatroomDto.icon = s3File;
-        console.log('dto in controller after s3', createChatroomDto);
         result = await this.chatroomService.create(createChatroomDto);
         // error when sending icon to s3
       } else {
         createChatroomDto.icon = null;
         result = await this.chatroomService.create(createChatroomDto);
       }
-      console.log('result in controller', result);
       return result;
     } catch (err) {
       console.log(err);
@@ -90,9 +88,18 @@ export class ChatroomController {
     return this.chatroomService.findCreated();
   }
 
-  @Get('/entered')
-  findEntered() {
-    return this.chatroomService.findEntered();
+  @Post('/hosted')
+  async findHosted(@Body() enteringChatroomDto: EnteringChatroomDto) {
+    let result = await this.chatroomService.findHosted(enteringChatroomDto);
+    console.log('enter chatroom controller findEnter', result);
+    return result;
+  }
+
+  @Post('/entered')
+  async findEntered(@Body() enteringChatroomDto: EnteringChatroomDto) {
+    let result = await this.chatroomService.findEntered(enteringChatroomDto);
+    console.log('enter chatroom controller findEnter', result);
+    return result;
   }
 
   @Get('/recommend')
@@ -100,9 +107,15 @@ export class ChatroomController {
     return this.chatroomService.findRecommend();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.chatroomService.findOne(+id);
+  @Post(':id')
+  async findOne(
+    @Param('id') id: number,
+    @Body() enteringChatroomDto: EnteringChatroomDto,
+  ) {
+    let data = { chatroomId: +id, user: +enteringChatroomDto.user };
+    let result = await this.chatroomService.findOne(data);
+    console.log('enter chatroom controller find one', result);
+    return result;
   }
 
   @Patch(':id')

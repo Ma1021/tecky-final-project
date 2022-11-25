@@ -38,3 +38,5 @@ lerna-debug.log*
 pgdata/
 
 src/auth/constants.ts
+
+./image.zst

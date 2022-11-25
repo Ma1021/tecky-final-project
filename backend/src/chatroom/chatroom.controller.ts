@@ -50,11 +50,11 @@ export class ChatroomController {
           fileMimetype: file.mimetype,
         };
         let s3File = await this.s3Service.uploadFile(fileUpload);
-        console.log('s3File controller received', s3File);
         if (s3File == 'error') {
           throw new Error('圖片發生錯誤, 請重新輸入');
         }
         createChatroomDto.icon = s3File;
+        console.log('dto in controller after s3', createChatroomDto);
         result = await this.chatroomService.create(createChatroomDto);
         // error when sending icon to s3
       } else {

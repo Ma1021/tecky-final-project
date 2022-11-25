@@ -30,7 +30,6 @@ export class S3Service {
       file.fileName,
       file.fileMimetype,
     );
-    console.log('s3 result', result);
     return result;
   }
 
@@ -50,11 +49,9 @@ export class S3Service {
     try {
       let s3Response = await this.s3.upload(params).promise();
 
-      console.log('link', s3Response.Location);
       return s3Response.Location;
       // return the link of photo
     } catch (e) {
-      console.log(e);
       return 'error';
     }
   }

@@ -34,8 +34,7 @@ export class ChatroomController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     console.log('create new chatroom');
-    console.log(createChatroomDto);
-    console.log(file);
+    let result;
     // return 'entered create';
     if (createChatroomDto.host === 0) {
       throw new HttpException('請先登入', HttpStatus.UNAUTHORIZED);
@@ -51,19 +50,28 @@ export class ChatroomController {
           fileMimetype: file.mimetype,
         };
         let s3File = await this.s3Service.uploadFile(fileUpload);
-        console.log(s3File);
+        console.log('s3File controller received', s3File);
         if (s3File == 'error') {
           throw new Error('圖片發生錯誤, 請重新輸入');
         }
         createChatroomDto.icon = s3File;
+        result = await this.chatroomService.create(createChatroomDto);
         // error when sending icon to s3
       } else {
         createChatroomDto.icon = null;
+        result = await this.chatroomService.create(createChatroomDto);
       }
-      return await this.chatroomService.create(createChatroomDto);
-    } catch (error) {
-      console.log(error);
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      console.log('result in controller', result);
+      return result;
+    } catch (err) {
+      console.log(err);
+      if (err.constraint == 'chatrooms_name_unique') {
+        throw new HttpException(
+          '已有此聊天室, 請用新名字',
+          HttpStatus.CONFLICT,
+        );
+      }
+      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
     }
   }
 

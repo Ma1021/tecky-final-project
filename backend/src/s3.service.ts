@@ -24,12 +24,14 @@ export class S3Service {
   }) {
     // return the link of photo
     console.log('entered s3 upload');
-    return await this.s3_upload(
+    let result = await this.s3_upload(
       file.fileBuffer,
       this.AWS_S3_BUCKET,
       file.fileName,
       file.fileMimetype,
     );
+    console.log('s3 result', result);
+    return result;
   }
 
   async s3_upload(dataBuffer, bucket, name, mimetype) {

@@ -18,7 +18,7 @@ docker images stockoverflow-server:latest
 
 ## Export image, then upload with rsync to allow skipping if the image is unchanged
 docker save stockoverflow-server:latest | zstd > image.zst
-bash rsync -SavLP image.zst $server:~/stockoverflow/
+# rsync -SavLP image.zst $server:~/stockoverflow/
 ssh $server "
   cd stockoverflow && \
   cat image.zst | unzstd | docker load

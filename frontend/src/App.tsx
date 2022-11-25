@@ -22,36 +22,31 @@ import "./theme/variables.css";
 // import component
 import Navigation from "./components/Navigation";
 import { useEffect } from "react";
-import { useAppDispatch } from "./redux/store";
+import { useAppDispatch, useAppSelector } from "./redux/store";
 import { login } from "./redux/auth/actions";
+import { AuthState } from "./redux/auth/state";
 
 setupIonicReact();
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
+  const selector = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     // const auth = async () => {
     //   await Preferences.get({ key: "auth_stockoverflow" });
     // };
-    const auth = localStorage.getItem("auth_stockoverflow");
-    let isAuth: null | boolean = null;
-    if (auth) {
-      const authJson = JSON.parse(auth);
-      isAuth = authJson.isAuthenticated;
-      if (isAuth) {
-        console.log("authJson at App", authJson);
-        fetch(
-          `${process.env.REACT_APP_PUBLIC_URL}/user/${authJson.user.id}`
-        ).then((res) => {
-          console.log("res at App", res);
-          res.json().then((json) => {
-            dispatch(login(json.user, json.token));
-          });
-        });
+    const localAuthString = localStorage.getItem("auth_stockoverflow");
+    if (!!localAuthString) {
+      const localAuthJson: AuthState = JSON.parse(localAuthString);
+      console.log("Navigation: authJson after parse", localAuthJson);
+      if (!localAuthJson.user || !localAuthJson.token) {
+        console.log("not logged in");
+        return;
       }
+      dispatch(login(localAuthJson.user, localAuthJson.token));
     }
-  });
+  }, []);
 
   return (
     <IonApp>

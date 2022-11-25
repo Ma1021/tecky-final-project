@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
 import {
@@ -38,6 +38,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import UserEdit from "../pages/user/UserEdit";
 import ChatroomList from "../pages/chatroom/ChatroomList";
+import Subscription from "../pages/user/Subscription";
 
 //common pages
 import Menu from "./All/Menu";
@@ -49,7 +50,8 @@ import StockList from "../../stock/StockList";
 import ChatroomForm from "../pages/chatroom/ChatroomForm";
 
 //live pages
-import Live from '../pages/live/live'
+import Live from "../pages/live/live";
+import LiveRoom from "../pages/live/liveRoom";
 
 const Navigation: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState("tab1");
@@ -63,6 +65,11 @@ const Navigation: React.FC = () => {
         <Route exact path="/question/:id" component={QuestionDetail}></Route>
         <Route exact path="/inbox/:id" component={Inbox}></Route>
         <Route exact path="/chatroom/:id" component={Chatroom}></Route>
+        <Route
+          exact
+          path="/user/subscription/:id"
+          component={Subscription}
+        ></Route>
         <Route exact path="/chatroom/create" component={ChatroomForm}></Route>
         {/* <Route exact path="/stockList" component={StockList}></Route> */}
         {/* <Route
@@ -86,6 +93,7 @@ const Navigation: React.FC = () => {
             <Route exact path="/chatroomList" component={ChatroomList}></Route>
             <Route exact path="/discuss" component={Discuss}></Route>
             <Route exact path="/live" component={Live}></Route>
+            <Route exact path="/live/:id" component={LiveRoom}></Route>
             <Route
               exact
               path="/discuss/createQuestion"

@@ -75,6 +75,7 @@ const RegisterLoop: React.FC = () => {
     },
   });
   let main = async (json: any) => {
+    console.log("before dispatch json ", json);
     await dispatching(json);
     await gettingStorage();
     // return <Redirect to="/discuss" />;
@@ -82,6 +83,7 @@ const RegisterLoop: React.FC = () => {
     history.replace("/discuss");
   };
   let dispatching = (json: any) => {
+    console.log("dispatching");
     dispatch(registerAuth(json.user, json.token.access_token));
   };
   let gettingStorage = () => {
@@ -91,7 +93,10 @@ const RegisterLoop: React.FC = () => {
     // };
 
     // web version
-    localStorage.getItem("auth_stockoverflow");
+    console.log(
+      "register local storage",
+      localStorage.getItem("auth_stockoverflow")
+    );
   };
   let submit = async () => {
     console.log("enter submit register");
@@ -116,8 +121,6 @@ const RegisterLoop: React.FC = () => {
     });
     const json = await res.json();
     //format of json return: { user: {id: userObj}, access_token: token}
-    console.log(json);
-    console.log(res);
     if (res.ok) {
       main(json);
 
@@ -292,7 +295,7 @@ const RegisterLoop: React.FC = () => {
               as={<IonLabel style={{ color: "red" }}></IonLabel>}
             />
           </IonList>
-          <IonButton onClick={submit} className="ion-margin">
+          <IonButton expand="block" onClick={submit} className="ion-margin">
             註冊
           </IonButton>
         </form>

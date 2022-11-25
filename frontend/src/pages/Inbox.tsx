@@ -1,4 +1,4 @@
-import { IonPage, IonHeader, IonToolbar, IonButtons, IonBadge, IonBackButton, IonTitle, IonContent, IonSearchbar, IonText, IonFab, IonFabButton, IonFabList, IonIcon } from "@ionic/react"
+import { IonPage, IonHeader, IonToolbar, IonButtons, IonBadge, IonBackButton, IonTitle, IonContent, IonSearchbar, IonText, IonFab, IonFabButton, IonFabList, IonIcon, useIonToast, IonList } from "@ionic/react"
 import MessageCard from "../components/Inbox/MessageCard";
 import styled from "styled-components";
 import { ellipsisHorizontal } from 'ionicons/icons';
@@ -25,10 +25,12 @@ interface Notification {
 
 const Inbox: React.FC = () => {
     const [ notificationList, setNotificationList ] = useState(Array<Notification>);
-    const user_id = 1;
     const amount = (notificationList.filter(notification => !notification.is_read)).length
+    const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
+    const user_id = +user.id;
 
     const history = useHistory();
+    const [toastPresent] = useIonToast();
 
     function fetchData() {
         fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/${user_id}`)
@@ -38,7 +40,7 @@ const Inbox: React.FC = () => {
 
     useEffect(()=>{
         fetchData()
-    }, [])
+    }, [notificationList])
 
     const handleRead = useCallback((obj:{notification_id: number, notification_type: number, target_id: number, is_read: boolean})=>{        
         if(!obj.is_read) {
@@ -61,6 +63,36 @@ const Inbox: React.FC = () => {
         }
 
     }, [notificationList])
+
+    async function handleDeleteAll() {
+        const res = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/user/${user_id}`, {
+            method:'DELETE',
+            headers:{'Content-Type': 'application/json'}
+        })
+        if(res.status === 409) {
+            toastPresent({
+                message: '沒有訊息可刪除',
+                duration: 1500,
+                position: "bottom",
+            });
+        }
+    }
+    
+    async function handleDeleteOne(target_type_id: number, target_id: number) {
+        const res = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification`, {
+            method: 'DELETE',
+            headers: {'Content-Type':'application/json'},
+            body:JSON.stringify({target_type_id, target_id})
+        })
+
+        if(res.status === 404) {
+            toastPresent({
+                message: '沒有訊息可刪除',
+                duration: 1500,
+                position: "bottom",
+            });
+        }
+    }
 
     return (
         <IonPage id="main-content">
@@ -88,7 +120,7 @@ const Inbox: React.FC = () => {
                                     <svg width="18" height="18" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M44 24C44 35.0457 35.0457 44 24 44C18.0265 44 4 44 4 44C4 44 4 29.0722 4 24C4 12.9543 12.9543 4 24 4C35.0457 4 44 12.9543 44 24Z" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.9999 26L20 32L33 19" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                     <IonText>標記全部已讀</IonText>
                                 </IonFabButton>
-                                <IonFabButton color="primary">
+                                <IonFabButton color="primary" onClick={handleDeleteAll} >
                                     <svg width="18" height="18" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M20 5.91406H28V13.9141H43V21.9141H5V13.9141H20V5.91406Z" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 40H40V22H8V40Z" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round"/><path d="M16 39.8976V33.9141" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 39.8977V33.8977" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 39.8976V33.9141" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 40H36" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                     <IonText>清除全部訊息</IonText>
                                 </IonFabButton>
@@ -96,8 +128,10 @@ const Inbox: React.FC = () => {
                         </IonFab>
                     </div>
                     <InboxMessageContainer>
-                        { notificationList.length > 0 ? 
-                        notificationList.map((notification:Notification)=> <MessageCard key={notification.id} notification={notification} handleRead={handleRead}/>) 
+                        { notificationList.length > 0 ?
+                        <IonList class="ion-no-padding">
+                            {notificationList.map((notification:Notification)=> <MessageCard key={notification.id} notification={notification} handleRead={handleRead} handleDeleteOne={handleDeleteOne}/>)} 
+                        </IonList>
                         : <div>沒有訊息</div> }
                     </InboxMessageContainer>
                 </MessageContainer>
@@ -114,6 +148,10 @@ const InboxMessageContainer = styled.div`
     display:flex;
     flex-direction: column;
     align-items: center;
+
+    ion-list {
+        width: 100%;
+    }
 `
 
 const MessageContainer = styled.div`

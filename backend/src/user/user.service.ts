@@ -11,6 +11,7 @@ export class UserService {
   constructor(@InjectModel() private readonly knex: Knex) {}
 
   async create(createUserDto: CreateUserDto) {
+    // console.log('enter create user');
     const newUser = await this.knex.raw(
       `
         Insert Into users (username, birthday, gender, email, password_hash) Values (?,?,?,?,?) Returning *;
@@ -36,7 +37,7 @@ export class UserService {
     // return `This action returns #${username} user`;
     const user = await this.knex('users').select('*').where('id', id);
 
-    console.log('findOneId', user[0]);
+    // console.log('findOneId', user[0]);
     return user[0];
   }
 

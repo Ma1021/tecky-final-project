@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React,{ useState } from "react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
 import {
@@ -8,18 +8,15 @@ import {
   IonTabButton,
   IonIcon,
   IonLabel,
-  IonSplitPane,
 } from "@ionic/react";
 import {
   chatboxEllipses,
   trendingUp,
-  videocam,
   newspaper,
   chatbubbles,
   newspaperOutline,
   chatboxEllipsesOutline,
   chatbubblesOutline,
-  videocamOutline,
   flame,
   flameOutline
 } from "ionicons/icons";
@@ -51,14 +48,8 @@ import IndividualStockInfo from "../../stock/IndividualStockInfo";
 import StockList from "../../stock/StockList";
 import ChatroomForm from "../pages/chatroom/ChatroomForm";
 
-<<<<<<< HEAD
 //KOL ranking pages
 import KOL from '../pages/ranking/ranking'
-=======
-//live pages
-import Live from "../pages/live/live";
-import LiveRoom from "../pages/live/liveRoom";
->>>>>>> 25d46a52d230fe08980b06d815b7015c5cb29668
 
 const Navigation: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState("tab1");

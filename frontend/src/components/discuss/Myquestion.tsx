@@ -41,7 +41,7 @@ const MyQuestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
             </IonRefresher>
             {loading ? <LoadingScreen><IonSpinner name="crescent"/> 載入中...</LoadingScreen> : 
             <QuestionContainer>
-                {askerQuestionList.length > 0 ? <QuestionCard questions={filteredQuestions.length > 0 ? filteredQuestions : askerQuestionList} /> : <div style={{marginTop:10}}>沒有問題</div>}
+                {askerQuestionList.length > 0 ? <QuestionCard questions={filteredQuestions.length > 0 ? filteredQuestions : askerQuestionList} /> : <div style={{marginTop:10}}>沒有提出過問題</div>}
             </QuestionContainer>}
         </>
     );

@@ -6,6 +6,8 @@ import img from "../../img/animal_stand_ookami.png";
 interface UserIconProps {}
 
 const UserIcon: React.FC<UserIconProps> = () => {
+  const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
+
   return (
     <>
       <IonButtons className="pl-1" slot="start">
@@ -27,7 +29,7 @@ const UserIcon: React.FC<UserIconProps> = () => {
             }}
           >
             <img
-              src={img}
+              src={user.avatar}
               alt="user icon"
               style={{
                 width: "100%",

@@ -1,6 +1,4 @@
-import { IonButton, IonContent, IonPage, IonText, IonIcon } from "@ionic/react";
-import logo from "../img/logo.jpeg";
-import { logoApple } from "ionicons/icons";
+import { IonButton, IonContent, IonPage } from "@ionic/react";
 import { Redirect, useHistory } from "react-router";
 import styled from "styled-components";
 import background from '../img/coverphoto.png'
@@ -29,7 +27,6 @@ const Home: React.FC = () => {
               alt="古惑狼的標誌"
               style={{ width: "330px", height: "330px" }}
             />
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#222" fill-opacity="1" d="M0,96L80,128C160,160,320,224,480,234.7C640,245,800,203,960,160C1120,117,1280,75,1360,53.3L1440,32L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
             <div className="loginCard">
               <div className="d-flex flex-column align-items-center w100">
                 <h1 className="ion-margin">歡迎使用</h1>
@@ -79,7 +76,6 @@ const Container = styled.div`
   .loginCard {
     width: 100%;
     height: 100%;
-    background-color: #222;
     margin-top: 2.5rem;
     padding: 2rem;
 
@@ -89,7 +85,8 @@ const Container = styled.div`
       margin-top: 1rem;
 
       ion-button {
-        --background: #ffaf4d;
+        --background: #333;
+        --background-activated: #222;
       }
 
       ion-button:nth-child(2) {

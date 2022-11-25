@@ -101,7 +101,7 @@ const CreateQuestion: React.FC = () => {
       </IonHeader>
       <IonContent>
         <UserInfo lines="full">
-          <UserIcon src={user.avatar} />
+          <IonImg src={user.avatar} />
           <IonText>{user.username}</IonText>
         </UserInfo>
         <Container>
@@ -129,9 +129,9 @@ const CreateQuestion: React.FC = () => {
           </IonItem>
           <IonItem lines="full">
             <IonLabel>內容</IonLabel>
-            <IonTextarea typeof="text" rows={25} value={content} onIonChange={handleContent} />
+            <IonTextarea typeof="text" rows={15} value={content} onIonChange={handleContent} />
           </IonItem>
-          <IonButton onClick={submit}>Submit</IonButton>
+          <IonButton onClick={submit}>提出問題</IonButton>
         </Container>
       </IonContent>
     </IonPage>
@@ -139,15 +139,19 @@ const CreateQuestion: React.FC = () => {
 };
 
 const UserInfo = styled(IonItem)`
-  padding: 10px 0px;
-`;
+  ion-text {
+    height: 3.5rem;
+    line-height: 3.5rem;
+  }
 
-const UserIcon = styled(IonImg)`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  overflow: hidden;
-  margin-right: 10px;
+  ion-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 10px;
+    object-fit: cover;
+  }
 `;
 
 const StockTag = styled.div`
@@ -166,7 +170,7 @@ const StockTag = styled.div`
 
 const TagContainer = styled.div`
   width: 73%;
-  margin: 0px 20px;
+  margin: 10px 20px;
   display: flex;
   overflow-x: scroll;
   &::-webkit-scrollbar {
@@ -194,7 +198,7 @@ const Container = styled.div`
   }
 
   ion-item:nth-child(2) {
-    --min-height: 60vh;
+    
   }
 
   ion-button {
@@ -204,7 +208,6 @@ const Container = styled.div`
   }
 
   ion-textarea {
-    border: 1px solid red;
     padding: 1rem;
   }
 

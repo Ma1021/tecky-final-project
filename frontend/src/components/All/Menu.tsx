@@ -40,13 +40,7 @@ const Menu: React.FC<MenuProps> = () => {
   const dispatch = useAppDispatch();
   const selector = useAppSelector((state) => state.auth.user);
   const [presentAlert] = useIonAlert();
-  // const userInfo = {
-  //   username: "user",
-  //   userId: 123,
-  //   email: "user@gmail.com",
-  //   // phone: 12345678,
-  // };
-
+  
   const logoutPage = () => {
     // phone version
     // async () => {
@@ -132,7 +126,7 @@ const Menu: React.FC<MenuProps> = () => {
                     }}
                   >
                     <img
-                      src={img}
+                      src={selector?.avatar}
                       alt="user icon"
                       style={{
                         width: "100%",
@@ -184,7 +178,7 @@ const Menu: React.FC<MenuProps> = () => {
           </IonMenuToggle>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding">
+      <IonContent className="ion-no-padding">
         <div className="w100">
           <IonList className="w100">
             <IonAccordionGroup className="menu">

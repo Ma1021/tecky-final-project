@@ -15,6 +15,7 @@ import {
   IonAccordionGroup,
   IonList,
   useIonRouter,
+  useIonAlert,
 } from "@ionic/react";
 import img from "../../img/animal_stand_ookami.png";
 import { useHistory } from "react-router";
@@ -24,11 +25,11 @@ import {
   logoWhatsapp,
   logOutOutline,
   trashOutline,
-  trash,
 } from "ionicons/icons";
 import "./Menu.css";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { logout, deleteAcc } from "../../redux/auth/actions";
+import { useState } from "react";
 // import { Redirect } from "react-router";
 
 interface MenuProps {}
@@ -37,13 +38,14 @@ const Menu: React.FC<MenuProps> = () => {
   const history = useHistory();
   const router = useIonRouter();
   const dispatch = useAppDispatch();
-  const selector = useAppSelector((state) => state.auth.user?.id);
-  const userInfo = {
-    username: "user",
-    userId: 123,
-    email: "user@gmail.com",
-    phone: 12345678,
-  };
+  const selector = useAppSelector((state) => state.auth.user);
+  const [presentAlert] = useIonAlert();
+  // const userInfo = {
+  //   username: "user",
+  //   userId: 123,
+  //   email: "user@gmail.com",
+  //   // phone: 12345678,
+  // };
 
   const logoutPage = () => {
     // phone version
@@ -64,6 +66,21 @@ const Menu: React.FC<MenuProps> = () => {
     router.push("/home", "forward", "push");
   };
 
+  const confirmDeleteAccount = () =>
+    presentAlert({
+      header: "確認刪除?",
+      subHeader: "一經刪除, 不可回復帳號",
+      buttons: [
+        {
+          text: "刪除",
+          role: "confirm",
+          handler: async () => {
+            await deleteAccount();
+          },
+        },
+        { text: "取消", role: "cancel" },
+      ],
+    });
   const deleteAccount = async () => {
     // phone version
     // async () => {
@@ -71,7 +88,7 @@ const Menu: React.FC<MenuProps> = () => {
     // };
     // deleteAccount in backend
     console.log("enter deleteAccount", selector);
-    await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/${selector}`, {
+    await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/${selector?.id}`, {
       method: "DELETE",
     });
     dispatch(deleteAcc());
@@ -125,7 +142,7 @@ const Menu: React.FC<MenuProps> = () => {
                   </IonAvatar>
                   <div className="flex-column pl-3 pb-3">
                     <div className="w100">
-                      <IonLabel>{userInfo.username}</IonLabel>
+                      <IonLabel>{selector?.username}</IonLabel>
                     </div>
                     <div className="w100">
                       <IonLabel className="grey" onClick={toEdit}>
@@ -139,7 +156,7 @@ const Menu: React.FC<MenuProps> = () => {
               {/* user id */}
               <IonItem lines="none" className="menu-userId menu ">
                 <div className="d-flex w100 justify-content-between align-items-center ">
-                  <IonText>用戶碼: {userInfo.userId}</IonText>
+                  <IonText>用戶碼: {selector?.id}</IonText>
                   <IonButton>複製</IonButton>
                 </div>
               </IonItem>
@@ -149,22 +166,15 @@ const Menu: React.FC<MenuProps> = () => {
                 <IonGrid>
                   <div className="w100">
                     <IonText className="grey">
-                      {userInfo.phone.toString().slice(0, 2) +
-                        "****" +
-                        userInfo.phone.toString().slice(6)}
-                    </IonText>
-                  </div>
-                  <div className="w100">
-                    <IonText className="grey">
-                      {userInfo.email
+                      {selector?.email
                         .toString()
                         .split("@")[0]
                         .slice(
                           0,
-                          userInfo.email.toString().split("@")[0].length - 4
+                          selector?.email.toString().split("@")[0].length - 4
                         ) +
                         "****" +
-                        userInfo.email.toString().split("@")[1]}
+                        selector?.email.toString().split("@")[1]}
                     </IonText>
                   </div>
                 </IonGrid>
@@ -176,23 +186,27 @@ const Menu: React.FC<MenuProps> = () => {
       </IonHeader>
       <IonContent className="ion-padding">
         <div className="w100">
-          <IonMenuToggle>
-            <IonList className="w100">
-              <IonAccordionGroup className="menu">
-                <IonAccordion value="first">
-                  <IonItem className="menu" slot="header" color="light">
-                    <IonLabel>
-                      <IonIcon icon={logoWhatsapp}></IonIcon> 客戶服務
-                    </IonLabel>
-                  </IonItem>
-                  <div className="ion-padding" slot="content">
-                    申請成為KOL
-                  </div>
-                  <div className="ion-padding" slot="content">
-                    其他查詢
-                  </div>
-                </IonAccordion>
-              </IonAccordionGroup>
+          <IonList className="w100">
+            <IonAccordionGroup className="menu">
+              <IonAccordion value="first">
+                <IonItem className="menu" slot="header" color="light">
+                  <IonLabel>
+                    <IonIcon icon={logoWhatsapp}></IonIcon> 客戶服務
+                  </IonLabel>
+                </IonItem>
+                <div className="ion-padding" slot="content">
+                  <IonMenuToggle>
+                    <div className="w100">申請成為KOL</div>
+                  </IonMenuToggle>
+                </div>
+                <div className="ion-padding" slot="content">
+                  <IonMenuToggle>
+                    <div className="w100">其他查詢</div>
+                  </IonMenuToggle>
+                </div>
+              </IonAccordion>
+            </IonAccordionGroup>
+            <IonMenuToggle>
               <IonItem className="menu" lines="none">
                 <IonLabel>
                   <IonIcon icon={settingsOutline}></IonIcon> 系統設定
@@ -205,13 +219,13 @@ const Menu: React.FC<MenuProps> = () => {
                 </IonLabel>
               </IonItem>
               <IonItem className="menu" lines="none">
-                <IonLabel onClick={deleteAccount}>
+                <IonLabel onClick={confirmDeleteAccount}>
                   <IonIcon icon={trashOutline}></IonIcon>
                   刪除帳號
                 </IonLabel>
               </IonItem>
-            </IonList>
-          </IonMenuToggle>
+            </IonMenuToggle>
+          </IonList>
         </div>
       </IonContent>
     </IonMenu>

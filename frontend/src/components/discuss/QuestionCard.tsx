@@ -119,9 +119,10 @@ const StockTag = styled(IonText)`
     padding: 0rem 0.5rem;
     border-radius: 0.9rem;
     text-align: center;
-    background-color: #F2B950;
     color: #fff;
-`
+    font-weight: 600;
+    background-image: linear-gradient(to right bottom, #ffc748, #ffba53, #ffae5e, #ffa46a, #ff9b75);
+    `
 
 const AskerContent = styled.div`
     display:flex ;
@@ -160,8 +161,13 @@ const AnswererAvatar = styled(IonImg)`
 `
 
 const AnswererContent = styled(IonText)`
-    width:90%;
+    width:80%;
     margin-left:21%;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `
 const AnswerAmount = styled.div`
     height: 2rem;

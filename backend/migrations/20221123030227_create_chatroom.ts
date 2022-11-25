@@ -3,11 +3,13 @@ import { Knex } from 'knex';
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('chatrooms', (table) => {
     table.increments('id').primary();
-    table.string('name').unique().notNullable();
+    table.string('name', 30).unique().notNullable();
     table.integer('host').unsigned().notNullable();
     table.foreign('host').references('users.id');
     table.enu('type', ['public', 'private']).defaultTo('public');
     table.timestamps(false, true);
+    table.string('introduction', 500);
+    table.string('icon');
   });
 
   await knex.schema.createTable('chatroom_user', (table) => {
@@ -15,7 +17,7 @@ export async function up(knex: Knex): Promise<void> {
     table.integer('member').unsigned().notNullable();
     table.foreign('member').references('users.id');
     table
-      .enu('status', ['approved', 'pending', 'declined'])
+      .enu('status', ['approved', 'pending', 'declined', 'invited'])
       .defaultTo('pending');
     table.integer('chatroom').unsigned().notNullable();
     table.foreign('chatroom').references('chatrooms.id');
@@ -33,7 +35,7 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
-  await knex.schema.dropSchema('chatrooms');
-  await knex.schema.dropSchema('chatroom_user');
-  await knex.schema.dropSchema('chatroom_record');
+  await knex.schema.dropTableIfExists('chatroom_record');
+  await knex.schema.dropTableIfExists('chatroom_user');
+  await knex.schema.dropTableIfExists('chatrooms');
 }

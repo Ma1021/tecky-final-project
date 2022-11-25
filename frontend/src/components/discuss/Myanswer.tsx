@@ -12,9 +12,10 @@ interface QuestionProps {
 
 const MyAnswer: React.FC<QuestionProps> = memo((props:QuestionProps) => {
     const { answererQuestionList, loading } = useAppSelector((state) => state.question)
-    const user_id = 2;
     const [filteredQuestions, setFilteredQuestions ] = useState(Array<Questions>);
-
+    const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
+    const user_id = user.id;
+    
     function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
         props.loadAnswererQuestion(user_id);
         if(!loading) {
@@ -38,7 +39,7 @@ const MyAnswer: React.FC<QuestionProps> = memo((props:QuestionProps) => {
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
             <IonRefresherContent pullingText="下拉更新"></IonRefresherContent>
         </IonRefresher>
-        {loading ? <LoadingScreen><IonSpinner name="circles"/> 載入中...</LoadingScreen> : 
+        {loading ? <LoadingScreen><IonSpinner name="crescent"/> 載入中...</LoadingScreen> : 
         <QuestionContainer>
             {answererQuestionList.length > 0 ? <QuestionCard questions={filteredQuestions.length > 0 ? filteredQuestions : answererQuestionList} user_id={user_id} /> : <div style={{marginTop:10}}>沒有問題</div>}
         </QuestionContainer>}

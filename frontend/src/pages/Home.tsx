@@ -2,32 +2,19 @@ import { IonButton, IonContent, IonPage, IonText, IonIcon } from "@ionic/react";
 import logo from "../img/logo.jpeg";
 import { logoApple } from "ionicons/icons";
 import { Redirect, useHistory } from "react-router";
+import { useAppSelector } from "../redux/store";
 // import { useEffect } from "react";
 // import { Preferences } from "@capacitor/preferences";
 // import Notification from "../components/All/Notification";
 
 const Home: React.FC = () => {
   const history = useHistory();
-
-  // const auth = async () => {
-  //   await Preferences.get({ key: "auth_stockoverflow" });
-  // };
-  const auth = localStorage.getItem("auth_stockoverflow");
-  if (auth) {
-    const authJson = JSON.parse(auth);
-    if (authJson.isAuthenticated) {
-      console.log("authJson", authJson);
-      fetch(
-        `${process.env.REACT_APP_PUBLIC_URL}/user/${authJson.user.id}`
-      ).then((res) => {
-        console.log("res", res);
-        res.json().then((json) => {
-          console.log("json", json);
-        });
-      });
-
-      return <Redirect to="/discuss" />;
-    }
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+  console.log("isAuthenticated", isAuthenticated);
+  // isAuthenticated = null
+  // !isAuthenticated = true
+  if (!!isAuthenticated) {
+    return <Redirect to={{ pathname: "/discuss" }} />;
   }
 
   return (

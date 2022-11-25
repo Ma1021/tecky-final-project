@@ -27,6 +27,7 @@ import ChatroomAll from "../../components/Chatroom/ChatroomAll";
 import ChatroomUser from "../../components/Chatroom/ChatroomUser";
 import Menu from "../../components/All/Menu";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
+import styled from "styled-components";
 
 const ChatroomList: React.FC = () => {
   const [chatroomSegment, setChatroomSegment] = useState("entered");
@@ -121,20 +122,22 @@ const ChatroomList: React.FC = () => {
             <Title title="聊天室" />
           </IonToolbar>
         </IonHeader>
-        <IonItemDivider sticky={true}>
-          <IonSegment value={chatroomSegment} onIonChange={onSegmentChange}>
-            <IonSegmentButton value="entered">
-              <IonLabel>我的聊天室</IonLabel>
-            </IonSegmentButton>
-            <IonSegmentButton value="recommendation">
-              <IonLabel>推薦</IonLabel>
-            </IonSegmentButton>
-            <IonSegmentButton value="all">
-              <IonLabel>所有聊天室</IonLabel>
-            </IonSegmentButton>
-          </IonSegment>
-        </IonItemDivider>
         <IonContent>
+          <SegmentOrganizer>
+            <IonItemDivider sticky={true}>
+              <IonSegment value={chatroomSegment} onIonChange={onSegmentChange}>
+                <IonSegmentButton value="entered">
+                  <IonLabel>我的聊天室</IonLabel>
+                </IonSegmentButton>
+                <IonSegmentButton value="recommendation">
+                  <IonLabel>推薦</IonLabel>
+                </IonSegmentButton>
+                <IonSegmentButton value="all">
+                  <IonLabel>所有聊天室</IonLabel>
+                </IonSegmentButton>
+              </IonSegment>
+            </IonItemDivider>
+          </SegmentOrganizer>
           <IonList>
             {chatroomSegment === "entered" ? (
               <ChatroomUser list={list} />
@@ -151,3 +154,32 @@ const ChatroomList: React.FC = () => {
 };
 
 export default ChatroomList;
+
+export const SegmentOrganizer = styled.div`
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
+  ion-item-divider {
+    --inner-padding-start: 1rem;
+    --inner-padding-end: 1rem;
+    --padding-start: 0;
+  }
+
+  ion-segment {
+    color: #dedede;
+  }
+
+  ion-segment-button {
+    --indicator-color: linear-gradient(
+      to right bottom,
+      #ffa930,
+      #ff9d3f,
+      #ff924d,
+      #ff885b,
+      #ff7f67
+    );
+    --color-checked: #fff;
+    font-weight: 800;
+  }
+`;

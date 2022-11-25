@@ -7,6 +7,7 @@ import { env } from '../env';
 import { AuthModule } from './auth/auth.module';
 import { AnswerModule } from './answer/answer.module';
 import { NotificationModule } from './notification/notification.module';
+import { ChatroomModule } from './chatroom/chatroom.module';
 
 let profile = require('../knexfile')[env.NODE_ENV];
 
@@ -17,6 +18,7 @@ let profile = require('../knexfile')[env.NODE_ENV];
     AuthModule,
     AnswerModule,
     NotificationModule,
+    ChatroomModule,
   ],
   controllers: [AppController],
   providers: [AppService],

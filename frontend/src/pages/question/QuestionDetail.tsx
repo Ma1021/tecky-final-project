@@ -2,7 +2,7 @@ import { IonButtons, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, Io
 import { memo, useCallback, useEffect, useState } from 'react'
 import { useLocation, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import { heartCircle, chatboxEllipses, shareSocial, trash, heartOutline, heart } from 'ionicons/icons';
+import { heartCircle, chatboxEllipses, shareSocial, trash, heartOutline, heart, send } from 'ionicons/icons';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { loadQuestion, createAnswer, deleteQuestion, deleteAnswer, loadQuestions  } from '../../redux/questions/questionSlice';
 import { WhatsappShareButton } from 'react-share'
@@ -16,10 +16,11 @@ const QuestionDetail: React.FC = memo(() => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const [ replyContent, setReplyContent ] = useState('');
-  const user_id = 2;
   let reverseAnswer = [];
   const [followings_id, setFollowings_id] = useState(Array<number>);
-
+  const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
+  const user_id = +user.id;
+  
   useEffect(()=>{
     if(!question_id) return;
     dispatch(loadQuestion(+question_id));
@@ -140,7 +141,7 @@ const QuestionDetail: React.FC = memo(() => {
         })
       }
     }
-  
+    
     function handleLike(e:any) {
       let obj = {
         answer_id: +e.target.parentNode.parentNode.parentNode.dataset.answer_id,
@@ -249,7 +250,9 @@ const QuestionDetail: React.FC = memo(() => {
       <IonFooter>
           <ReplyContainer>
             <IonInput value={replyContent} placeholder='發表回應' maxlength={100} onIonChange={handleInput}></IonInput>
-            <IonText onClick={handleReplySubmit}>發送</IonText>
+            <div onClick={handleReplySubmit}>
+              <IonIcon icon={send}/>
+            </div>
           </ReplyContainer>
         </IonFooter>
     </IonPage>
@@ -296,7 +299,7 @@ const AskerContainer = styled(IonItem)`
 
 const ContentContainer = styled.div`
   width: 100%;
-  height: 14rem;
+  min-height: 14rem;
   background-color: #222;
   padding: 1rem;
   display: flex;
@@ -334,13 +337,14 @@ const AnswerContainer = styled.div`
   margin-top: 0.5rem;
   background-color: #222;
   padding: 1rem;
+  padding-bottom: 0rem;
 
   .answerCard {
     width: 100%;
     border-bottom: 1px solid rgba(225,225,225,0.2);
     display: flex;
-    padding: 1rem 0rem;
-
+    padding: 1rem 0.5rem 0.5rem 0.5rem;
+    
     .answererAvatar {
       width: 20%;
       height: 100%;
@@ -361,7 +365,6 @@ const AnswerContainer = styled.div`
         max-width: 3.5rem;
         height: 1.5rem;
         font-size: 12px;
-
       }
     }
 
@@ -392,11 +395,18 @@ const AnswerContainer = styled.div`
       }
 
       .answerLikes {
+        height: 1.5rem;
         align-self: flex-end;
         display: flex;
         align-items: center;
         gap:0.5rem;
-        font-size: 16px;
+        font-size: 14px;
+        line-height: 1.5rem;
+        
+        ion-icon {
+          color: #ffa73c;
+          font-size: 17px;
+        }
       }
     }
   }
@@ -420,9 +430,16 @@ const ReplyContainer = styled.div`
     --padding-start: 1rem;
   }
 
-  ion-text {
-    width: 10%;
-    color: #ddd;
+  div {
+    height: 2.2rem;
+    width: 2.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color: #fff;
     font-weight: 600;
+    background-color: #ffa73c;
+    text-align: center;
   }
 `

@@ -1,7 +1,12 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { Question, initialState } from './state'
 
-const user_id = 2;
+const userStorage = localStorage.getItem("auth_stockoverflow") as string;
+let user_id: number;
+if(userStorage) {
+    const { user } = JSON.parse(userStorage)
+    user_id = +user.id
+}
 
 // actions that get data
 export const loadQuestions = createAsyncThunk<Question[]>("question/loadQuestions", async(_, thunkAPI)=>{
@@ -101,7 +106,7 @@ export const createQuestion = createAsyncThunk<Question, Object>("question/creat
 // action that delete question by id
 export const deleteQuestion = createAsyncThunk<Question, {question_id: number, user_id: number}>("question/deleteQuestion", async(data, thunkAPI)=>{
     try {
-        const res = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/question/${data.question_id}`, {
+        const res: Response = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/question/${data.question_id}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }
         })
@@ -172,6 +177,13 @@ export const deleteAnswer = createAsyncThunk<Question, {question_id: number, ans
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body:JSON.stringify({target_id: +data.answer_id, target_type_id: 2})
+        })
+
+        // delete likes
+        await fetch(`${process.env.REACT_APP_PUBLIC_URL}/answer/like`,{
+            method:'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({answer_id:data.answer_id, user_id})
         })
 
         thunkAPI.dispatch(loadQuestion(data.question_id));

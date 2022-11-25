@@ -11,6 +11,10 @@ export const env = {
   NODE_ENV: 'development',
   DB_HOST: '',
   DB_PORT: 5432,
+  AWS_ACCESS_KEY_ID: '',
+  AWS_SECRET_ACCESS_KEY: '',
+  S3_BUCKET_NAME: '',
+  S3_REGION: '',
 };
 
 populateEnv(env, { mode: 'halt' });

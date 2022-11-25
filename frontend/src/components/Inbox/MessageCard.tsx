@@ -1,4 +1,4 @@
-import { IonImg, IonText } from "@ionic/react";
+import { IonImg, IonText, IonItemSliding, IonItem, IonItemOptions, IonItemOption } from "@ionic/react";
 import styled from "styled-components";
 
 interface MessageStyled {
@@ -25,6 +25,7 @@ interface MessageProps {
         }
     },
     handleRead: Function
+    handleDeleteOne: Function
 }
 
 const MessageCard: React.FC<MessageProps> = (props: MessageProps) => {
@@ -43,26 +44,40 @@ const MessageCard: React.FC<MessageProps> = (props: MessageProps) => {
     }
     
     return (
-       <MessageCardContainer isRead={props.notification.is_read} onClick={()=>{handleRead(obj)}}>
-        <IonImg src={props.notification.actor.avatar}/>
-        <div className="cardBody">
-            <div className="header">
-                <IonText>{props.notification.actor.username}</IonText>
-                <IonText>{formatDate(props.notification.created_at)}</IonText>
-            </div>
-            {props.notification.target.answer_content && <IonText>回覆了你: {props.notification.target.answer_content}</IonText>} 
-            {props.notification.target.question_content && <IonText>提出了問題: {props.notification.target.question_content}</IonText>} 
-            {props.notification.target.subscription_id && <IonText>追蹤了你</IonText>} 
-        </div>
-       </MessageCardContainer> 
+        <IonItemSliding>
+            <Item lines="full" class="ion-no-padding">
+                <MessageCardContainer isRead={props.notification.is_read} onClick={()=>{handleRead(obj)}}>
+                    <IonImg src={props.notification.actor.avatar}/>
+                    <div className="cardBody">
+                        <div className="header">
+                            <IonText>{props.notification.actor.username}</IonText>
+                            <IonText>{formatDate(props.notification.created_at)}</IonText>
+                        </div>
+                        {props.notification.target.answer_content && <IonText>回覆了你: {props.notification.target.answer_content}</IonText>} 
+                        {props.notification.target.question_content && <IonText>提出了問題: {props.notification.target.question_content}</IonText>} 
+                        {props.notification.target.subscription_id && <IonText>追蹤了你</IonText>} 
+                    </div>
+                </MessageCardContainer>
+            </Item>
+            <IonItemOptions side="end">
+                <IonItemOption onClick={()=> {
+                    props.handleDeleteOne(obj.notification_type, obj.target_id)
+
+                }}>刪除</IonItemOption>
+            </IonItemOptions>
+        </IonItemSliding>
     )
 }
 
 export default MessageCard;
 
+const Item = styled(IonItem)`
+    --padding-end: 0px;
+    --inner-padding-end: 0px;
+`
+
 const MessageCardContainer = styled.div<MessageStyled>`
     width: 100%;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
     height: 80px;
     padding: 0.5rem;
     padding-left: 4%;

@@ -16,6 +16,7 @@ import {
   IonChip,
   IonSegment,
   IonSegmentButton,
+  useIonRouter,
 } from "@ionic/react";
 import "./UserInfo.css";
 import {
@@ -26,11 +27,13 @@ import {
 } from "ionicons/icons";
 import img from "../../img/animal_stand_ookami.png";
 import Notification from "../../components/All/Notification";
-import { useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import UserArticles from "../../components/UserContent/UserArticles";
 import UserDiscussion from "../../components/UserContent/UserDiscussion";
 import UserIntro from "../../components/UserContent/UserIntro";
 import UserBadge from "../../components/All/UserBadge";
+import { RootState, useAppSelector, useAppDispatch } from "../../redux/store";
+import { loadFollowings, loadFollowers } from "../../redux/subscription/subscriptionSlice";
 
 const UserInfo: React.FC = () => {
   const userInfo = {
@@ -56,6 +59,31 @@ const UserInfo: React.FC = () => {
   const segmentChangeAction = (event: IonSegmentCustomEvent) => {
     setUserSegment(event.detail.value || "userIntro");
   };
+
+  const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
+  const user_id = +user.id;
+
+  const dispatch = useAppDispatch();
+
+  // get user followers and following
+  const initFollowings = useCallback(async () => {
+    await dispatch(loadFollowings());
+  }, [dispatch]);
+
+  const initFollowers = useCallback(async () => {
+    await dispatch(loadFollowers());
+  }, [dispatch]);
+
+  useEffect(() => {
+    initFollowings();
+    initFollowers();
+  }, [])
+
+  const { followerList, followingList } = useAppSelector(
+    (state: RootState) => state.subscription
+  );
+
+  const router = useIonRouter();
 
   return (
     <IonPage>
@@ -85,7 +113,7 @@ const UserInfo: React.FC = () => {
               }}
             >
               <img
-                src={img}
+                src={user.avatar}
                 alt="user icon"
                 style={{
                   width: "100%",
@@ -94,7 +122,7 @@ const UserInfo: React.FC = () => {
               />
             </IonAvatar>
             <div className="d-flex flex-row  align-items-center">
-              <IonText>{userInfo.username}</IonText>
+              <IonText>{user.username}</IonText>
             </div>
             <UserBadge isKOL={userInfo.isKOL} />
             <div className="flex-row pt-1 pb-1">
@@ -108,12 +136,12 @@ const UserInfo: React.FC = () => {
               </IonButton>
             </div>
             <div className="d-flex flex-row pt-1 pb-1">
-              <div className="flex-column text-align-center p-1 pr-2 border-right">
-                <div>{userInfo.following}</div>
+              <div className="flex-column text-align-center p-1 pr-2 border-right" onClick={() => { router.push(`/user/subscription/${user_id}`) }}>
+                <div>{followingList.length}</div>
                 <div>關注中</div>
               </div>
-              <div className="flex-column text-align-center p-1 pl-2">
-                <div>{userInfo.followed}</div>
+              <div className="flex-column text-align-center p-1 pl-2" onClick={() => { router.push(`/user/subscription/${user_id}`) }}>
+                <div>{followerList.length}</div>
                 <div>粉絲數</div>
               </div>
             </div>
@@ -121,17 +149,20 @@ const UserInfo: React.FC = () => {
         </IonItem>
         {/* user information above */}
         {/* user history below */}
-        <IonSegment onIonChange={segmentChangeAction}>
-          <IonSegmentButton value="userIntro">
-            <IonLabel>自我介紹</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton value="userArticle">
-            <IonLabel>文章</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton value="userDiscuss">
-            <IonLabel>討論</IonLabel>
-          </IonSegmentButton>
-        </IonSegment>
+        <div style={{padding:"0.5rem 1rem"}}>
+          <IonSegment onIonChange={segmentChangeAction}>
+            <IonSegmentButton value="userIntro">
+              <IonLabel>自我介紹</IonLabel>
+            </IonSegmentButton>
+            <IonSegmentButton value="userArticle">
+              <IonLabel>文章</IonLabel>
+            </IonSegmentButton>
+            <IonSegmentButton value="userDiscuss">
+              <IonLabel>討論</IonLabel>
+            </IonSegmentButton>
+          </IonSegment>
+        </div>
+
         {userSegment === "userIntro" ? (
           <UserIntro />
         ) : userSegment === "userArticle" ? (
@@ -146,3 +177,4 @@ const UserInfo: React.FC = () => {
 };
 
 export default UserInfo;
+ 

@@ -29,8 +29,9 @@ import Menu from "../../components/All/Menu";
 const Discuss: React.FC = () => {
   const [segment, setSegment] = useState("all");
   const [keyword, setKeyword] = useState("");
-  const user_id = 2;
-
+  const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
+  const user_id = user.id;
+  
   const onSegmentChange = (e: any) => {
     setSegment(e.detail.value);
   };
@@ -38,7 +39,7 @@ const Discuss: React.FC = () => {
   function handleKeywordChange(e: any) {
     setKeyword(e.target.value);
   }
-
+  
   const dispatch = useAppDispatch();
 
   const initQuestion = useCallback(async () => {
@@ -152,7 +153,7 @@ const SegmentTab = styled(IonSegment)`
 `;
 
 const SegmentButton = styled(IonSegmentButton)`
-  --indicator-color: #ffa73c;
+  --indicator-color: linear-gradient(to right bottom, #ffa930, #ff9d3f, #ff924d, #ff885b, #ff7f67);
   --color-checked: #fff;
   font-weight: 800;
 `;

@@ -3,4 +3,4 @@ set -x
 
 npm i
 npm run build
-docker build -t server .
+docker build -t stockoverflow-server .

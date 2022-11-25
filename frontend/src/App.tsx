@@ -47,6 +47,8 @@ const App: React.FC = () => {
           console.log("res at App", res);
           res.json().then((json) => {
             dispatch(login(json.user, json.token));
+          }).catch((error)=>{
+            console.log(error);
           });
         });
       }

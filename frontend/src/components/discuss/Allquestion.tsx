@@ -47,7 +47,9 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
   const { questionList, loading } = useAppSelector(
     (state: RootState) => state.question
   );
-  const user_id = 2;
+  const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
+  const user_id = +user.id;
+  
   const [filteredQuestions, setFilteredQuestions] = useState(Array<Questions>);
   
   function handleRefresh(event: CustomEvent<RefresherEventDetail>) {

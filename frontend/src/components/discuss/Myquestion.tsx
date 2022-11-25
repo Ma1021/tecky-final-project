@@ -12,8 +12,9 @@ interface QuestionProps {
 
 const MyQuestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
     const { askerQuestionList, loading } = useAppSelector((state) => state.question)
-    const user_id = 2;
     const [filteredQuestions, setFilteredQuestions ] = useState(Array<Questions>);
+    const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
+    const user_id = user.id;
 
     function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
         props.loadAskerQuestion(user_id);

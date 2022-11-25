@@ -111,4 +111,6 @@ export class UserService {
       .where('user_id', user_id)
       .innerJoin('users', 'users.id', 'subscriptions.following_id');
   }
+
+  
 }

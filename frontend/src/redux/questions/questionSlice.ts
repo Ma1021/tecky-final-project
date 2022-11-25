@@ -1,7 +1,12 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { Question, initialState } from './state'
 
-const user_id = 2;
+const userStorage = localStorage.getItem("auth_stockoverflow") as string;
+let user_id: number;
+if(userStorage) {
+    const { user } = JSON.parse(userStorage)
+    user_id = +user.id
+}
 
 // actions that get data
 export const loadQuestions = createAsyncThunk<Question[]>("question/loadQuestions", async(_, thunkAPI)=>{

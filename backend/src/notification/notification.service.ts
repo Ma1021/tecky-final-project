@@ -103,4 +103,23 @@ export class NotificationService {
             console.log(err);
         }
     }
+
+    async deleteAllNotification(user_id: number) {
+        try {
+            // get all object id and delete notification   
+            const objectRes = await this.knex('notification').where('notifier_id', user_id).del().returning('notification_object_id');
+            
+            //delete notification object
+            if(objectRes.length > 0) {
+                for(let object of objectRes) {
+                    await this.knex('notification_object').where('id', object.notification_object_id).del();
+                }
+            }
+
+            return objectRes;
+        } catch(err) {
+            console.log(err);
+            
+        }
+    }
 }

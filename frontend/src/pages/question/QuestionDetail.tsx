@@ -16,9 +16,10 @@ const QuestionDetail: React.FC = memo(() => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const [ replyContent, setReplyContent ] = useState('');
-  const user_id = 2;
   let reverseAnswer = [];
   const [followings_id, setFollowings_id] = useState(Array<number>);
+  const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
+  const user_id = +user.id;
   
   useEffect(()=>{
     if(!question_id) return;

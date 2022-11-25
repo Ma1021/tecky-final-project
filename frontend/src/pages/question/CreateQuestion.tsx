@@ -30,7 +30,8 @@ type TagValues = {
 const CreateQuestion: React.FC = () => {
   const [selectTags, setSelectTags] = useState(Array<TagValues>);
   const [content, setContent] = useState("");
-  const user_id = 2;
+  const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
+  const user_id = +user.id;
 
   const { state } = useLocation();
   const [present] = useIonToast();
@@ -100,10 +101,10 @@ const CreateQuestion: React.FC = () => {
       </IonHeader>
       <IonContent>
         <UserInfo lines="full">
-          <UserIcon src="https://ionicframework.com/docs/img/demos/avatar.svg" />
-          <IonText>Username</IonText>
+          <UserIcon src={user.avatar} />
+          <IonText>{user.username}</IonText>
         </UserInfo>
-        <div>
+        <Container>
           <IonItem lines="full">
             <IonText>標籤</IonText>
             <TagContainer>
@@ -128,10 +129,10 @@ const CreateQuestion: React.FC = () => {
           </IonItem>
           <IonItem lines="full">
             <IonLabel>內容</IonLabel>
-            <IonTextarea value={content} onIonChange={handleContent} />
+            <IonTextarea typeof="text" rows={25} value={content} onIonChange={handleContent} />
           </IonItem>
           <IonButton onClick={submit}>Submit</IonButton>
-        </div>
+        </Container>
       </IonContent>
     </IonPage>
   );
@@ -153,7 +154,7 @@ const StockTag = styled.div`
   margin: 0px 3px;
   height: 2rem;
   line-height: 2rem;
-  background-color: #f2b950;
+  background-image: linear-gradient(to right bottom, #ffc748, #ffba53, #ffae5e, #ffa46a, #ff9b75);
   border-radius: 0.9rem;
   padding: 0.5rem;
   color: #fff;
@@ -182,5 +183,31 @@ const DeleteTagButton = styled(IonIcon)`
   margin-left: 0.7rem;
   font-size: 1.2rem;
 `;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  ion-item {
+    width: 100%;
+  }
+
+  ion-item:nth-child(2) {
+    --min-height: 60vh;
+  }
+
+  ion-button {
+    width: 90%;
+    height: 2.3rem;
+    margin-top: 1rem;
+  }
+
+  ion-textarea {
+    border: 1px solid red;
+    padding: 1rem;
+  }
+
+`
 
 export default CreateQuestion;

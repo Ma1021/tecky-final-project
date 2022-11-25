@@ -57,6 +57,10 @@ export class ChatroomController {
       return await this.chatroomService.create(createChatroomDto);
     } catch (error) {
       console.log(error);
+      throw new HttpException(
+        '圖片發生錯誤, 請重新輸入',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 

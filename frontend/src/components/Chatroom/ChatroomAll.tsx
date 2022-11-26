@@ -1,17 +1,7 @@
 import {
-  IonCard,
-  IonAvatar,
-  IonIcon,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardContent,
-  IonButton,
-  IonCardSubtitle,
-  useIonLoading,
   IonSpinner,
   IonText,
 } from "@ionic/react";
-import { idCard, people } from "ionicons/icons";
 import { useEffect } from "react";
 import { fetchChatroomsAll } from "../../redux/chatroomAdd/actions";
 import { ChatroomAdd } from "../../redux/chatroomAdd/state";
@@ -20,8 +10,6 @@ import { LoadingScreen } from "../discuss/Allquestion";
 import ChatroomAddCard from "./ChatroomAddCard";
 
 const ChatroomAll: React.FC = () => {
-  const [present, dismiss] = useIonLoading();
-
   const dispatch = useAppDispatch();
   const { chatInfo, loading, error } = useAppSelector(
     (state) => state.chatroomAdd
@@ -31,6 +19,9 @@ const ChatroomAll: React.FC = () => {
   useEffect(() => {
     dispatch(fetchChatroomsAll(userId as number));
   }, [dispatch]);
+
+  console.log("loading", loading);
+  console.log("data", chatInfo);
 
   return (
     <>
@@ -47,9 +38,7 @@ const ChatroomAll: React.FC = () => {
           // if can load
           <>
             {chatInfo.map((chatroom: ChatroomAdd) => (
-              <>
-                <ChatroomAddCard props={chatroom} />
-              </>
+                <ChatroomAddCard key={chatroom.id} props={chatroom} />
             ))}
           </>
         ) : (

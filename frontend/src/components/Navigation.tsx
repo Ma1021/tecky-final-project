@@ -49,7 +49,7 @@ import StockList from "../../stock/StockList";
 import ChatroomForm from "../pages/chatroom/ChatroomForm";
 
 //KOL ranking pages
-import KOL from '../pages/ranking/Ranking'
+import KOL from '../pages/ranking/ranking'
 
 const Navigation: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState("tab1");

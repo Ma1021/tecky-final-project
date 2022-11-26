@@ -118,7 +118,7 @@ const ChatroomList: React.FC = () => {
     <>
       <Menu />
       <IonPage id="main-content">
-        <IonHeader translucent={true} collapse="fade">
+        <IonHeader translucent={true} collapse="fade" style={{height:50}} className="d-flex align-items-center">
           <IonToolbar>
             <Title title="聊天室" />
           </IonToolbar>

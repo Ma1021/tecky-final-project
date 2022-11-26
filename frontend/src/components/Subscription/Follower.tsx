@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import UserCard from "./UserCard";
-import { RootState, useAppSelector } from "../../redux/store";
+import { useAppSelector } from "../../redux/store";
 
 interface FollowerProps {
     keyword: string
@@ -8,7 +8,7 @@ interface FollowerProps {
 
 const Follower: React.FC<FollowerProps> = (props: FollowerProps) => {
     const { followerList } = useAppSelector(
-        (state: RootState) => state.subscription
+        (state) => state.subscription
     );
     
     return (

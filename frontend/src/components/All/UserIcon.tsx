@@ -39,7 +39,6 @@ const UserIcon: React.FC<UserIconProps> = () => {
                 objectFit: "cover",
                 borderRadius: "50%",
                 overflow:"hidden",
-                marginTop:"0.5rem"
               }}
             />
         </IonMenuToggle>

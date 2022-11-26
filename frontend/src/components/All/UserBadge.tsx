@@ -9,12 +9,12 @@ const UserBadge: React.FC<UserBadgeProps> = (props) => {
   return (
     <>
       {props.isKOL === true ? (
-        <IonChip className="userBadge d-flex align-items-center justify-content-center" style={{backgroundColor:"#536878"}}>
+        <IonChip className="userBadge d-flex align-items-center justify-content-center" style={{backgroundColor:"#536878", margin:0}}>
           <IonIcon style={{ color: "#A7F9F9", marginLeft:1 }} icon={diamond}></IonIcon>
           <IonLabel style={{ fontSize: "0.8rem", fontWeight:400 }}>超級股神</IonLabel>
         </IonChip>
       ) : (
-        <IonChip className="userBadge" style={{backgroundColor: '#646F67'}} >
+        <IonChip className="userBadge d-flex align-items-center justify-content-center" style={{backgroundColor: '#646F67', margin:0}} >
           <IonIcon icon={happy} style={{ color: "#C5D932", marginLeft:1 }}></IonIcon>
           <IonLabel style={{ fontSize: "0.8rem", fontWeight:400 }}>精明股民</IonLabel>
         </IonChip>

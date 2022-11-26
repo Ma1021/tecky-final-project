@@ -27,14 +27,17 @@ const UserCard: React.FC<RankingProps> = (props:RankingProps) => {
 
     const dispatch = useAppDispatch();
 
+    const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
+    const user_id = +user.id;
+
     async function handleFollowUser(e: any) {
         e.preventDefault();
-        await dispatch(followUser(+e.target.parentNode.dataset.user_id));
+        await dispatch(followUser({following_id:+e.target.parentNode.dataset.user_id, user_id}));
     }
 
     async function handleUnFollowUser(e: any) {
         e.preventDefault();
-        await dispatch(unFollowUser(+e.target.parentNode.dataset.user_id));
+        await dispatch(unFollowUser({following_id:+e.target.parentNode.dataset.user_id, user_id}));
     }
 
     return (

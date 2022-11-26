@@ -134,7 +134,7 @@ export class QuestionService {
       'created_at', answers.created_at,
       'answers', (SELECT json_build_object(
           'id', users.id,
-          'type', users.user_id,
+          'type', users.user_type,
           'avatar', users.avatar,
           'username', users.username)
           from users where users.id = answers.answerer_id),

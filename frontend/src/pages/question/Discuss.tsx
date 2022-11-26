@@ -66,7 +66,7 @@ const Discuss: React.FC = () => {
     <>
       <Menu />
       <IonPage id="main-content">
-        <IonHeader translucent={true} collapse="fade">
+        <IonHeader translucent={true} collapse="fade" style={{height:50}} className="d-flex align-items-center">
           <IonToolbar>
             <Title title="討論區" />
           </IonToolbar>

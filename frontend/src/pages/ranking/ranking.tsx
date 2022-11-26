@@ -6,7 +6,8 @@ import {
     IonText,
     IonImg,
     IonButton,
-    IonIcon
+    IonIcon,
+    IonSpinner
 } from "@ionic/react";
 import Title from "../../components/All/Title";
 import styled from "styled-components";
@@ -28,14 +29,17 @@ const Ranking: React.FC = () => {
     const [followerCountList, setFollowerCountList ] =  useState(Array<FollowerCountList>);
     const topThree = followerCountList.slice(0, 3);
     const otherRanking = followerCountList.slice(3);
-    const { followingIdList } = useAppSelector(
+    const { followingIdList, loading } = useAppSelector(
         (state) => state.subscription
     );
+
+    const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
+    const user_id = +user.id;
 
     const dispatch = useAppDispatch();
 
     const initIdList = useCallback(async () => {
-        await dispatch(loadFollowingsId());
+        await dispatch(loadFollowingsId(user_id));
     }, [dispatch]);
 
     useEffect(()=>{
@@ -56,22 +60,25 @@ const Ranking: React.FC = () => {
 
     async function handleFollowUser(e: any) {
         e.preventDefault();
-        await dispatch(followUser(+e.target.parentNode.dataset.user_id));
+        await dispatch(followUser({following_id:+e.target.parentNode.dataset.user_i, user_id}));
     }
 
     async function handleUnFollowUser(e: any) {
         e.preventDefault();
-        await dispatch(unFollowUser(+e.target.parentNode.dataset.user_id));
+        await dispatch(unFollowUser({following_id:+e.target.parentNode.dataset.user_id, user_id}));
     }
     
     return (
         <IonPage id="main-content">
-            <IonHeader translucent={true} collapse="fade">
-                <IonToolbar>
+            <IonHeader translucent={true} collapse="fade" style={{height:50}} className="d-flex align-items-center">
+                <IonToolbar >
                     <Title title="排行榜" />
                 </IonToolbar>
             </IonHeader>
             <IonContent>
+                
+                {loading ? <LoadingScreen><IonSpinner name="crescent"/> 載入中...</LoadingScreen> :
+                <>
                 <Background/>
                 <Container>
                     <IonText class="title">人氣KOL</IonText>
@@ -126,13 +133,23 @@ const Ranking: React.FC = () => {
                         )}
                     </KOLRanking>
                 </Container>
-                <Background/>
+                </>
+                }
+                
             </IonContent>
         </IonPage>
     )
 }
 
 export default Ranking;
+
+export const LoadingScreen = styled.div`
+  width: 100%;
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const KOLRanking = styled.div`
     padding: 0rem 1rem;

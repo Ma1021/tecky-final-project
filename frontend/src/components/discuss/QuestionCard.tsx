@@ -139,6 +139,13 @@ const AskerInfo = styled.div`
     display: flex;
     align-items: flex-start;
     gap: 10px;
+
+    .username {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.3rem;
+        font-size: 15px;
+    }
 `
 
 const AskerAvatar = styled(IonImg)`
@@ -147,12 +154,6 @@ const AskerAvatar = styled(IonImg)`
     object-fit: cover;
     border-radius: 50%;
     overflow: hidden;
-
-    .username {
-        display: flex;
-        align-items: center;
-        gap: 0.3rem;
-    }
 `
 
 const AnswererInfo = styled.div`

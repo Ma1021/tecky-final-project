@@ -30,6 +30,9 @@ const Subscription: React.FC = () => {
     const [segment, setSegment] = useState("follower");
     const [keyword, setKeyword] = useState("");
 
+    const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
+    const user_id = +user.id;
+
     const onSegmentChange = (e: any) => {
         setSegment(e.detail.value);
     };
@@ -37,15 +40,15 @@ const Subscription: React.FC = () => {
     const dispatch = useAppDispatch();
 
     const initFollowings = useCallback(async () => {
-        await dispatch(loadFollowings());
+        await dispatch(loadFollowings(user_id));
     }, [dispatch]);
 
     const initFollowingsId = useCallback(async ()=>{
-        await dispatch(loadFollowingsId());
+        await dispatch(loadFollowingsId(user_id));
     }, [dispatch])
 
     const initFollowers = useCallback(async () => {
-        await dispatch(loadFollowers());
+        await dispatch(loadFollowers(user_id));
     }, [dispatch]);
     
     useEffect(()=>{

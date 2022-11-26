@@ -2,7 +2,7 @@ import { IonButton, IonImg, IonText } from "@ionic/react";
 import styled from "styled-components";
 import { User } from "../../pages/user/Subscription";
 import { followUser, unFollowUser } from '../../redux/subscription/subscriptionSlice';
-import { RootState, useAppSelector, useAppDispatch } from "../../redux/store";
+import { useAppSelector, useAppDispatch } from "../../redux/store";
 
 interface SubscriptionProps {
     page: string
@@ -12,19 +12,20 @@ interface SubscriptionProps {
 const UserCard: React.FC<SubscriptionProps> = (props: SubscriptionProps) => { 
     const dispatch = useAppDispatch();
     const { followingIdList } = useAppSelector(
-        (state: RootState) => state.subscription
+        (state) => state.subscription
     );
+
+    const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
+    const user_id = +user.id;
     
     async function handleFollowUser(e: any) {
         e.preventDefault();
-        console.log(e.target.innerText);
-        await dispatch(followUser(+e.target.parentNode.dataset.user_id));
+        await dispatch(followUser({following_id:+e.target.parentNode.dataset.user_id, user_id}));
     }
 
     async function handleUnFollowUser(e: any) {
         e.preventDefault();
-        console.log(e.target.innerText);
-        await dispatch(unFollowUser(+e.target.parentNode.dataset.user_id));
+        await dispatch(unFollowUser({following_id:+e.target.parentNode.dataset.user_id, user_id}));
     }
     
     return (

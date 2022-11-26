@@ -67,11 +67,11 @@ const UserInfo: React.FC = () => {
 
   // get user followers and following
   const initFollowings = useCallback(async () => {
-    await dispatch(loadFollowings());
+    await dispatch(loadFollowings(user_id));
   }, [dispatch]);
 
   const initFollowers = useCallback(async () => {
-    await dispatch(loadFollowers());
+    await dispatch(loadFollowers(user_id));
   }, [dispatch]);
 
   useEffect(() => {

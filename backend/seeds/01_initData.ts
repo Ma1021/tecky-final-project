@@ -10,6 +10,7 @@ function hashPassword(password:string):Promise<string> {
 
 export async function seed(knex: Knex): Promise<void> {
   // Deletes ALL existing entries
+  await knex('subscriptions').del();
   await knex('questions').del();
   await knex('users').del();
   await knex('stocks').del();

@@ -19,7 +19,7 @@ const UserIcon: React.FC<UserIconProps> = () => {
           }}
         >
           {/* autoHide={false} */}
-          <IonButton
+          {/* <IonButton
             style={{
               width: 40,
               height: 40,
@@ -28,15 +28,20 @@ const UserIcon: React.FC<UserIconProps> = () => {
               backgroundColor: "pink",
             }}
           >
-            <img
+
+          </IonButton> */}
+          <img
               src={user.avatar}
               alt="user icon"
               style={{
-                width: "100%",
+                width: "2.5rem",
+                height: "2.5rem",
                 objectFit: "cover",
+                borderRadius: "50%",
+                overflow:"hidden",
+                marginTop:"0.5rem"
               }}
             />
-          </IonButton>
         </IonMenuToggle>
       </IonButtons>
     </>

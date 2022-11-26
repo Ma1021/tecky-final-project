@@ -56,6 +56,7 @@ export class NotificationService {
                 ) from questions where questions.id = notification_object.notification_target_id)
                 WHEN 2 THEN
                 (SELECT jsonb_build_object(
+                    'question_id', answers.question_id,
                     'answer_id', answers.id,
                     'answer_content', answers.content
                 ) from answers where answers.id = notification_object.notification_target_id)

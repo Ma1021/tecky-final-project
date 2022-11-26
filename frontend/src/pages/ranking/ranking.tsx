@@ -138,7 +138,8 @@ const KOLRanking = styled.div`
     padding: 0rem 1rem;
     display: flex;
     flex-direction: column;
-    gap: 0.3rem;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
 `
 
 const RecommendContainer = styled.div`
@@ -234,23 +235,22 @@ const Background = styled.div`
     height: 15%;
     background-image: linear-gradient(to right bottom, #ffc748, #ffba53, #ffae5e, #ffa46a, #ff9b75);
     position: absolute;
-    top:10px;
+    top:0px;
     z-index: -1;
 `
 
 const Container = styled.div`
     background-color: #111;
     width: 100%;
-    height: 90%;
     position: absolute;
-    top: 80px;
+    top: 65px;
     border-radius: 1.5rem 1.5rem 0rem 0rem;
 
     .title {
         position: absolute;
-        top: -3.8rem;
+        top: -3.6rem;
         left: 1rem;
-        font-weight: 800;
+        font-weight: 600;
         font-size: 17px;
     }
 `

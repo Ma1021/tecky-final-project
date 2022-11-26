@@ -566,3 +566,8 @@ body {
 .mr-5 {
   margin-right: calc(1rem * 3);
 }
+
+ion-alert.alert {
+  color: #ffa930;
+}
+

@@ -107,6 +107,7 @@ const Navigation: React.FC = () => {
             </Route>
           </IonRouterOutlet>
           <IonTabBar
+            selectedTab="discuss"
             slot="bottom"
             className="tabBar"
             onIonTabsWillChange={(e) => setSelectedTab(e.detail.tab)}

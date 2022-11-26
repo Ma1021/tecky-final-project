@@ -1,38 +1,47 @@
+import ChatroomAddCard from "../../components/Chatroom/ChatroomAddCard";
 import img from "../../img/animal_stand_ookami.png";
 
-export type ChatroomListState = {
-  list: ChatroomState[];
-};
-
-export type ChatroomState = {
-  id: number | null;
-  host: string | null;
-  name: string | null;
-  last_msg: string | null;
-  last_time: string | null;
-  last_user: string | null;
-  avatar: string | null;
-  head_count: number | null;
-  introduction: string | null;
-  is_entered: boolean | null;
-};
-
-// export const initialState: ChatroomListState = {
-//   list: [
-//     {
-//       id: null,
-//       host: null,
-//       name: null,
-//       last_msg: null,
-//       last_time: null,
-//       last_user: null,
-//       avatar: null,
-//       head_count: null,
-//       introduction: null,
-//       is_entered: null,
-//     },
-//   ],
+// export type ChatroomListState = {
+//   list: ChatroomState[];
 // };
+
+// export type ChatroomState = {
+//   id: number | null;
+//   host: string | null;
+//   name: string | null;
+//   last_msg: string | null;
+//   last_time: string | null;
+//   last_user: string | null;
+//   avatar: string | null;
+//   head_count: number | null;
+//   introduction: string | null;
+//   is_entered: boolean | null;
+// };
+
+export interface ChatroomAdd {
+  id: number;
+  host: string;
+  name: string;
+  type: "public" | "private";
+  created_at: string;
+  updated_at: string;
+  member_count: number;
+  introduction: string;
+  icon: string;
+  loading: boolean;
+  error: string;
+}
+
+export interface ChatroomAddState {
+  chatInfo: ChatroomAdd[];
+  loading: boolean;
+  error?: string;
+}
+
+export const initialChatroomAddState: ChatroomAddState = {
+  chatInfo: [],
+  loading: false,
+};
 
 // data
 const chatroomEntered = [
@@ -98,6 +107,6 @@ const chatroomEntered = [
   },
 ];
 
-export const initialState: ChatroomListState = {
-  list: chatroomEntered,
-};
+// export const initialState: ChatroomListState = {
+//   list: chatroomEntered,
+// };

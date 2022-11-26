@@ -49,7 +49,7 @@ import StockList from "../../stock/StockList";
 import ChatroomForm from "../pages/chatroom/ChatroomForm";
 
 //KOL ranking pages
-import KOL from '../pages/ranking/ranking'
+import KOL from '../pages/ranking/Ranking'
 
 const Navigation: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState("tab1");
@@ -107,6 +107,7 @@ const Navigation: React.FC = () => {
             </Route>
           </IonRouterOutlet>
           <IonTabBar
+            selectedTab="discuss"
             slot="bottom"
             className="tabBar"
             onIonTabsWillChange={(e) => setSelectedTab(e.detail.tab)}

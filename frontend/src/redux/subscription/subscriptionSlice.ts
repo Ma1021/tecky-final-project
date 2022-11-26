@@ -1,17 +1,8 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { Subscription, initialState } from './state';
 
-const userStorage = localStorage.getItem("auth_stockoverflow") as string;
-let user_id: number;
-if(userStorage) {
-    const { user } = JSON.parse(userStorage)
-    if(user) {
-        user_id = +user.id
-    }
-}
-
 // action that get all followers by user id
-export const loadFollowers = createAsyncThunk<Subscription[]>("subscription/loadFollowers", async (_, thunkAPI) => {
+export const loadFollowers = createAsyncThunk<Subscription[], number>("subscription/loadFollowers", async (user_id, thunkAPI) => {
     try {
         const res = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/followers/${user_id}`)
         const json = await res.json();
@@ -22,7 +13,7 @@ export const loadFollowers = createAsyncThunk<Subscription[]>("subscription/load
 })
 
 //action that get all followings by user id
-export const loadFollowings = createAsyncThunk<Subscription[]>("subscription/loadFollowings", async (_, thunkAPI) => {
+export const loadFollowings = createAsyncThunk<Subscription[], number>("subscription/loadFollowings", async (user_id, thunkAPI) => {
     try {
         const res = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/followings/${user_id}`)
         const json = await res.json();
@@ -32,7 +23,7 @@ export const loadFollowings = createAsyncThunk<Subscription[]>("subscription/loa
     }
 })
 
-export const loadFollowingsId = createAsyncThunk<number[]>("subscription/loadFollowingId", async (_, thunkAPI) =>{
+export const loadFollowingsId = createAsyncThunk<number[], number>("subscription/loadFollowingId", async (user_id, thunkAPI) =>{
     try {
         const res = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/followings/${user_id}`)
         const json = await res.json();
@@ -47,12 +38,12 @@ export const loadFollowingsId = createAsyncThunk<number[]>("subscription/loadFol
 })
 
 //action that follow a user
-export const followUser = createAsyncThunk<number, number>("subscription/followUser", async (following_id, thunkAPI) => {
+export const followUser = createAsyncThunk<number, {following_id: number, user_id: number}>("subscription/followUser", async (data, thunkAPI) => {
     try {
         const subscriptionRes: Response = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/subscriptions`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ user_id, following_id })
+            body: JSON.stringify({ user_id:data.user_id, following_id:data.following_id })
         })
 
         const subscription_json = await subscriptionRes.json();
@@ -62,8 +53,8 @@ export const followUser = createAsyncThunk<number, number>("subscription/followU
         const notification = {
             notification_type_id: 3,
             notification_target_id: subscription_id,
-            actor_id: user_id,
-            notifiers: following_id
+            actor_id: data.user_id,
+            notifiers: data.following_id
         }
 
         await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/`, {
@@ -72,9 +63,9 @@ export const followUser = createAsyncThunk<number, number>("subscription/followU
             body: JSON.stringify(notification)
         })
 
-        thunkAPI.dispatch(loadFollowers());
-        thunkAPI.dispatch(loadFollowings());
-        thunkAPI.dispatch(loadFollowingsId());
+        thunkAPI.dispatch(loadFollowers(data.user_id));
+        thunkAPI.dispatch(loadFollowings(data.user_id));
+        thunkAPI.dispatch(loadFollowingsId(data.user_id));
 
 
         return subscription_json[0].following_id;
@@ -84,17 +75,17 @@ export const followUser = createAsyncThunk<number, number>("subscription/followU
 })
 
 //action that UNfollow a user
-export const unFollowUser = createAsyncThunk<number, number>("subscription/unFollowUser", async(following_id, thunkAPI)=>{
+export const unFollowUser = createAsyncThunk<number, {following_id: number, user_id: number}>("subscription/unFollowUser", async(data, thunkAPI)=>{
     try {
         const subscriptionRes: Response = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/subscriptions`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ user_id, following_id })
+            body: JSON.stringify({ user_id:data.user_id, following_id:data.following_id })
         })
 
-        thunkAPI.dispatch(loadFollowers());
-        thunkAPI.dispatch(loadFollowings());
-        thunkAPI.dispatch(loadFollowingsId());
+        thunkAPI.dispatch(loadFollowers(data.user_id));
+        thunkAPI.dispatch(loadFollowings(data.user_id));
+        thunkAPI.dispatch(loadFollowingsId(data.user_id));
 
         const subscription_json = await subscriptionRes.json();
         const subscription_id = await subscription_json[0].id;
@@ -116,18 +107,32 @@ export const subscriptionSlice = createSlice({
     name: "subscription",
     initialState,
     reducers: {
-
+        setFollower: (state, action: PayloadAction<Subscription[]>) => {
+            state.followerList = action.payload
+        }
     },
     extraReducers: (builder) => {
+        builder.addCase(loadFollowers.pending, (state)=>{
+            state.loading = true
+        })
         builder.addCase(loadFollowers.fulfilled, (state, action) => {
+            state.loading = false
             state.followerList = action.payload;
         })
 
+        builder.addCase(loadFollowings.pending, (state)=>{
+            state.loading = true
+        })
         builder.addCase(loadFollowings.fulfilled, (state, action) => {
+            state.loading = false
             state.followingList = action.payload;
         })
 
+        builder.addCase(loadFollowingsId.pending, (state)=>{
+            state.loading = true
+        })
         builder.addCase(loadFollowingsId.fulfilled, (state, action)=>{
+            state.loading = false
             state.followingIdList = action.payload;
         })
     }
@@ -136,4 +141,4 @@ export const subscriptionSlice = createSlice({
 const reducer = subscriptionSlice.reducer;
 export default reducer;
 
-export const { } = subscriptionSlice.actions
+export const { setFollower } = subscriptionSlice.actions

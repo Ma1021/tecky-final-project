@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { Questions } from './Allquestion'
 import { chatboxEllipses } from 'ionicons/icons';
+import UserBadge from '../All/UserBadge';
 
 interface QuestionsProps {
     questions: Questions[]
@@ -16,7 +17,8 @@ const QuestionCard: React.FC<QuestionsProps> = memo((props:QuestionsProps)=>{
         answers:{
             id: number,
             avatar: string,
-            username: string
+            username: string,
+            type: string
         },
         content: string,
         created_at: string,
@@ -41,7 +43,10 @@ const QuestionCard: React.FC<QuestionsProps> = memo((props:QuestionsProps)=>{
                     <QuestionHeader >
                         <AskerInfo>
                             <AskerAvatar src={question.asker_avatar}></AskerAvatar>
-                            <IonText>{question.asker_username}</IonText>
+                            <div className='username'>
+                                <IonText>{question.asker_username}</IonText>
+                                <UserBadge isKOL={question.user_type === 'kol'} />
+                            </div>
                         </AskerInfo>
                         <IonText style={{fontSize:12}}>{formatDate(question.created_at)}</IonText>
                     </QuestionHeader>
@@ -62,6 +67,7 @@ const QuestionCard: React.FC<QuestionsProps> = memo((props:QuestionsProps)=>{
                             <AnswererInfo>
                                 <AnswererAvatar src={reverseAnswer[0].answers.avatar}></AnswererAvatar>
                                 <IonText>{reverseAnswer[0].answers.username}</IonText>
+                                <UserBadge isKOL={reverseAnswer[0].answers.type === 'kol'} />
                             </AnswererInfo>
                             <AnswererContent>{reverseAnswer[0].content}</AnswererContent>    
                         </>
@@ -133,6 +139,13 @@ const AskerInfo = styled.div`
     display: flex;
     align-items: flex-start;
     gap: 10px;
+
+    .username {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.3rem;
+        font-size: 15px;
+    }
 `
 
 const AskerAvatar = styled(IonImg)`
@@ -146,7 +159,7 @@ const AskerAvatar = styled(IonImg)`
 const AnswererInfo = styled.div`
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 0.5rem;
     margin-top:10px
 `
 

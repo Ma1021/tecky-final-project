@@ -67,11 +67,11 @@ const UserInfo: React.FC = () => {
 
   // get user followers and following
   const initFollowings = useCallback(async () => {
-    await dispatch(loadFollowings());
+    await dispatch(loadFollowings(user_id));
   }, [dispatch]);
 
   const initFollowers = useCallback(async () => {
-    await dispatch(loadFollowers());
+    await dispatch(loadFollowers(user_id));
   }, [dispatch]);
 
   useEffect(() => {
@@ -118,13 +118,13 @@ const UserInfo: React.FC = () => {
                 style={{
                   width: "100%",
                   objectFit: "cover",
-                }}
+                }}   
               />
             </IonAvatar>
             <div className="d-flex flex-row  align-items-center">
               <IonText>{user.username}</IonText>
             </div>
-            <UserBadge isKOL={userInfo.isKOL} />
+            <UserBadge isKOL={user.user_type === 'kol'} />
             <div className="flex-row pt-1 pb-1">
               <IonButton className="userInfo-button" size="small" shape="round">
                 <IonIcon slot="start" icon={personOutline}></IonIcon>

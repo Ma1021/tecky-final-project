@@ -6,25 +6,57 @@ import {
 } from "@ionic/react";
 import { people } from "ionicons/icons";
 import styled from "styled-components";
+import { useAppSelector, useAppDispatch } from "../../redux/store";
+import { followUser, unFollowUser } from '../../redux/subscription/subscriptionSlice';
 
-const UserCard: React.FC = () => {
+interface RankingProps {
+    kol: {
+        username: string
+        id: number
+        avatar: string
+        followers: string
+        introduction: string
+    }
+    cardId: number
+}
+
+const UserCard: React.FC<RankingProps> = (props:RankingProps) => {
+    const { followingIdList } = useAppSelector(
+        (state) => state.subscription
+    );
+
+    const dispatch = useAppDispatch();
+
+    const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
+    const user_id = +user.id;
+
+    async function handleFollowUser(e: any) {
+        e.preventDefault();
+        await dispatch(followUser({following_id:+e.target.parentNode.dataset.user_id, user_id}));
+    }
+
+    async function handleUnFollowUser(e: any) {
+        e.preventDefault();
+        await dispatch(unFollowUser({following_id:+e.target.parentNode.dataset.user_id, user_id}));
+    }
+
     return (
-        <Card>
-            <IonText>4</IonText>
+        <Card data-user_id={props.kol.id}>
+            <IonText>{props.cardId}</IonText>
             <div className="cardContent">
-                <IonImg src="https://scontent.fhkg10-1.fna.fbcdn.net/v/t39.30808-6/293487775_591967448961252_2293454378797054705_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=TVGCEZ_jPcYAX9o3nmb&_nc_ht=scontent.fhkg10-1.fna&oh=00_AfBPevGG1PKXmvTGDpSqdh5gBqj42G4RS2UXPb-RMs9nVg&oe=6381D9B8"/>
+                <IonImg src={props.kol.avatar}/>
                 <div className="userInfo">
                     <div className="amountInfo">
-                        <IonText>古天后</IonText>
+                        <IonText>{props.kol.username}</IonText>
                         <div className="amount">
                             <IonIcon icon={people} />
-                            <IonText>183</IonText>
+                            <IonText>{props.kol.followers}</IonText>
                         </div>
                     </div>
-                    <IonText>金融獵豹，人稱豹姐</IonText>
+                    <IonText>{props.kol.introduction}</IonText>
                 </div>
             </div>
-            <IonButton>追蹤</IonButton>
+            {followingIdList.includes(props.kol.id) ? <IonButton onClick={handleUnFollowUser}>取消追蹤</IonButton> : <IonButton onClick={handleFollowUser}>追蹤</IonButton>}
         </Card>
     )
 }
@@ -36,9 +68,9 @@ const Card = styled.div`
     border-radius: 0.5rem;
     background-color: #333;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding: 0rem 1.3rem;
+    position: relative;
 
     ion-img {
         width: 3rem;
@@ -52,6 +84,7 @@ const Card = styled.div`
         display: flex;
         align-items: center;
         gap: 0.5rem;
+        margin-left: 1rem;
 
         .userInfo {
             display: flex;
@@ -80,6 +113,8 @@ const Card = styled.div`
         width: 4.5rem;
         height: 2rem;
         font-size: 14px;
+        position: absolute;
+        right: 5%;
     }
     
 `

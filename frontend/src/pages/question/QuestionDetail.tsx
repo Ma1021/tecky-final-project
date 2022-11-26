@@ -6,6 +6,7 @@ import { heartCircle, chatboxEllipses, shareSocial, trash, heartOutline, heart, 
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { loadQuestion, createAnswer, deleteQuestion, deleteAnswer, loadQuestions  } from '../../redux/questions/questionSlice';
 import { WhatsappShareButton } from 'react-share'
+import UserBadge from '../../components/All/UserBadge';
 
 const QuestionDetail: React.FC = memo(() => {
   const { question, loading } = useAppSelector((state) => state.question);
@@ -62,7 +63,7 @@ const QuestionDetail: React.FC = memo(() => {
     }
 
     alertPresent({
-        cssClass: 'my-css',
+        cssClass: 'alert',
         header: '提示',
         message: '確定要刪除問題嗎？',
         buttons: ['取消', { text: '確定', handler: () => dispatch(deleteQuestion(obj))
@@ -177,7 +178,10 @@ const QuestionDetail: React.FC = memo(() => {
         <AskerContainer lines='full' data-user_id={question.asker_id}>
           <IonImg src={`${question.asker_avatar}`}/>
           <div className='askerInfo'>
-            <IonText>{question.asker_username}</IonText>
+            <div className='username'>
+              <IonText>{question.asker_username}</IonText>
+              <UserBadge isKOL={question.user_type === 'kol'} />
+            </div>
             <IonText style={{fontSize:10}}>{formatDate(question.created_at)}</IonText>
           </div>
           { question.asker_id !== user_id &&
@@ -217,13 +221,16 @@ const QuestionDetail: React.FC = memo(() => {
             return <div className='answerCard' key={answer.id} data-answer_id = {answer.id} data-user_id={answer.answers.id}>
                       <div className='answererAvatar'>
                         <IonImg src={answer.answers.avatar} />
-                        {followings_id.includes(answer.answers.id) ?
-                          <IonButton onClick={handleSubscription}>取消關注</IonButton> 
+                        {followings_id.includes(answer.answers.id) && user_id !== answer.answers.id ?
+                          <IonButton onClick={handleSubscription}>取消關注</IonButton>
                           : answer.answers.id !== user_id && <IonButton onClick={handleSubscription}>關注</IonButton>
                         }
                       </div>
                       <div className='answerContent'>
-                        <IonText className='username'>{answer.answers.username}</IonText>
+                        <div className='username'>
+                          <IonText>{answer.answers.username}</IonText>
+                          <UserBadge isKOL={answer.answers.type === 'kol'} />
+                        </div>
                         <IonText className='content'>{answer.content}</IonText>
                         <div className='answerInfo'>
                           <IonText className='answerDate'>{new Date(answer.created_at).toLocaleString([],{hour12: false, dateStyle:'medium', timeStyle:'short'})}</IonText>
@@ -285,6 +292,14 @@ const AskerContainer = styled(IonItem)`
     display: flex;
     flex-direction: column;
     margin-left: 0.5rem;
+
+    .username {
+      font-size: 16px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
   }
 
   .subscribeBtn {
@@ -317,7 +332,7 @@ const ContentContainer = styled.div`
       padding: 0.3rem 0.6rem;
       border-radius: 0.9rem;
       text-align: center;
-      background-color: #F2B950;
+      background-image: linear-gradient(to right bottom, #ffc748, #ffba53, #ffae5e, #ffa46a, #ff9b75);
       color: #fff;
       font-size: 14px;
     }
@@ -375,11 +390,16 @@ const AnswerContainer = styled.div`
       flex-direction: column;
       gap: 0.5rem;
       padding-left: 0.5rem;
-      margin-top: 0.3rem;
 
       .username {
-        font-size: 16px;
-        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+
+        ion-text {
+          font-size: 16px;
+          font-weight: 600;
+        }
       }
 
       .content {

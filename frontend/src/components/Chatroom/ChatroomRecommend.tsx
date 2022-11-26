@@ -31,9 +31,9 @@ const ChatroomRecommend: React.FC<ChatroomRecommendList> = (props) => {
 
   return (
     <>
-      {props.list.map((room: ChatroomRecommendProps) => {
+      {/* {props.list.map((room: ChatroomRecommendProps) => {
         return <ChatroomAddCard props={room} />;
-      })}
+      })} */}
     </>
   );
 };

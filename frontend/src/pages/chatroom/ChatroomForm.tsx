@@ -14,6 +14,9 @@ import {
   IonTextarea,
   IonModal,
   IonCheckbox,
+  useIonToast,
+  useIonRouter,
+  useIonLoading,
 } from "@ionic/react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
@@ -29,10 +32,11 @@ import {
 import Cropper from "react-easy-crop";
 import { Point, Area } from "react-easy-crop/types";
 import "./ChatroomForm.css";
-import getCroppedImg from "../../helper/cropImage";
+import getCroppedImg, { dataURLToBlob } from "../../helper/cropImage";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 
 const ChatroomForm: React.FC = () => {
+  // form
   const {
     register,
     getValues,
@@ -45,8 +49,9 @@ const ChatroomForm: React.FC = () => {
       host: 0,
     },
   });
-
   const [intro, setIntro] = useState("");
+  const [present] = useIonToast();
+  const router = useIonRouter();
 
   //   cropper below
   const [imageCrop, setImageCrop] = useState("");
@@ -58,26 +63,20 @@ const ChatroomForm: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const selector = useAppSelector((state) => state?.auth?.user?.id as number);
+
+  // goback to previous page
+  const goBack = () => router.goBack();
+  // ()=>{router.push("/chatroomList", "forward","replace")}
+
   // create chatroom +  update data
-  const createChatroom = (e: any) => {
+  const createChatroom = async (e: any) => {
     e.preventDefault();
     let data = getValues();
-    console.log("data befroe edited", data);
+    // console.log("data befroe edited", data);
     if (croppedImage !== null) {
       data.icon = croppedImage;
     }
     data.introduction = intro;
-    function dataURLToBlob(fileDataURL: string, filename: string) {
-      let arr = fileDataURL.split(","),
-        mime = (arr as any)[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]),
-        n = bstr.length,
-        u8arr = new Uint8Array(n);
-      while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
-      }
-      return new File([u8arr], filename, { type: mime });
-    }
     let filename = `${new Date().toISOString()}_${data.host}`;
     let file = dataURLToBlob(data.icon, filename);
     let formData = new FormData();
@@ -85,13 +84,26 @@ const ChatroomForm: React.FC = () => {
     formData.append("introduction", data.introduction);
     formData.append("host", selector.toString());
     formData.append("icon", file);
-    fetch(`${process.env.REACT_APP_PUBLIC_URL}/chatroom`, {
+    let res = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/chatroom`, {
       method: "POST",
       body: formData,
-    }).then((res) => {
-      console.log("entered fetch");
-      console.log(res);
     });
+    if (res.ok) {
+      present({
+        message: "已成功開設你的聊天室！",
+        duration: 1500,
+        position: "bottom",
+      });
+      
+      router.goBack();
+    } else {
+      let json = await res.json();
+      present({
+        message: json.message,
+        duration: 1000,
+        position: "bottom",
+      });
+    }
     setCroppedImage(null);
   };
 
@@ -162,7 +174,9 @@ const ChatroomForm: React.FC = () => {
                 </IonButtons>
                 開設聊天室
                 <IonButtons>
-                  <IonButton className="pr-1">取消</IonButton>
+                  <IonButton onClick={goBack} className="pr-1">
+                    取消
+                  </IonButton>
                 </IonButtons>
               </div>
             </IonTitle>

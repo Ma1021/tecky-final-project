@@ -1,41 +1,53 @@
 import {
-  IonCard,
-  IonAvatar,
-  IonIcon,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardContent,
-  IonButton,
-  IonCardSubtitle,
+  IonSpinner,
+  IonText,
 } from "@ionic/react";
-import { idCard, people } from "ionicons/icons";
+import { useEffect } from "react";
+import { fetchChatroomsAll } from "../../redux/chatroomAdd/actions";
+import { ChatroomAdd } from "../../redux/chatroomAdd/state";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { LoadingScreen } from "../discuss/Allquestion";
 import ChatroomAddCard from "./ChatroomAddCard";
 
-interface ChatroomRecommendList {
-  list: ChatroomRecommendProps[];
-}
+const ChatroomAll: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const { chatInfo, loading, error } = useAppSelector(
+    (state) => state.chatroomAdd
+  );
+  const userId = useAppSelector((state) => state?.auth?.user?.id);
 
-export interface ChatroomRecommendProps {
-  id: number;
-  host: string;
-  name: string;
-  last_msg: string;
-  last_time: string;
-  avatar: string;
-  head_count: number;
-  introduction: string;
-  last_user: string;
-}
+  useEffect(() => {
+    dispatch(fetchChatroomsAll(userId as number));
+  }, [dispatch]);
 
-const ChatroomRecommend: React.FC<ChatroomRecommendList> = (props) => {
-  console.log(props);
+  console.log("loading", loading);
+  console.log("data", chatInfo);
+
   return (
     <>
-      {props.list.map((room: ChatroomRecommendProps) => {
-        return <ChatroomAddCard props={room} />;
-      })}
+      {
+        // if loading
+        loading ? (
+          <LoadingScreen>
+            <IonSpinner name="crescent" /> 載入中...
+          </LoadingScreen>
+        ) : //if error
+        error ? (
+          <IonText>載入失敗</IonText>
+        ) : chatInfo.length > 0 ? (
+          // if can load
+          <>
+            {chatInfo.map((chatroom: ChatroomAdd) => (
+                <ChatroomAddCard key={chatroom.id} props={chatroom} />
+            ))}
+          </>
+        ) : (
+          // if no chatroom yet
+          <div style={{ marginTop: 10 }}>沒有聊天室</div>
+        )
+      }
     </>
   );
 };
 
-export default ChatroomRecommend;
+export default ChatroomAll;

@@ -14,6 +14,7 @@ export interface Questions {
   content: string;
   created_at: string;
   asker_id: number;
+  user_type: string;
   asker_username: string;
   asker_avatar: string;
   stock: Array<{
@@ -28,6 +29,7 @@ export interface Questions {
     id: number;
     answers: {
       id: number;
+      type: string;
       avatar: string;
       username: string;
     };
@@ -94,7 +96,7 @@ const QuestionContainer = styled.div`
   align-items: center;
 `;
 
-const LoadingScreen = styled.div`
+export const LoadingScreen = styled.div`
   width: 100%;
   height: 50%;
   display: flex;

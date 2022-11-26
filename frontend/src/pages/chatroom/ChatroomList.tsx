@@ -24,13 +24,15 @@ import img from "../../img/animal_stand_ookami.png";
 import { people } from "ionicons/icons";
 import ChatroomRecommend from "../../components/Chatroom/ChatroomRecommend";
 import ChatroomAll from "../../components/Chatroom/ChatroomAll";
-import ChatroomUser from "../../components/Chatroom/ChatroomUser";
+import ChatroomEntered from "../../components/Chatroom/ChatroomEntered";
 import Menu from "../../components/All/Menu";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import styled from "styled-components";
+import ChatroomHosted from "../../components/Chatroom/ChatroomHosted";
 
 const ChatroomList: React.FC = () => {
   const [chatroomSegment, setChatroomSegment] = useState("entered");
+  const user = useAppSelector((state) => state.auth.user);
 
   interface SegmentChangeEventDetail {
     value?: string;
@@ -112,12 +114,11 @@ const ChatroomList: React.FC = () => {
     let value = event.detail.value;
     setChatroomSegment(value || "userIntro");
   };
-  useEffect(() => {});
   return (
     <>
       <Menu />
       <IonPage id="main-content">
-        <IonHeader translucent={true} collapse="fade">
+        <IonHeader translucent={true} collapse="fade" style={{height:50}} className="d-flex align-items-center">
           <IonToolbar>
             <Title title="聊天室" />
           </IonToolbar>
@@ -126,26 +127,32 @@ const ChatroomList: React.FC = () => {
           <SegmentOrganizer>
             <IonItemDivider sticky={true}>
               <IonSegment value={chatroomSegment} onIonChange={onSegmentChange}>
+                <IonSegmentButton value="hosted">
+                  <IonLabel>我的</IonLabel>
+                </IonSegmentButton>
                 <IonSegmentButton value="entered">
-                  <IonLabel>我的聊天室</IonLabel>
+                  <IonLabel>參與中</IonLabel>
                 </IonSegmentButton>
                 <IonSegmentButton value="recommendation">
                   <IonLabel>推薦</IonLabel>
                 </IonSegmentButton>
                 <IonSegmentButton value="all">
-                  <IonLabel>所有聊天室</IonLabel>
+                  <IonLabel>所有</IonLabel>
                 </IonSegmentButton>
               </IonSegment>
             </IonItemDivider>
           </SegmentOrganizer>
           <IonList>
-            {chatroomSegment === "entered" ? (
-              <ChatroomUser list={list} />
+            {/* {chatroomSegment === "entered" ? (
+              <ChatroomEntered list={list} />
             ) : chatroomSegment === "recommendation" ? (
               <ChatroomRecommend list={list} />
-            ) : (
-              <ChatroomAll list={list} />
-            )}
+            ) : chatroomSegment === "hosted" ? (
+              <ChatroomHosted />
+            ) : null
+            // <ChatroomAll list={hosted as any} />
+            } */}
+            <ChatroomAll />
           </IonList>
         </IonContent>
       </IonPage>

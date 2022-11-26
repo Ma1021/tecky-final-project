@@ -11,10 +11,10 @@ import {
 } from "@ionic/react";
 import { people } from "ionicons/icons";
 import React from "react";
-import { ChatroomRecommendProps } from "./ChatroomAll";
+import { ChatroomDisplayProps } from "./ChatroomAll";
 // import { useAppDispatch } from "../../redux/store";
 interface ChatroomRecommendObjProps {
-  props: ChatroomRecommendProps;
+  props: ChatroomDisplayProps;
 }
 
 const ChatroomDisplayCard: React.FC<ChatroomRecommendObjProps> = (props) => {
@@ -30,7 +30,7 @@ const ChatroomDisplayCard: React.FC<ChatroomRecommendObjProps> = (props) => {
         className="d-flex flex-row align-items-center"
         onClick={directChatroom}
       >
-        <div className="d-flex flex-row">
+        {/* <div className="d-flex flex-row">
           <div className="ion-padding d-flex flex-column align-items-center">
             <IonAvatar
               style={{
@@ -90,7 +90,7 @@ const ChatroomDisplayCard: React.FC<ChatroomRecommendObjProps> = (props) => {
               </div>
             </IonCardContent>
           </div>
-        </div>
+        </div> */}
       </IonCard>
     </>
   );

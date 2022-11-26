@@ -34,6 +34,30 @@ export type ChatroomState = {
 //   ],
 // };
 
+export interface ChatroomAddState {
+  id: number | null;
+  host: string | null;
+  name: string | null;
+  type: "public" | "private" | null;
+  created_at: string | null;
+  updated_at: string | null;
+  member_count: number | null;
+  introduction: string | null;
+  icon: string | null;
+}
+
+export const initialChatroomDisplayState: ChatroomAddState = {
+  id: null,
+  host: null,
+  name: null,
+  type: null,
+  created_at: null,
+  updated_at: null,
+  member_count: null,
+  introduction: null,
+  icon: null,
+};
+
 // data
 const chatroomEntered = [
   {

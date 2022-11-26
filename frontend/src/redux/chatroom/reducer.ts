@@ -14,10 +14,10 @@ export function chatroomReducer(
       return {
         ...state,
       };
-    case "@@chatroom/chatroomAll":
-      return {
-        ...state,
-      };
+    // case "@@chatroom/chatroomAll":
+    //   return {
+    //     ...state,
+    //   };
     default:
       return state;
   }

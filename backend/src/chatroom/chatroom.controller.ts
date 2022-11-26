@@ -78,9 +78,11 @@ export class ChatroomController {
     await this.chatroomService.join(joinChatroomDto);
   }
 
-  @Get()
-  findAll() {
-    return this.chatroomService.findAll();
+  @Post('/all')
+  async findAll(@Body() enteringChatroomDto: EnteringChatroomDto) {
+    let result = await this.chatroomService.findAll(enteringChatroomDto);
+    console.log('enter chatroom controller findall', result);
+    return result;
   }
 
   @Get('/created')
@@ -94,7 +96,6 @@ export class ChatroomController {
     console.log('enter chatroom controller findEnter', result);
     return result;
   }
-
   @Post('/entered')
   async findEntered(@Body() enteringChatroomDto: EnteringChatroomDto) {
     let result = await this.chatroomService.findEntered(enteringChatroomDto);

@@ -10,6 +10,7 @@ import { UpdateChatroomDto } from './dto/update-chatroom.dto';
 import { Knex } from 'knex';
 import { InjectModel } from 'nest-knexjs';
 import { JoinChatroomDto } from './dto/join-chatroom.dto';
+import { EnteringChatroomDto } from './dto/entering-chatroom.dto';
 
 @Injectable()
 export class ChatroomService {
@@ -70,14 +71,30 @@ export class ChatroomService {
 
   findRecommend() {}
 
-  async findAll() {
-    let result = await this.knex.raw(`
+  // find all no host and no user
+  async findAll(enteringChatroomDto: EnteringChatroomDto) {
+    let result = await this.knex.raw(
+      `
     select chatrooms.*, count(distinct chatroom_user.member) as member_count from chatrooms 
-    join chatroom_user on chatroom_user.chatroom = chatrooms.id 
+    left join chatroom_user on chatroom_user.chatroom = chatrooms.id
+    and chatroom_user.member = ?
+    join users on users.id = host
+    where host NOT IN (?)
     group by chatrooms.id, chatroom_user.id
     order by member_count;
-    `)
-    return `This action returns all chatroom`;
+    `,
+      [enteringChatroomDto.user, enteringChatroomDto.user],
+    );
+
+    // select chatrooms.*, count(distinct chatroom_user.member) as member_count from chatrooms
+    // left join chatroom_user on chatroom_user.chatroom = chatrooms.id
+    // and chatroom_user.member = 3
+    // where host NOT IN (3)
+    // group by chatrooms.id, chatroom_user.id
+    // order by member_count;
+    result = result.rows;
+    // console.log('chatroom service find all', result);
+    return result;
   }
 
   async findOne(data: { chatroomId: number; user: number }) {

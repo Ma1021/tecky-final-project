@@ -2,7 +2,7 @@ import { IsNotEmpty } from 'class-validator';
 
 export class JoinChatroomDto {
   @IsNotEmpty()
-  member: number;
+  userId: number;
 
   @IsNotEmpty()
   chatroomId: number;

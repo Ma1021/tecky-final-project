@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { Subscription, initialState } from './state';
 
+
 const userStorage = localStorage.getItem("auth_stockoverflow") as string;
 let user_id: number;
 if(userStorage) {

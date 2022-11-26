@@ -12,18 +12,35 @@ import Title from "../../components/All/Title";
 import styled from "styled-components";
 import { people } from "ionicons/icons";
 import UserCard from "./UserCard";
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
+import { RootState, useAppSelector, useAppDispatch } from "../../redux/store";
+import { loadFollowingsId, followUser, unFollowUser } from '../../redux/subscription/subscriptionSlice';
 
 interface FollowerCountList {
     id: number
     username: string,
     introduction: string
     followers: string
+    avatar: string
 }
 
-const Live: React.FC = () => {
+const Ranking: React.FC = () => {
     const [followerCountList, setFollowerCountList ] =  useState(Array<FollowerCountList>);
     const topThree = followerCountList.slice(0, 3);
+    const otherRanking = followerCountList.slice(3);
+    const { followingIdList } = useAppSelector(
+        (state) => state.subscription
+    );
+
+    const dispatch = useAppDispatch();
+
+    const initIdList = useCallback(async () => {
+        await dispatch(loadFollowingsId());
+    }, [dispatch]);
+
+    useEffect(()=>{
+        initIdList();
+    },[])
 
     async function fetchFollowerCount() {
         const res = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/follower/count`)
@@ -32,10 +49,20 @@ const Live: React.FC = () => {
             setFollowerCountList(json);
         }
     }
-    
+
     useEffect(()=>{
         fetchFollowerCount();
-    },[])
+    },[followingIdList])
+
+    async function handleFollowUser(e: any) {
+        e.preventDefault();
+        await dispatch(followUser(+e.target.parentNode.dataset.user_id));
+    }
+
+    async function handleUnFollowUser(e: any) {
+        e.preventDefault();
+        await dispatch(unFollowUser(+e.target.parentNode.dataset.user_id));
+    }
     
     return (
         <IonPage id="main-content">
@@ -51,20 +78,20 @@ const Live: React.FC = () => {
                     <RecommendContainer>
                         {topThree.length > 0 &&
                         <div className="ranking">
-                            <div className="2nd">
-                                <IonImg className="icon" src="https://scontent.fhkg10-1.fna.fbcdn.net/v/t39.30808-6/293487775_591967448961252_2293454378797054705_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=TVGCEZ_jPcYAX9o3nmb&_nc_ht=scontent.fhkg10-1.fna&oh=00_AfBPevGG1PKXmvTGDpSqdh5gBqj42G4RS2UXPb-RMs9nVg&oe=6381D9B8" />
+                            <div className="2nd" data-user_id={topThree[1].id}>
+                                <IonImg className="icon" src={topThree[1].avatar} />
                                 <div className="rankMark">
                                     <IonImg src={require("./2nd.png")} />
-                                    <IonText>古天后</IonText>
+                                    <IonText>{topThree[1].username}</IonText>
                                 </div>
                                 <div className="liveAmount">
                                     <IonIcon icon={people} />
-                                    <IonText>5128</IonText>
+                                    <IonText>{topThree[1].followers}</IonText>
                                 </div>
-                                <IonButton>追蹤</IonButton>
+                                {followingIdList.includes(topThree[1].id) ? <IonButton onClick={handleUnFollowUser}>取消追蹤</IonButton> : <IonButton onClick={handleFollowUser}>追蹤</IonButton>}
                             </div>
-                            <div className="1st">
-                                <IonImg className="icon" src="https://scontent-hkg4-1.xx.fbcdn.net/v/t39.30808-6/260252262_3121808114767525_3237799065672652954_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=0yJQyK_QPqcAX-M0XVp&_nc_ht=scontent-hkg4-1.xx&oh=00_AfCND-3quiMRdQ1LYFIeeJLF3Au_CNjefgda4jkmnsryBg&oe=637F5363" />
+                            <div className="1st" data-user_id={topThree[0].id}>
+                                <IonImg className="icon" src={topThree[0].avatar} />
                                 <div className="rankMark">
                                     <IonImg src={require("./1st.png")} />
                                     <IonText>{topThree[0].username}</IonText>
@@ -73,19 +100,19 @@ const Live: React.FC = () => {
                                     <IonIcon icon={people} />
                                     <IonText>{topThree[0].followers}</IonText>
                                 </div>
-                                <IonButton>追蹤</IonButton>
+                                {followingIdList.includes(topThree[0].id) ? <IonButton onClick={handleUnFollowUser}>取消追蹤</IonButton> : <IonButton onClick={handleFollowUser}>追蹤</IonButton>}
                             </div>
-                            <div className="3rd">
-                                <IonImg className="icon" src="https://scontent-hkg4-1.xx.fbcdn.net/v/t39.30808-6/260252262_3121808114767525_3237799065672652954_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=0yJQyK_QPqcAX-M0XVp&_nc_ht=scontent-hkg4-1.xx&oh=00_AfCND-3quiMRdQ1LYFIeeJLF3Au_CNjefgda4jkmnsryBg&oe=637F5363" />
+                            <div className="3rd" data-user_id={topThree[2].id}>
+                                <IonImg className="icon" src={topThree[2].avatar} />
                                 <div className="rankMark">
                                     <IonImg src={require("./3rd.png")} />
-                                    <IonText>豹姐</IonText>
+                                    <IonText>{topThree[2].username}</IonText>
                                 </div>
                                 <div className="liveAmount">
                                     <IonIcon icon={people} />
-                                    <IonText>1145</IonText>
+                                    <IonText>{topThree[2].followers}</IonText>
                                 </div>
-                                <IonButton>追蹤</IonButton>
+                                {followingIdList.includes(topThree[2].id) ? <IonButton onClick={handleUnFollowUser}>取消追蹤</IonButton> : <IonButton onClick={handleFollowUser}>追蹤</IonButton>}
                             </div>
                         </div>
                         }
@@ -93,10 +120,10 @@ const Live: React.FC = () => {
 
                     <KOLRanking>
                         <IonText>KOL排行</IonText>
-                        <UserCard/>
-                        <UserCard/>
-                        <UserCard/>
-                        <UserCard/>
+                        {otherRanking.length > 0 && otherRanking.map((kol, index) => {
+                            return <UserCard kol={kol} key={index+4} cardId={index+4}/>
+                        } 
+                        )}
                     </KOLRanking>
                 </Container>
                 <Background/>
@@ -105,10 +132,9 @@ const Live: React.FC = () => {
     )
 }
 
-export default Live;
+export default Ranking;
 
 const KOLRanking = styled.div`
-    min-height: 45%;
     padding: 0rem 1rem;
     display: flex;
     flex-direction: column;
@@ -116,7 +142,6 @@ const KOLRanking = styled.div`
 `
 
 const RecommendContainer = styled.div`
-    height: 22%;
     padding: 1rem;
 
     ion-text {

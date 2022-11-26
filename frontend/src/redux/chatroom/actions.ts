@@ -31,6 +31,17 @@ export function loadChatroomsAllEnd() {
   };
 }
 
+export function loadChatroomsAllError(error: string) {
+  console.log({
+    type: "@@chatroom/LOAD_CHATROOMS_ALL" as const,
+    error: error,
+  });
+  return {
+    type: "@@chatroom/LOAD_CHATROOMS_ALL" as const,
+    error: error,
+  };
+}
+
 // fetch all chatroom here
 export function fetchChatroomsAll(user: { id: number }) {
   return (dispatch: AppDispatch) => {
@@ -45,18 +56,10 @@ export function fetchChatroomsAll(user: { id: number }) {
       .then((data) => {
         dispatch(loadChatroomsAll(data));
         dispatch(loadChatroomsAllEnd);
-      }).catch(error=>{});
-  };
-}
-
-export function loadChatroomsAllError(error: string) {
-  console.log({
-    type: "@@chatroom/LOAD_CHATROOMS_ALL" as const,
-    error: error,
-  });
-  return {
-    type: "@@chatroom/LOAD_CHATROOMS_ALL" as const,
-    error: error,
+      })
+      .catch((error) => {
+        dispatch(loadChatroomsAllError(error));
+      });
   };
 }
 

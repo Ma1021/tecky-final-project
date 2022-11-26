@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "723387573489",
+    "project_id": "stockoverflow-andr",
+    "storage_bucket": "stockoverflow-andr.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:723387573489:android:99cd3c35c30ae3ee193550",
+        "android_client_info": {
+          "package_name": "com.stockoverflow.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "723387573489-n9d4v54ffgk2ncu69j9bqkanccfh0362.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvR0Sz0zNIQIrC4M0a0HX8Hl42gBq-kWs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "723387573489-n9d4v54ffgk2ncu69j9bqkanccfh0362.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "723387573489-q56tsv287s1leff16claqeb67p43e67m.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.stockoverflow.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

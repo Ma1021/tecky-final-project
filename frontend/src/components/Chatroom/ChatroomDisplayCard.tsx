@@ -30,7 +30,7 @@ const ChatroomDisplayCard: React.FC<ChatroomRecommendObjProps> = (props) => {
         className="d-flex flex-row align-items-center"
         onClick={directChatroom}
       >
-        <div className="d-flex flex-row">
+        {/* <div className="d-flex flex-row">
           <div className="ion-padding d-flex flex-column align-items-center">
             <IonAvatar
               style={{
@@ -90,7 +90,7 @@ const ChatroomDisplayCard: React.FC<ChatroomRecommendObjProps> = (props) => {
               </div>
             </IonCardContent>
           </div>
-        </div>
+        </div> */}
       </IonCard>
     </>
   );

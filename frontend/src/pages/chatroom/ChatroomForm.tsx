@@ -52,7 +52,6 @@ const ChatroomForm: React.FC = () => {
   const [intro, setIntro] = useState("");
   const [present] = useIonToast();
   const router = useIonRouter();
-  const [presentLoading, dismissLoading] = useIonLoading();
 
   //   cropper below
   const [imageCrop, setImageCrop] = useState("");
@@ -95,6 +94,7 @@ const ChatroomForm: React.FC = () => {
         duration: 1500,
         position: "bottom",
       });
+      
       router.goBack();
     } else {
       let json = await res.json();

@@ -8,25 +8,51 @@ import {
   IonCardSubtitle,
   useIonRouter,
   IonButton,
+  useIonToast,
 } from "@ionic/react";
 import { people } from "ionicons/icons";
 import React from "react";
-import { ChatroomDisplayProps } from "./ChatroomAll";
+import { useHistory } from "react-router";
+import { ChatroomAdd, ChatroomAddState } from "../../redux/chatroomAdd/state";
+import { useAppSelector } from "../../redux/store";
 // import { useAppDispatch } from "../../redux/store";
-interface ChatroomRecommendObjProps {
-  props: ChatroomDisplayProps;
+
+interface ChatroomAddCardProps {
+  props: ChatroomAdd;
 }
 
-const ChatroomAddCard: React.FC<ChatroomRecommendObjProps> = (props) => {
-  const router = useIonRouter();
+const ChatroomAddCard: React.FC<ChatroomAddCardProps> = (props) => {
+  const [present] = useIonToast();
+  const userId = useAppSelector((state) => {
+    state.auth.user?.id;
+  });
 
-  const directChatroom = (e: any) => {
-    router.push(`/chatroom/${e.currentTarget.dataset.id}`, "forward", "push");
+  const joinChat = async (e: any) => {
+    let res = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/chatroom/join`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ userId, chatroomId: e.target.data.id }),
+    });
+
+    if (res.ok) {
+      present({
+        message: "成功加入聊天室！",
+        duration: 1500,
+        position: "bottom",
+      });
+    } else {
+      present({
+        message: "再試一次！",
+        duration: 1500,
+        position: "bottom",
+      });
+    }
   };
+
   return (
     <>
-      <IonCard data-id={props.props.id}>
-        {/* <div className="d-flex flex-row">
+      <IonCard>
+        <div className="d-flex flex-row">
           <div className="ion-padding d-flex flex-column align-items-center">
             <IonAvatar
               style={{
@@ -34,7 +60,7 @@ const ChatroomAddCard: React.FC<ChatroomRecommendObjProps> = (props) => {
               }}
             >
               <img
-                src={props.props.avatar}
+                src={props.props.icon}
                 alt="user icon"
                 style={{
                   width: "100%",
@@ -65,7 +91,7 @@ const ChatroomAddCard: React.FC<ChatroomRecommendObjProps> = (props) => {
                   textAlign: "center",
                 }}
               >
-                {props.props.head_count}
+                {props.props.member_count}
               </span>
             </div>
           </div>
@@ -78,11 +104,13 @@ const ChatroomAddCard: React.FC<ChatroomRecommendObjProps> = (props) => {
             <IonCardContent>
               <div className="d-flex flex-row">{props.props.introduction}</div>
               <div style={{ textAlign: "end" }}>
-                <IonButton>加入</IonButton>
+                <IonButton data-id={props.props.id} onClick={joinChat}>
+                  加入
+                </IonButton>
               </div>
             </IonCardContent>
           </div>
-        </div> */}
+        </div>
       </IonCard>
     </>
   );

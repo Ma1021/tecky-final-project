@@ -30,3 +30,8 @@ yarn-error.log*
 
 # aws s3 user information
 aws.users.txt  
+
+# test firebase token
+# device to xcode 
+# run in device --> token in terminal
+maggie_app_token.txt

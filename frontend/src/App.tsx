@@ -53,27 +53,42 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const main = async () => {
+      // download app then the token will be generated
       await reg_push_notifications_token();
       await reg_push_notification_listeners();
     };
     main();
   }, []);
+
+  // after checking permission from reg_push_notification
   const reg_push_notification_listeners = async () => {
+    // ask for acception to push
     await PushNotifications.addListener("registration", (token) => {
+      // put into local storage
       console.log("Registration token: ", token.value);
     });
 
+    // firebase unknown error + accepted
     await PushNotifications.addListener("registrationError", (err) => {
       console.log("Registration error: ", err.error);
     });
 
+    // outside the app -> push
     await PushNotifications.addListener(
       "pushNotificationReceived",
       (notification) => {
+        /* 
+        speicify location
+        if (noticifation.data.path === "register"){
+          redirect to register
+        }
+        */
         console.log("Push notification received: ", notification);
       }
     );
 
+    // inside the app -> push
+    // data
     await PushNotifications.addListener(
       "pushNotificationActionPerformed",
       (notification) => {
@@ -86,6 +101,7 @@ const App: React.FC = () => {
     );
   };
 
+  // check permission
   const reg_push_notifications_token = async () => {
     let permStatus = await PushNotifications.checkPermissions();
 
@@ -97,6 +113,7 @@ const App: React.FC = () => {
       throw new Error("User denied permissions!");
     }
 
+    // register the token
     await PushNotifications.register();
   };
 

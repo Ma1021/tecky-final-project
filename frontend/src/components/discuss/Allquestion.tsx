@@ -96,7 +96,7 @@ const QuestionContainer = styled.div`
   align-items: center;
 `;
 
-const LoadingScreen = styled.div`
+export const LoadingScreen = styled.div`
   width: 100%;
   height: 50%;
   display: flex;

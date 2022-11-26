@@ -38,7 +38,7 @@ export class ChatroomService {
     let result = await this.knex('chatroom_user')
       .insert([
         {
-          member: joinChatroomDto.member,
+          member: joinChatroomDto.userId,
           chatroom: joinChatroomDto.chatroomId,
           status: 'approved',
         },

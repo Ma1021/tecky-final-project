@@ -16,6 +16,7 @@ import { useHistory } from "react-router";
 import { ChatroomAdd, ChatroomAddState } from "../../redux/chatroomAdd/state";
 import { useAppSelector } from "../../redux/store";
 // import { useAppDispatch } from "../../redux/store";
+import defaultGroupIcon from "../../img/logo.jpeg";
 
 interface ChatroomAddCardProps {
   props: ChatroomAdd;
@@ -24,8 +25,13 @@ interface ChatroomAddCardProps {
 const ChatroomAddCard: React.FC<ChatroomAddCardProps> = (props) => {
   const [present] = useIonToast();
   const userId = useAppSelector((state) => {
-    state.auth.user?.id;
+    return state.auth.user?.id;
   });
+
+  // change the photo if null
+  // if (!props.props.icon) {
+  //   props.props.icon = defaultGroupIcon;
+  // }
 
   const joinChat = async (e: any) => {
     let res = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/chatroom/join`, {
@@ -60,7 +66,7 @@ const ChatroomAddCard: React.FC<ChatroomAddCardProps> = (props) => {
               }}
             >
               <img
-                src={props.props.icon}
+                src={props.props.icon ? props.props.icon : defaultGroupIcon}
                 alt="user icon"
                 style={{
                   width: "100%",

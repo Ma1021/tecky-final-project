@@ -55,7 +55,7 @@ export function fetchChatroomsAll( id: number ) {
       .then((res) => res.json())
       .then((data) => {
         dispatch(loadChatroomsAll(data));
-        dispatch(loadChatroomsAllEnd);
+        dispatch(loadChatroomsAllEnd());
       })
       .catch((error) => {
         dispatch(loadChatroomsAllError(error.message));

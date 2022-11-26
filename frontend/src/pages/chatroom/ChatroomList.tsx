@@ -152,6 +152,7 @@ const ChatroomList: React.FC = () => {
             ) : null
             // <ChatroomAll list={hosted as any} />
             } */}
+            <ChatroomAll />
           </IonList>
         </IonContent>
       </IonPage>

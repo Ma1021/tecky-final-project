@@ -1,7 +1,6 @@
-import { IonPage, IonHeader, IonToolbar, IonButtons, IonBadge, IonBackButton, IonTitle, IonContent, IonSearchbar, IonText, IonLabel, IonModal, IonFab, IonFabButton, IonFabList, IonIcon, useIonToast, IonList, IonButton, IonItem } from "@ionic/react"
+import { IonPage, IonHeader, IonToolbar, IonButtons, IonBadge, IonBackButton, IonTitle, IonContent, IonSearchbar, IonText, IonModal, useIonToast, IonList, IonButton, IonItem } from "@ionic/react"
 import MessageCard from "../components/Inbox/MessageCard";
 import styled from "styled-components";
-import { ellipsisHorizontal } from 'ionicons/icons';
 import { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router";
 
@@ -42,7 +41,9 @@ const Inbox: React.FC = () => {
         fetchData()
     }, [notificationList])
 
-    const handleRead = useCallback((obj:{notification_id: number, notification_type: number, target_id: number, is_read: boolean})=>{        
+    const handleRead = useCallback((obj:{notification_id: number, notification_type: number, target_id: number, is_read: boolean})=>{
+        console.log(obj);
+        
         if(!obj.is_read) {
             fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/${obj.notification_id}`, {
                 method:'PUT',

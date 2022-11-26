@@ -11,7 +11,7 @@ export class QuestionService {
     const questions = await this.knex
     .raw(`
     SELECT questions.id, questions.content, questions.created_at,
-    users.id as asker_id, users.username as asker_username, users.avatar as asker_avatar, tags.tag_id,
+    users.id as asker_id, users.username as asker_username, users.avatar as asker_avatar, users.user_type, tags.tag_id,
     coalesce(jsonb_agg(DISTINCT jsonb_build_object(
       'id', stocks.id,
       'name', stocks.name,
@@ -23,6 +23,7 @@ export class QuestionService {
         'created_at', answers.created_at,
         'answers', (SELECT json_build_object(
             'id', users.id,
+            'type', users.user_type,
             'avatar', users.avatar,
             'username', users.username)
             from users where users.id = answers.answerer_id),
@@ -46,7 +47,7 @@ export class QuestionService {
   async findOne(question_id: number) {
     const question = await this.knex.raw(`
       SELECT questions.id, questions.content, questions.created_at,
-      users.id as asker_id, users.username as asker_username, users.avatar as asker_avatar, tags.tag_id,
+      users.id as asker_id, users.username as asker_username, users.avatar as asker_avatar, users.user_type, tags.tag_id,
       coalesce(jsonb_agg(DISTINCT jsonb_build_object(
         'id', stocks.id,
         'name', stocks.name,
@@ -58,6 +59,7 @@ export class QuestionService {
           'created_at', answers.created_at,
           'answers', (SELECT json_build_object(
               'id', users.id,
+              'type', users.user_type,
               'avatar', users.avatar,
               'username', users.username)
               from users where users.id = answers.answerer_id),
@@ -83,7 +85,7 @@ export class QuestionService {
   async findAskerQuestions(asker_id: number) {
     const questions = await this.knex.raw(`
       SELECT questions.id, questions.content, questions.created_at,
-      users.id as asker_id, users.username as asker_username, users.avatar as asker_avatar, tags.tag_id,
+      users.id as asker_id, users.username as asker_username, users.avatar as asker_avatar, users.user_type, tags.tag_id,
       coalesce(jsonb_agg(DISTINCT jsonb_build_object(
         'id', stocks.id,
         'name', stocks.name,
@@ -95,6 +97,7 @@ export class QuestionService {
           'created_at', answers.created_at,
           'answers', (SELECT json_build_object(
               'id', users.id,
+              'type', users.user_type,
               'avatar', users.avatar,
               'username', users.username)
               from users where users.id = answers.answerer_id),
@@ -119,7 +122,7 @@ export class QuestionService {
   async findAnswererQuestions(answerer_id: number) {
     const questions = await this.knex.raw(`
     SELECT questions.id, questions.content, questions.created_at,
-    users.id as asker_id, users.username as asker_username, users.avatar as asker_avatar, tags.tag_id,
+    users.id as asker_id, users.username as asker_username, users.avatar as asker_avatar, users.user_type ,tags.tag_id,
     coalesce(jsonb_agg(DISTINCT jsonb_build_object(
       'id', stocks.id,
       'name', stocks.name,
@@ -131,6 +134,7 @@ export class QuestionService {
       'created_at', answers.created_at,
       'answers', (SELECT json_build_object(
           'id', users.id,
+          'type', users.user_id,
           'avatar', users.avatar,
           'username', users.username)
           from users where users.id = answers.answerer_id),

@@ -80,7 +80,7 @@ const Container = styled.div`
       flex-direction: column;
       gap: 0.5rem;
       margin-top: 1rem;
-      
+
       ion-button {
         --background: #333;
         --background-activated: #222;

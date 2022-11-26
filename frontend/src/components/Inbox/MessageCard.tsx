@@ -34,7 +34,7 @@ const MessageCard: React.FC<MessageProps> = (props: MessageProps) => {
     let obj = {
         notification_id: props.notification.id,
         notification_type: props.notification.notification_type_id,
-        target_id: props.notification.target.answer_id || props.notification.target.question_id || props.notification.target.subscription_id,
+        target_id: props.notification.target.question_id || props.notification.target.subscription_id,
         is_read: props.notification.is_read 
     }
 

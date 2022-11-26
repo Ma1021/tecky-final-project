@@ -14,6 +14,7 @@ export interface Questions {
   content: string;
   created_at: string;
   asker_id: number;
+  user_type: string;
   asker_username: string;
   asker_avatar: string;
   stock: Array<{
@@ -28,6 +29,7 @@ export interface Questions {
     id: number;
     answers: {
       id: number;
+      type: string;
       avatar: string;
       username: string;
     };

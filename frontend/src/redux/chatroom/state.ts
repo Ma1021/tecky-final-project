@@ -1,3 +1,5 @@
+import img from "../../img/animal_stand_ookami.png";
+
 export type ChatroomListState = {
   list: ChatroomState[];
 };

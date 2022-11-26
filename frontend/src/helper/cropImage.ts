@@ -1,3 +1,15 @@
+export function dataURLToBlob(fileDataURL: string, filename: string) {
+  let arr = fileDataURL.split(","),
+    mime = (arr as any)[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], filename, { type: mime });
+}
+
 export const createImage = (url: string) =>
   new Promise((resolve, reject) => {
     const image = new Image();

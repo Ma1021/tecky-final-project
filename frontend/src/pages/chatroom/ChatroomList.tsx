@@ -24,13 +24,40 @@ import img from "../../img/animal_stand_ookami.png";
 import { people } from "ionicons/icons";
 import ChatroomRecommend from "../../components/Chatroom/ChatroomRecommend";
 import ChatroomAll from "../../components/Chatroom/ChatroomAll";
-import ChatroomUser from "../../components/Chatroom/ChatroomUser";
+import ChatroomEntered from "../../components/Chatroom/ChatroomEntered";
 import Menu from "../../components/All/Menu";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import styled from "styled-components";
+import ChatroomHosted from "../../components/Chatroom/ChatroomHosted";
 
 const ChatroomList: React.FC = () => {
   const [chatroomSegment, setChatroomSegment] = useState("entered");
+  const user = useAppSelector((state) => state.auth.user);
+  let hosted;
+  let all;
+  // fetch all info once
+  // - fetch recommended chatroom
+  // - fetch joined chatroom
+  useEffect(() => {
+    // - fetch all chatroom
+    
+
+    // - fetch hosted chatroom
+    // fetch(`${process.env.REACT_APP_PUBLIC_URL}/chatroom/hosted`, {
+    //   method: "POST",
+    //   headers: { "content-type": "application/json" },
+    //   body: JSON.stringify({ user: user!.id }),
+    // }).then((res) => {
+    //   console.log("chatroomList fetching hosted response", res);
+    //   if (res.ok) {
+    //     hosted = res.json();
+    //     console.log(
+    //       "chatroomList fetched hosted json check if await is required",
+    //       hosted
+    //     );
+    //   }
+    // });
+  }, []);
 
   interface SegmentChangeEventDetail {
     value?: string;
@@ -112,7 +139,6 @@ const ChatroomList: React.FC = () => {
     let value = event.detail.value;
     setChatroomSegment(value || "userIntro");
   };
-  useEffect(() => {});
   return (
     <>
       <Menu />
@@ -126,26 +152,31 @@ const ChatroomList: React.FC = () => {
           <SegmentOrganizer>
             <IonItemDivider sticky={true}>
               <IonSegment value={chatroomSegment} onIonChange={onSegmentChange}>
+                <IonSegmentButton value="hosted">
+                  <IonLabel>我的</IonLabel>
+                </IonSegmentButton>
                 <IonSegmentButton value="entered">
-                  <IonLabel>我的聊天室</IonLabel>
+                  <IonLabel>參與中</IonLabel>
                 </IonSegmentButton>
                 <IonSegmentButton value="recommendation">
                   <IonLabel>推薦</IonLabel>
                 </IonSegmentButton>
                 <IonSegmentButton value="all">
-                  <IonLabel>所有聊天室</IonLabel>
+                  <IonLabel>所有</IonLabel>
                 </IonSegmentButton>
               </IonSegment>
             </IonItemDivider>
           </SegmentOrganizer>
           <IonList>
-            {chatroomSegment === "entered" ? (
-              <ChatroomUser list={list} />
+            {/* {chatroomSegment === "entered" ? (
+              <ChatroomEntered list={list} />
             ) : chatroomSegment === "recommendation" ? (
               <ChatroomRecommend list={list} />
-            ) : (
-              <ChatroomAll list={list} />
-            )}
+            ) : chatroomSegment === "hosted" ? (
+              <ChatroomHosted />
+            ) : null
+            // <ChatroomAll list={hosted as any} />
+            } */}
           </IonList>
         </IonContent>
       </IonPage>

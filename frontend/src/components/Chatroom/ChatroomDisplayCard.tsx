@@ -11,10 +11,10 @@ import {
 } from "@ionic/react";
 import { people } from "ionicons/icons";
 import React from "react";
-import { ChatroomRecommendProps } from "./ChatroomAll";
+import { ChatroomDisplayProps } from "./ChatroomAll";
 // import { useAppDispatch } from "../../redux/store";
 interface ChatroomRecommendObjProps {
-  props: ChatroomRecommendProps;
+  props: ChatroomDisplayProps;
 }
 
 const ChatroomDisplayCard: React.FC<ChatroomRecommendObjProps> = (props) => {

@@ -20,7 +20,7 @@ interface ChatroomRecommendProps {
   last_user: string;
 }
 
-const ChatroomUser: React.FC<ChatroomRecommendList> = (props) => {
+const ChatroomEntered: React.FC<ChatroomRecommendList> = (props) => {
   console.log("已進入", props);
   const router = useIonRouter();
   const createChat = () => {
@@ -33,14 +33,10 @@ const ChatroomUser: React.FC<ChatroomRecommendList> = (props) => {
         開設聊天室
       </IonButton>
       {props.list.map((room: ChatroomRecommendProps) => {
-        return (
-          <>
-            <ChatroomDisplayCard props={room} />
-          </>
-        );
+        return <>{/* <ChatroomDisplayCard props={room} /> */}</>;
       })}
     </>
   );
 };
 
-export default React.memo(ChatroomUser);
+export default React.memo(ChatroomEntered);

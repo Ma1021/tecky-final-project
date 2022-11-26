@@ -12,26 +12,26 @@ import { idCard, people } from "ionicons/icons";
 import ChatroomAddCard from "./ChatroomAddCard";
 
 interface ChatroomRecommendList {
-  list: ChatroomRecommendProps[];
+  list: ChatroomDisplayProps[];
 }
 
-export interface ChatroomRecommendProps {
+export interface ChatroomDisplayProps {
   id: number;
   host: string;
   name: string;
-  last_msg: string;
-  last_time: string;
-  avatar: string;
-  head_count: number;
+  type: "public" | "private";
+  created_at: string;
+  updated_at: string;
+  member_count: number;
   introduction: string;
-  last_user: string;
+  icon: string;
 }
 
 const ChatroomRecommend: React.FC<ChatroomRecommendList> = (props) => {
   console.log(props);
   return (
     <>
-      {props.list.map((room: ChatroomRecommendProps) => {
+      {props.list.map((room: ChatroomDisplayProps) => {
         return <ChatroomAddCard props={room} />;
       })}
     </>

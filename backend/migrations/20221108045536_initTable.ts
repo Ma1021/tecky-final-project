@@ -8,7 +8,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string("email").notNullable().unique();
         table.string("password_hash").notNullable().unique();
         table.enu('user_type', ['normal', 'admin', 'kol']).defaultTo('normal');
-        table.text("avatar");
+        table.text("avatar").defaultTo('https://cdn5.vectorstock.com/i/1000x1000/54/19/gray-wolf-cartoon-wolf-grey-the-nature-vector-20325419.jpg');
         table.text("introduction").defaultTo('此用戶沉迷股市﹐未有容餘更新自我介紹。');
         table.date("birthday").notNullable();
         table.enu("gender", ["M", "F"]);

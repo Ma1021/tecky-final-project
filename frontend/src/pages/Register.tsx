@@ -22,6 +22,7 @@ import { registerAuth } from "../redux/auth/actions";
 import { useEffect } from "react";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 
 // import { Preferences } from "@capacitor/preferences";
 
@@ -152,7 +153,7 @@ const RegisterLoop: React.FC = () => {
         // through local strategy get the access_token
         >
           <IonList>
-            <IonItem>
+            <IonItem className="formInput">
               <IonLabel position="floating">用戶名稱</IonLabel>
               <IonInput
                 clearInput={true}
@@ -311,3 +312,5 @@ const RegisterLoop: React.FC = () => {
 };
 
 export default RegisterLoop;
+
+

@@ -81,7 +81,7 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
       </IonRefresher>
       {loading ? <LoadingScreen><IonSpinner name="crescent"/> 載入中...</LoadingScreen> : 
       <QuestionContainer>
-        { questionList.length > 0 ? <QuestionCard questions={filteredQuestions.length > 0 ? filteredQuestions : questionList} user_id={user_id} /> : <div style={{marginTop:10}}>沒有問題</div> }
+        { questionList.length > 0 ? <QuestionCard questions={filteredQuestions.length > 0 ? filteredQuestions : questionList} /> : <div style={{marginTop:10}}>沒有問題</div> }
       </QuestionContainer>}
     </>
   );

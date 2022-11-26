@@ -1,4 +1,4 @@
-import { IonPage, IonHeader, IonToolbar, IonButtons, IonBadge, IonBackButton, IonTitle, IonContent, IonSearchbar, IonText, IonFab, IonFabButton, IonFabList, IonIcon, useIonToast, IonList } from "@ionic/react"
+import { IonPage, IonHeader, IonToolbar, IonButtons, IonBadge, IonBackButton, IonTitle, IonContent, IonSearchbar, IonText, IonLabel, IonModal, IonFab, IonFabButton, IonFabList, IonIcon, useIonToast, IonList, IonButton, IonItem } from "@ionic/react"
 import MessageCard from "../components/Inbox/MessageCard";
 import styled from "styled-components";
 import { ellipsisHorizontal } from 'ionicons/icons';
@@ -111,7 +111,29 @@ const Inbox: React.FC = () => {
                     <div className="todayHeader">
                         <IonText>訊息</IonText>
                         {amount > 0 && <IonBadge>未讀: {amount}</IonBadge>}
-                        <IonFab horizontal="end"> 
+                        <IonButton id="open-modal">
+                            <IonText>...</IonText>
+                        </IonButton>
+                        <IonModal
+                            trigger="open-modal"
+                            initialBreakpoint={0.3}
+                            breakpoints={[0, 0.25, 0.5, 0.75]}
+                            handleBehavior="cycle"
+                        >
+                            <IonContent className="ion-padding-top">
+                                <div className="ion-margin-top">
+                                    <ModalItem lines="full">
+                                        <svg width="18" height="18" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M44 24C44 35.0457 35.0457 44 24 44C18.0265 44 4 44 4 44C4 44 4 29.0722 4 24C4 12.9543 12.9543 4 24 4C35.0457 4 44 12.9543 44 24Z" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.9999 26L20 32L33 19" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        <IonText style={{marginLeft:10}}>標記全部已讀</IonText>
+                                    </ModalItem>
+                                    <ModalItem lines="full" onClick={handleDeleteAll}>
+                                        <svg width="18" height="18" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M20 5.91406H28V13.9141H43V21.9141H5V13.9141H20V5.91406Z" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 40H40V22H8V40Z" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round"/><path d="M16 39.8976V33.9141" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 39.8977V33.8977" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 39.8976V33.9141" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 40H36" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        <IonText style={{marginLeft:10}}>清除全部訊息</IonText>
+                                    </ModalItem>
+                                </div>
+                            </IonContent>
+                        </IonModal>
+                        {/* <IonFab horizontal="end"> 
                             <IonFabButton size="small">
                                 <IonIcon icon={ellipsisHorizontal}></IonIcon>
                             </IonFabButton>
@@ -125,7 +147,7 @@ const Inbox: React.FC = () => {
                                     <IonText>清除全部訊息</IonText>
                                 </IonFabButton>
                             </IonFabList>
-                        </IonFab>
+                        </IonFab>  */}
                     </div>
                     <InboxMessageContainer>
                         { notificationList.length > 0 ?
@@ -152,6 +174,14 @@ const InboxMessageContainer = styled.div`
     ion-list {
         width: 100%;
     }
+`
+
+const ModalItem = styled(IonItem)`
+    margin: 0.5rem 1rem;
+    --ion-item-background: #333;
+    border-radius: 0.6rem;
+    font-size: 15px;
+    font-weight: 500;
 `
 
 const MessageContainer = styled.div`
@@ -191,6 +221,20 @@ const MessageContainer = styled.div`
             ion-fab-button {
                 width: 120px;
                 --border-radius: 5%;
+            }
+        }
+
+        ion-button {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            overflow: hidden;
+
+            ion-text {
+                width: 2rem;
+                height: 2rem;
+                font-size: 20px;
+                font-weight: 800;
             }
         }
 

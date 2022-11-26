@@ -113,5 +113,12 @@ export class UserService {
       .innerJoin('users', 'users.id', 'subscriptions.following_id');
   }
 
-  
+  countFollower() {
+    return this.knex('subscriptions').select('users.id', 'users.username', 'users.introduction')
+    .count('following_id as followers')
+    .where('users.user_type', 'kol')
+    .innerJoin('users', 'users.id', 'subscriptions.following_id')
+    .groupBy('users.id')
+    .orderBy('followers', 'desc');
+  }
 }

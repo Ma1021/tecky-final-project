@@ -7,7 +7,6 @@ import { chatboxEllipses } from 'ionicons/icons';
 
 interface QuestionsProps {
     questions: Questions[]
-    user_id: number
 }
 
 const QuestionCard: React.FC<QuestionsProps> = memo((props:QuestionsProps)=>{

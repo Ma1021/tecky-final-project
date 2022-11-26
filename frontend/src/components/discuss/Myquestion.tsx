@@ -15,7 +15,7 @@ const MyQuestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
     const [filteredQuestions, setFilteredQuestions ] = useState(Array<Questions>);
     const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
     const user_id = user.id;
-
+    
     function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
         props.loadAskerQuestion(user_id);
         if(!loading) {
@@ -41,7 +41,7 @@ const MyQuestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
             </IonRefresher>
             {loading ? <LoadingScreen><IonSpinner name="crescent"/> 載入中...</LoadingScreen> : 
             <QuestionContainer>
-                {askerQuestionList.length > 0 ? <QuestionCard questions={filteredQuestions.length > 0 ? filteredQuestions : askerQuestionList} user_id={user_id} /> : <div style={{marginTop:10}}>沒有問題</div>}
+                {askerQuestionList.length > 0 ? <QuestionCard questions={filteredQuestions.length > 0 ? filteredQuestions : askerQuestionList} /> : <div style={{marginTop:10}}>沒有提出過問題</div>}
             </QuestionContainer>}
         </>
     );

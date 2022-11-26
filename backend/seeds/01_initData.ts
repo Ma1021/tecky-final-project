@@ -28,6 +28,56 @@ export async function seed(knex: Knex): Promise<void> {
     await knex('users').insert(user);
   }
 
+  //Insert subscriptions 
+  for(let x=1; x < 12; x++) {
+    await knex('subscriptions').insert({
+      user_id: x,
+      following_id: 5
+    })
+  }
+
+  for(let x=1; x<10; x++) {
+    await knex('subscriptions').insert({
+      user_id: x,
+      following_id: 6
+    })
+  }
+
+  for(let x=1; x<9; x++) {
+    await knex('subscriptions').insert({
+      user_id: x,
+      following_id: 8
+    })
+  }
+
+  for(let x=1; x<7; x++) {
+    await knex('subscriptions').insert({
+      user_id: x,
+      following_id: 9
+    })
+  }
+
+  for(let x=1; x<5; x++) {
+    await knex('subscriptions').insert({
+      user_id: x,
+      following_id: 10
+    })
+  }
+
+  for(let x=1; x<4; x++) {
+    await knex('subscriptions').insert({
+      user_id: x,
+      following_id: 11
+    })
+  }
+
+  for(let x=1; x<3; x++) {
+    await knex('subscriptions').insert({
+      user_id: x,
+      following_id: 7
+    })
+  }
+  
   await knex("notification_type").insert([
     {action_type:"create question", action_desc:"提出問題："},
     {action_type:"create answer", action_desc:"回覆了你："},

@@ -25,7 +25,7 @@ const Home: React.FC = () => {
            <img
               src={background}
               alt="古惑狼的標誌"
-              style={{ width: "330px", height: "330px" }}
+              style={{ width: "75%"}}
             />
             <div className="loginCard">
               <div className="d-flex flex-column align-items-center w100">
@@ -60,30 +60,19 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
 
-  svg {
-    display: block; 
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    bottom: 0;
-  }
-
   img {
-    margin-top: 5.5rem;
     object-fit: contain;
   }
 
   .loginCard {
     width: 100%;
-    height: 100%;
-    margin-top: 2.5rem;
-    padding: 2rem;
+    padding:5% 15%;
 
     .buttonContainer {
       flex-direction: column;
       gap: 0.5rem;
       margin-top: 1rem;
-
+      
       ion-button {
         --background: #333;
         --background-activated: #222;

@@ -114,7 +114,7 @@ export class UserService {
   }
 
   countFollower() {
-    return this.knex('subscriptions').select('users.id', 'users.username', 'users.introduction')
+    return this.knex('subscriptions').select('users.id', 'users.username', 'users.introduction', 'users.avatar')
     .count('following_id as followers')
     .where('users.user_type', 'kol')
     .innerJoin('users', 'users.id', 'subscriptions.following_id')

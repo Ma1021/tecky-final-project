@@ -85,6 +85,13 @@ export class ChatroomController {
     return result;
   }
 
+  @Post('/recommend')
+  async findRecommend(@Body() enteringChatroomDto: EnteringChatroomDto) {
+    let result = await this.chatroomService.findRecommend(enteringChatroomDto);
+    console.log('enter chatroom controller find recommend', result);
+    return result;
+  }
+
   @Get('/created')
   findCreated() {
     return this.chatroomService.findCreated();
@@ -96,16 +103,12 @@ export class ChatroomController {
     console.log('enter chatroom controller findEnter', result);
     return result;
   }
+
   @Post('/entered')
   async findEntered(@Body() enteringChatroomDto: EnteringChatroomDto) {
     let result = await this.chatroomService.findEntered(enteringChatroomDto);
     console.log('enter chatroom controller findEnter', result);
     return result;
-  }
-
-  @Get('/recommend')
-  findRecommend() {
-    return this.chatroomService.findRecommend();
   }
 
   @Post(':id')

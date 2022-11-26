@@ -48,41 +48,18 @@ export class ChatroomService {
     return result;
   }
 
-  findCreated() {}
-
-  async findEntered(enteringChatroomDto) {
-    let result = await this.knex.raw(
-      `select * from chatrooms where id IN (select chatroom from chatroom_user where member=?)`,
-      [enteringChatroomDto.user],
-    );
-    result = result.rows;
-    console.log('chatroom service findEntered result', result);
-    return result;
-  }
-
-  async findHosted(enteringChatroomDto) {
-    let result = await this.knex.raw(`select * from chatrooms where host = ?`, [
-      enteringChatroomDto.user,
-    ]);
-    result = result.rows;
-    // console.log('chatroom service findHosted result', result);
-    return result;
-  }
-
-  findRecommend() {}
-
   // find all no host and no user
   async findAll(enteringChatroomDto: EnteringChatroomDto) {
     let result = await this.knex.raw(
       `
-    select chatrooms.*, count(distinct chatroom_user.member) as member_count from chatrooms 
-    left join chatroom_user on chatroom_user.chatroom = chatrooms.id
-    and chatroom_user.member = ?
-    join users on users.id = host
-    where host NOT IN (?)
-    group by chatrooms.id, chatroom_user.id
-    order by member_count;
-    `,
+        select chatrooms.*, count(distinct chatroom_user.member) as member_count from chatrooms 
+        left join chatroom_user on chatroom_user.chatroom = chatrooms.id
+      and chatroom_user.member = ?
+      join users on users.id = host
+      where host NOT IN (?)
+      group by chatrooms.id, chatroom_user.id
+      order by member_count;
+      `,
       [enteringChatroomDto.user, enteringChatroomDto.user],
     );
 
@@ -90,10 +67,58 @@ export class ChatroomService {
     // left join chatroom_user on chatroom_user.chatroom = chatrooms.id
     // and chatroom_user.member = 3
     // where host NOT IN (3)
+    // and users.user_type = "KOL"
     // group by chatrooms.id, chatroom_user.id
     // order by member_count;
     result = result.rows;
     // console.log('chatroom service find all', result);
+    return result;
+  }
+
+  // find all no host and no user with only kol -- top 10
+  async findRecommend(enteringChatroomDto: EnteringChatroomDto) {
+    let result = await this.knex.raw(
+      `
+        select chatrooms.*, count(distinct chatroom_user.member) as member_count from chatrooms 
+        left join chatroom_user on chatroom_user.chatroom = chatrooms.id
+        and chatroom_user.member = ?
+        join users on users.id = host
+        where host NOT IN (?)
+        and users.user_type = "KOL"
+        group by chatrooms.id, chatroom_user.id
+        order by member_count;
+        `,
+      [enteringChatroomDto.user, enteringChatroomDto.user],
+    );
+
+    result = result.rows;
+    return result;
+  }
+
+  findCreated() {}
+
+  async findHosted(enteringChatroomDto: EnteringChatroomDto) {
+    let result = await this.knex.raw(
+      `
+      select * from chatrooms 
+      join chatroom_record on chatrooms.id = chatroom_record.chatroom
+      join user on chatroom_record.user = user.id
+      where host = ?
+    `,
+      [enteringChatroomDto.user],
+    );
+    result = result.rows;
+    // console.log('chatroom service findHosted result', result);
+    return result;
+  }
+
+  async findEntered(enteringChatroomDto: EnteringChatroomDto) {
+    let result = await this.knex.raw(
+      `select * from chatrooms where id IN (select chatroom from chatroom_user where member=?)`,
+      [enteringChatroomDto.user],
+    );
+    result = result.rows;
+    console.log('chatroom service findEntered result', result);
     return result;
   }
 

@@ -1,7 +1,7 @@
 import { IonButton, IonContent, IonPage } from "@ionic/react";
 import { Redirect, useHistory } from "react-router";
 import styled from "styled-components";
-import background from '../img/coverphoto.png'
+import background from "../img/coverphoto.png";
 import { useAppSelector } from "../redux/store";
 // import { useEffect } from "react";
 // import { Preferences } from "@capacitor/preferences";
@@ -22,7 +22,7 @@ const Home: React.FC = () => {
       <IonPage>
         <IonContent>
           <Container>
-           <img
+            <img
               src={background}
               alt="古惑狼的標誌"
               style={{ width: "330px", height: "330px" }}
@@ -37,11 +37,12 @@ const Home: React.FC = () => {
                   <IonButton onClick={() => history.push("/register")}>
                     註冊
                   </IonButton>
-                  <IonButton onClick={() => history.push("/login")}>登入</IonButton>
+                  <IonButton onClick={() => history.push("/login")}>
+                    登入
+                  </IonButton>
                 </div>
               </div>
             </div>
-            
           </Container>
         </IonContent>
       </IonPage>
@@ -54,14 +55,21 @@ export default Home;
 const Container = styled.div`
   height: 100%;
   width: 100%;
-  background-image: linear-gradient(to right bottom, #ffa930, #ff9d3f, #ff924d, #ff885b, #ff7f67);
+  background-image: linear-gradient(
+    to right bottom,
+    #ffa930,
+    #ff9d3f,
+    #ff924d,
+    #ff885b,
+    #ff7f67
+  );
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
   svg {
-    display: block; 
+    display: block;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -91,9 +99,9 @@ const Container = styled.div`
 
       ion-button:nth-child(2) {
         --background: #fff;
-        color:#222;
+        color: #222;
         --background-activated: #ddd;
       }
     }
   }
-`
+`;

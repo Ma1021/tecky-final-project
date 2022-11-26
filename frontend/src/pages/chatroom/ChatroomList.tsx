@@ -33,31 +33,6 @@ import ChatroomHosted from "../../components/Chatroom/ChatroomHosted";
 const ChatroomList: React.FC = () => {
   const [chatroomSegment, setChatroomSegment] = useState("entered");
   const user = useAppSelector((state) => state.auth.user);
-  let hosted;
-  let all;
-  // fetch all info once
-  // - fetch recommended chatroom
-  // - fetch joined chatroom
-  useEffect(() => {
-    // - fetch all chatroom
-    
-
-    // - fetch hosted chatroom
-    // fetch(`${process.env.REACT_APP_PUBLIC_URL}/chatroom/hosted`, {
-    //   method: "POST",
-    //   headers: { "content-type": "application/json" },
-    //   body: JSON.stringify({ user: user!.id }),
-    // }).then((res) => {
-    //   console.log("chatroomList fetching hosted response", res);
-    //   if (res.ok) {
-    //     hosted = res.json();
-    //     console.log(
-    //       "chatroomList fetched hosted json check if await is required",
-    //       hosted
-    //     );
-    //   }
-    // });
-  }, []);
 
   interface SegmentChangeEventDetail {
     value?: string;

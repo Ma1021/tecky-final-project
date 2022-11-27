@@ -59,13 +59,15 @@ const Ranking: React.FC = () => {
     },[followingIdList])
 
     async function handleFollowUser(e: any) {
+        const following_id = +e.target.parentNode.dataset.user_id
         e.preventDefault();
-        await dispatch(followUser({following_id:+e.target.parentNode.dataset.user_i, user_id}));
+        await dispatch(followUser({following_id, user_id}));
     }
 
     async function handleUnFollowUser(e: any) {
+        const following_id = +e.target.parentNode.dataset.user_id
         e.preventDefault();
-        await dispatch(unFollowUser({following_id:+e.target.parentNode.dataset.user_id, user_id}));
+        await dispatch(unFollowUser({following_id, user_id}));
     }
     
     return (
@@ -95,7 +97,9 @@ const Ranking: React.FC = () => {
                                     <IonIcon icon={people} />
                                     <IonText>{topThree[1].followers}</IonText>
                                 </div>
-                                {followingIdList.includes(topThree[1].id) ? <IonButton onClick={handleUnFollowUser}>取消追蹤</IonButton> : <IonButton onClick={handleFollowUser}>追蹤</IonButton>}
+                                {topThree[1].id === user_id ? <IonButton>個人專頁</IonButton> 
+                                : followingIdList.includes(topThree[1].id) ? <IonButton onClick={handleUnFollowUser}>取消關注</IonButton> 
+                                :  <IonButton onClick={handleFollowUser}>關注</IonButton>}
                             </div>
                             <div className="1st" data-user_id={topThree[0].id}>
                                 <IonImg className="icon" src={topThree[0].avatar} />
@@ -107,7 +111,9 @@ const Ranking: React.FC = () => {
                                     <IonIcon icon={people} />
                                     <IonText>{topThree[0].followers}</IonText>
                                 </div>
-                                {followingIdList.includes(topThree[0].id) ? <IonButton onClick={handleUnFollowUser}>取消追蹤</IonButton> : <IonButton onClick={handleFollowUser}>追蹤</IonButton>}
+                                {topThree[0].id === user_id ? <IonButton>個人專頁</IonButton> 
+                                : followingIdList.includes(topThree[0].id) ? <IonButton onClick={handleUnFollowUser}>取消關注</IonButton> 
+                                :  <IonButton onClick={handleFollowUser}>關注</IonButton>}
                             </div>
                             <div className="3rd" data-user_id={topThree[2].id}>
                                 <IonImg className="icon" src={topThree[2].avatar} />
@@ -119,7 +125,9 @@ const Ranking: React.FC = () => {
                                     <IonIcon icon={people} />
                                     <IonText>{topThree[2].followers}</IonText>
                                 </div>
-                                {followingIdList.includes(topThree[2].id) ? <IonButton onClick={handleUnFollowUser}>取消追蹤</IonButton> : <IonButton onClick={handleFollowUser}>追蹤</IonButton>}
+                                {topThree[2].id === user_id ? <IonButton>個人專頁</IonButton> 
+                                : followingIdList.includes(topThree[2].id) ? <IonButton onClick={handleUnFollowUser}>取消關注</IonButton> 
+                                :  <IonButton onClick={handleFollowUser}>關注</IonButton>}
                             </div>
                         </div>
                         }

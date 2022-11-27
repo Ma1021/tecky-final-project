@@ -25,6 +25,7 @@ import {
   logoWhatsapp,
   logOutOutline,
   trashOutline,
+  statsChart
 } from "ionicons/icons";
 import "./Menu.css";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
@@ -48,7 +49,7 @@ const Menu: React.FC<MenuProps> = () => {
     // };
     dispatch(logout());
     // web version
-    localStorage.setItem("auth_stockoverflow", "");
+    localStorage.clear();
     // console.log(
     //   "after useEffect and set localStorage",
     //   localStorage.getItem("auth_stockoverflow")
@@ -112,10 +113,10 @@ const Menu: React.FC<MenuProps> = () => {
 
   return (
     <IonMenu disabled={false} contentId="main-content">
-      <IonHeader className="menu pt-3 pb-3" onClick={toInfo}>
+      <IonHeader className="menu" onClick={toInfo}>
         <IonToolbar>
           <IonMenuToggle className="w100">
-            <div className="pr-1">
+            <div className="pr-1 pt-3">
               {/* username id edit and name */}
               <IonItem lines="none" className="menu-username menu">
                 <div className="d-flex">
@@ -151,7 +152,7 @@ const Menu: React.FC<MenuProps> = () => {
               <IonItem lines="none" className="menu-userId menu ">
                 <div className="d-flex w100 justify-content-between align-items-center ">
                   <IonText>用戶碼: {selector?.id}</IonText>
-                  <IonButton>複製</IonButton>
+                  <IonButton color="primary">複製</IonButton>
                 </div>
               </IonItem>
               {/* user id */}
@@ -183,7 +184,7 @@ const Menu: React.FC<MenuProps> = () => {
           <IonList className="w100">
             <IonAccordionGroup className="menu">
               <IonAccordion value="first">
-                <IonItem className="menu" slot="header" color="light">
+                <IonItem className="menu" slot="header" color="primary">
                   <IonLabel>
                     <IonIcon icon={logoWhatsapp}></IonIcon> 客戶服務
                   </IonLabel>
@@ -204,6 +205,11 @@ const Menu: React.FC<MenuProps> = () => {
               <IonItem className="menu" lines="none">
                 <IonLabel>
                   <IonIcon icon={settingsOutline}></IonIcon> 系統設定
+                </IonLabel>
+              </IonItem>
+              <IonItem className="menu" lines="none">
+                <IonLabel>
+                  <IonIcon icon={statsChart}></IonIcon> 用戶數據分析
                 </IonLabel>
               </IonItem>
               <IonItem className="menu" lines="none">

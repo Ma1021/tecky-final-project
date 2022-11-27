@@ -29,8 +29,14 @@ import Menu from "../../components/All/Menu";
 const Discuss: React.FC = () => {
   const [segment, setSegment] = useState("all");
   const [keyword, setKeyword] = useState("");
-  const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
-  const user_id = user.id;
+  let user
+  let user_id: number
+
+  if(localStorage.getItem("auth_stockoverflow") !== null) {
+    user = JSON.parse(localStorage.getItem("auth_stockoverflow") as string).user || undefined;
+    user_id = +user.id;
+  }
+
   
   const onSegmentChange = (e: any) => {
     setSegment(e.detail.value);

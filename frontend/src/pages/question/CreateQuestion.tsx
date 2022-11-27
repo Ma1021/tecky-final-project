@@ -30,8 +30,14 @@ type TagValues = {
 const CreateQuestion: React.FC = () => {
   const [selectTags, setSelectTags] = useState(Array<TagValues>);
   const [content, setContent] = useState("");
-  const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
-  const user_id = +user.id;
+  let userData
+  let user_id: number
+  
+  if(localStorage.getItem("auth_stockoverflow")) {
+    const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
+    userData = user
+    user_id = user.id
+  }
 
   const { state } = useLocation();
   const [present] = useIonToast();
@@ -101,8 +107,8 @@ const CreateQuestion: React.FC = () => {
       </IonHeader>
       <IonContent>
         <UserInfo lines="full">
-          <IonImg src={user.avatar} />
-          <IonText>{user.username}</IonText>
+          <IonImg src={userData.avatar} />
+          <IonText>{userData.username}</IonText>
         </UserInfo>
         <Container>
           <IonItem lines="full">

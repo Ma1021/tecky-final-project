@@ -56,7 +56,7 @@ const UserCard: React.FC<RankingProps> = (props:RankingProps) => {
                     <IonText>{props.kol.introduction}</IonText>
                 </div>
             </div>
-            {followingIdList.includes(props.kol.id) ? <IonButton onClick={handleUnFollowUser}>取消追蹤</IonButton> : <IonButton onClick={handleFollowUser}>追蹤</IonButton>}
+            {followingIdList.includes(props.kol.id) ? <IonButton onClick={handleUnFollowUser}>取消關注</IonButton> : <IonButton onClick={handleFollowUser}>關注</IonButton>}
         </Card>
     )
 }

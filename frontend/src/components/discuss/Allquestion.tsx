@@ -49,10 +49,14 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
   const { questionList, loading } = useAppSelector(
     (state: RootState) => state.question
   );
-  const { user } = JSON.parse(
-    localStorage.getItem("auth_stockoverflow") as string
-  );
-  const user_id = +user.id;
+  let user_id: number;
+
+  if (localStorage.getItem("auth_stockoverflow")) {
+    const { user } = JSON.parse(
+      localStorage.getItem("auth_stockoverflow") as string
+    );
+    user_id = user.id;
+  }
 
   const [filteredQuestions, setFilteredQuestions] = useState(Array<Questions>);
 

@@ -77,7 +77,7 @@ const Subscription: React.FC = () => {
                             <IonLabel>我的粉絲</IonLabel>
                         </IonSegmentButton>
                         <IonSegmentButton value="following">
-                            <IonLabel>追蹤中</IonLabel>
+                            <IonLabel>關注中</IonLabel>
                         </IonSegmentButton>
                     </IonSegment>
                     

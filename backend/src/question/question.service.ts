@@ -158,7 +158,7 @@ export class QuestionService {
   async create(questions: Question_DTO) {
     try {
       const { asker_id, content, stock_id } = questions;
-
+      
       const tag_number = await this.knex('tags').count('tag_id').first();
 
       if (tag_number.count == 0) {

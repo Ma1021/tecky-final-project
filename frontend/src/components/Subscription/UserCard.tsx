@@ -15,8 +15,12 @@ const UserCard: React.FC<SubscriptionProps> = (props: SubscriptionProps) => {
         (state) => state.subscription
     );
 
-    const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
-    const user_id = +user.id;
+    let user_id: number
+        
+    if(localStorage.getItem("auth_stockoverflow")) {
+      const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
+      user_id = user.id;
+    }
     
     async function handleFollowUser(e: any) {
         e.preventDefault();
@@ -37,7 +41,7 @@ const UserCard: React.FC<SubscriptionProps> = (props: SubscriptionProps) => {
                     <IonText>{props.user.introduction}</IonText>
                 </div>
             </div>
-            {props.page === 'follower' && !followingIdList.includes(props.user.user_id) ? <IonButton onClick={handleFollowUser}>追蹤</IonButton> : <IonButton onClick={handleUnFollowUser} >取消追蹤</IonButton>}
+            {props.page === 'follower' && !followingIdList.includes(props.user.user_id) ? <IonButton onClick={handleFollowUser}>關注</IonButton> : <IonButton onClick={handleUnFollowUser} >取消關注</IonButton>}
         </Card>
     )
 }

@@ -40,3 +40,4 @@ pgdata/
 src/auth/constants.ts
 
 ./image.zst
+sql

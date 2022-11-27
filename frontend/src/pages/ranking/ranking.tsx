@@ -59,13 +59,15 @@ const Ranking: React.FC = () => {
     },[followingIdList])
 
     async function handleFollowUser(e: any) {
+        const following_id = +e.target.parentNode.dataset.user_id
         e.preventDefault();
-        await dispatch(followUser({following_id:+e.target.parentNode.dataset.user_i, user_id}));
+        await dispatch(followUser({following_id, user_id}));
     }
 
     async function handleUnFollowUser(e: any) {
+        const following_id = +e.target.parentNode.dataset.user_id
         e.preventDefault();
-        await dispatch(unFollowUser({following_id:+e.target.parentNode.dataset.user_id, user_id}));
+        await dispatch(unFollowUser({following_id, user_id}));
     }
     
     return (

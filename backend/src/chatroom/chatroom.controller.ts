@@ -75,21 +75,40 @@ export class ChatroomController {
 
   @Post('/join')
   async join(@Body() joinChatroomDto: JoinChatroomDto) {
-    await this.chatroomService.join(joinChatroomDto);
+    try {
+      let result = await this.chatroomService.join(joinChatroomDto);
+      // return the chatroom id for redirection
+      return result;
+    } catch (error) {
+      if (error.message.includes('已經加入該群組')) {
+        throw new HttpException(error.message, HttpStatus.CREATED);
+      }
+      throw new HttpException(error.message, HttpStatus.CREATED);
+    }
   }
 
   @Post('/all')
   async findAll(@Body() enteringChatroomDto: EnteringChatroomDto) {
-    let result = await this.chatroomService.findAll(enteringChatroomDto);
-    console.log('enter chatroom controller findall', result);
-    return result;
+    try {
+      let result = await this.chatroomService.findAll(enteringChatroomDto);
+      console.log('enter chatroom controller findall', result);
+      return result;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Post('/recommend')
   async findRecommend(@Body() enteringChatroomDto: EnteringChatroomDto) {
-    let result = await this.chatroomService.findRecommend(enteringChatroomDto);
-    console.log('enter chatroom controller find recommend', result);
-    return result;
+    try {
+      let result = await this.chatroomService.findRecommend(
+        enteringChatroomDto,
+      );
+      console.log('enter chatroom controller find recommend', result);
+      return result;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Get('/created')
@@ -99,16 +118,24 @@ export class ChatroomController {
 
   @Post('/hosted')
   async findHosted(@Body() enteringChatroomDto: EnteringChatroomDto) {
-    let result = await this.chatroomService.findHosted(enteringChatroomDto);
-    console.log('enter chatroom controller findEnter', result);
-    return result;
+    try {
+      let result = await this.chatroomService.findHosted(enteringChatroomDto);
+      console.log('enter chatroom controller findEnter', result);
+      return result;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Post('/entered')
   async findEntered(@Body() enteringChatroomDto: EnteringChatroomDto) {
-    let result = await this.chatroomService.findEntered(enteringChatroomDto);
-    console.log('enter chatroom controller findEnter', result);
-    return result;
+    try {
+      let result = await this.chatroomService.findEntered(enteringChatroomDto);
+      console.log('enter chatroom controller findEnter', result);
+      return result;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Post(':id')
@@ -116,10 +143,14 @@ export class ChatroomController {
     @Param('id') id: number,
     @Body() enteringChatroomDto: EnteringChatroomDto,
   ) {
-    let data = { chatroomId: +id, user: +enteringChatroomDto.user };
-    let result = await this.chatroomService.findOne(data);
-    console.log('enter chatroom controller find one', result);
-    return result;
+    try {
+      let data = { chatroomId: +id, user: +enteringChatroomDto.user };
+      let result = await this.chatroomService.findOne(data);
+      console.log('enter chatroom controller find one', result);
+      return result;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Patch(':id')

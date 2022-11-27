@@ -49,11 +49,13 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
   const { questionList, loading } = useAppSelector(
     (state: RootState) => state.question
   );
-  const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
+  const { user } = JSON.parse(
+    localStorage.getItem("auth_stockoverflow") as string
+  );
   const user_id = +user.id;
-  
+
   const [filteredQuestions, setFilteredQuestions] = useState(Array<Questions>);
-  
+
   function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
     props.loadQuestion();
     if (!loading) {
@@ -81,15 +83,28 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
       <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
         <IonRefresherContent pullingText="下拉更新"></IonRefresherContent>
       </IonRefresher>
-      {loading ? <LoadingScreen><IonSpinner name="crescent"/> 載入中...</LoadingScreen> : 
-      <QuestionContainer>
-        { questionList.length > 0 ? <QuestionCard questions={filteredQuestions.length > 0 ? filteredQuestions : questionList} /> : <div style={{marginTop:10}}>沒有問題</div> }
-      </QuestionContainer>}
+      {loading ? (
+        <LoadingScreen>
+          <IonSpinner name="crescent" /> 載入中...
+        </LoadingScreen>
+      ) : (
+        <QuestionContainer>
+          {questionList.length > 0 ? (
+            <QuestionCard
+              questions={
+                filteredQuestions.length > 0 ? filteredQuestions : questionList
+              }
+            />
+          ) : (
+            <div style={{ marginTop: 10 }}>沒有問題</div>
+          )}
+        </QuestionContainer>
+      )}
     </>
   );
 });
 
-const QuestionContainer = styled.div`
+export const QuestionContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;

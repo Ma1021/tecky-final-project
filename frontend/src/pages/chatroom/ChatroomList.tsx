@@ -118,7 +118,12 @@ const ChatroomList: React.FC = () => {
     <>
       <Menu />
       <IonPage id="main-content">
-        <IonHeader translucent={true} collapse="fade" style={{height:50}} className="d-flex align-items-center">
+        <IonHeader
+          translucent={true}
+          collapse="fade"
+          style={{ height: 50 }}
+          className="d-flex align-items-center"
+        >
           <IonToolbar>
             <Title title="聊天室" />
           </IonToolbar>
@@ -152,7 +157,14 @@ const ChatroomList: React.FC = () => {
             ) : null
             // <ChatroomAll list={hosted as any} />
             } */}
-            <ChatroomAll />
+            {chatroomSegment ===
+            "entered" ? null : // <ChatroomEntered list={list} />
+            chatroomSegment === "recommendation" ? (
+              <ChatroomRecommend />
+            ) : chatroomSegment === "hosted" ? // <ChatroomHosted />
+            null : (
+              <ChatroomAll />
+            )}
           </IonList>
         </IonContent>
       </IonPage>

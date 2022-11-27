@@ -43,7 +43,7 @@ export function loadChatroomsAllError(error: string) {
 }
 
 // fetch all chatroom here
-export function fetchChatroomsAll( id: number ) {
+export function fetchChatroomsAll(id: number) {
   return (dispatch: AppDispatch) => {
     // side effects welcome
     dispatch(loadChatroomsAllStart());
@@ -104,7 +104,7 @@ export function loadChatroomsRecommendError(error: string) {
 }
 
 // fetch recommend chatroom here
-export function fetchChatroomsRecommend(id: number ) {
+export function fetchChatroomsRecommend(id: number) {
   return (dispatch: AppDispatch) => {
     // side effects welcome
     dispatch(loadChatroomsRecommendStart());
@@ -116,7 +116,7 @@ export function fetchChatroomsRecommend(id: number ) {
       .then((res) => res.json())
       .then((data) => {
         dispatch(loadChatroomsRecommend(data));
-        dispatch(loadChatroomsRecommendEnd);
+        dispatch(loadChatroomsRecommendEnd());
       })
       .catch((error) => {
         dispatch(loadChatroomsRecommendError(error.message));

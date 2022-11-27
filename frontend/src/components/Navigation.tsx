@@ -1,4 +1,4 @@
-import React,{ useState } from "react";
+import React, { useState } from "react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
 import {
@@ -18,7 +18,7 @@ import {
   chatboxEllipsesOutline,
   chatbubblesOutline,
   flame,
-  flameOutline
+  flameOutline,
 } from "ionicons/icons";
 import "./Navigation.css";
 
@@ -49,7 +49,7 @@ import StockList from "../../stock/StockList";
 import ChatroomForm from "../pages/chatroom/ChatroomForm";
 
 //KOL ranking pages
-import KOL from '../pages/ranking/Ranking'
+import KOL from "../pages/ranking/ranking";
 
 const Navigation: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState("tab1");
@@ -87,7 +87,6 @@ const Navigation: React.FC = () => {
 
         <IonTabs>
           <IonRouterOutlet>
-
             <Route exact path="/tab1" component={Tab1}></Route>
             <Route exact path="/chatroomList" component={ChatroomList}></Route>
             <Route exact path="/discuss" component={Discuss}></Route>
@@ -147,9 +146,7 @@ const Navigation: React.FC = () => {
               <IonLabel>聊天室</IonLabel>
             </IonTabButton>
             <IonTabButton tab="tab5" href="/kol" className="tabButton">
-              <IonIcon
-                icon={selectedTab === "tab5" ? flame : flameOutline}
-              />
+              <IonIcon icon={selectedTab === "tab5" ? flame : flameOutline} />
               <IonLabel>排行榜</IonLabel>
             </IonTabButton>
           </IonTabBar>

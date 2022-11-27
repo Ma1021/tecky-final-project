@@ -37,7 +37,7 @@ const UserCard: React.FC<SubscriptionProps> = (props: SubscriptionProps) => {
                     <IonText>{props.user.introduction}</IonText>
                 </div>
             </div>
-            {props.page === 'follower' && !followingIdList.includes(props.user.user_id) ? <IonButton onClick={handleFollowUser}>追蹤</IonButton> : <IonButton onClick={handleUnFollowUser} >取消追蹤</IonButton>}
+            {props.page === 'follower' && !followingIdList.includes(props.user.user_id) ? <IonButton onClick={handleFollowUser}>關注</IonButton> : <IonButton onClick={handleUnFollowUser} >取消關注</IonButton>}
         </Card>
     )
 }

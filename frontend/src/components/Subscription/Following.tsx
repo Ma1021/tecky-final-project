@@ -19,7 +19,7 @@ const Following: React.FC<FollowingProps> = (props: FollowingProps) => {
                     return <UserCard key={following.id} page="following" user={following} />
                 }}) : followingList.map((following)=>{
                     return <UserCard key={following.id} page="following" user={following} />
-                })  : <div>沒有追蹤中用戶</div>}
+                })  : <div>沒有關注中用戶</div>}
         </UserCardContainer>
     )
 }

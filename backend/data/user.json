@@ -14,7 +14,7 @@
     "password_hash": "123",
     "birthday": "2022-11-12T13:00",
     "gender": "F",
-    "avatar":"https://cdn5.vectorstock.com/i/1000x1000/54/19/gray-wolf-cartoon-wolf-grey-the-nature-vector-20325419.jpg"
+    "avatar":"https://images.pexels.com/photos/1816225/pexels-photo-1816225.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
   },
   {
     "username": "張雅成",
@@ -22,15 +22,64 @@
     "password_hash": "123",
     "birthday": "2022-11-12T13:00",
     "gender": "F",
-    "avatar":"https://cdn5.vectorstock.com/i/1000x1000/54/19/gray-wolf-cartoon-wolf-grey-the-nature-vector-20325419.jpg"
+    "avatar":"https://images.pexels.com/photos/1846574/pexels-photo-1846574.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
   },
+
   {
     "username": "張雅星",
     "email": "user3@gmail.com",
     "password_hash": "123",
     "birthday": "2022-11-12T13:00",
     "gender": "F",
-    "avatar":"https://cdn5.vectorstock.com/i/1000x1000/54/19/gray-wolf-cartoon-wolf-grey-the-nature-vector-20325419.jpg"
+    "avatar":"https://images.pexels.com/photos/1200232/pexels-photo-1200232.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+  },
+  {
+    "username": "吳信宏",
+    "email": "user4@gmail.com",
+    "password_hash": "123",
+    "birthday": "2022-11-12T13:00",
+    "gender": "M",
+    "avatar":"https://images.pexels.com/photos/2285991/pexels-photo-2285991.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+  },
+  {
+    "username": "李佳亨",
+    "email": "user5@gmail.com",
+    "password_hash": "123",
+    "birthday": "2022-11-12T13:00",
+    "gender": "M",
+    "avatar":"https://images.pexels.com/photos/1182125/pexels-photo-1182125.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+  },
+  {
+    "username": "王昌聖",
+    "email": "user6@gmail.com",
+    "password_hash": "123",
+    "birthday": "2022-11-12T13:00",
+    "gender": "M",
+    "avatar":"https://images.pexels.com/photos/898768/pexels-photo-898768.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+  },
+  {
+    "username": "陳佩如",
+    "email": "user7@gmail.com",
+    "password_hash": "123",
+    "birthday": "2022-11-12T13:00",
+    "gender": "F",
+    "avatar":"https://images.pexels.com/photos/2250526/pexels-photo-2250526.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+  },
+  {
+    "username": "陳淑貞",
+    "email": "user8@gmail.com",
+    "password_hash": "123",
+    "birthday": "2022-11-12T13:00",
+    "gender": "F",
+    "avatar":"https://images.pexels.com/photos/1084546/pexels-photo-1084546.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+  },
+  {
+    "username": "林慧姍",
+    "email": "user9@gmail.com",
+    "password_hash": "123",
+    "birthday": "2022-11-12T13:00",
+    "gender": "F",
+    "avatar":"https://images.pexels.com/photos/3351676/pexels-photo-3351676.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
   },
   {
     "username": "黃昱丞",
@@ -39,7 +88,7 @@
     "password_hash": "123",
     "birthday": "2022-11-21T11:00",
     "gender": "M",
-    "introduction": "我要賺錢買airplane",
+    "introduction": "技術分析，基金經理",
     "avatar":"https://media.istockphoto.com/id/1288538088/zh/%E7%85%A7%E7%89%87/%E8%82%96%E5%83%8F%E5%B9%B4%E8%BC%95%E8%87%AA%E4%BF%A1%E8%81%B0%E6%98%8E%E7%9A%84%E4%BA%9E%E6%B4%B2%E5%95%86%E4%BA%BA%E7%9C%8B%E8%91%97%E7%9B%B8%E6%A9%9F%E5%92%8C%E5%BE%AE%E7%AC%91.jpg?s=612x612&w=0&k=20&c=OqFmAsuzlKTujnEcaB7CmUej4zbJuCcaVf63p9KLy90="
   },
   {
@@ -49,7 +98,7 @@
     "password_hash": "123",
     "birthday": "2022-11-21T11:00",
     "gender": "M",
-    "introduction":"多則惑，少則得",
+    "introduction":"科技股達人",
     "avatar":"https://media.istockphoto.com/id/1149504274/zh/%E7%85%A7%E7%89%87/%E8%87%BA%E7%81%A3%E7%94%B7%E5%AD%90%E7%9A%84%E8%82%96%E5%83%8F.jpg?s=612x612&w=0&k=20&c=BAqVeAavMlsUro5ssy7SsB8HvOmMJGhTcgvvgw0vYvs="
   },
   {

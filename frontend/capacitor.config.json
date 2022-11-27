@@ -1,6 +1,19 @@
 {
   "appId": "com.stockoverflow.app",
-  "appName": "frontend",
+  "appName": "stockoverflow",
   "webDir": "build",
-  "bundledWebRuntime": false
+  "bundledWebRuntime": false,
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    },
+    "PushNotifications": {
+      "presentationOptions": ["badge", "sound", "alert"]
+    }
+  },
+  "cordova": {},
+  "server": {
+    "url": "http://192.168.0.108:8100",
+    "cleartext": true
+  }
 }

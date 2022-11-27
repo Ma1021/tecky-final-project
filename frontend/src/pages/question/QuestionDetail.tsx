@@ -17,7 +17,7 @@ const QuestionDetail: React.FC = memo(() => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const [ replyContent, setReplyContent ] = useState('');
-  let reverseAnswer = [];
+  let reverseAnswer = [] as any;
   const [followings_id, setFollowings_id] = useState(Array<number>);
   const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
   const user_id = +user.id;
@@ -95,6 +95,12 @@ const QuestionDetail: React.FC = memo(() => {
 
   function handleReplySubmit(e: any) {
     e.preventDefault();
+
+    if(replyContent === "") {
+      toastPresent('請輸入回應內容', 1500)
+      return
+    }
+
     const obj = {
       answerer_id: user_id,
       asker_id: question.asker_id,
@@ -143,17 +149,21 @@ const QuestionDetail: React.FC = memo(() => {
       }
     }
     
-    function handleLike(e:any) {
+    async function handleLike(e:any) {
       let obj = {
         answer_id: +e.target.parentNode.parentNode.parentNode.dataset.answer_id,
         user_id
       }
 
-      fetch(`${process.env.REACT_APP_PUBLIC_URL}/answer/like`,{
+      const res = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/answer/like`,{
         method:'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(obj)
       })
+
+      if(res.ok) {
+        dispatch(loadQuestion(+question_id));
+      }
     }
 
   if(question.id === undefined) {
@@ -161,6 +171,8 @@ const QuestionDetail: React.FC = memo(() => {
   } else {
     reverseAnswer = [...question.answer].reverse();
   }
+
+  
 
   return (
     <IonPage id="main-content">
@@ -174,7 +186,6 @@ const QuestionDetail: React.FC = memo(() => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-      {loading ? <LoadingScreen><IonSpinner name="circles"/> 載入中...</LoadingScreen> : <>
         <AskerContainer lines='full' data-user_id={question.asker_id}>
           <IonImg src={`${question.asker_avatar}`}/>
           <div className='askerInfo'>
@@ -217,7 +228,7 @@ const QuestionDetail: React.FC = memo(() => {
         {reverseAnswer.length > 0 &&  
           <AnswerContainer>
             <IonText>回答</IonText>
-          {reverseAnswer.map((answer: any)=>{
+          {reverseAnswer.map((answer: any, index: number)=>{
             return <div className='answerCard' key={answer.id} data-answer_id = {answer.id} data-user_id={answer.answers.id}>
                       <div className='answererAvatar'>
                         <IonImg src={answer.answers.avatar} />
@@ -241,7 +252,7 @@ const QuestionDetail: React.FC = memo(() => {
                         </div>
                         <div className='answerLikes'>
                           {answer.likes_user_id.includes(user_id) ? 
-                          <IonIcon icon={heart} onClick={handleLike}/> 
+                          <IonIcon icon={heart} onClick={handleLike}/>
                           : 
                           <IonIcon icon={heartOutline} onClick={handleLike}/>}
                           <IonText>{answer.likes_user_id.length}</IonText>
@@ -251,9 +262,7 @@ const QuestionDetail: React.FC = memo(() => {
           })} 
           </AnswerContainer>
         }
-        
-        </>}
-      </IonContent>
+        </IonContent>
       <IonFooter>
           <ReplyContainer>
             <IonInput value={replyContent} placeholder='發表回應' maxlength={100} onIonChange={handleInput}></IonInput>

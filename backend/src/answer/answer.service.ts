@@ -12,7 +12,7 @@ export class AnswerService {
             const { answerer_id, question_id, content } = answer;
 
             const res = await this.knex('answers').insert({answerer_id, question_id, content}).returning('id');
-        
+            
             return res[0];
         } catch(err) {
             console.log(err);

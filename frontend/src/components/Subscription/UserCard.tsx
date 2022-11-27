@@ -15,8 +15,12 @@ const UserCard: React.FC<SubscriptionProps> = (props: SubscriptionProps) => {
         (state) => state.subscription
     );
 
-    const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
-    const user_id = +user.id;
+    let user_id: number
+        
+    if(localStorage.getItem("auth_stockoverflow")) {
+      const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
+      user_id = user.id;
+    }
     
     async function handleFollowUser(e: any) {
         e.preventDefault();

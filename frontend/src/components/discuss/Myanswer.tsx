@@ -13,8 +13,12 @@ interface QuestionProps {
 const MyAnswer: React.FC<QuestionProps> = memo((props:QuestionProps) => {
     const { answererQuestionList, loading } = useAppSelector((state) => state.question)
     const [filteredQuestions, setFilteredQuestions ] = useState(Array<Questions>);
-    const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
-    const user_id = user.id;
+    let user_id: number
+  
+    if(localStorage.getItem("auth_stockoverflow")) {
+      const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
+      user_id = user.id;
+    }
     
     function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
         props.loadAnswererQuestion(user_id);

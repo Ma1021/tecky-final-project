@@ -1,12 +1,15 @@
 import { IonButton, IonMenuToggle, IonButtons } from "@ionic/react";
 import React from "react";
 import "./UserIcon.css";
-import img from "../../img/animal_stand_ookami.png";
 
 interface UserIconProps {}
 
 const UserIcon: React.FC<UserIconProps> = () => {
-  const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
+  let user
+
+  if(localStorage.getItem("auth_stockoverflow") !== null) {
+    user = JSON.parse(localStorage.getItem("auth_stockoverflow") as string).user || undefined;
+  }
 
   return (
     <>
@@ -30,6 +33,7 @@ const UserIcon: React.FC<UserIconProps> = () => {
           >
 
           </IonButton> */}
+          {user && 
           <img
               src={user.avatar}
               alt="user icon"
@@ -40,7 +44,7 @@ const UserIcon: React.FC<UserIconProps> = () => {
                 borderRadius: "50%",
                 overflow:"hidden",
               }}
-            />
+          />}
         </IonMenuToggle>
       </IonButtons>
     </>

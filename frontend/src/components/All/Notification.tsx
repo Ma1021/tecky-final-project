@@ -9,8 +9,12 @@ const Notification: React.FC = memo(() => {
   const [ amount, setAmount ] = useState(0);
 
   const router = useIonRouter();
-  const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
-  const user_id = user.id;
+  let user_id: number
+
+  if(localStorage.getItem("auth_stockoverflow") !== null) {
+    const user = JSON.parse(localStorage.getItem("auth_stockoverflow") as string).user || undefined;
+    user_id = +user.id;
+  }
 
   useEffect(()=>{
     fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/${user_id}`)

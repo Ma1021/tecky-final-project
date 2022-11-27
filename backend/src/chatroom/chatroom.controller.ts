@@ -13,6 +13,8 @@ import {
   UploadedFile,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express/multer';
+import { Server } from 'socket.io';
+import { io } from 'src/io';
 import { S3Service } from 'src/s3.service';
 import { ChatroomService } from './chatroom.service';
 import { CreateChatroomDto } from './dto/create-chatroom.dto';
@@ -22,11 +24,32 @@ import { UpdateChatroomDto } from './dto/update-chatroom.dto';
 
 @Controller('chatroom')
 export class ChatroomController {
+  // 鏡中鏡
+  static instance: ChatroomController;
+
   constructor(
     private readonly chatroomService: ChatroomService,
     private readonly s3Service: S3Service,
     private readonly httpService: HttpService,
-  ) {}
+  ) {
+    // 未起好socket.io --> console.log(io) --> undefined
+    // console.log('chatroom controller constructing, socket io status:', !!io);
+
+    // 整多個自己係自己入面
+    ChatroomController.instance = this;
+  }
+
+  // tell chatroom to take up socket.io
+  setupIO(io: Server) {
+    console.log('enter setupIO');
+    io.on('connection', (socket) => {
+      console.log('socket connected:', socket.id);
+      socket.on('join-room', (roomId) => {
+        console.log('join room', { id: socket.id, roomId });
+        // socket.join('room:' + roomId);
+      });
+    });
+  }
 
   @Post()
   @UseInterceptors(FileInterceptor('icon'))
@@ -91,7 +114,7 @@ export class ChatroomController {
   async findAll(@Body() enteringChatroomDto: EnteringChatroomDto) {
     try {
       let result = await this.chatroomService.findAll(enteringChatroomDto);
-      console.log('enter chatroom controller findall', result);
+      // console.log('enter chatroom controller findall', result);
       return result;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
@@ -104,16 +127,11 @@ export class ChatroomController {
       let result = await this.chatroomService.findRecommend(
         enteringChatroomDto,
       );
-      console.log('enter chatroom controller find recommend', result);
+      // console.log('enter chatroom controller find recommend', result);
       return result;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
-  }
-
-  @Get('/created')
-  findCreated() {
-    return this.chatroomService.findCreated();
   }
 
   @Post('/hosted')
@@ -151,6 +169,26 @@ export class ChatroomController {
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  // ----------------------------------------------------------------------------------
+
+  // handling messaging
+  @Post('chatroom/:id/message')
+  postChatMessage(
+    @Param('id') roomId: string,
+    // unknown as not knowing what user will send
+    @Body() body: unknown,
+  ) {
+    console.log(
+      'chatroom controller after constructing, socket io status:',
+      !!io,
+    );
+  }
+
+  @Get('/created')
+  findCreated() {
+    return this.chatroomService.findCreated();
   }
 
   @Patch(':id')

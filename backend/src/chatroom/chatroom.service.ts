@@ -79,7 +79,6 @@ export class ChatroomService {
     );
     // need to fix if join
     result = result.rows;
-    console.log('find all service', result);
     return result;
   }
 
@@ -117,7 +116,6 @@ export class ChatroomService {
 
     result = result.rows;
     // need to fix if joined
-    console.log('find recommend service', result);
     return result;
   }
 

@@ -1,6 +1,6 @@
 import { IonHeader, IonPage, IonToolbar, IonButtons, IonBackButton, IonContent, IonTitle, IonText, IonSegment, IonSegmentButton, IonLabel } from "@ionic/react";
 import styled from "styled-components";
-import { Area } from '@ant-design/plots';
+import { Area, Line } from '@ant-design/plots';
 import { useEffect, useState } from "react";
 
 let user_id: number
@@ -16,12 +16,13 @@ interface Data {
 }
 
 interface Follower {
-  data:Data[],
+  increaseData:Data[],
   follower_now: number,
   follower_beforeMonth: number
 }
 
-const DemoColumn = () => {
+
+const Analytics: React.FC = () => {
     const [followerData, setFollowerData] = useState(Array<Follower>);
 
     useEffect(()=>{
@@ -30,44 +31,44 @@ const DemoColumn = () => {
       .then(json => setFollowerData(json));
     },[]);
 
-    let data: Data[] = [];
-
-    if(followerData.length > 0) {
-      data = followerData[0].data
-    }
-
-    const config = {
-      data,
-      xField: 'date',
-      yField: 'number_of_follower',
-      smooth: true,
-      areaStyle:{
-        fill:"#dedede",
-        fillOpacity:1,
-        lineOpacity:0,
-      },
-      line:{
-        color:'#666'
-      },
-      xAxis: {
-        label: {
-          autoHide: true,
-          autoRotate: false,
+    const DemoColumn = () => {    
+      let data: Data[] = [];
+  
+      if(followerData.length > 0) {
+        data = followerData[0].increaseData
+      }
+  
+      const config = {
+        data,
+        xField: 'date',
+        yField: 'number_of_follower',
+        smooth: true,
+        areaStyle:{
+          fill:"#dedede",
+          fillOpacity:1,
+          lineOpacity:0,
         },
-      },
-      meta: {
-        type: {
-          alias: '',
+        line:{
+          color:'#666'
         },
-        sales: {
-          alias: '關注數量',
+        xAxis: {
+          label: {
+            autoHide: true,
+            autoRotate: false,
+          },
         },
-      },
+        meta: {
+          type: {
+            alias: '',
+          },
+          sales: {
+            alias: '關注數量',
+          },
+        },
+      };
+      return <Area {...config as any} />;
     };
-    return <Area {...config as any} />;
-};
 
-const Analytics: React.FC = () => {
     return (
         <IonPage>
             <IonHeader translucent={true} collapse="fade">
@@ -79,13 +80,14 @@ const Analytics: React.FC = () => {
                 </IonToolbar>
             </IonHeader>
             <IonContent>
+              {followerData.length > 0 &&
                 <Container>
                     <FansAmountHeader>
                         <IonText>粉絲增長</IonText>
                         <IonText>過去30天</IonText>
                     </FansAmountHeader>
                     <div className="totalAmount">
-                        <IonText>你有<strong style={{fontSize:25, margin:"0rem 0.5rem"}}>102</strong>名粉絲</IonText>
+                        <IonText>你有<strong style={{fontSize:25, margin:"0rem 0.5rem"}}>{followerData[0].follower_now}</strong>名粉絲</IonText>
                         <IonText>+0.2% vs 10月27日</IonText>
                     </div>
                     <FansAmountAnalysis>
@@ -109,6 +111,7 @@ const Analytics: React.FC = () => {
                         <DemoColumn />
                     </FansAmountAnalysis>
                 </Container>
+              }
             </IonContent>
         </IonPage>
     )

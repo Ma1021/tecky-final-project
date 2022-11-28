@@ -9,18 +9,33 @@ export class AnalyticsService {
 
     async findMonth(user_id: number) {
         try {
-            // 30days follower per day amount
-            const dataRes = await this.knex.raw(`
+            // 30days follower increase per day
+            const i_dataRes = await this.knex.raw(`
             SELECT
-            DATE_TRUNC('day','created_at') as "date",
+            "increase" as category,
+            DATE_TRUNC('day', created_at) as date,
             COUNT("created_at")::INT as number_of_follower
             FROM "subscriptions"
             WHERE subscriptions.following_id = ?
             AND subscriptions.is_deleted = false
             AND subscriptions.created_at > now() - interval '30 day'
-            GROUP BY DATE_TRUNC('day', "created_at")
+            GROUP BY DATE_TRUNC('day', created_at)
             ORDER BY date desc;
-            `,[user_id])            
+            `,[user_id])
+            
+            // 30days follower decrease per day
+            const d_dataRes = await this.knex.raw(`
+            SELECT
+            DATE_TRUNC('day', created_at) as date,
+            COUNT("created_at")::INT as number_of_follower
+            FROM "subscriptions"
+            WHERE subscriptions.following_id = ?
+            AND subscriptions.is_deleted = true
+            AND subscriptions.created_at > now() - interval '30 day'
+            GROUP BY DATE_TRUNC('day', created_at)
+            ORDER BY date desc;
+            `, [user_id])
+            
 
             // total follower for now
             const nowRes = await this.knex('subscriptions')
@@ -35,10 +50,13 @@ export class AnalyticsService {
             .andWhere('is_deleted', false)
             .andWhere(this.knex.raw(`created_at < now() - interval '30 day'`))
 
+
+
             return [{
                 follower_now:+nowRes[0].number_of_follower,
                 follower_beforeMonth:+beforeMonthRes[0].number_of_follower,
-                data: dataRes.rows
+                increaseData: i_dataRes.rows,
+                decreaseData: d_dataRes.rows
             }]
 
         } catch(err) {

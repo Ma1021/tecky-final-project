@@ -1,12 +1,9 @@
-import {
-  IonSpinner,
-  IonText,
-} from "@ionic/react";
+import { IonSpinner, IonText } from "@ionic/react";
 import { useEffect } from "react";
 import { fetchChatroomsAll } from "../../redux/chatroomAdd/actions";
 import { ChatroomAdd } from "../../redux/chatroomAdd/state";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
-import { LoadingScreen } from "../discuss/Allquestion";
+import { LoadingScreen, QuestionContainer } from "../discuss/Allquestion";
 import ChatroomAddCard from "./ChatroomAddCard";
 
 const ChatroomAll: React.FC = () => {
@@ -33,17 +30,19 @@ const ChatroomAll: React.FC = () => {
           </LoadingScreen>
         ) : //if error
         error ? (
-          <IonText>載入失敗</IonText>
+          <QuestionContainer>
+            <div style={{ marginTop: 10 }}>載入失敗</div>
+          </QuestionContainer>
         ) : chatInfo.length > 0 ? (
           // if can load
           <>
             {chatInfo.map((chatroom: ChatroomAdd) => (
-                <ChatroomAddCard key={chatroom.id} props={chatroom} />
+              <ChatroomAddCard key={chatroom.id} props={chatroom} />
             ))}
           </>
         ) : (
           // if no chatroom yet
-          <div style={{ marginTop: 10 }}>沒有聊天室</div>
+          <div style={{ marginTop: 10 }}>未有聊天室</div>
         )
       }
     </>

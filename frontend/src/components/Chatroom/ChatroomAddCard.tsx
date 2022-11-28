@@ -37,7 +37,7 @@ const ChatroomAddCard: React.FC<ChatroomAddCardProps> = (props) => {
     let res = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/chatroom/join`, {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ userId, chatroomId: e.target.data.id }),
+      body: JSON.stringify({ userId, chatroomId: e.target.dataset.id }),
     });
 
     if (res.ok) {

@@ -13,6 +13,8 @@ import {
   UploadedFile,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express/multer';
+import { Server } from 'socket.io';
+import { io } from 'src/io';
 import { S3Service } from 'src/s3.service';
 import { ChatroomService } from './chatroom.service';
 import { CreateChatroomDto } from './dto/create-chatroom.dto';
@@ -22,11 +24,32 @@ import { UpdateChatroomDto } from './dto/update-chatroom.dto';
 
 @Controller('chatroom')
 export class ChatroomController {
+  // 鏡中鏡
+  static instance: ChatroomController;
+
   constructor(
     private readonly chatroomService: ChatroomService,
     private readonly s3Service: S3Service,
     private readonly httpService: HttpService,
-  ) {}
+  ) {
+    // 未起好socket.io --> console.log(io) --> undefined
+    // console.log('chatroom controller constructing, socket io status:', !!io);
+
+    // 整多個自己係自己入面
+    ChatroomController.instance = this;
+  }
+
+  // tell chatroom to take up socket.io
+  setupIO(io: Server) {
+    console.log('enter setupIO');
+    io.on('connection', (socket) => {
+      console.log('socket connected:', socket.id);
+      socket.on('join-room', (roomId) => {
+        console.log('join room', { id: socket.id, roomId });
+        // socket.join('room:' + roomId);
+      });
+    });
+  }
 
   @Post()
   @UseInterceptors(FileInterceptor('icon'))
@@ -75,40 +98,62 @@ export class ChatroomController {
 
   @Post('/join')
   async join(@Body() joinChatroomDto: JoinChatroomDto) {
-    await this.chatroomService.join(joinChatroomDto);
+    try {
+      let result = await this.chatroomService.join(joinChatroomDto);
+      // return the chatroom id for redirection
+      return result;
+    } catch (error) {
+      if (error.message.includes('已經加入該群組')) {
+        throw new HttpException(error.message, HttpStatus.CREATED);
+      }
+      throw new HttpException(error.message, HttpStatus.CREATED);
+    }
   }
 
   @Post('/all')
   async findAll(@Body() enteringChatroomDto: EnteringChatroomDto) {
-    let result = await this.chatroomService.findAll(enteringChatroomDto);
-    console.log('enter chatroom controller findall', result);
-    return result;
+    try {
+      let result = await this.chatroomService.findAll(enteringChatroomDto);
+      // console.log('enter chatroom controller findall', result);
+      return result;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Post('/recommend')
   async findRecommend(@Body() enteringChatroomDto: EnteringChatroomDto) {
-    let result = await this.chatroomService.findRecommend(enteringChatroomDto);
-    console.log('enter chatroom controller find recommend', result);
-    return result;
-  }
-
-  @Get('/created')
-  findCreated() {
-    return this.chatroomService.findCreated();
+    try {
+      let result = await this.chatroomService.findRecommend(
+        enteringChatroomDto,
+      );
+      // console.log('enter chatroom controller find recommend', result);
+      return result;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Post('/hosted')
   async findHosted(@Body() enteringChatroomDto: EnteringChatroomDto) {
-    let result = await this.chatroomService.findHosted(enteringChatroomDto);
-    console.log('enter chatroom controller findEnter', result);
-    return result;
+    try {
+      let result = await this.chatroomService.findHosted(enteringChatroomDto);
+      console.log('enter chatroom controller findEnter', result);
+      return result;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Post('/entered')
   async findEntered(@Body() enteringChatroomDto: EnteringChatroomDto) {
-    let result = await this.chatroomService.findEntered(enteringChatroomDto);
-    console.log('enter chatroom controller findEnter', result);
-    return result;
+    try {
+      let result = await this.chatroomService.findEntered(enteringChatroomDto);
+      console.log('enter chatroom controller findEnter', result);
+      return result;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Post(':id')
@@ -116,10 +161,34 @@ export class ChatroomController {
     @Param('id') id: number,
     @Body() enteringChatroomDto: EnteringChatroomDto,
   ) {
-    let data = { chatroomId: +id, user: +enteringChatroomDto.user };
-    let result = await this.chatroomService.findOne(data);
-    console.log('enter chatroom controller find one', result);
-    return result;
+    try {
+      let data = { chatroomId: +id, user: +enteringChatroomDto.user };
+      let result = await this.chatroomService.findOne(data);
+      console.log('enter chatroom controller find one', result);
+      return result;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  // ----------------------------------------------------------------------------------
+
+  // handling messaging
+  @Post('chatroom/:id/message')
+  postChatMessage(
+    @Param('id') roomId: string,
+    // unknown as not knowing what user will send
+    @Body() body: unknown,
+  ) {
+    console.log(
+      'chatroom controller after constructing, socket io status:',
+      !!io,
+    );
+  }
+
+  @Get('/created')
+  findCreated() {
+    return this.chatroomService.findCreated();
   }
 
   @Patch(':id')

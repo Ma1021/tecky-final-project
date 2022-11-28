@@ -35,63 +35,87 @@ export class ChatroomService {
   }
 
   async join(joinChatroomDto: JoinChatroomDto) {
+    // check if chatroom user is already joined
+    let checkJoin = await this.knex('chatroom_user').select('*').where({
+      chatroom: joinChatroomDto.chatroomId,
+      member: joinChatroomDto.userId,
+    });
+    if (!!checkJoin.length) {
+      throw new Error('已經加入該群組');
+    }
     let result = await this.knex('chatroom_user')
       .insert([
         {
-          member: joinChatroomDto.userId,
-          chatroom: joinChatroomDto.chatroomId,
+          member: +joinChatroomDto.userId,
+          chatroom: +joinChatroomDto.chatroomId,
           status: 'approved',
         },
       ])
-      .returning('id');
-    console.log('chatroom service join id ', result);
+      .returning(['id', 'chatroom']);
     return result;
   }
 
-  // find all no host and no user
   async findAll(enteringChatroomDto: EnteringChatroomDto) {
+    // find all no host and no member
     let result = await this.knex.raw(
+      /*sql*/
       `
-        select chatrooms.*, count(distinct chatroom_user.member) as member_count from chatrooms 
-        left join chatroom_user on chatroom_user.chatroom = chatrooms.id
-      and chatroom_user.member = ?
-      join users on users.id = host
-      where host NOT IN (?)
-      group by chatrooms.id, chatroom_user.id
-      order by member_count;
+      select chatrooms.*
+      ,count(chatroom_user.member) as member_count
+      from chatrooms
+      full join chatroom_user on chatrooms.id = chatroom_user.chatroom
+      where chatrooms.host NOT IN (?)
+      and chatrooms.id NOT in (
+          select chatrooms.id
+          from chatroom_user
+              join chatrooms on chatrooms.id = chatroom_user.chatroom
+          where chatroom_user.member = ?
+      )
+      group by chatrooms.id
+      ORDER BY member_count desc
+      ,chatrooms.id;
       `,
-      [enteringChatroomDto.user, enteringChatroomDto.user],
+      [+enteringChatroomDto.user, +enteringChatroomDto.user],
     );
-
-    // select chatrooms.*, count(distinct chatroom_user.member) as member_count from chatrooms
-    // left join chatroom_user on chatroom_user.chatroom = chatrooms.id
-    // and chatroom_user.member = 3
-    // where host NOT IN (3)
-    // and users.user_type = "KOL"
-    // group by chatrooms.id, chatroom_user.id
-    // order by member_count;
+    // need to fix if join
     result = result.rows;
-    // console.log('chatroom service find all', result);
     return result;
   }
 
-  // find all no host and no user with only kol -- top 10
   async findRecommend(enteringChatroomDto: EnteringChatroomDto) {
+    // find all no host and no user with only kol -- top 10
     let result = await this.knex.raw(
+      /*sql*/
       `
-        select chatrooms.*, count(distinct chatroom_user.member) as member_count from chatrooms 
-        left join chatroom_user on chatroom_user.chatroom = chatrooms.id
-        and chatroom_user.member = ?
-        join users on users.id = host
-        where host NOT IN (?)
-        and users.user_type = "KOL"
-        group by chatrooms.id, chatroom_user.id
-        order by member_count;
+      select chatrooms.*
+      ,count(chatroom_user.member) as member_count
+      from chatrooms
+      full join chatroom_user on chatrooms.id = chatroom_user.chatroom
+      where chatrooms.host NOT IN (?)
+      and chatrooms.id NOT in (
+          select chatrooms.id
+          from chatroom_user
+              join chatrooms on chatrooms.id = chatroom_user.chatroom
+          where chatroom_user.member = ?
+      )
+      and chatrooms.id IN(
+          SELECT chatrooms.id
+          from chatrooms
+          where chatrooms.host IN (
+                  select id
+                  from users
+                  where user_type = 'kol'
+              )
+      )
+      group by chatrooms.id
+      ORDER BY member_count desc
+      ,chatrooms.id;
         `,
-      [enteringChatroomDto.user, enteringChatroomDto.user],
+      [+enteringChatroomDto.user, +enteringChatroomDto.user],
     );
 
     result = result.rows;
+    // need to fix if joined
     return result;
   }
 
@@ -99,13 +123,15 @@ export class ChatroomService {
 
   async findHosted(enteringChatroomDto: EnteringChatroomDto) {
     let result = await this.knex.raw(
+      /*sql*/
       `
-      select * from chatrooms 
-      join chatroom_record on chatrooms.id = chatroom_record.chatroom
-      join user on chatroom_record.user = user.id
+      select distinct on chatrooms.id from chatrooms
+      inner join chatroom_record on chatroom_record.chatroom = chatrooms.id
       where host = ?
-    `,
-      [enteringChatroomDto.user],
+      order by chatroom_record.created_at, chatrooms.id desc
+      limit by 1;
+      `,
+      [+enteringChatroomDto.user],
     );
     result = result.rows;
     // console.log('chatroom service findHosted result', result);
@@ -114,22 +140,30 @@ export class ChatroomService {
 
   async findEntered(enteringChatroomDto: EnteringChatroomDto) {
     let result = await this.knex.raw(
-      `select * from chatrooms where id IN (select chatroom from chatroom_user where member=?)`,
-      [enteringChatroomDto.user],
+      /*sql*/
+      `
+      select * from chatrooms 
+      where id IN (select chatroom from chatroom_user 
+        where member=? and status='approved');
+        `,
+      [+enteringChatroomDto.user, +enteringChatroomDto.user],
     );
     result = result.rows;
-    console.log('chatroom service findEntered result', result);
+    // console.log('chatroom service findEntered result', result);
     return result;
   }
 
   async findOne(data: { chatroomId: number; user: number }) {
     // to do check if users is inside the group // is the host of the group
     let result = await this.knex.raw(
+      /*sql*/
       `select * from chatroom_record where chatroom = ?`,
-      [data.chatroomId],
+      [+data.chatroomId],
     );
     return `This action returns a #${data.chatroomId} chatroom`;
   }
+
+  async createRecord() {}
 
   update(id: number, updateChatroomDto: UpdateChatroomDto) {
     return `This action updates a #${id} chatroom`;

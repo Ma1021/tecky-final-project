@@ -19,16 +19,41 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { searchOutline, send } from "ionicons/icons";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouteMatch } from "react-router";
+import { Socket } from "socket.io-client";
 import styled from "styled-components";
+import { useSocket } from "../../helper/use-socket";
 import img from "../../img/animal_stand_ookami.png";
 
 const Chatroom: React.FC = () => {
   const [reply, setReply] = useState("");
 
-  const routeMatch = useRouteMatch<{ id: string }>();
-  let chatroomId = routeMatch.params.id;
+  // 拎 url 嘅 param
+  let url = useRouteMatch<{ id: string }>();
+  let roomId = url.params.id;
+
+  // 開新socket
+  const socket = useSocket(
+    // why: prevent join room multiple times.
+    useCallback(
+      (socket: Socket) => {
+        console.log("join room:", roomId);
+        socket.emit("join-room", roomId);
+        return () => {
+          console.log("leave room:", roomId);
+          socket.emit("leave-room", roomId);
+        };
+      },
+      [roomId]
+    )
+  );
+  // useEffect(() => {
+  //   // 會係 socket connect之前 emit 咗
+  //   socket.emit("join-room", roomId);
+  // }, [socket, roomId]);
+
+  console.log("rendering, socket", socket);
 
   const handleReply = (e: any) => {
     setReply(e.target.value);

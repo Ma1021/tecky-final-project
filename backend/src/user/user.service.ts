@@ -73,7 +73,7 @@ export class UserService {
         .then(async (subscriptionList) => {
           if (subscriptionList.length > 0) {
             return await this.knex('subscriptions')
-            .update({is_deleted: true, updated_at:this.knex.fn.now(), category:"decrease"})
+            .update({is_deleted: true, updated_at:this.knex.fn.now(), category:"取消關注"})
             .where('user_id', subscription.user_id)
             .andWhere('following_id', subscription.following_id)
             .returning('*');

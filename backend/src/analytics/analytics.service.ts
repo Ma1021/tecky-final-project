@@ -93,4 +93,37 @@ export class AnalyticsService {
             console.log(err);
         } 
     }
+
+    async findGender(user_id: number) {
+        try {
+            const femaleRes = await this.knex('subscriptions')
+            .count('users.gender as Female')
+            .where('subscriptions.following_id', user_id)
+            .where('users.gender', 'F')
+            .andWhere('subscriptions.is_deleted', false)
+            .innerJoin('users', 'users.id', 'subscriptions.user_id')
+
+            const maleRes = await this.knex('subscriptions')
+            .count('users.gender as Male')
+            .where('subscriptions.following_id', user_id)
+            .where('users.gender', 'M')
+            .andWhere('subscriptions.is_deleted', false)
+            .innerJoin('users', 'users.id', 'subscriptions.user_id')
+            
+            return [
+                {
+                    name: "女性",
+                    percent: +femaleRes[0].Female,
+                    a:'1'
+                },
+                {
+                    name: "男性",
+                    percent: +maleRes[0].Male,
+                    a:'1'
+                }
+            ];
+        } catch(err) {
+            console.log(err);
+        }
+    }
 }

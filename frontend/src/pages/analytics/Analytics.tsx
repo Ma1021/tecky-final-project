@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Canvas from '@antv/f2-react';
 import { Chart, Legend, Axis, Line, Tooltip, Point } from '@antv/f2';
 import { useEffect, useState } from "react";
+import GenderPie from './GenderChart';
 
 let user_id: number
 
@@ -67,16 +68,16 @@ const Analytics: React.FC = () => {
               {followerData.length > 0 &&
                 <Container>
                     <FansAmountHeader>
-                        <IonText>粉絲增長</IonText>
+                        <IonText>粉絲數據</IonText>
                         <IonText>過去30天</IonText>
                     </FansAmountHeader>
                     <div className="totalAmount">
                         <IonText>你有<strong style={{fontSize:25, margin:"0rem 0.5rem"}}>{followerData[0].follower_now}</strong>名粉絲</IonText>
-                        <IonText>{percentage(followerData[0].follower_now, followerData[0].follower_beforeMonth+13)}% vs {thirtyDaysAgo}</IonText>
+                        <IonText>{percentage(followerData[0].follower_now, followerData[0].follower_beforeMonth+7)}% vs {thirtyDaysAgo}</IonText>
                     </div>
                     <FansAmountAnalysis>
                         <div className="amountAnalysis">
-                            <IonText>數據</IonText>
+                            <IonText>增長</IonText>
                             <div className="amountCardContainer">
                                 <div className="amountCard">
                                     <IonText>變化</IonText>
@@ -96,12 +97,15 @@ const Analytics: React.FC = () => {
                           <Chart data={followerData[0].data} scale={scale}>
                             <Axis
                               field="date"
-                              tickCount={3}
+                              tickCount={4}
                               style={{
                                 label:{align: 'between'}
                               }}
                             />
-                            <Axis field="number_of_follower"/>
+                            <Axis 
+                              field="number_of_follower"
+                              tickCount={2}
+                            />
                             <Line x="date" y="number_of_follower" lineWidth="4px" color="category" shape="smooth"/>
                             <Point x="date" y="number_of_follower" color="category"/>
                             <Legend 
@@ -114,6 +118,10 @@ const Analytics: React.FC = () => {
                           </Chart>
                         </Canvas>
                     </FansAmountAnalysis>
+                    <IonText>性別分布</IonText>
+                    <FansGenderAnalysis>
+                        <GenderPie user_id={user_id}/>
+                    </FansGenderAnalysis>
                 </Container>
               }
             </IonContent>
@@ -124,11 +132,11 @@ const Analytics: React.FC = () => {
 export default Analytics;
 
 const Container = styled.div`
-    padding: 1rem;
+    padding: 1rem 1.5rem;
 
     .totalAmount {
         width: 100%;
-        height: 8rem;
+        height: 7rem;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -145,9 +153,7 @@ const Container = styled.div`
         ion-text:nth-child(2) {
             color: #9e9e9e
         }
-
     }
-
 `
 
 const FansAmountHeader = styled.div`
@@ -157,8 +163,6 @@ const FansAmountHeader = styled.div`
 `
 
 const FansAmountAnalysis = styled.div`
-    height: 15rem;
-
     .amountCardContainer {
         display: flex;
         gap: 0.8rem;
@@ -166,7 +170,7 @@ const FansAmountAnalysis = styled.div`
         
         .amountCard {
             width: 8rem;
-            height: 3rem;
+            height: 2.5rem;
             border-radius: 0.5rem;
             background-image: linear-gradient(to right bottom, #ffa930, #ff9d3f, #ff924d, #ff885b, #ff7f67);
             display: flex;
@@ -180,5 +184,15 @@ const FansAmountAnalysis = styled.div`
             }
         }
     }
+`
 
+const FansGenderAnalysis = styled.div`
+    width: 100%;
+    height: 15rem;
+    margin-top:0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background-color: #222;
+    border-radius: 0.8rem;
 `

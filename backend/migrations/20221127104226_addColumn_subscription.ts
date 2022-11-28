@@ -5,7 +5,7 @@ export async function up(knex: Knex): Promise<void> {
         table.boolean('is_deleted').defaultTo(false);
         table.date('created_at');
         table.date('updated_at');
-        table.string('category').defaultTo('increase');
+        table.string('category').defaultTo('關注');
     });
 }
 

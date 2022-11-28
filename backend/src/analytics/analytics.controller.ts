@@ -3,12 +3,13 @@ import { Body, Controller, Post, Response, HttpException, HttpStatus, Param, Del
 
 @Controller('/analytics')
 export class AnalyticsController {
-    @Get(':id')
-    findFollowerMonth(@Param('id') user_id: string) {
+    constructor(private readonly analyticsService: AnalyticsService) {}
+
+    @Get('/follower_month/:id')
+    async findFollowerMonth(@Param('id') user_id: string) {
         if(!user_id) {
             throw new HttpException('Missing user id', HttpStatus.BAD_REQUEST)
         }
-        
-        
+        return await this.analyticsService.findMonth(+user_id);
     }
 }

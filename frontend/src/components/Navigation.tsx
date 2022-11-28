@@ -49,7 +49,7 @@ import StockList from "../../stock/StockList";
 import ChatroomForm from "../pages/chatroom/ChatroomForm";
 
 //KOL ranking pages
-import KOL from "../pages/ranking/ranking";
+import KOL from "../pages/ranking/Ranking";
 
 // User Analysis pages
 import Analytics from "../pages/analytics/Analytics";

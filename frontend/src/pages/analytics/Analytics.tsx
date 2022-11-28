@@ -1,46 +1,45 @@
 import { IonHeader, IonPage, IonToolbar, IonButtons, IonBackButton, IonContent, IonTitle, IonText, IonSegment, IonSegmentButton, IonLabel } from "@ionic/react";
 import styled from "styled-components";
 import { Area } from '@ant-design/plots';
+import { useEffect, useState } from "react";
+
+let user_id: number
+
+if(localStorage.getItem("auth_stockoverflow") !== null) {
+  const user = JSON.parse(localStorage.getItem("auth_stockoverflow") as string).user || undefined;
+  user_id = +user.id;
+}
+
+interface Data {
+  date:string,
+  number_of_follower: number
+}
+
+interface Follower {
+  data:Data[],
+  follower_now: number,
+  follower_beforeMonth: number
+}
 
 const DemoColumn = () => {
-    const data = [
-      {
-        type: '家具家电',
-        sales: 38,
-      },
-      {
-        type: '粮油副食',
-        sales: 52,
-      },
-      {
-        type: '生鲜水果',
-        sales: 61,
-      },
-      {
-        type: '美容洗护',
-        sales: 145,
-      },
-      {
-        type: '母婴用品',
-        sales: 48,
-      },
-      {
-        type: '进口食品',
-        sales: 38,
-      },
-      {
-        type: '食品饮料',
-        sales: 38,
-      },
-      {
-        type: '家庭清洁',
-        sales: 38,
-      },
-    ];
+    const [followerData, setFollowerData] = useState(Array<Follower>);
+
+    useEffect(()=>{
+      fetch(`${process.env.REACT_APP_PUBLIC_URL}/analytics/follower_month/${user_id}`)
+      .then(response => response.json())
+      .then(json => setFollowerData(json));
+    },[]);
+
+    let data: Data[] = [];
+
+    if(followerData.length > 0) {
+      data = followerData[0].data
+    }
+
     const config = {
       data,
-      xField: 'type',
-      yField: 'sales',
+      xField: 'date',
+      yField: 'number_of_follower',
       smooth: true,
       areaStyle:{
         fill:"#dedede",
@@ -66,7 +65,7 @@ const DemoColumn = () => {
       },
     };
     return <Area {...config as any} />;
-  };
+};
 
 const Analytics: React.FC = () => {
     return (

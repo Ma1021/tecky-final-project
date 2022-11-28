@@ -3,7 +3,8 @@ import { Knex } from 'knex';
 export async function up(knex: Knex): Promise<void> {
     await knex.schema.alterTable('subscriptions', (table) => {
         table.boolean('is_deleted').defaultTo(false);
-        table.timestamps(false, true);
+        table.date('created_at');
+        table.date('updated_at');
     });
 }
 

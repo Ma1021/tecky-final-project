@@ -1,6 +1,5 @@
-import styled from "styled-components";
 import Canvas from '@antv/f2-react';
-import { Chart, Interval, Legend, Axis, Line, Tooltip, Point } from '@antv/f2';
+import { Chart, Interval, Legend, PieLabel } from '@antv/f2';
 import { useEffect, useState } from "react";
 
 interface GenderPieProps {
@@ -35,6 +34,16 @@ const GenderPie: React.FC<GenderPieProps> = (props:GenderPieProps) => {
                 }}
             />
             <Legend position="right" />
+            <PieLabel 
+                label1={(data: any) => {
+                    return {
+                      text: data.percent,
+                      fill: "#fff",
+                      fontWeight: 500,
+                      fontSize: 14,
+                    }
+                }}
+            />
             </Chart>
         </Canvas>
     )

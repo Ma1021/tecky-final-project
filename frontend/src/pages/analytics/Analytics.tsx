@@ -3,7 +3,8 @@ import styled from "styled-components";
 import Canvas from '@antv/f2-react';
 import { Chart, Legend, Axis, Line, Tooltip, Point } from '@antv/f2';
 import { useEffect, useState } from "react";
-import GenderPie from './GenderChart';
+import GenderPie from './GenderPie';
+import AgeChart from './AgeChart';
 
 let user_id: number
 
@@ -41,14 +42,14 @@ const Analytics: React.FC = () => {
     }
     
     const scale = {
-      Date: {
+      date: {
         type: 'timeCat',
         mask: 'MM/DD',
-        tickCount: 3,
+        tickCount: 5,
         range: [0, 1],
       },
       number_of_follower: {
-        tickCount: 1,
+        tickCount: 3,
         min: 0,
         alias: '關注數量',
       },
@@ -93,21 +94,21 @@ const Analytics: React.FC = () => {
                                 </div>
                             </div>
                         </div>
-                        <Canvas>
+                        <Canvas height="250">
                           <Chart data={followerData[0].data} scale={scale}>
                             <Axis
                               field="date"
-                              tickCount={4}
+                              tickCount={5}
                               style={{
                                 label:{align: 'between'}
                               }}
                             />
                             <Axis 
                               field="number_of_follower"
-                              tickCount={2}
+                              tickCount={4}
                             />
-                            <Line x="date" y="number_of_follower" lineWidth="4px" color="category" shape="smooth"/>
-                            <Point x="date" y="number_of_follower" color="category"/>
+                            <Line x="date" y="number_of_follower" lineWidth="4px" shape="smooth" color={{field: 'category',range: ["#0ADA73", "#ff3d41"]}}/>
+                            <Point x="date" y="number_of_follower" color={{field: 'category',range: ["#0ADA73", "#ff3d41"]}}/>
                             <Legend 
                               position="top"
                               style={{
@@ -118,10 +119,16 @@ const Analytics: React.FC = () => {
                           </Chart>
                         </Canvas>
                     </FansAmountAnalysis>
+
                     <IonText>性別分布</IonText>
                     <FansGenderAnalysis>
                         <GenderPie user_id={user_id}/>
                     </FansGenderAnalysis>
+
+                    <IonText>年齡分布</IonText>
+                    <FansAgeAnalysis>
+                      <AgeChart user_id={user_id}/>
+                    </FansAgeAnalysis>
                 </Container>
               }
             </IonContent>
@@ -188,11 +195,16 @@ const FansAmountAnalysis = styled.div`
 
 const FansGenderAnalysis = styled.div`
     width: 100%;
-    height: 15rem;
-    margin-top:0.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    height: 12rem;
+    margin:1rem 0rem;
+    background-color: #222;
+    border-radius: 0.8rem;
+`
+
+const FansAgeAnalysis = styled.div`
+    width: 100%;
+    height: 13rem;
+    margin-top: 0.5rem;
     background-color: #222;
     border-radius: 0.8rem;
 `

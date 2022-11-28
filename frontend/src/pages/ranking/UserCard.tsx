@@ -29,9 +29,12 @@ const UserCard: React.FC<RankingProps> = (props:RankingProps) => {
     const dispatch = useAppDispatch();
     const router = useIonRouter();
 
-
-    const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
-    const user_id = +user.id;
+    let user_id: number = 0
+  
+    if(localStorage.getItem("auth_stockoverflow") !== null) {
+      const user = JSON.parse(localStorage.getItem("auth_stockoverflow") as string).user || undefined;
+      user_id = +user.id;
+    }
 
     async function handleFollowUser(e: any) {
         e.preventDefault();

@@ -2,7 +2,6 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from 'nest-knexjs';
 import { Knex } from "knex";
 
-
 @Injectable()
 export class AnalyticsService {
     constructor(@InjectModel() private readonly knex: Knex) {}
@@ -122,6 +121,97 @@ export class AnalyticsService {
                     a:'1'
                 }
             ];
+        } catch(err) {
+            console.log(err);
+        }
+    }
+
+    async findAge(user_id: number) {
+        try {
+            function subtractYears(date, years) {
+                date.setFullYear(date.getFullYear() - years);
+                return date.toISOString().split('T')[0];
+            }
+            const date = new Date();
+
+            //18-27
+            const aRes = await this.knex('subscriptions')
+            .count('users.birthday as amount')
+            .where('subscriptions.following_id', user_id)
+            .andWhere('users.birthday', '<=', subtractYears(date, 18))
+            .andWhere('users.birthday', '>=', subtractYears(date, 10))
+            .andWhere('subscriptions.is_deleted', false)
+            .innerJoin('users', 'users.id', 'subscriptions.user_id');
+            
+            //28-37
+            const bRes = await this.knex('subscriptions')
+            .count('users.birthday as amount')
+            .where('subscriptions.following_id', user_id)
+            .andWhere('users.birthday', '<=', date.toISOString().split('T')[0])
+            .andWhere('users.birthday', '>=', subtractYears(date, 10))
+            .andWhere('subscriptions.is_deleted', false)
+            .innerJoin('users', 'users.id', 'subscriptions.user_id');
+            
+            //38-47
+            const cRes = await this.knex('subscriptions')
+            .count('users.birthday as amount')
+            .where('subscriptions.following_id', user_id)
+            .andWhere('users.birthday', '<=', date.toISOString().split('T')[0])
+            .andWhere('users.birthday', '>=', subtractYears(date, 10))
+            .andWhere('subscriptions.is_deleted', false)
+            .innerJoin('users', 'users.id', 'subscriptions.user_id');
+
+            //48-57
+            const dRes = await this.knex('subscriptions')
+            .count('users.birthday as amount')
+            .where('subscriptions.following_id', user_id)
+            .andWhere('users.birthday', '<=', date.toISOString().split('T')[0])
+            .andWhere('users.birthday', '>=', subtractYears(date, 10))
+            .andWhere('subscriptions.is_deleted', false)
+            .innerJoin('users', 'users.id', 'subscriptions.user_id');
+
+            //58-67
+            const eRes = await this.knex('subscriptions')
+            .count('users.birthday as amount')
+            .where('subscriptions.following_id', user_id)
+            .andWhere('users.birthday', '<=', date.toISOString().split('T')[0])
+            .andWhere('users.birthday', '>=', subtractYears(date, 10))
+            .andWhere('subscriptions.is_deleted', false)
+            .innerJoin('users', 'users.id', 'subscriptions.user_id');
+
+            // 68以上
+            const fRes = await this.knex('subscriptions')
+            .count('users.birthday as amount')
+            .where('subscriptions.following_id', user_id)
+            .andWhere('users.birthday', '<', date.toISOString().split('T')[0])
+            .andWhere('subscriptions.is_deleted', false)
+            .innerJoin('users', 'users.id', 'subscriptions.user_id');
+
+            return [
+                {
+                    "range":"18-27",
+                    "amount":+aRes[0].amount
+                },
+                {
+                    "range":"28-37",
+                    "amount":+bRes[0].amount
+                },
+                {
+                    "range":"38-47",
+                    "amount":+cRes[0].amount
+                },
+                {
+                    "range":"48-57",
+                    "amount":+dRes[0].amount
+                },
+                {
+                    "range":"58-67",
+                    "amount":+eRes[0].amount
+                },{
+                    "range":"68+",
+                    "amount":+fRes[0].amount
+                }
+            ]
         } catch(err) {
             console.log(err);
         }

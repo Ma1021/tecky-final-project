@@ -43,7 +43,7 @@ export async function seed(knex: Knex): Promise<void> {
   const user_idArray = userRes.slice(1); // without admin
 
   //Insert subscriptions 
-  for (let x = 0; x < 300; x++) {
+  for (let x = 0; x < 500; x++) {
     //random a user id and following id between 0 to user array length
     const user_id = user_idArray[Math.floor(Math.random() * user_idArray.length)].id
     const following_id = user_idArray[Math.floor(Math.random() * user_idArray.length)].id

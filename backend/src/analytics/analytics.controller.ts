@@ -20,4 +20,12 @@ export class AnalyticsController {
         }
         return await this.analyticsService.findGender(+user_id);
     }
+
+    @Get('/follower_age/:id')
+    async findFollowerAge(@Param('id') user_id: string) {
+        if(!user_id) {
+            throw new HttpException('Missing user id', HttpStatus.BAD_REQUEST)
+        }
+        return await this.analyticsService.findAge(+user_id);
+    }
 }

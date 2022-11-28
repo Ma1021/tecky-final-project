@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@ant-design/plots": "^1.2.2",
+    "@antv/f2": "^4.0.38",
+    "@antv/f2-react": "^4.0.38",
     "@capacitor/android": "4.4.0",
     "@capacitor/app": "4.1.0",
     "@capacitor/core": "^4.4.0",

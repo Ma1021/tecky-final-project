@@ -32,9 +32,13 @@ const Ranking: React.FC = () => {
     const { followingIdList, loading } = useAppSelector(
         (state) => state.subscription
     );
-
-    const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
-    const user_id = +user.id;
+    
+    let user_id: number = 0
+  
+    if(localStorage.getItem("auth_stockoverflow") !== null) {
+      const user = JSON.parse(localStorage.getItem("auth_stockoverflow") as string).user || undefined;
+      user_id = +user.id;
+    }
 
     const dispatch = useAppDispatch();
 

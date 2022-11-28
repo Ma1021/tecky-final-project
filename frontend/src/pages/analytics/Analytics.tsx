@@ -1,6 +1,7 @@
 import { IonHeader, IonPage, IonToolbar, IonButtons, IonBackButton, IonContent, IonTitle, IonText, IonSegment, IonSegmentButton, IonLabel } from "@ionic/react";
 import styled from "styled-components";
-import { Area, Line } from '@ant-design/plots';
+import Canvas from '@antv/f2-react';
+import { Chart, Legend, Axis, Line, Tooltip, Point } from '@antv/f2';
 import { useEffect, useState } from "react";
 
 let user_id: number
@@ -16,11 +17,12 @@ interface Data {
 }
 
 interface Follower {
-  increaseData:Data[],
+  data:Data[],
   follower_now: number,
-  follower_beforeMonth: number
+  follower_beforeMonth: number,
+  increaseNum:number,
+  decreaseNum: number
 }
-
 
 const Analytics: React.FC = () => {
     const [followerData, setFollowerData] = useState(Array<Follower>);
@@ -31,42 +33,24 @@ const Analytics: React.FC = () => {
       .then(json => setFollowerData(json));
     },[]);
 
-    const DemoColumn = () => {    
-      let data: Data[] = [];
-  
-      if(followerData.length > 0) {
-        data = followerData[0].increaseData
-      }
-  
-      const config = {
-        data,
-        xField: 'date',
-        yField: 'number_of_follower',
-        smooth: true,
-        areaStyle:{
-          fill:"#dedede",
-          fillOpacity:1,
-          lineOpacity:0,
-        },
-        line:{
-          color:'#666'
-        },
-        xAxis: {
-          label: {
-            autoHide: true,
-            autoRotate: false,
-          },
-        },
-        meta: {
-          type: {
-            alias: '',
-          },
-          sales: {
-            alias: '關注數量',
-          },
-        },
-      };
-      return <Area {...config as any} />;
+    const thirtyDaysAgo = new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0]
+    
+    function percentage(now: number, thirtyAgo: number) {
+      return ((now - thirtyAgo) / thirtyAgo * 100).toFixed(1);
+    }
+    
+    const scale = {
+      Date: {
+        type: 'timeCat',
+        mask: 'MM/DD',
+        tickCount: 3,
+        range: [0, 1],
+      },
+      number_of_follower: {
+        tickCount: 1,
+        min: 0,
+        alias: '關注數量',
+      },
     };
 
     return (
@@ -88,7 +72,7 @@ const Analytics: React.FC = () => {
                     </FansAmountHeader>
                     <div className="totalAmount">
                         <IonText>你有<strong style={{fontSize:25, margin:"0rem 0.5rem"}}>{followerData[0].follower_now}</strong>名粉絲</IonText>
-                        <IonText>+0.2% vs 10月27日</IonText>
+                        <IonText>{percentage(followerData[0].follower_now, followerData[0].follower_beforeMonth+13)}% vs {thirtyDaysAgo}</IonText>
                     </div>
                     <FansAmountAnalysis>
                         <div className="amountAnalysis">
@@ -96,19 +80,39 @@ const Analytics: React.FC = () => {
                             <div className="amountCardContainer">
                                 <div className="amountCard">
                                     <IonText>變化</IonText>
-                                    <IonText>+2</IonText>
+                                    <IonText>{followerData[0].increaseNum - followerData[0].decreaseNum}</IonText>
                                 </div>
                                 <div className="amountCard">
                                     <IonText>關注</IonText>
-                                    <IonText>4</IonText>
+                                    <IonText>{followerData[0].increaseNum}</IonText>
                                 </div>
                                 <div className="amountCard">
                                     <IonText>取消關注</IonText>
-                                    <IonText>2</IonText>
+                                    <IonText>{followerData[0].decreaseNum}</IonText>
                                 </div>
                             </div>
                         </div>
-                        <DemoColumn />
+                        <Canvas>
+                          <Chart data={followerData[0].data} scale={scale}>
+                            <Axis
+                              field="date"
+                              tickCount={3}
+                              style={{
+                                label:{align: 'between'}
+                              }}
+                            />
+                            <Axis field="number_of_follower"/>
+                            <Line x="date" y="number_of_follower" lineWidth="4px" color="category" shape="smooth"/>
+                            <Point x="date" y="number_of_follower" color="category"/>
+                            <Legend 
+                              position="top"
+                              style={{
+                                justifyContent: 'space-around'
+                              }}
+                            />
+                            <Tooltip />
+                          </Chart>
+                        </Canvas>
                     </FansAmountAnalysis>
                 </Container>
               }
@@ -124,12 +128,15 @@ const Container = styled.div`
 
     .totalAmount {
         width: 100%;
-        height: 10rem;
+        height: 8rem;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         gap:0.5rem;
+        background-color: #222;
+        border-radius: 0.8rem;
+        margin: 0.5rem 0rem;
 
         ion-text:nth-child(1) {
             font-size: 18px;

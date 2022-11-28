@@ -58,8 +58,10 @@ export async function seed(knex: Knex): Promise<void> {
           // if existed do nothing
           return
         } else {
+          // random a date within 30 days
+          const date = new Date().getDate() - Math.floor(Math.random() * 27)
           // if not exist then insert 
-          await knex('subscriptions').insert({ user_id, following_id })
+          await knex('subscriptions').insert({ user_id, following_id, created_at:`2022-11-${date}` })
         }
       })
   }

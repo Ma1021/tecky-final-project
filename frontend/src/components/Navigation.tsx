@@ -51,6 +51,9 @@ import ChatroomForm from "../pages/chatroom/ChatroomForm";
 //KOL ranking pages
 import KOL from '../pages/ranking/Ranking'
 
+// User Analysis pages
+import Analytics from "../pages/analytics/Analytics";
+
 const Navigation: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState("tab1");
 
@@ -66,6 +69,7 @@ const Navigation: React.FC = () => {
         <Route exact path="/question/:id" component={QuestionDetail}></Route>
         <Route exact path="/inbox/:id" component={Inbox}></Route>
         <Route exact path="/chatroom/:id" component={Chatroom}></Route>
+        <Route exact path="/analysis/:id" component={Analytics}></Route>
         <Route
           exact
           path="/user/subscription/:id"

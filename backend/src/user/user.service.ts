@@ -69,13 +69,14 @@ export class UserService {
         .select('*')
         .where('user_id', subscription.user_id)
         .andWhere('following_id', subscription.following_id)
+        .andWhere('is_deleted', false)
         .then(async (subscriptionList) => {
           if (subscriptionList.length > 0) {
             return await this.knex('subscriptions')
-              .where('user_id', subscription.user_id)
-              .andWhere('following_id', subscription.following_id)
-              .del()
-              .returning('*');
+            .update({is_deleted: true, updated_at:this.knex.fn.now()})
+            .where('user_id', subscription.user_id)
+            .andWhere('following_id', subscription.following_id)
+            .returning('*');
           } else {
             return await this.knex('subscriptions')
               .insert(subscription)
@@ -94,9 +95,11 @@ export class UserService {
         'users.id as user_id',
         'users.username',
         'users.avatar',
-        'users.introduction'
+        'users.introduction',
+        'subscriptions.created_at'
       )
       .where('following_id', user_id)
+      .andWhere('subscriptions.is_deleted', false)
       .innerJoin('users', 'users.id', 'subscriptions.user_id');
   }
 
@@ -110,6 +113,7 @@ export class UserService {
         'users.introduction'
       )
       .where('user_id', user_id)
+      .andWhere('subscriptions.is_deleted', false)
       .innerJoin('users', 'users.id', 'subscriptions.following_id');
   }
 
@@ -117,6 +121,7 @@ export class UserService {
     return this.knex('subscriptions').select('users.id', 'users.username', 'users.introduction', 'users.avatar')
     .count('following_id as followers')
     .where('users.user_type', 'kol')
+    .andWhere('subscriptions.is_deleted', false)
     .innerJoin('users', 'users.id', 'subscriptions.following_id')
     .groupBy('users.id')
     .orderBy('followers', 'desc');

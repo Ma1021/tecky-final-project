@@ -87,8 +87,8 @@ const MessageCardContainer = styled.div<MessageStyled>`
     font-size: 14px;
     
     ion-img {
-        width: 2.8rem;
-        height: 2.8rem;
+        width: 3.5rem;
+        height: 3rem;
         border-radius: 50%;
         overflow: hidden;
         object-fit: cover;

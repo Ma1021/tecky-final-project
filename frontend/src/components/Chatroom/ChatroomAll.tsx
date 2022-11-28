@@ -1,4 +1,5 @@
 import { IonSpinner, IonText } from "@ionic/react";
+import React from "react";
 import { useEffect } from "react";
 import { fetchChatroomsAll } from "../../redux/chatroomAdd/actions";
 import { ChatroomAdd } from "../../redux/chatroomAdd/state";
@@ -49,4 +50,4 @@ const ChatroomAll: React.FC = () => {
   );
 };
 
-export default ChatroomAll;
+export default React.memo(ChatroomAll);

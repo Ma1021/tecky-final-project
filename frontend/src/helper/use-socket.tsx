@@ -6,10 +6,10 @@ let socket: Socket;
 // socket connect之後先 emit
 export function useSocket(initFn: (socket: Socket) => () => void) {
   // 無 socket 先 set socket == useMemo
-  console.log("what is socket", socket);
+  // console.log("what is socket", socket);
   if (!socket) {
-    console.log(process.env.REACT_APP_PUBLIC_WS_URL);
-    socket = connect("ws://192.168.168.154:8080");
+    // console.log(process.env.REACT_APP_PUBLIC_WS_URL);
+    socket = connect(process.env.REACT_APP_PUBLIC_WS_URL as string);
   }
   useEffect(() => {
     let teardown: () => void;
@@ -17,13 +17,13 @@ export function useSocket(initFn: (socket: Socket) => () => void) {
 
     // need to leave socket when window closed
     if (socket.connected) {
-      console.log("socket is already connected", socket.connected);
+      // console.log("socket is already connected", socket.connected);
       teardown = initFn(socket);
     } else {
-      console.log("NO socket", socket.connected);
+      // console.log("NO socket", socket.connected);
       socket.on("connect", () => {
         if (!isDestroyed) {
-          console.log("if it run teardown");
+          // console.log("if it run teardown");
           teardown = initFn(socket);
         }
       });
@@ -31,7 +31,7 @@ export function useSocket(initFn: (socket: Socket) => () => void) {
 
     return () => {
       // check if teardown is destroyed or not
-      console.log("clean up");
+      // console.log("clean up");
       isDestroyed = true;
 
       // call only if there is teardown

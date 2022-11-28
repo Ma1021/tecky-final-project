@@ -1,7 +1,7 @@
 import { ChatroomRecordActions } from "./actions";
 import { ChatroomRecordState, initialChatroomRecordState } from "./state";
 
-export function chatroomAddReducer(
+export function chatroomRecordReducer(
   state: ChatroomRecordState = initialChatroomRecordState,
   action: ChatroomRecordActions
 ): ChatroomRecordState {

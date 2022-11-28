@@ -14,6 +14,7 @@ import {
   IonIcon,
   IonInput,
   IonPage,
+  IonSpinner,
   IonText,
   IonTitle,
   IonToolbar,
@@ -23,11 +24,31 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouteMatch } from "react-router";
 import { Socket } from "socket.io-client";
 import styled from "styled-components";
+import ChatReceiveBubble from "../../components/Chatroom/ChatReceiveBubble";
+import ChatSendBubble from "../../components/Chatroom/ChatSendBubble";
+import {
+  LoadingScreen,
+  QuestionContainer,
+} from "../../components/discuss/Allquestion";
 import { useSocket } from "../../helper/use-socket";
 import img from "../../img/animal_stand_ookami.png";
+import {
+  fetchChatroomsRecord,
+  loadChatroomsRecordStart,
+} from "../../redux/chatroomRecord/actions";
+import { ChatroomRecord } from "../../redux/chatroomRecord/state";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 
 const Chatroom: React.FC = () => {
-  const [reply, setReply] = useState("");
+  const [message, setMessage] = useState("");
+  const dispatch = useAppDispatch();
+
+  const userId = useAppSelector((state) => {
+    return state?.auth?.user?.id;
+  });
+  const { chatRecord, loading, error } = useAppSelector(
+    (state) => state.chatroomRecord
+  );
 
   // 拎 url 嘅 param
   let url = useRouteMatch<{ id: string }>();
@@ -38,25 +59,44 @@ const Chatroom: React.FC = () => {
     // why: prevent join room multiple times.
     useCallback(
       (socket: Socket) => {
-        console.log("join room:", roomId);
+        // console.log("join room:", roomId);
         socket.emit("join-room", roomId);
         return () => {
-          console.log("leave room:", roomId);
+          // console.log("leave room:", roomId);
           socket.emit("leave-room", roomId);
         };
       },
       [roomId]
     )
   );
-  // useEffect(() => {
-  //   // 會係 socket connect之前 emit 咗
-  //   socket.emit("join-room", roomId);
-  // }, [socket, roomId]);
 
-  console.log("rendering, socket", socket);
+  // check if host is speaker
+  // if user is host
 
-  const handleReply = (e: any) => {
-    setReply(e.target.value);
+  // take previous record and display
+  useEffect(() => {
+    dispatch(fetchChatroomsRecord(userId!, +roomId));
+  }, [dispatch]);
+
+  const handleMessage = (e: any) => {
+    let msg = e.target.value;
+    setMessage(msg);
+  };
+
+  const sendMessage = (e: any) => {
+    fetch(`${process.env.REACT_APP_PUBLIC_URL}/chatroom/${roomId}/message`, {
+      method: "POST",
+      headers: { contentType: "application/json" },
+      body: JSON.stringify({
+        message: message,
+        userId: userId,
+        chatroomId: roomId,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        data;
+      });
   };
 
   return (
@@ -68,101 +108,50 @@ const Chatroom: React.FC = () => {
               <IonButtons>
                 <IonBackButton defaultHref="/chatroomList"></IonBackButton>
               </IonButtons>
-              Group name here
+              <span>{chatRecord[0] ? chatRecord[0].chatroomname : null}</span>
               <IonIcon className="pr-2" icon={searchOutline}></IonIcon>
             </div>
           </IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <div className="d-flex">
-          <div className="d-flex flex-row ion-margin mr-0">
-            <IonAvatar
-              style={{
-                backgroundColor: "pink",
-              }}
-            >
-              <img
-                src={img}
-                alt="user icon"
-                style={{
-                  width: "100%",
-                  objectFit: "cover",
-                }}
-              />
-            </IonAvatar>
-          </div>
-          <IonCard
-            className="ion-margin pb-0"
-            style={{
-              maxWidth: "75%",
-              borderRadius: "10px",
-              borderTopLeftRadius: "0px",
-            }}
-          >
-            <IonCardHeader className="pt-1 pb-1">
-              <IonCardSubtitle style={{ textTransform: "none" }}>
-                User name
-              </IonCardSubtitle>
-            </IonCardHeader>
-
-            <IonCardContent className="pb-1">
-              This is the content of the user
-              <p className="pt-1 pb-0" style={{ fontSize: "0.7rem" }}>
-                內容只供參考, 不構成投資建議
-              </p>
-            </IonCardContent>
-          </IonCard>
-        </div>
-        <div className="d-flex flex-row-reverse">
-          <div className="d-flex flex-row ion-margin ml-0">
-            <IonAvatar
-              style={{
-                backgroundColor: "pink",
-              }}
-            >
-              <img
-                src={img}
-                alt="user icon"
-                style={{
-                  width: "100%",
-                  objectFit: "cover",
-                }}
-              />
-            </IonAvatar>
-          </div>
-          <IonCard
-            className="ion-margin pb-0"
-            style={{
-              maxWidth: "75%",
-              borderRadius: "10px",
-              borderTopRightRadius: "0px",
-            }}
-          >
-            <IonCardHeader className="pt-1 pb-1">
-              <IonCardSubtitle style={{ textTransform: "none" }}>
-                User name
-              </IonCardSubtitle>
-            </IonCardHeader>
-
-            <IonCardContent className="pb-1">
-              This is the content of the user
-              <p className="pt-1 pb-0" style={{ fontSize: "0.7rem" }}>
-                內容只供參考, 不構成投資建議
-              </p>
-            </IonCardContent>
-          </IonCard>
-        </div>
+        {
+          // if loading
+          loading ? (
+            <LoadingScreen>
+              <IonSpinner name="crescent" /> 載入中...
+            </LoadingScreen>
+          ) : //if error
+          error ? (
+            <QuestionContainer>
+              <div style={{ marginTop: 10 }}>載入失敗</div>
+            </QuestionContainer>
+          ) : chatRecord.length > 0 ? (
+            // if can load
+            <>
+              {chatRecord.map((record: ChatroomRecord) =>
+                record.userid === (userId as number) ? (
+                  <ChatSendBubble key={record.recordid} props={record} />
+                ) : (
+                  <ChatReceiveBubble key={record.recordid} props={record} />
+                )
+              )}
+            </>
+          ) : (
+            // if no chatroom yet
+            <div style={{ marginTop: 10 }}>未有對話</div>
+          )
+        }
       </IonContent>
       <IonFooter>
         <ChatReplyContainer>
           <IonInput
-            value={reply}
+            value={message}
             placeholder="發表回應"
             maxlength={255}
-            onIonChange={handleReply}
+            onIonChange={handleMessage}
           ></IonInput>
-          <IonButton>
+          <IonButton onClick={sendMessage}>
             <IonIcon icon={send}></IonIcon>
           </IonButton>
         </ChatReplyContainer>

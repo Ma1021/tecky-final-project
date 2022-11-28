@@ -43,14 +43,14 @@ export function loadChatroomsRecordError(error: string) {
 }
 
 // fetch all chatroom here
-export function fetchChatroomsRecord(id: number) {
+export function fetchChatroomsRecord(userId: number, roomId: number) {
   return (dispatch: AppDispatch) => {
     // side effects welcome
     dispatch(loadChatroomsRecordStart());
-    fetch(`${process.env.REACT_APP_PUBLIC_URL}/chatroom/:id`, {
+    fetch(`${process.env.REACT_APP_PUBLIC_URL}/chatroom/${roomId}`, {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ user: id }),
+      body: JSON.stringify({ userId, chatroomId: roomId }),
     })
       .then((res) => res.json())
       .then((data) => {

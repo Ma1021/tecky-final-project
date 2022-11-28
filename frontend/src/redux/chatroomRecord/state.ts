@@ -9,6 +9,7 @@ export interface ChatroomRecord {
   created_at: string;
   useravatar: string;
   chatroomid: number;
+  chatroomname: string;
 }
 
 export interface ChatroomRecordState {

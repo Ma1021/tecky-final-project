@@ -11,15 +11,19 @@ import {
   HttpStatus,
   UseInterceptors,
   UploadedFile,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express/multer';
 import { Server } from 'socket.io';
+import { ChatroomAuthGuard } from 'src/chatroom/chatroom-auth.guard';
 import { io } from 'src/io';
 import { S3Service } from 'src/s3.service';
 import { ChatroomService } from './chatroom.service';
 import { CreateChatroomDto } from './dto/create-chatroom.dto';
 import { EnteringChatroomDto } from './dto/entering-chatroom.dto';
 import { JoinChatroomDto } from './dto/join-chatroom.dto';
+import { MessageChatroomDto } from './dto/message-chatroom.dto';
 import { UpdateChatroomDto } from './dto/update-chatroom.dto';
 
 @Controller('chatroom')
@@ -45,8 +49,8 @@ export class ChatroomController {
     io.on('connection', (socket) => {
       console.log('socket connected:', socket.id);
       socket.on('join-room', (roomId) => {
+        socket.join('room:' + roomId);
         console.log('join room', { id: socket.id, roomId });
-        // socket.join('room:' + roomId);
       });
     });
   }
@@ -156,34 +160,40 @@ export class ChatroomController {
     }
   }
 
+  // ----------------------------------------------------------------------------------
+
+  // entering chatroom
+  @UseGuards(ChatroomAuthGuard)
   @Post(':id')
   async findOne(
     @Param('id') id: number,
-    @Body() enteringChatroomDto: EnteringChatroomDto,
+    @Body() joinChatroomDto: JoinChatroomDto,
   ) {
+    console.log(joinChatroomDto);
     try {
-      let data = { chatroomId: +id, user: +enteringChatroomDto.user };
+      let data = { chatroomId: +id, user: +joinChatroomDto.userId };
       let result = await this.chatroomService.findOne(data);
-      console.log('enter chatroom controller find one', result);
+      // console.log('enter chatroom controller find one', result);
       return result;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 
-  // ----------------------------------------------------------------------------------
-
   // handling messaging
-  @Post('chatroom/:id/message')
-  postChatMessage(
+  @UseGuards(ChatroomAuthGuard)
+  @Post(':id/message')
+  async postChatMessage(
     @Param('id') roomId: string,
     // unknown as not knowing what user will send
-    @Body() body: unknown,
+    @Body() messageChatDto: MessageChatroomDto,
   ) {
-    console.log(
-      'chatroom controller after constructing, socket io status:',
-      !!io,
-    );
+    console.log('entering message controller');
+    let result = await this.chatroomService.sendMessage(messageChatDto);
+
+    // use the message to do socket
+    io.to(`room:${roomId}`).emit('new-message', result);
+    return result;
   }
 
   @Get('/created')

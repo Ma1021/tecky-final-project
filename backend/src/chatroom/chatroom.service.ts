@@ -11,10 +11,42 @@ import { Knex } from 'knex';
 import { InjectModel } from 'nest-knexjs';
 import { JoinChatroomDto } from './dto/join-chatroom.dto';
 import { EnteringChatroomDto } from './dto/entering-chatroom.dto';
+import { MessageChatroomDto } from './dto/message-chatroom.dto';
 
 @Injectable()
 export class ChatroomService {
   constructor(@InjectModel() private readonly knex: Knex) {}
+
+  // validate if user is one of the member of chatroom
+  async validateUser(data: { userId: number; chatroomId: number }) {
+    console.log('enter chatroom validation');
+    let result = await this.knex.raw(
+      /*sql*/
+      `
+      select chatrooms.id from chatrooms where host = ? and id = ?;
+      `,
+      [data.userId, data.chatroomId],
+    );
+    if (result.rows.length > 0) {
+      console.log(result.rows[0]);
+      return result.rows[0];
+    }
+    result = await this.knex.raw(
+      /*sql*/
+      `
+      select chatrooms.id
+      from chatroom_user
+      join chatrooms on chatrooms.id = chatroom_user.chatroom
+      where member = ?
+      and chatroom = ?
+      and status = 'approved'
+      and is_ban = false;
+      `,
+      [data.userId, data.chatroomId],
+    );
+    console.log(result.rows[0]);
+    return result.rows[0];
+  }
 
   async create(createChatroomDto: CreateChatroomDto) {
     if (!createChatroomDto.icon) {
@@ -109,7 +141,8 @@ export class ChatroomService {
       )
       group by chatrooms.id
       ORDER BY member_count desc
-      ,chatrooms.id;
+      ,chatrooms.id
+      limit 10;
         `,
       [+enteringChatroomDto.user, +enteringChatroomDto.user],
     );
@@ -154,13 +187,75 @@ export class ChatroomService {
   }
 
   async findOne(data: { chatroomId: number; user: number }) {
-    // to do check if users is inside the group // is the host of the group
     let result = await this.knex.raw(
       /*sql*/
-      `select * from chatroom_record where chatroom = ?`,
+      `
+      select chatroom_record.id as recordId 
+      ,chatroom_record.record as record
+      , users.id as userId
+      , userName as username
+      , users.avatar as userAvatar
+      , chatroom_record.created_at as created_at 
+      , chatroom_record.chatroom as chatroomId
+      , chatrooms.name as chatroomName
+      from chatroom_record 
+      join users on chatroom_record.user = users.id 
+      join chatrooms on chatroom_record.chatroom = chatrooms.id
+      where chatroom_record.chatroom = ?
+      order by created_at
+      `,
       [+data.chatroomId],
     );
-    return `This action returns a #${data.chatroomId} chatroom`;
+    result = result.rows;
+    console.log('chatroom service findOne result', result);
+    return result;
+  }
+
+  async sendMessage(messageChatroomDto: MessageChatroomDto) {
+    console.log('entering message service');
+
+    let result = await this.knex.raw(
+      /*sql*/
+      `
+    insert into chatroom_record 
+    (record, chatroom, "user")
+    values (?,?,?)
+    returning id;
+    `,
+      // insert into chatroom_record
+      // (record, "user", chatroom)
+      // values ('yo man', 2, 1)
+      // returning id;
+      [
+        messageChatroomDto.message,
+        messageChatroomDto.chatroomId,
+        messageChatroomDto.userId,
+      ],
+    );
+    let recordId = result.rows[0].id;
+    console.log(recordId);
+
+    result = await this.knex.raw(
+      /*sql*/
+      `
+      select chatroom_record.id as recordId 
+      ,chatroom_record.record as record
+      , users.id as userId
+      , userName as username
+      , users.avatar as userAvatar
+      , chatroom_record.created_at as created_at 
+      , chatroom_record.chatroom as chatroomId
+      , chatrooms.name as chatroomName
+      from chatroom_record 
+      join users on chatroom_record.user = users.id 
+      join chatrooms on chatroom_record.chatroom = chatrooms.id
+      where chatroom_record.id = ?
+      `,
+      [recordId],
+    );
+    result = result.rows[0];
+    console.log('chatroom service sendMessage', result);
+    return result;
   }
 
   async createRecord() {}

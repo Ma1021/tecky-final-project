@@ -19,4 +19,4 @@ export const env = {
 };
 
 populateEnv(env, { mode: 'halt' });
-console.log(env);
+// console.log(env);

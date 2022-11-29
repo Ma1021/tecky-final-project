@@ -7,7 +7,6 @@ import {
   LineElement,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { ResultObj } from "../../backend/src/stock/stock.interface";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement);
 
@@ -402,6 +401,7 @@ const labels = [
   "15:57",
   "15:58",
   "15:59",
+  "16:00",
 ];
 
 const options = {
@@ -421,33 +421,32 @@ const options = {
   },
 };
 
-export default function SmallStockChart(props: { id: number; symbol: string }) {
+interface UserPortfolioProps {
+  symbol: string;
+}
+
+const UserPortfolio: React.FC<UserPortfolioProps> = ({ symbol }) => {
   const [stockDataPoints, setStockDataPoints] = useState([] as number[]);
 
   useEffect(() => {
-    const stockDataArray = [] as number[];
-    fetch(
-      `http://localhost:4000/getIntraDayDataFromMongoDB?symbol=${props.symbol}`
-    )
+    fetch(`http://localhost:8080/stock/getIntraDayDataFromMongoDB?symbol=${symbol}`)
       .then((response) => response.json())
-      .then((result: ResultObj[]) => {
-        result.map((item) => {
-          stockDataArray.push(item.lineData.value);
-          return stockDataArray;
-        });
-        setStockDataPoints(stockDataArray);
+      .then((result: number[]) => {
+        setStockDataPoints(result);
       });
-  }, [props.symbol]);
+  }, [symbol]);
 
   const data = {
     labels: labels,
     datasets: [
       {
         data: stockDataPoints,
-        borderColor: "rgb(255, 99, 132)",
+        borderColor: "rgb(99, 255, 132)",
       },
     ],
   };
 
   return <Line options={options} data={data} />;
-}
+};
+
+export default UserPortfolio;

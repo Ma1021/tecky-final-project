@@ -15,7 +15,8 @@ export const env = {
   AWS_SECRET_ACCESS_KEY: '',
   S3_BUCKET_NAME: '',
   S3_REGION: '',
+  FIREBASE_KEY: '',
 };
 
 populateEnv(env, { mode: 'halt' });
-console.log(env);
+// console.log(env);

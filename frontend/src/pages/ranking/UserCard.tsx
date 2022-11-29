@@ -2,7 +2,8 @@ import {
     IonText,
     IonImg,
     IonButton,
-    IonIcon
+    IonIcon,
+    useIonRouter
 } from "@ionic/react";
 import { people } from "ionicons/icons";
 import styled from "styled-components";
@@ -26,9 +27,14 @@ const UserCard: React.FC<RankingProps> = (props:RankingProps) => {
     );
 
     const dispatch = useAppDispatch();
+    const router = useIonRouter();
 
-    const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
-    const user_id = +user.id;
+    let user_id: number = 0
+  
+    if(localStorage.getItem("auth_stockoverflow") !== null) {
+      const user = JSON.parse(localStorage.getItem("auth_stockoverflow") as string).user || undefined;
+      user_id = +user.id;
+    }
 
     async function handleFollowUser(e: any) {
         e.preventDefault();
@@ -56,7 +62,9 @@ const UserCard: React.FC<RankingProps> = (props:RankingProps) => {
                     <IonText>{props.kol.introduction}</IonText>
                 </div>
             </div>
-            {followingIdList.includes(props.kol.id) ? <IonButton onClick={handleUnFollowUser}>取消關注</IonButton> : <IonButton onClick={handleFollowUser}>關注</IonButton>}
+            {props.kol.id === user_id ? <IonButton onClick={()=>router.push('/user/info', 'forward', 'push')}>個人專頁</IonButton> 
+            : followingIdList.includes(props.kol.id) ? <IonButton onClick={handleUnFollowUser}>取消關注</IonButton>
+            : <IonButton onClick={handleFollowUser}>關注</IonButton>}
         </Card>
     )
 }

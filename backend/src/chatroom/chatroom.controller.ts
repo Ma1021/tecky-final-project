@@ -49,8 +49,8 @@ export class ChatroomController {
     io.on('connection', (socket) => {
       console.log('socket connected:', socket.id);
       socket.on('join-room', (roomId) => {
+        socket.join('room:' + roomId);
         console.log('join room', { id: socket.id, roomId });
-        // socket.join('room:' + roomId);
       });
     });
   }
@@ -188,7 +188,11 @@ export class ChatroomController {
     // unknown as not knowing what user will send
     @Body() messageChatDto: MessageChatroomDto,
   ) {
+    console.log('entering message controller');
     let result = await this.chatroomService.sendMessage(messageChatDto);
+
+    // use the message to do socket
+    io.to(`room:${roomId}`).emit('new-message', result);
     return result;
   }
 

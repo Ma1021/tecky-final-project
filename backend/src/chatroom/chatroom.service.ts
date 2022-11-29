@@ -212,6 +212,8 @@ export class ChatroomService {
   }
 
   async sendMessage(messageChatroomDto: MessageChatroomDto) {
+    console.log('entering message service');
+
     let result = await this.knex.raw(
       /*sql*/
       `
@@ -231,6 +233,7 @@ export class ChatroomService {
       ],
     );
     let recordId = result.rows[0].id;
+    console.log(recordId);
 
     result = await this.knex.raw(
       /*sql*/
@@ -246,10 +249,11 @@ export class ChatroomService {
       from chatroom_record 
       join users on chatroom_record.user = users.id 
       join chatrooms on chatroom_record.chatroom = chatrooms.id
-      where chatroom_record.chatroom = ?
-      `[recordId],
+      where chatroom_record.id = ?
+      `,
+      [recordId],
     );
-    result = result.rows;
+    result = result.rows[0];
     console.log('chatroom service sendMessage', result);
     return result;
   }

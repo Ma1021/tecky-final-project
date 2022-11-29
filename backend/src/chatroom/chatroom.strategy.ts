@@ -18,7 +18,6 @@ export class ChatroomStrategy extends PassportStrategy(Strategy, 'chatroom') {
   }
 
   async validate(userId: number, chatroomId: number): Promise<any> {
-    console.log('enter chatroom validation');
     const user = await this.chatroomService.validateUser({
       userId: +userId,
       chatroomId: +chatroomId,

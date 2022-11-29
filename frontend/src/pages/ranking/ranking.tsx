@@ -7,7 +7,8 @@ import {
     IonImg,
     IonButton,
     IonIcon,
-    IonSpinner
+    IonSpinner,
+    useIonRouter
 } from "@ionic/react";
 import Title from "../../components/All/Title";
 import styled from "styled-components";
@@ -32,9 +33,15 @@ const Ranking: React.FC = () => {
     const { followingIdList, loading } = useAppSelector(
         (state) => state.subscription
     );
+    
+    const router = useIonRouter();
 
-    const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
-    const user_id = +user.id;
+    let user_id: number = 0
+  
+    if(localStorage.getItem("auth_stockoverflow") !== null) {
+      const user = JSON.parse(localStorage.getItem("auth_stockoverflow") as string).user || undefined;
+      user_id = +user.id;
+    }
 
     const dispatch = useAppDispatch();
 
@@ -97,7 +104,7 @@ const Ranking: React.FC = () => {
                                     <IonIcon icon={people} />
                                     <IonText>{topThree[1].followers}</IonText>
                                 </div>
-                                {topThree[1].id === user_id ? <IonButton>個人專頁</IonButton> 
+                                {topThree[1].id === user_id ? <IonButton onClick={()=>router.push('/user/info', 'forward', 'push')}>個人專頁</IonButton> 
                                 : followingIdList.includes(topThree[1].id) ? <IonButton onClick={handleUnFollowUser}>取消關注</IonButton> 
                                 :  <IonButton onClick={handleFollowUser}>關注</IonButton>}
                             </div>
@@ -111,7 +118,7 @@ const Ranking: React.FC = () => {
                                     <IonIcon icon={people} />
                                     <IonText>{topThree[0].followers}</IonText>
                                 </div>
-                                {topThree[0].id === user_id ? <IonButton>個人專頁</IonButton> 
+                                {topThree[0].id === user_id ? <IonButton onClick={()=>router.push('/user/info', 'forward', 'push')}>個人專頁</IonButton> 
                                 : followingIdList.includes(topThree[0].id) ? <IonButton onClick={handleUnFollowUser}>取消關注</IonButton> 
                                 :  <IonButton onClick={handleFollowUser}>關注</IonButton>}
                             </div>
@@ -125,7 +132,7 @@ const Ranking: React.FC = () => {
                                     <IonIcon icon={people} />
                                     <IonText>{topThree[2].followers}</IonText>
                                 </div>
-                                {topThree[2].id === user_id ? <IonButton>個人專頁</IonButton> 
+                                {topThree[2].id === user_id ? <IonButton onClick={()=>router.push('/user/info', 'forward', 'push')}>個人專頁</IonButton> 
                                 : followingIdList.includes(topThree[2].id) ? <IonButton onClick={handleUnFollowUser}>取消關注</IonButton> 
                                 :  <IonButton onClick={handleFollowUser}>關注</IonButton>}
                             </div>

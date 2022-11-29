@@ -17,7 +17,6 @@ import {
   useIonRouter,
   useIonAlert,
 } from "@ionic/react";
-import img from "../../img/animal_stand_ookami.png";
 import { useHistory } from "react-router";
 import {
   pencilOutline,
@@ -207,11 +206,13 @@ const Menu: React.FC<MenuProps> = () => {
                   <IonIcon icon={settingsOutline}></IonIcon> 系統設定
                 </IonLabel>
               </IonItem>
-              <IonItem className="menu" lines="none">
-                <IonLabel>
-                  <IonIcon icon={statsChart}></IonIcon> 用戶數據分析
-                </IonLabel>
-              </IonItem>
+              {selector?.user_type === 'kol' &&
+                <IonItem className="menu" lines="none" onClick={() => router.push(`/analysis/${selector.id}`, "forward", "push")}>
+                  <IonLabel>
+                    <IonIcon icon={statsChart}></IonIcon> 數據分析
+                  </IonLabel>
+                </IonItem>
+              }
               <IonItem className="menu" lines="none">
                 <IonLabel onClick={logoutPage}>
                   <IonIcon icon={logOutOutline}></IonIcon>

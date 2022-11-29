@@ -5,6 +5,9 @@ import {
   IonLabel,
   IonSegment,
   IonSegmentButton,
+  IonHeader,
+  IonToolbar,
+  IonText
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import "./StockList.css";
@@ -17,6 +20,7 @@ import {
 import { StockInfo } from "../../type";
 import { IonPage } from "@ionic/react";
 import styled from "styled-components";
+import Title from "../../components/All/Title";
 
 const StockList: React.FC = () => {
   const userID = 1;
@@ -51,114 +55,120 @@ const StockList: React.FC = () => {
 
   return (
     <IonPage>
+      <IonHeader translucent={true} collapse="fade" style={{height:50}} className="d-flex align-items-center">
+        <IonToolbar>
+          <Title title="市場" />
+        </IonToolbar>
+      </IonHeader>
       <IonContent>
         <SegmentTab value={segment} onIonChange={onSegmentChange}>
           <SegmentButton value="watchList">
-            <IonLabel>Your watch list</IonLabel>
+            <IonLabel>自選</IonLabel>
           </SegmentButton>
           <SegmentButton value="all">
-            <IonLabel>All stocks</IonLabel>
+            <IonLabel>所有股票</IonLabel>
           </SegmentButton>
         </SegmentTab>
 
-        <div className="button-container">
-          <IonButtons>
-            <IonButton
-              onClick={() => {
-                console.log("clicked");
-                switch (sortBySymbol) {
-                  case 0:
-                    setSortBySymbol(1);
-                    setSortByPrice(0);
-                    setSortByChange(0);
-                    setStockList(stockList.sort(compareSymbolDescend));
-                    break;
-                  case 1:
-                    setSortBySymbol(2);
-                    setSortByPrice(0);
-                    setSortByChange(0);
-                    setStockList(stockList.sort(compareSymbolAscend));
+        <IonButtons className="d-flex align-items-center" style={{padding:"0rem 0.5rem"}}>
+          <IonButton
+            onClick={() => {
+              console.log("clicked");
+              switch (sortBySymbol) {
+                case 0:
+                  setSortBySymbol(1);
+                  setSortByPrice(0);
+                  setSortByChange(0);
+                  setStockList(stockList.sort(compareSymbolDescend));
+                  break;
+                case 1:
+                  setSortBySymbol(2);
+                  setSortByPrice(0);
+                  setSortByChange(0);
+                  setStockList(stockList.sort(compareSymbolAscend));
 
-                    break;
-                  default:
-                    setSortBySymbol(0);
-                    setSortByPrice(0);
-                    setSortByChange(0);
-                    setStockList(initStockList);
-                    break;
-                }
-              }}
-            >
-              {isChinese ? "按名稱排序" : "Sort by Symbol"}
-            </IonButton>
-            <IonButton
-              onClick={() => {
-                switch (sortByPrice) {
-                  case 0:
-                    setSortByPrice(1);
-                    setSortBySymbol(0);
-                    setSortByChange(0);
-                    setStockList(stockList.sort(comparePriceAscend));
-                    break;
-                  case 1:
-                    setSortByPrice(2);
-                    setSortBySymbol(0);
-                    setSortByChange(0);
-                    setStockList(stockList.sort(comparePriceDescend));
-                    break;
-                  default:
-                    setSortByPrice(0);
-                    setSortBySymbol(0);
-                    setSortByChange(0);
-                    setStockList(initStockList);
-                    break;
-                }
-              }}
-            >
-              {isChinese ? "按價格排序" : "Sort by Price"}
-            </IonButton>
-            <IonButton
-              onClick={() => {
-                switch (sortByChange) {
-                  case 0:
-                    setSortByChange(1);
-                    setSortBySymbol(0);
-                    setSortByPrice(0);
-                    setStockList(stockList.sort(compareChangeAscend));
-                    break;
-                  case 1:
-                    setSortByChange(2);
-                    setSortBySymbol(0);
-                    setSortByPrice(0);
-                    setStockList(stockList.sort(compareChangeDescend));
-                    break;
-                  default:
-                    setSortByChange(0);
-                    setSortBySymbol(0);
-                    setSortByPrice(0);
-                    setStockList(initStockList);
-                    break;
-                }
-              }}
-            >
-              {isChinese ? "按升跌幅排序" : "Sort by Change"}
-            </IonButton>
-            <IonButton
-              onClick={() => {
-                dispatch(changeLanguage(isChinese));
-              }}
-            >
-              {isChinese ? "English" : "中文"}
-            </IonButton>
-            <IonButton
-              onClick={() => {
-                dispatch(changeColorTheme(isDark));
-              }}
-            >
-              {isDark ? "Light Theme" : "Dark Theme"}
-            </IonButton>
-          </IonButtons>
-        </div>
+                  break;
+                default:
+                  setSortBySymbol(0);
+                  setSortByPrice(0);
+                  setSortByChange(0);
+                  setStockList(initStockList);
+                  break;
+              }
+            }}
+          >
+            {/* {isChinese ? "按名稱排序" : "Sort by Symbol"} */}
+            <IonText style={{fontSize:14}}>按名稱排序</IonText>
+          </IonButton>
+          <IonButton
+            onClick={() => {
+              switch (sortByPrice) {
+                case 0:
+                  setSortByPrice(1);
+                  setSortBySymbol(0);
+                  setSortByChange(0);
+                  setStockList(stockList.sort(comparePriceAscend));
+                  break;
+                case 1:
+                  setSortByPrice(2);
+                  setSortBySymbol(0);
+                  setSortByChange(0);
+                  setStockList(stockList.sort(comparePriceDescend));
+                  break;
+                default:
+                  setSortByPrice(0);
+                  setSortBySymbol(0);
+                  setSortByChange(0);
+                  setStockList(initStockList);
+                  break;
+              }
+            }}
+          >
+            {/* {isChinese ? "按價格排序" : "Sort by Price"} */}
+            <IonText style={{fontSize:14}}>按價格排序</IonText>
+          </IonButton>
+          <IonButton
+            onClick={() => {
+              switch (sortByChange) {
+                case 0:
+                  setSortByChange(1);
+                  setSortBySymbol(0);
+                  setSortByPrice(0);
+                  setStockList(stockList.sort(compareChangeAscend));
+                  break;
+                case 1:
+                  setSortByChange(2);
+                  setSortBySymbol(0);
+                  setSortByPrice(0);
+                  setStockList(stockList.sort(compareChangeDescend));
+                  break;
+                default:
+                  setSortByChange(0);
+                  setSortBySymbol(0);
+                  setSortByPrice(0);
+                  setStockList(initStockList);
+                  break;
+              }
+            }}
+          >
+            {/* {isChinese ? "按升跌幅排序" : "Sort by Change"} */}
+            <IonText style={{fontSize:14}}>按升跌幅排序</IonText>
+          </IonButton>
+          {/* <IonButton
+            onClick={() => {
+              dispatch(changeLanguage(isChinese));
+            }}
+          >
+            {isChinese ? "English" : "中文"}
+          </IonButton>
+          <IonButton
+            onClick={() => {
+              dispatch(changeColorTheme(isDark));
+            }}
+          >
+            {isDark ? "Light Theme" : "Dark Theme"}
+          </IonButton> */}
+        </IonButtons>
 
         {segment === "watchList"
           ? stockList.map((item) => (

@@ -233,7 +233,7 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
     setVolumeSeries(
       chart.addHistogramSeries({
         priceFormat: { type: "volume" },
-        overlay: true,
+        // overlay: true,
         scaleMargins: { top: 0.9, bottom: 0 },
       })
     );

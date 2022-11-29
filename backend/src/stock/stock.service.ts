@@ -1,13 +1,17 @@
+import {
+  CandlestickData,
+  HistogramData,
+  LineData,
+  VolumeData,
+} from './stock.interface';
 import { Injectable } from '@nestjs/common';
-import { InjectKnex, Knex } from 'nestjs-knex';
+import { InjectModel } from 'nest-knexjs';
+import { Knex } from 'knex';
 import { MongoClient } from 'mongodb';
-import { ResultObj } from './stock.interface';
 
 async function connectMongoDB() {
   const url =
     'mongodb://03b083fd0aadc8883198881ba88111ab:f9023000f29773649f3850298becb9544b5fd6a9@35.213.167.63/?authMechanism=DEFAULT';
-  // const url =
-  //   'mongodb://f49435c5b2f88a8729256406cd4967d1:54b8ebfd1f120adb69b1be060c270de2aa3407f5@localhost:27017/?authMechanism=DEFAULT';
   const mongoClient = new MongoClient(url);
   await mongoClient.connect();
   console.log('MongoDB connected...........');
@@ -16,18 +20,31 @@ async function connectMongoDB() {
 }
 
 @Injectable()
-export class AppService {
-  constructor(@InjectKnex() private readonly knex: Knex) {}
+export class StockService {
+  constructor(@InjectModel() private readonly knex: Knex) {}
   getHello(): string {
     return 'Hello World';
   }
 
-  async getMyList(userID: string) {
+  async getUserList(userID: string) {
+    console.log('getUserList');
+
     const result = await this.knex
-      .select(['user_stock.id', 'user_id', 'stock_id', 'symbol'])
+      .select([
+        'stock_id',
+        'symbol',
+        'name',
+        'chinese_name',
+        'current_price',
+        'yesterday_price',
+      ])
       .from('user_stock')
-      .join('stockinfo', 'user_stock.stock_id', 'stockinfo.id')
+      .join('stock_info', 'user_stock.stock_id', 'stock_info.id')
       .where({ user_id: userID });
+    result.map((stockObj) => {
+      stockObj['price_difference'] =
+        stockObj.current_price - stockObj.yesterday_price;
+    });
 
     return result;
   }
@@ -35,196 +52,606 @@ export class AppService {
   async getAllDataFromStockInfo(stockSymbol: string) {
     const result = await this.knex
       .select('*')
-      .from('stockinfo')
+      .from('stock_info')
       .where({ symbol: stockSymbol });
 
     return result;
   }
 
-  async getSomeDataFromStockInfo(stockID: string) {
-    const result = await this.knex
-      .select(['id', 'name', 'symbol', 'currentprice', 'yesterdayprice'])
-      .from('stockinfo')
-      .where({ id: stockID });
-
-    return result;
-  }
-
-  async getDataFromIntraDay(stockID: string) {
-    const result = await this.knex
-      .select('*')
-      .from('intradayprices')
-      .where({ stock_id: stockID });
-
-    return result;
-  }
-
   async getIntraDayDataFromMongoDB(symbol: string) {
+    const valueArray: number[] = [];
+
     const MongoDB = await connectMongoDB();
     const result = await MongoDB.db('stocks_price_data')
       .collection(symbol)
       .find({})
       .toArray();
-    let resultArray: ResultObj[] = [];
-    const resultObj: ResultObj = {
-      histogramData: { time: 0, value: 0, color: '' },
-      areaData: { time: 0, value: 0 },
-      barData: { time: 0, open: 0, high: 0, close: 0, low: 0 },
-      candleStickData: { time: 0, open: 0, high: 0, close: 0, low: 0 },
-      lineData: { time: 0, value: 0 },
-      volume: { time: 0, value: 0, color: '' },
-    };
 
-    result.forEach((element) => {
-      resultObj.histogramData.time =
-        resultObj.areaData.time =
-        resultObj.barData.time =
-        resultObj.candleStickData.time =
-        resultObj.lineData.time =
-        resultObj.volume.time =
-          element.timestamp;
+    result
+      .filter(
+        (element) =>
+          element.timestamp >= new Date('2022-11-08').getTime() / 1000,
+      )
+      .slice(0, 389)
+      .forEach((element) => {
+        valueArray.push(element.Close);
+      });
 
-      resultObj.barData.open = resultObj.candleStickData.open = parseFloat(
-        element.Open.toFixed(2),
-      );
+    await MongoDB.close();
 
-      resultObj.barData.high = resultObj.candleStickData.high = parseFloat(
-        element.High.toFixed(2),
-      );
-
-      resultObj.barData.low = resultObj.candleStickData.low = parseFloat(
-        element.Low.toFixed(2),
-      );
-
-      resultObj.barData.close = resultObj.candleStickData.close = parseFloat(
-        element.Close.toFixed(2),
-      );
-
-      resultObj.areaData.value =
-        resultObj.histogramData.value =
-        resultObj.lineData.value =
-          parseFloat(element.Close.toFixed(2));
-
-      resultObj.volume.value = element.Volume;
-      resultObj.volume.color = resultObj.histogramData.color = '#00ff00';
-
-      resultArray.push(JSON.parse(JSON.stringify(resultObj)));
-    });
-    resultArray = resultArray.slice(0, 389);
-
-    return resultArray;
+    return valueArray;
   }
 
-  async getDataFromMongoDB(symbol: string) {
+  async getMinuteDataFromMongoDB(symbol: string, timeFrame: string) {
+    const candlestickDataArray: CandlestickData[] = [];
+    const lineDataArray: LineData[] = [];
+    const volumeDataArray: VolumeData[] = [];
+
     const MongoDB = await connectMongoDB();
     const result = await MongoDB.db('stocks_price_data')
       .collection(symbol)
       .find({})
       .toArray();
-    const resultArray: ResultObj[] = [];
-    const resultObj: ResultObj = {
-      histogramData: { time: 0, value: 0, color: '' },
-      areaData: { time: 0, value: 0 },
-      barData: { time: 0, open: 0, high: 0, close: 0, low: 0 },
-      candleStickData: { time: 0, open: 0, high: 0, close: 0, low: 0 },
-      lineData: { time: 0, value: 0 },
-      volume: { time: 0, value: 0, color: '' },
-    };
 
     result.forEach((element) => {
-      resultObj.histogramData.time =
-        resultObj.areaData.time =
-        resultObj.barData.time =
-        resultObj.candleStickData.time =
-        resultObj.lineData.time =
-        resultObj.volume.time =
-          element.timestamp;
-
-      resultObj.barData.open = resultObj.candleStickData.open = parseFloat(
-        element.Open.toFixed(2),
-      );
-
-      resultObj.barData.high = resultObj.candleStickData.high = parseFloat(
-        element.High.toFixed(2),
-      );
-
-      resultObj.barData.low = resultObj.candleStickData.low = parseFloat(
-        element.Low.toFixed(2),
-      );
-
-      resultObj.barData.close = resultObj.candleStickData.close = parseFloat(
-        element.Close.toFixed(2),
-      );
-
-      resultObj.areaData.value =
-        resultObj.histogramData.value =
-        resultObj.lineData.value =
-          parseFloat(element.Close.toFixed(2));
-
-      resultObj.volume.value = element.Volume;
-      resultObj.volume.color = resultObj.histogramData.color = '#00ff00';
-
-      resultArray.push(JSON.parse(JSON.stringify(resultObj)));
+      const volumeColor =
+        element.Close - element.Open > 0
+          ? 'rgba(38, 166, 155, 0.5)'
+          : 'rgba(239, 83, 80, 0.5)';
+      candlestickDataArray.push({
+        time: element.timestamp,
+        open: element.Open,
+        high: element.High,
+        low: element.Low,
+        close: element.Close,
+      });
+      lineDataArray.push({ time: element.timestamp, value: element.Close });
+      volumeDataArray.push({
+        time: element.timestamp,
+        value: element.Volume,
+        color: volumeColor,
+      });
     });
-    console.log('fetching getDataFromMongoDB');
 
-    return resultArray;
+    const {
+      convertedLineDataArray,
+      convertedCandlestickDataArray,
+      convertedVolumeDataArray,
+    } = changeTimeFrame(
+      timeFrame,
+      lineDataArray,
+      candlestickDataArray,
+      volumeDataArray,
+    );
+
+    const lineSMA20Array = calculateSMA(convertedLineDataArray, 20);
+    const lineSMA50Array = calculateSMA(convertedLineDataArray, 50);
+    const lineSMA100Array = calculateSMA(convertedLineDataArray, 100);
+    const lineSMA250Array = calculateSMA(convertedLineDataArray, 250);
+
+    const lineEMA20Array = calculateEMA(
+      convertedLineDataArray,
+      20,
+      lineSMA20Array,
+      2 / 21,
+    );
+    const lineEMA50Array = calculateEMA(
+      convertedLineDataArray,
+      50,
+      lineSMA50Array,
+      2 / 51,
+    );
+    const lineEMA100Array = calculateEMA(
+      convertedLineDataArray,
+      100,
+      lineSMA100Array,
+      2 / 101,
+    );
+    const lineEMA250Array = calculateEMA(
+      convertedLineDataArray,
+      250,
+      lineSMA250Array,
+      2 / 251,
+    );
+
+    const lineRSI7Array = calculateRSI(convertedLineDataArray, 7);
+    const lineRSI14Array = calculateRSI(convertedLineDataArray, 14);
+
+    const counterDaySMA12 = calculateSMA(convertedLineDataArray, 12);
+    const K12 = 2 / (12 + 1);
+    const lineEMA12Array = calculateEMA(
+      convertedLineDataArray,
+      12,
+      counterDaySMA12,
+      K12,
+    );
+    const counterDaySMA26 = calculateSMA(convertedLineDataArray, 26);
+    const K26 = 2 / (26 + 1);
+    const lineEMA26Array = calculateEMA(
+      convertedLineDataArray,
+      26,
+      counterDaySMA26,
+      K26,
+    );
+    const { fastLineResultArray, slowLineResultArray, histogramResultArray } =
+      calculateMACD(lineEMA12Array, lineEMA26Array);
+
+    console.log('fetching getMinuteDataFromMongoDB');
+
+    await MongoDB.close();
+
+    return {
+      convertedLineDataArray,
+      convertedCandlestickDataArray,
+      convertedVolumeDataArray,
+      lineSMA20Array,
+      lineSMA50Array,
+      lineSMA100Array,
+      lineSMA250Array,
+      lineEMA20Array,
+      lineEMA50Array,
+      lineEMA100Array,
+      lineEMA250Array,
+      lineRSI7Array,
+      lineRSI14Array,
+      fastLineResultArray,
+      slowLineResultArray,
+      histogramResultArray,
+    };
   }
 
-  async getEveryDayDataFromMongoDB(symbol: string) {
+  async getDayDataFromMongoDB(symbol: string, timeFrame: string) {
+    const candlestickDataArray: CandlestickData[] = [];
+    const lineDataArray: LineData[] = [];
+    const volumeDataArray: VolumeData[] = [];
+
     const MongoDB = await connectMongoDB();
     const result = await MongoDB.db('for_gary_test')
       .collection(symbol)
       .find({})
       .toArray();
-    const resultArray: ResultObj[] = [];
-    const resultObj: ResultObj = {
-      histogramData: { time: 0, value: 0, color: '' },
-      areaData: { time: 0, value: 0 },
-      barData: { time: 0, open: 0, high: 0, close: 0, low: 0 },
-      candleStickData: { time: 0, open: 0, high: 0, close: 0, low: 0 },
-      lineData: { time: 0, value: 0 },
-      volume: { time: 0, value: 0, color: '' },
-    };
 
     result.forEach((element) => {
-      resultObj.histogramData.time =
-        resultObj.areaData.time =
-        resultObj.barData.time =
-        resultObj.candleStickData.time =
-        resultObj.lineData.time =
-        resultObj.volume.time =
-          element.timestamp;
-
-      resultObj.barData.open = resultObj.candleStickData.open = parseFloat(
-        element.Open.toFixed(2),
-      );
-
-      resultObj.barData.high = resultObj.candleStickData.high = parseFloat(
-        element.High.toFixed(2),
-      );
-
-      resultObj.barData.low = resultObj.candleStickData.low = parseFloat(
-        element.Low.toFixed(2),
-      );
-
-      resultObj.barData.close = resultObj.candleStickData.close = parseFloat(
-        element.Close.toFixed(2),
-      );
-
-      resultObj.areaData.value =
-        resultObj.histogramData.value =
-        resultObj.lineData.value =
-          parseFloat(element.Close.toFixed(2));
-
-      resultObj.volume.value = element.Volume;
-      resultObj.volume.color = resultObj.histogramData.color = '#00ff00';
-
-      resultArray.push(JSON.parse(JSON.stringify(resultObj)));
+      const volumeColor =
+        element.Close - element.Open > 0
+          ? 'rgba(38, 166, 155, 0.5)'
+          : 'rgba(239, 83, 80, 0.5)';
+      candlestickDataArray.push({
+        time: element.timestamp,
+        open: element.Open,
+        high: element.High,
+        low: element.Low,
+        close: element.Close,
+      });
+      lineDataArray.push({ time: element.timestamp, value: element.Close });
+      volumeDataArray.push({
+        time: element.timestamp,
+        value: element.Volume,
+        color: volumeColor,
+      });
     });
 
-    console.log('fetching getEveryDayDataFromMongoDB');
+    const {
+      convertedLineDataArray,
+      convertedCandlestickDataArray,
+      convertedVolumeDataArray,
+    } = changeTimeFrame(
+      timeFrame,
+      lineDataArray,
+      candlestickDataArray,
+      volumeDataArray,
+    );
 
+    const lineSMA20Array = calculateSMA(convertedLineDataArray, 20);
+    const lineSMA50Array = calculateSMA(convertedLineDataArray, 50);
+    const lineSMA100Array = calculateSMA(convertedLineDataArray, 100);
+    const lineSMA250Array = calculateSMA(convertedLineDataArray, 250);
+
+    const lineEMA20Array = calculateEMA(
+      convertedLineDataArray,
+      20,
+      lineSMA20Array,
+      2 / 21,
+    );
+    const lineEMA50Array = calculateEMA(
+      convertedLineDataArray,
+      50,
+      lineSMA50Array,
+      2 / 51,
+    );
+    const lineEMA100Array = calculateEMA(
+      convertedLineDataArray,
+      100,
+      lineSMA100Array,
+      2 / 101,
+    );
+    const lineEMA250Array = calculateEMA(
+      convertedLineDataArray,
+      250,
+      lineSMA250Array,
+      2 / 251,
+    );
+
+    const lineRSI7Array = calculateRSI(convertedLineDataArray, 7);
+    const lineRSI14Array = calculateRSI(convertedLineDataArray, 14);
+
+    const counterDaySMA12 = calculateSMA(convertedLineDataArray, 12);
+    const K12 = 2 / (12 + 1);
+    const lineEMA12Array = calculateEMA(
+      convertedLineDataArray,
+      12,
+      counterDaySMA12,
+      K12,
+    );
+    const counterDaySMA26 = calculateSMA(convertedLineDataArray, 26);
+    const K26 = 2 / (26 + 1);
+    const lineEMA26Array = calculateEMA(
+      convertedLineDataArray,
+      26,
+      counterDaySMA26,
+      K26,
+    );
+    const { fastLineResultArray, slowLineResultArray, histogramResultArray } =
+      calculateMACD(lineEMA12Array, lineEMA26Array);
+
+    console.log('fetching getDayDataFromMongoDB');
+
+    await MongoDB.close();
+
+    return {
+      convertedLineDataArray,
+      convertedCandlestickDataArray,
+      convertedVolumeDataArray,
+      lineSMA20Array,
+      lineSMA50Array,
+      lineSMA100Array,
+      lineSMA250Array,
+      lineEMA20Array,
+      lineEMA50Array,
+      lineEMA100Array,
+      lineEMA250Array,
+      lineRSI7Array,
+      lineRSI14Array,
+      fastLineResultArray,
+      slowLineResultArray,
+      histogramResultArray,
+    };
+  }
+
+  async getNewsFromDB(symbol: string) {
+    const result = await this.knex
+      .select([
+        'stock_news.id',
+        'stock_id',
+        'symbol',
+        'name',
+        'chinese_name',
+        'title',
+        'content',
+        'time',
+        'hyperlink',
+        'current_price',
+        'yesterday_price',
+      ])
+      .from('stock_news')
+      .join('stock_info', 'stock_info.id', 'stock_news.stock_id')
+      .where({ symbol: symbol });
+
+    return result;
+  }
+
+  async getUserTradeRecordsFromPostgres(userID: string) {
+    const result = await this.knex
+      .select('*')
+      .from('user_trades')
+      .where({ user_id: userID });
+
+    return result;
+  }
+
+  async placeOrder(
+    userID: string,
+    symbol: string,
+    orderType: string,
+    price: string,
+    quantity: string,
+  ) {
+    return [];
+  }
+}
+
+function changeTimeFrame(
+  timeFrame: string,
+  lineDataArray: LineData[],
+  candlestickDataArray: CandlestickData[],
+  volumeArray: VolumeData[],
+) {
+  let convertedVolumeDataArray: VolumeData[] = [];
+  let convertedLineDataArray: LineData[] = [];
+  let convertedCandlestickDataArray: CandlestickData[] = [];
+  switch (timeFrame) {
+    case '5m':
+      convertedLineDataArray = convertLineDataArray(5, lineDataArray);
+      convertedCandlestickDataArray = convertCandlestickDataArray(
+        5,
+        candlestickDataArray,
+      );
+      convertedVolumeDataArray = convertVolumeDataArray(5, volumeArray);
+      return {
+        convertedLineDataArray,
+        convertedCandlestickDataArray,
+        convertedVolumeDataArray,
+      };
+    case '10m':
+      convertedLineDataArray = convertLineDataArray(10, lineDataArray);
+      convertedCandlestickDataArray = convertCandlestickDataArray(
+        10,
+        candlestickDataArray,
+      );
+      convertedVolumeDataArray = convertVolumeDataArray(10, volumeArray);
+      return {
+        convertedLineDataArray,
+        convertedCandlestickDataArray,
+        convertedVolumeDataArray,
+      };
+    case '15m':
+      convertedLineDataArray = convertLineDataArray(15, lineDataArray);
+      convertedCandlestickDataArray = convertCandlestickDataArray(
+        15,
+        candlestickDataArray,
+      );
+      convertedVolumeDataArray = convertVolumeDataArray(15, volumeArray);
+      return {
+        convertedLineDataArray,
+        convertedCandlestickDataArray,
+        convertedVolumeDataArray,
+      };
+    case '30m':
+      convertedLineDataArray = convertLineDataArray(30, lineDataArray);
+      convertedCandlestickDataArray = convertCandlestickDataArray(
+        30,
+        candlestickDataArray,
+      );
+      convertedVolumeDataArray = convertVolumeDataArray(30, volumeArray);
+      return {
+        convertedLineDataArray,
+        convertedCandlestickDataArray,
+        convertedVolumeDataArray,
+      };
+    case '1h':
+      convertedLineDataArray = convertLineDataArray(60, lineDataArray);
+      convertedCandlestickDataArray = convertCandlestickDataArray(
+        60,
+        candlestickDataArray,
+      );
+      convertedVolumeDataArray = convertVolumeDataArray(60, volumeArray);
+      return {
+        convertedLineDataArray,
+        convertedCandlestickDataArray,
+        convertedVolumeDataArray,
+      };
+    case '2h':
+      convertedLineDataArray = convertLineDataArray(120, lineDataArray);
+      convertedCandlestickDataArray = convertCandlestickDataArray(
+        120,
+        candlestickDataArray,
+      );
+      convertedVolumeDataArray = convertVolumeDataArray(120, volumeArray);
+      return {
+        convertedLineDataArray,
+        convertedCandlestickDataArray,
+        convertedVolumeDataArray,
+      };
+    case '4h':
+      convertedLineDataArray = convertLineDataArray(240, lineDataArray);
+      convertedCandlestickDataArray = convertCandlestickDataArray(
+        240,
+        candlestickDataArray,
+      );
+      convertedVolumeDataArray = convertVolumeDataArray(240, volumeArray);
+      return {
+        convertedLineDataArray,
+        convertedCandlestickDataArray,
+        convertedVolumeDataArray,
+      };
+    default:
+      return {
+        convertedLineDataArray: lineDataArray,
+        convertedCandlestickDataArray: candlestickDataArray,
+        convertedVolumeDataArray: volumeArray,
+      };
+  }
+}
+
+function convertVolumeDataArray(timeFrame: number, array: VolumeData[]) {
+  const newVolumeDataArray: VolumeData[] = [];
+  if (timeFrame < 389) {
+    for (let i = 0; i < array.length; i = i + 389) {
+      const dayArray = array.slice(i, i + 389);
+      for (let i = 0; i < dayArray.length; i = i + timeFrame) {
+        const slicedArray = dayArray.slice(i, i + timeFrame);
+        let totalVolume = 0;
+        for (const volumeObj of slicedArray) {
+          totalVolume += volumeObj.value;
+        }
+        newVolumeDataArray.push({
+          time: slicedArray[0].time,
+          value: totalVolume,
+          color: 'rgb(46, 255, 3)',
+        });
+      }
+    }
+    return newVolumeDataArray;
+  }
+  return array;
+}
+
+function convertLineDataArray(timeFrame: number, array: LineData[]) {
+  const newLineDataArray: LineData[] = [];
+  if (timeFrame < 389) {
+    for (let i = 0; i < array.length; i = i + 389) {
+      const dayArray = array.slice(i, i + 389);
+      for (let i = 0; i < dayArray.length; i = i + timeFrame) {
+        const slicedArray = dayArray.slice(i, i + timeFrame);
+        newLineDataArray.push({
+          time: slicedArray[0].time,
+          value: slicedArray[slicedArray.length - 1].value,
+        });
+      }
+    }
+    return newLineDataArray;
+  }
+  return array;
+}
+
+function convertCandlestickDataArray(
+  timeFrame: number,
+  array: CandlestickData[],
+) {
+  const newCandlestickDataArray: CandlestickData[] = [];
+  if (timeFrame < 389) {
+    for (let i = 0; i < array.length; i = i + 389) {
+      const dayArray = array.slice(i, i + 389);
+      for (let i = 0; i < dayArray.length; i = i + timeFrame) {
+        const slicedArray = dayArray.slice(i, i + timeFrame);
+        const highest = slicedArray.reduce((prev, current) => {
+          if (current.high > prev) {
+            prev = current.high;
+          }
+          return prev;
+        }, 0);
+        const lowest = slicedArray.reduce((prev, current) => {
+          if (current.low < prev) {
+            prev = current.low;
+          }
+          return prev;
+        }, 999999);
+
+        newCandlestickDataArray.push({
+          time: slicedArray[0].time,
+          open: slicedArray[0].open,
+          close: slicedArray[slicedArray.length - 1].close,
+          high: highest,
+          low: lowest,
+        });
+      }
+    }
+    return newCandlestickDataArray;
+  }
+  return array;
+}
+
+function calculateSMA(dataArray: LineData[], count: number) {
+  const resultArray: LineData[] = [];
+  const slicedArrayContainer = [];
+  for (let i = count - 1; i < dataArray.length; i++) {
+    slicedArrayContainer.push(dataArray.slice(i - (count - 1), i + 1));
+  }
+  slicedArrayContainer.map((array) => {
+    let totalValue = 0;
+    array.map((obj) => {
+      totalValue += obj.value;
+    });
+    resultArray.push({
+      time: array[array.length - 1].time,
+      value: totalValue / array.length,
+    });
+  });
+
+  return resultArray;
+}
+
+function calculateRSI(dataArray: LineData[], counter: number) {
+  const resultArray: LineData[] = [];
+  const slicedArrayContainer = [];
+  for (let i = counter; i < dataArray.length; i++) {
+    slicedArrayContainer.push(dataArray.slice(i - counter, i + 1));
+  }
+  slicedArrayContainer.map((array) => {
+    const upArray = [];
+    const downArray = [];
+    for (let i = 1; i < array.length; i++) {
+      const result = array[i].value - array[i - 1].value;
+      if (result > 0) {
+        upArray.push(result);
+      } else {
+        downArray.push(result);
+      }
+    }
+    let totalUp = 0;
+    for (const value of upArray) {
+      totalUp += value;
+    }
+
+    let totalDown = 0;
+    for (const value of downArray) {
+      totalDown += -value;
+    }
+
+    const RSI =
+      (totalUp / counter / (totalUp / counter + totalDown / counter)) * 100;
+
+    resultArray.push({ time: array[array.length - 1].time, value: RSI });
+  });
+
+  return resultArray;
+}
+
+function calculateEMA(
+  dataArray: LineData[],
+  counter: number,
+  SMAArray: LineData[],
+  K: number,
+) {
+  const resultArray: LineData[] = [];
+  if (SMAArray.length < counter) {
     return resultArray;
   }
+  let lastDayEMA = SMAArray[0].value;
+  resultArray.push({ time: dataArray[counter + 1].time, value: lastDayEMA });
+  for (let i = counter + 2; i < dataArray.length; i++) {
+    const todayEMA = K * (dataArray[i].value - lastDayEMA) + lastDayEMA;
+    resultArray.push({ time: dataArray[i].time, value: todayEMA });
+    lastDayEMA = todayEMA;
+  }
+
+  return resultArray;
+}
+
+function calculateMACD(EMA12Array: LineData[], EMA26Array: LineData[]) {
+  const fastLineResultArray: LineData[] = [];
+  for (let i = 0; i < EMA26Array.length; i++) {
+    const fastLineResult = EMA12Array[i + 14].value - EMA26Array[i].value;
+    fastLineResultArray.push({
+      time: EMA26Array[i].time,
+      value: fastLineResult,
+    });
+  }
+
+  const counterDaySMA = calculateSMA(fastLineResultArray, 9);
+  const slowLineResultArray = calculateEMA(
+    fastLineResultArray,
+    9,
+    counterDaySMA,
+    2 / 10,
+  );
+
+  const histogramResultArray: HistogramData[] = [];
+  for (let i = 0; i < slowLineResultArray.length; i++) {
+    const histogramValue =
+      fastLineResultArray[i + 10].value - slowLineResultArray[i].value;
+
+    let color = '';
+    histogramValue > 0
+      ? (color = 'rgb(38, 166, 155)')
+      : (color = 'rgb(239, 83, 80)');
+
+    histogramResultArray.push({
+      time: fastLineResultArray[i].time,
+      value: histogramValue,
+      color: color,
+    });
+  }
+
+  return { fastLineResultArray, slowLineResultArray, histogramResultArray };
 }

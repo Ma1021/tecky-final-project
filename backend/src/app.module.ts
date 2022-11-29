@@ -9,8 +9,9 @@ import { AnswerModule } from './answer/answer.module';
 import { NotificationModule } from './notification/notification.module';
 import { ChatroomModule } from './chatroom/chatroom.module';
 import { AnalyticsModule } from './analytics/analytics.module';
+import { StockModule } from './stock/stock.module';
 
-let profile = require('../knexfile')[env.NODE_ENV];
+const profile = require('../knexfile')[env.NODE_ENV];
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ let profile = require('../knexfile')[env.NODE_ENV];
     AnswerModule,
     NotificationModule,
     ChatroomModule,
-    AnalyticsModule
+    AnalyticsModule,
+    StockModule,
   ],
   controllers: [AppController],
   providers: [AppService],

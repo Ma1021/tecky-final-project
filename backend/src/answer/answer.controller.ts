@@ -10,6 +10,7 @@ export class AnswerController {
     async createAnswer(@Body() answer: Answer_DTO, @Response() res) {        
         const response = await this.answerService.create(answer)
         const id = response.id
+
         res.status(HttpStatus.CREATED).json({message:"Create answer successfully", answer_id: id});
     }
 
@@ -18,7 +19,7 @@ export class AnswerController {
         if(!answer_id) {
             throw new HttpException('Missing answer id', HttpStatus.BAD_REQUEST)
         }
-
+        
         this.answerService.delete(+answer_id).then(()=>{
             res.status(HttpStatus.ACCEPTED).json({message:"Delete answer successfully"});
         })

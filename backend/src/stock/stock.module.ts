@@ -1,21 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './stock.controller';
-import { AppService } from './stock.service';
-import { KnexModule } from 'nestjs-knex';
+import { StockController } from './stock.controller';
+import { StockService } from './stock.service';
 
 @Module({
-  imports: [
-    KnexModule.forRoot({
-      config: {
-        client: 'pg',
-        useNullAsDefault: true,
-        connection: {
-          database: 'stock',
-        },
-      },
-    }),
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [StockController],
+  providers: [StockService],
 })
-export class AppModule {}
+export class StockModule {}

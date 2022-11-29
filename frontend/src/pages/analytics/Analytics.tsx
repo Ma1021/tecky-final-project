@@ -6,13 +6,6 @@ import { useEffect, useState } from "react";
 import GenderPie from './GenderPie';
 import AgeChart from './AgeChart';
 
-let user_id: number
-
-if(localStorage.getItem("auth_stockoverflow") !== null) {
-  const user = JSON.parse(localStorage.getItem("auth_stockoverflow") as string).user || undefined;
-  user_id = +user.id;
-}
-
 interface Data {
   date:string,
   number_of_follower: number
@@ -29,6 +22,13 @@ interface Follower {
 const Analytics: React.FC = () => {
     const [followerData, setFollowerData] = useState(Array<Follower>);
 
+    let user_id: number = 0
+
+    if(localStorage.getItem("auth_stockoverflow") !== null) {
+      const user = JSON.parse(localStorage.getItem("auth_stockoverflow") as string).user || undefined;
+      user_id = +user.id;
+    }
+
     useEffect(()=>{
       fetch(`${process.env.REACT_APP_PUBLIC_URL}/analytics/follower_month/${user_id}`)
       .then(response => response.json())
@@ -38,6 +38,9 @@ const Analytics: React.FC = () => {
     const thirtyDaysAgo = new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0]
     
     function percentage(now: number, thirtyAgo: number) {
+      if(thirtyAgo === 0) {
+        return ((now - thirtyAgo) / 1 * 100).toFixed(1);
+      }
       return ((now - thirtyAgo) / thirtyAgo * 100).toFixed(1);
     }
     
@@ -74,7 +77,7 @@ const Analytics: React.FC = () => {
                     </FansAmountHeader>
                     <div className="totalAmount">
                         <IonText>你有<strong style={{fontSize:25, margin:"0rem 0.5rem"}}>{followerData[0].follower_now}</strong>名粉絲</IonText>
-                        <IonText>{percentage(followerData[0].follower_now, followerData[0].follower_beforeMonth+7)}% vs {thirtyDaysAgo}</IonText>
+                        <IonText>{percentage(followerData[0].follower_now, followerData[0].follower_beforeMonth)}% vs {thirtyDaysAgo}</IonText>
                     </div>
                     <FansAmountAnalysis>
                         <div className="amountAnalysis">
@@ -129,6 +132,11 @@ const Analytics: React.FC = () => {
                     <FansAgeAnalysis>
                       <AgeChart user_id={user_id}/>
                     </FansAgeAnalysis>
+
+                    <IonText>聊天室數據</IonText>
+                    <ChatroomAnalysis>
+
+                    </ChatroomAnalysis>
                 </Container>
               }
             </IonContent>
@@ -194,17 +202,25 @@ const FansAmountAnalysis = styled.div`
 `
 
 const FansGenderAnalysis = styled.div`
-    width: 100%;
-    height: 12rem;
-    margin:1rem 0rem;
-    background-color: #222;
-    border-radius: 0.8rem;
+  width: 100%;
+  height: 12rem;
+  margin:1rem 0rem;
+  background-color: #222;
+  border-radius: 0.8rem;
 `
 
 const FansAgeAnalysis = styled.div`
-    width: 100%;
-    height: 13rem;
-    margin-top: 0.5rem;
-    background-color: #222;
-    border-radius: 0.8rem;
+  width: 100%;
+  height: 13rem;
+  margin-top: 0.5rem;
+  background-color: #222;
+  border-radius: 0.8rem;
+`
+
+const ChatroomAnalysis = styled.div`
+  width: 100%;
+  height: 13rem;
+  margin-top: 0.5rem;
+  background-color: #222;
+  border-radius: 0.8rem;
 `

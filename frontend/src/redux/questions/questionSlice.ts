@@ -2,12 +2,12 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { Question, initialState } from './state'
 
 const userStorage = localStorage.getItem("auth_stockoverflow") as string;
-let user_id: number;
+let userData: any
 
 if(userStorage) {
     const { user } = JSON.parse(userStorage)
     if(user) {
-        user_id = +user.id
+        userData = user
     }
 }
 
@@ -76,9 +76,11 @@ export const createQuestion = createAsyncThunk<Question, Object>("question/creat
           body:JSON.stringify(data)
         })
         const json = await res.json();
+
+        console.log(json);
         
         // insert notification 
-        const followerRes = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/followers/${user_id}`)
+        const followerRes = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/followers/${userData.id}`)
         const followerJson = await followerRes.json();
         
         if(followerJson.length > 0) {
@@ -86,8 +88,10 @@ export const createQuestion = createAsyncThunk<Question, Object>("question/creat
                 const notification = {
                     notification_type_id:1,
                     notification_target_id: json[0].id,
-                    actor_id: user_id,
-                    notifiers: follower.user_id
+                    actor_id: userData.id,
+                    actor_username: userData.username,
+                    notifiers: follower.user_id,
+                    content: json[0].content
                 }
                 
                 await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/`, {
@@ -146,7 +150,7 @@ export const createAnswer = createAsyncThunk<Question, {answerer_id: number, ask
             const notification = {
                 notification_type_id: 2,
                 notification_target_id: json.answer_id,
-                actor_id: user_id,
+                actor_id: userData.id,
                 notifiers: data.asker_id
             }
 
@@ -186,7 +190,7 @@ export const deleteAnswer = createAsyncThunk<Question, {question_id: number, ans
         await fetch(`${process.env.REACT_APP_PUBLIC_URL}/answer/like`,{
             method:'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({answer_id:data.answer_id, user_id})
+            body: JSON.stringify({answer_id:data.answer_id, user_id:userData.id})
         })
 
         thunkAPI.dispatch(loadQuestion(data.question_id));

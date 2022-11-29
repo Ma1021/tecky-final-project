@@ -28,6 +28,9 @@ import { AuthState } from "./redux/auth/state";
 
 // import for push notification
 import { PushNotifications } from "@capacitor/push-notifications";
+import { Capacitor } from '@capacitor/core';
+
+const isPushNotificationsAvailable = Capacitor.isPluginAvailable('PushNotifications');
 
 setupIonicReact();
 
@@ -57,7 +60,10 @@ const App: React.FC = () => {
       await reg_push_notifications_token();
       await reg_push_notification_listeners();
     };
-    main();
+
+    if(isPushNotificationsAvailable) {
+      main();
+    }
   }, []);
 
   // after checking permission from reg_push_notification

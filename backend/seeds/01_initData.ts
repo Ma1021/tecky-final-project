@@ -5,7 +5,7 @@ let users = require('../data/user.json');
 let SALT_ROUND = 10;
 
 function hashPassword(password: string): Promise<string> {
-  return hash(password, SALT_ROUND)
+  return hash(password, SALT_ROUND);
 }
 
 export async function seed(knex: Knex): Promise<void> {
@@ -35,18 +35,20 @@ export async function seed(knex: Knex): Promise<void> {
   // Insert users
   for (let user of users) {
     user.password_hash = await hashPassword(user.password_hash);
-    await knex('users').insert(user)
+    await knex('users').insert(user);
   }
 
   // get all user id
   const userRes = await knex('users').select('id');
   const user_idArray = userRes.slice(1); // without admin
 
-  //Insert subscriptions 
+  //Insert subscriptions
   for (let x = 0; x < 500; x++) {
     //random a user id and following id between 0 to user array length
-    const user_id = user_idArray[Math.floor(Math.random() * user_idArray.length)].id
-    const following_id = user_idArray[Math.floor(Math.random() * user_idArray.length)].id
+    const user_id =
+      user_idArray[Math.floor(Math.random() * user_idArray.length)].id;
+    const following_id =
+      user_idArray[Math.floor(Math.random() * user_idArray.length)].id;
 
     // checking the subscription peer is existed or not
     await knex('subscriptions')
@@ -56,69 +58,78 @@ export async function seed(knex: Knex): Promise<void> {
       .then(async (subscription) => {
         if (subscription.length > 0) {
           // if existed do nothing
-          return
+          return;
         } else {
           // random a date within 30 days
-          const date = new Date().getDate() - Math.floor(Math.random() * 27)
-          // if not exist then insert 
-          await knex('subscriptions').insert({ user_id, following_id, created_at:`2022-11-${date}` })
+          const date = new Date().getDate() - Math.floor(Math.random() * 27);
+          // if not exist then insert
+          await knex('subscriptions').insert({
+            user_id,
+            following_id,
+            created_at: `2022-11-${date}`,
+          });
         }
-      })
+      });
   }
 
-//Insert questions and answer start
+  //Insert questions and answer start
 
-async function insertAnswer(question_id: number, asker_id: number) {
+  async function insertAnswer(question_id: number, asker_id: number) {
     // random a answer amount
     const amount = Math.floor(Math.random() * 6);
-    for(let i = 0; i < amount; i++ ) {
-      const content = answerContent[Math.floor(Math.random()*answerContent.length)];
-      const answerer_id = user_idArray[Math.floor(Math.random()* user_idArray.length)].id;
-      
-      if(asker_id === answerer_id) {
-        return
+    for (let i = 0; i < amount; i++) {
+      const content =
+        answerContent[Math.floor(Math.random() * answerContent.length)];
+      const answerer_id =
+        user_idArray[Math.floor(Math.random() * user_idArray.length)].id;
+
+      if (asker_id === answerer_id) {
+        return;
       }
 
       await knex('answers').insert({
         answerer_id,
         question_id,
-        content
-      })
+        content,
+      });
     }
   }
-  
+
   // get all stock id
   const stockRes = await knex('stocks').select('id');
   const questionContent = [
-    "依隻可以買嗎？",
-    "點睇呢隻🙏",
-    "可以入嗎？",
-    "請問咩價位可以入？謝謝",
-    "請問美股依家到底未，有咩股推介",
-    "想開始月供股票，有咩推介？",
-    "想買收息股，邊隻好？",
-    "元宇宙仲有冇前景？"
-  ]
+    '依隻可以買嗎？',
+    '點睇呢隻🙏',
+    '可以入嗎？',
+    '請問咩價位可以入？謝謝',
+    '請問美股依家到底未，有咩股推介',
+    '想開始月供股票，有咩推介？',
+    '想買收息股，邊隻好？',
+    '元宇宙仲有冇前景？',
+  ];
 
   const answerContent = [
-    "依隻可以隨時買入都得",
-    "可以用平均成本法，每月少量買入",
-    "依家波動較大的市況下，比較適合即日短炒，風險相對較低",
-    "可以每月少量買入QQQ或VOO",
-    "科技股現時風險較高，特別係一d小型公司，有倒閉既風險",
-    "長線黎睇仲有得跌，可以再等等再入市",
-    "現階段保本為主要目標",
-    "唔好買住，市況未穩",
-    "長線既話可以入，短線唔好入住"
-  ]
+    '依隻可以隨時買入都得',
+    '可以用平均成本法，每月少量買入',
+    '依家波動較大的市況下，比較適合即日短炒，風險相對較低',
+    '可以每月少量買入QQQ或VOO',
+    '科技股現時風險較高，特別係一d小型公司，有倒閉既風險',
+    '長線黎睇仲有得跌，可以再等等再入市',
+    '現階段保本為主要目標',
+    '唔好買住，市況未穩',
+    '長線既話可以入，短線唔好入住',
+  ];
 
   // get all user id without kol and admin
-  const normalUser = await knex('users').select('id').where('user_type', 'normal');
+  const normalUser = await knex('users')
+    .select('id')
+    .where('user_type', 'normal');
 
   for (let i = 0; i < questionContent.length; i++) {
     const tag_number = await knex('tags').count('tag_id').first();
     const stock_id = stockRes[Math.floor(Math.random() * stockRes.length)].id;
-    const asker_id = normalUser[Math.floor(Math.random() * normalUser.length)].id;
+    const asker_id =
+      normalUser[Math.floor(Math.random() * normalUser.length)].id;
 
     if (tag_number.count == 0) {
       if (stock_id) {
@@ -129,12 +140,11 @@ async function insertAnswer(question_id: number, asker_id: number) {
       }
       // insert question to question table and get the question id
       const question_id = await knex('questions')
-      .insert({ asker_id, content: questionContent[i], tag_id: 1 })
-      .returning('id');
+        .insert({ asker_id, content: questionContent[i], tag_id: 1 })
+        .returning('id');
 
       // insert answer
       insertAnswer(question_id[0].id, asker_id);
-
     } else {
       let { tag_id } = await knex('tags')
         .select('tag_id')
@@ -147,7 +157,6 @@ async function insertAnswer(question_id: number, asker_id: number) {
           tag_id: tag_id + 1,
           stock_id,
         });
-
       } else {
         await knex('tags').insert({
           tag_id: tag_id + 1,
@@ -156,8 +165,8 @@ async function insertAnswer(question_id: number, asker_id: number) {
       }
       // insert question to question table and get the question id
       const question_id = await knex('questions')
-      .insert({ asker_id, content: questionContent[i], tag_id: tag_id + 1 })
-      .returning('id');
+        .insert({ asker_id, content: questionContent[i], tag_id: tag_id + 1 })
+        .returning('id');
 
       // insert answer
       insertAnswer(question_id[0].id, asker_id);
@@ -170,7 +179,6 @@ async function insertAnswer(question_id: number, asker_id: number) {
     { action_type: 'create answer', action_desc: '回覆了你：' },
     { action_type: 'follow user', action_desc: '追隨了你' },
   ]);
-  
 
   // Maggie's part -----------------------------
   // any problems please find maggie

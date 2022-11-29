@@ -10,7 +10,7 @@ import {
   IonLabel,
 } from "@ionic/react";
 import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router";
+import { useLocation } from "react-router";
 import "./IndividualStockInfo.css";
 import { useAppSelector } from "../../redux/store";
 import MainChart from "../../components/stock/MultipleSeriesChart";
@@ -55,7 +55,10 @@ interface StockInfo {
 }
 
 const IndividualStockInfo: React.FC = () => {
-  const { symbol } = useParams<{ symbol: string }>();
+  const location = useLocation();
+  const symbol =
+    location.pathname.split("/")[location.pathname.split("/").length - 1];
+
   const [extendStockInfo, setExtendStockInfo] = useState(false);
   const [stockInfo, setStockInfo] = useState<StockInfo>({
     symbol: "",
@@ -99,7 +102,9 @@ const IndividualStockInfo: React.FC = () => {
 
   useEffect(() => {
     // get stock data from database
-    fetch(`http://localhost:8080/stock/getAllDataFromStockInfo?symbol=${symbol}`)
+    fetch(
+      `http://localhost:8080/stock/getAllDataFromStockInfo?symbol=${symbol}`
+    )
       .then((res) => res.json())
       .then((result) => {
         setStockInfo({
@@ -169,7 +174,7 @@ const IndividualStockInfo: React.FC = () => {
     //   shsFloat: 2.55,
     //   minTradingUnit: 1,
     // });
-  }, [stockInfo, symbol]);
+  }, [stockInfo]);
 
   const currentPriceDifference = useMemo(
     () => stockInfo.currentPrice - stockInfo.close,

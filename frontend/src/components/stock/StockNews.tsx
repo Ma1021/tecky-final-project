@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useLocation } from "react-router";
 import NewsRow from "./NewsRow";
 
 interface News {
@@ -11,7 +11,9 @@ interface News {
 }
 
 const StockNews: React.FC = () => {
-  const { symbol } = useParams<{ symbol: string }>();
+  const location = useLocation();
+  const symbol =
+    location.pathname.split("/")[location.pathname.split("/").length - 1];
   const [newsArray, setNewsArray] = useState<News[]>([]);
 
   useEffect(() => {

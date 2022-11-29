@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useLocation } from "react-router";
 import "./PaperTrade.css";
 import MultipleSeriesChart from "./MultipleSeriesChart";
 import UserPortfolio from "./UserPortfolio";
@@ -21,7 +21,9 @@ interface UserTradeRecords {
 }
 
 const PaperTrade: React.FC = () => {
-  const { symbol } = useParams<{ symbol: string }>();
+  const location = useLocation();
+  const symbol =
+    location.pathname.split("/")[location.pathname.split("/").length - 1];
   const userID = 1;
   const [userTradeRecords, setUserTradeRecords] = useState<UserTradeRecords[]>(
     []

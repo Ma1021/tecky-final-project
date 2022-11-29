@@ -20,7 +20,7 @@ interface UserTradeRecords {
   complete_time: string;
 }
 
-const PaperTrade: React.FC = () => {
+const PaperTradePanel: React.FC = () => {
   const location = useLocation();
   const symbol =
     location.pathname.split("/")[location.pathname.split("/").length - 1];
@@ -75,4 +75,4 @@ const PaperTrade: React.FC = () => {
   );
 };
 
-export default PaperTrade;
+export default PaperTradePanel;

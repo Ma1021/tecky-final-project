@@ -94,7 +94,13 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
           textColor: "#FFFFFF",
         },
       })
-    : (layoutOption = { layout: { background: { color: "#FFFFFF" } } });
+    : (layoutOption = {
+        layout: { background: { color: "#FFFFFF" } },
+        // grid: {
+        //   vertLines: { color: "rgba(0, 0, 0, 0.5)" },
+        //   horzLines: { color: "rgba(0, 0, 0, 0.5)" },
+        // },
+      });
 
   // setup chart and series when loaded into the page
   useEffect(() => {
@@ -103,10 +109,10 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
       height: 500,
       grid: {
         vertLines: {
-          color: "rgba(255, 255, 255, 0.2)",
+          color: "rgba(200, 200, 200, 0.2)",
         },
         horzLines: {
-          color: "rgba(255, 255, 255, 0.2)",
+          color: "rgba(200, 200, 200, 0.2)",
         },
       },
     });

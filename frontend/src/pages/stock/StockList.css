@@ -79,3 +79,8 @@ h1 {
 .stock-other.positive {
   background-color: lightgreen;
 }
+
+.button-container {
+  display: flex;
+  justify-content: space-around;
+}

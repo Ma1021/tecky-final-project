@@ -44,12 +44,12 @@ import Menu from "./All/Menu";
 import Home from "../pages/Home";
 import Inbox from "../pages/Inbox";
 import Chatroom from "../pages/chatroom/Chatroom";
-import IndividualStockInfo from "../../stock/IndividualStockInfo";
-import StockList from "../../stock/StockList";
+import IndividualStockInfo from "../pages/stock/IndividualStockInfo";
+import StockList from "../pages/stock/StockList";
 import ChatroomForm from "../pages/chatroom/ChatroomForm";
 
 //KOL ranking pages
-import KOL from "../pages/ranking/Ranking";
+import KOL from "../pages/ranking/ranking";
 
 // User Analysis pages
 import Analytics from "../pages/analytics/Analytics";
@@ -76,12 +76,11 @@ const Navigation: React.FC = () => {
           component={Subscription}
         ></Route>
         <Route exact path="/chatroom/create" component={ChatroomForm}></Route>
-        {/* <Route exact path="/stockList" component={StockList}></Route> */}
-        {/* <Route
+        <Route
           exact
-          path="/individualStockInfo/:id"
+          path="/individualStockInfo/:symbol"
           component={IndividualStockInfo}
-        ></Route> */}
+        ></Route>
         <Route exact path="/">
           <Redirect to="/home" />
         </Route>
@@ -92,6 +91,7 @@ const Navigation: React.FC = () => {
         <IonTabs>
           <IonRouterOutlet>
             <Route exact path="/tab1" component={Tab1}></Route>
+            <Route exact path="/stockList" component={StockList}></Route>
             <Route exact path="/chatroomList" component={ChatroomList}></Route>
             <Route exact path="/discuss" component={Discuss}></Route>
             <Route exact path="/kol" component={KOL}></Route>
@@ -121,7 +121,11 @@ const Navigation: React.FC = () => {
               />
               <IonLabel>資訊</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="tab2" href="/tab2" className="tabButton">
+            <IonTabButton
+              tab="stockList"
+              href="/stockList"
+              className="tabButton"
+            >
               <IonIcon icon={trendingUp} />
               <IonLabel>市場</IonLabel>
             </IonTabButton>

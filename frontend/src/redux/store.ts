@@ -8,7 +8,6 @@ import { TypedUseSelectorHook } from "react-redux";
 import questionReducer from "./questions/questionSlice";
 import { chatroomAddReducer } from "./chatroomAdd/reducer";
 import { themeReducer } from "./theme/theme.reducer";
-import { pageReducer } from "./stock/page.reducer";
 import subscriptionReducer from "./subscription/subscriptionSlice";
 
 export type RootState = ReturnType<typeof store.getState>;
@@ -20,7 +19,6 @@ export let store = configureStore({
     question: questionReducer,
     chatroomAdd: chatroomAddReducer,
     theme: themeReducer,
-    page: pageReducer,
     subscription: subscriptionReducer,
   }),
 });

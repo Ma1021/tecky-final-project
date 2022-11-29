@@ -13,7 +13,7 @@ import { ChatBubbleProps } from "./ChatSendBubble";
 const ChatReceiveBubble: React.FC<ChatBubbleProps> = (props) => {
   return (
     <>
-      <div className="d-flex" data-message-id={props.props.recordid}>
+      <div className="d-flex" data-message={props.props.recordid}>
         <div className="d-flex flex-row ion-margin mr-0">
           <IonAvatar
             style={{
@@ -51,7 +51,11 @@ const ChatReceiveBubble: React.FC<ChatBubbleProps> = (props) => {
               </p>
             </IonCardContent>
           </IonCard>
-          {new Date(props.props.created_at).toLocaleString()}
+          {new Date(props.props.created_at).toLocaleString([], {
+            hour12: false,
+            dateStyle: "medium",
+            timeStyle: "short",
+          })}
         </div>
       </div>
     </>

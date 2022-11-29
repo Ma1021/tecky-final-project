@@ -201,20 +201,20 @@ const IndividualStockInfo: React.FC = () => {
 
         <SegmentTab value={segment} onIonChange={onSegmentChange}>
           <SegmentButton value="stockInfo">
-            <IonLabel>Stock Info</IonLabel>
+            <IonLabel>股票資訊</IonLabel>
           </SegmentButton>
           <SegmentButton value="stockForum">
-            <IonLabel>Stock Forum</IonLabel>
+            <IonLabel>問題</IonLabel>
           </SegmentButton>
           <SegmentButton value="stockNews">
-            <IonLabel>Stock News</IonLabel>
+            <IonLabel>新聞</IonLabel>
           </SegmentButton>
           <SegmentButton value="stockAnalysis">
-            <IonLabel>Stock Analysis</IonLabel>
+            <IonLabel>分析</IonLabel>
           </SegmentButton>
-          <SegmentButton value="paperTrade">
+          {/* <SegmentButton value="paperTrade">
             <IonLabel>Paper Trade</IonLabel>
-          </SegmentButton>
+          </SegmentButton> */}
         </SegmentTab>
 
         <IonContent>

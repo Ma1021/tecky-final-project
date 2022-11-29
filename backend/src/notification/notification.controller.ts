@@ -11,8 +11,6 @@ export class NotificationController {
     @Post()
     async createNotification(@Body() notification: Notification_DTO, @Response() res) {
         const response = await this.notificationService.create(notification);
-
-        console.log(response);
         
         if(response.length > 0) {
             res.status(HttpStatus.ACCEPTED).json({message:"notification create successfully"});
@@ -21,8 +19,6 @@ export class NotificationController {
             if(notification.notification_type_id === 1) {
 
                 // get notifier push notification key
-                
-
                 fetch(`https://fcm.googleapis.com/fcm/send`, {
                     method:"POST",
                     headers:{"content-type": "application/json", "Authorization":`key=${env.FIREBASE_KEY}`},

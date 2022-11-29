@@ -15,7 +15,7 @@ export interface ChatroomRecord {
 export interface ChatroomRecordState {
   chatRecord: ChatroomRecord[];
   loading: boolean;
-  error?: string;
+  error?: { statusCode: number; message: string };
 }
 
 export const initialChatroomRecordState: ChatroomRecordState = {

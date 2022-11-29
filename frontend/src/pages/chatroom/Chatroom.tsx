@@ -18,9 +18,10 @@ import {
   IonText,
   IonTitle,
   IonToolbar,
+  useIonToast,
 } from "@ionic/react";
 import { searchOutline, send } from "ionicons/icons";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useRouteMatch } from "react-router";
 import { Socket } from "socket.io-client";
 import styled from "styled-components";
@@ -34,14 +35,18 @@ import { useSocket } from "../../helper/use-socket";
 import img from "../../img/animal_stand_ookami.png";
 import {
   fetchChatroomsRecord,
+  loadChatroomsRecord,
   loadChatroomsRecordStart,
 } from "../../redux/chatroomRecord/actions";
 import { ChatroomRecord } from "../../redux/chatroomRecord/state";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 
 const Chatroom: React.FC = () => {
+  // get the new message
   const [message, setMessage] = useState("");
+  const [newMessageId, setNewMessageId] = useState<null | number>(null);
   const dispatch = useAppDispatch();
+  const [present] = useIonToast();
 
   const userId = useAppSelector((state) => {
     return state?.auth?.user?.id;
@@ -54,15 +59,41 @@ const Chatroom: React.FC = () => {
   let url = useRouteMatch<{ id: string }>();
   let roomId = url.params.id;
 
+  // take previous chat record and display
+  useEffect(() => {
+    dispatch(fetchChatroomsRecord(userId!, +roomId));
+  }, [dispatch]);
+
   // 開新socket
-  const socket = useSocket(
+  useSocket(
     // why: prevent join room multiple times.
     useCallback(
       (socket: Socket) => {
-        // console.log("join room:", roomId);
+        // join the room
         socket.emit("join-room", roomId);
+        // event listener listening on the socket
+        socket.on("new-message", (bubble) => {
+          let newMessage: ChatroomRecord = bubble;
+          console.log("newMessage", newMessage);
+          if (!!newMessage) {
+            if (newMessage.chatroomid !== +roomId) {
+              return;
+            }
+          }
+
+          // update the list of chats
+          console.log("before dispatch", chatRecord);
+
+          if (JSON.stringify(newMessage) === JSON.stringify(chatRecord)) {
+            console.log("they equal");
+            return;
+          }
+          console.log("they not equal", chatRecord, newMessage);
+          dispatch(loadChatroomsRecord([...chatRecord, newMessage]));
+          console.log("after dispatch", chatRecord);
+        });
         return () => {
-          // console.log("leave room:", roomId);
+          console.log("leave room:", roomId);
           socket.emit("leave-room", roomId);
         };
       },
@@ -70,33 +101,49 @@ const Chatroom: React.FC = () => {
     )
   );
 
+  useLayoutEffect(() => {
+    if (!newMessageId) return;
+    let ionCard = document.querySelector(
+      `[dataset-message-id="${newMessageId}"]`
+    );
+  });
+
   // check if host is speaker
   // if user is host
 
-  // take previous record and display
-  useEffect(() => {
-    dispatch(fetchChatroomsRecord(userId!, +roomId));
-  }, [dispatch]);
-
+  // take now typing record
   const handleMessage = (e: any) => {
     let msg = e.target.value;
     setMessage(msg);
   };
 
-  const sendMessage = (e: any) => {
-    fetch(`${process.env.REACT_APP_PUBLIC_URL}/chatroom/${roomId}/message`, {
-      method: "POST",
-      headers: { contentType: "application/json" },
-      body: JSON.stringify({
-        message: message,
-        userId: userId,
-        chatroomId: roomId,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        data;
+  const sendMessage = async (e: any) => {
+    let res = await fetch(
+      `${process.env.REACT_APP_PUBLIC_URL}/chatroom/${roomId}/message`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          message,
+          userId,
+          chatroomId: +roomId,
+        }),
+      }
+    );
+    if (!res.ok) {
+      console.log(await res.json());
+      present({
+        message: "發送失敗",
+        duration: 1000,
+        position: "bottom",
       });
+    }
+    setMessage((latestMsg) => {
+      if (latestMsg == message) {
+        return "";
+      }
+      return latestMsg;
+    });
   };
 
   return (
@@ -123,9 +170,17 @@ const Chatroom: React.FC = () => {
             </LoadingScreen>
           ) : //if error
           error ? (
-            <QuestionContainer>
-              <div style={{ marginTop: 10 }}>載入失敗</div>
-            </QuestionContainer>
+            //if error = 未加入聊天室
+            error.message.includes("未加入") ? (
+              <QuestionContainer>
+                <div style={{ marginTop: 10 }}>{error.message}</div>
+              </QuestionContainer>
+            ) : (
+              // 其他 error
+              <QuestionContainer>
+                <div style={{ marginTop: 10 }}>載入失敗</div>
+              </QuestionContainer>
+            )
           ) : chatRecord.length > 0 ? (
             // if can load
             <>
@@ -143,19 +198,21 @@ const Chatroom: React.FC = () => {
           )
         }
       </IonContent>
-      <IonFooter>
-        <ChatReplyContainer>
-          <IonInput
-            value={message}
-            placeholder="發表回應"
-            maxlength={255}
-            onIonChange={handleMessage}
-          ></IonInput>
-          <IonButton onClick={sendMessage}>
-            <IonIcon icon={send}></IonIcon>
-          </IonButton>
-        </ChatReplyContainer>
-      </IonFooter>
+      {error ? null : (
+        <IonFooter>
+          <ChatReplyContainer>
+            <IonInput
+              value={message}
+              placeholder="發表回應"
+              maxlength={255}
+              onIonChange={handleMessage}
+            ></IonInput>
+            <IonButton onClick={sendMessage}>
+              <IonIcon icon={send}></IonIcon>
+            </IonButton>
+          </ChatReplyContainer>
+        </IonFooter>
+      )}
     </IonPage>
   );
 };

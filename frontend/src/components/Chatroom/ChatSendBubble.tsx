@@ -29,7 +29,10 @@ export interface ChatBubbleProps {
 const ChatSendBubble: React.FC<ChatBubbleProps> = (props) => {
   return (
     <>
-      <div className="d-flex flex-row-reverse">
+      <div
+        className="d-flex flex-row-reverse"
+        data-message-id={props.props.recordid}
+      >
         <div className="d-flex flex-row ion-margin ml-0">
           <IonAvatar
             style={{

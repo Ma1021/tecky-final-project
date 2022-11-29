@@ -13,7 +13,7 @@ import { ChatBubbleProps } from "./ChatSendBubble";
 const ChatReceiveBubble: React.FC<ChatBubbleProps> = (props) => {
   return (
     <>
-      <div className="d-flex">
+      <div className="d-flex" data-message-id={props.props.recordid}>
         <div className="d-flex flex-row ion-margin mr-0">
           <IonAvatar
             style={{

@@ -11,6 +11,8 @@ export function useSocket(initFn: (socket: Socket) => () => void) {
     // console.log(process.env.REACT_APP_PUBLIC_WS_URL);
     socket = connect(process.env.REACT_APP_PUBLIC_WS_URL as string);
   }
+
+  // only call when  init fn not changed (which is roomid i guess)
   useEffect(() => {
     let teardown: () => void;
     let isDestroyed = false;
@@ -31,7 +33,7 @@ export function useSocket(initFn: (socket: Socket) => () => void) {
 
     return () => {
       // check if teardown is destroyed or not
-      // console.log("clean up");
+      console.log("clean up");
       isDestroyed = true;
 
       // call only if there is teardown

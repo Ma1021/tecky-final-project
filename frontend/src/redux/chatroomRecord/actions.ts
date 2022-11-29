@@ -31,7 +31,10 @@ export function loadChatroomsRecordEnd() {
   };
 }
 
-export function loadChatroomsRecordError(error: string) {
+export function loadChatroomsRecordError(error: {
+  statusCode: number;
+  message: string;
+}) {
   console.log({
     type: "@@chatroom/LOAD_CHATROOMS_RECORD_ERROR" as const,
     error: error,
@@ -51,15 +54,19 @@ export function fetchChatroomsRecord(userId: number, roomId: number) {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ userId, chatroomId: roomId }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        dispatch(loadChatroomsRecord(data));
-        dispatch(loadChatroomsRecordEnd());
-      })
-      .catch((error) => {
-        dispatch(loadChatroomsRecordError(error.message));
-      });
+    }).then((res) => {
+      if (res.ok) {
+        res.json().then((data) => {
+          dispatch(loadChatroomsRecord(data));
+          dispatch(loadChatroomsRecordEnd());
+        });
+        // .catch((error) => {
+        //   dispatch(loadChatroomsRecordError(error.message));
+        // });
+      } else {
+        res.json().then((error) => dispatch(loadChatroomsRecordError(error)));
+      }
+    });
   };
 }
 

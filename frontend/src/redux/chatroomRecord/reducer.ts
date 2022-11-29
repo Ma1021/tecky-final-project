@@ -7,9 +7,13 @@ export function chatroomRecordReducer(
 ): ChatroomRecordState {
   switch (action.type) {
     case "@@chatroom/LOAD_CHATROOMS_RECORD":
+      if (
+        JSON.stringify(state.chatRecord) === JSON.stringify(action.chatRecord)
+      )
+        return { ...state };
       return {
         ...state,
-        chatRecord: action.chatRecord,
+        chatRecord: [...state.chatRecord, ...action.chatRecord],
       };
     case "@@chatroom/LOAD_CHATROOMS_RECORD_START":
       return {

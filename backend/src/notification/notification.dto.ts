@@ -1,4 +1,4 @@
-import { IsNumber, IsNotEmpty } from "class-validator"
+import { IsNumber, IsNotEmpty, IsString } from "class-validator"
 
 export class Notification_DTO {
     @IsNotEmpty()
@@ -11,8 +11,14 @@ export class Notification_DTO {
     @IsNumber()
     actor_id: number;
     @IsNotEmpty()
+    @IsString()
+    actor_username: string;
+    @IsNotEmpty()
     @IsNumber({}, {each: true})
     notifiers: number[];
+    @IsNotEmpty()
+    @IsString()
+    content: string;
 }
 
 export class Notification_Delete_DTO {

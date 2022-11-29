@@ -9,7 +9,7 @@ import { WhatsappShareButton } from 'react-share'
 import UserBadge from '../../components/All/UserBadge';
 
 const QuestionDetail: React.FC = memo(() => {
-  const { question, loading } = useAppSelector((state) => state.question);
+  const { question } = useAppSelector((state) => state.question);
   let location = useLocation();
   const question_id = location.pathname.slice(10)  
   const [toastPresent] = useIonToast();

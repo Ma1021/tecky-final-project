@@ -39,7 +39,7 @@ export class QuestionController {
   @Post()
   createQuestion(@Body() questions: Question_DTO, @Response() res) {    
     const { asker_id, content, stock_id } = questions;
-
+    
     if(!content) {
       throw new HttpException('Missing content', HttpStatus.BAD_REQUEST)
     } 

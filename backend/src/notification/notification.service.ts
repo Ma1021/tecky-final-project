@@ -17,7 +17,7 @@ export class NotificationService {
                 notification_target_id,
                 actor_id
             }).returning('id');
-
+            
             const notification_object_id = objectRes[0].id;
             
             // insert notification
@@ -34,6 +34,8 @@ export class NotificationService {
                     notifier_id: notifiers
                 })
             }
+
+            return objectRes;
         }catch(err) {
             console.log(err);
         }

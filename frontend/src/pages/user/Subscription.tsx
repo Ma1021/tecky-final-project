@@ -8,7 +8,7 @@ import {
     IonSearchbar,
     IonSegment,
     IonSegmentButton,
-    IonLabel
+    IonLabel,
 } from "@ionic/react";
 
 import styled from "styled-components";

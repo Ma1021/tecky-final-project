@@ -10,7 +10,7 @@ export class AnswerService {
     async create(answer: Answer_DTO) {
         try {
             const { answerer_id, question_id, content } = answer;
-
+            
             const res = await this.knex('answers').insert({answerer_id, question_id, content}).returning('id');
             
             return res[0];

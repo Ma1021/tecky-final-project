@@ -7,7 +7,6 @@ import {
     IonImg,
     IonButton,
     IonIcon,
-    IonSpinner,
     useIonRouter
 } from "@ionic/react";
 import Title from "../../components/All/Title";
@@ -15,7 +14,7 @@ import styled from "styled-components";
 import { people } from "ionicons/icons";
 import UserCard from "./UserCard";
 import {useCallback, useEffect, useState} from 'react';
-import { RootState, useAppSelector, useAppDispatch } from "../../redux/store";
+import { useAppSelector, useAppDispatch } from "../../redux/store";
 import { loadFollowingsId, followUser, unFollowUser } from '../../redux/subscription/subscriptionSlice';
 
 interface FollowerCountList {
@@ -30,7 +29,7 @@ const Ranking: React.FC = () => {
     const [followerCountList, setFollowerCountList ] =  useState(Array<FollowerCountList>);
     const topThree = followerCountList.slice(0, 3);
     const otherRanking = followerCountList.slice(3);
-    const { followingIdList, loading } = useAppSelector(
+    const { followingIdList } = useAppSelector(
         (state) => state.subscription
     );
     
@@ -85,9 +84,6 @@ const Ranking: React.FC = () => {
                 </IonToolbar>
             </IonHeader>
             <IonContent>
-                
-                {loading ? <LoadingScreen><IonSpinner name="crescent"/> 載入中...</LoadingScreen> :
-                <>
                 <Background/>
                 <Container>
                     <IonText class="title">人氣KOL</IonText>
@@ -148,9 +144,6 @@ const Ranking: React.FC = () => {
                         )}
                     </KOLRanking>
                 </Container>
-                </>
-                }
-                
             </IonContent>
         </IonPage>
     )

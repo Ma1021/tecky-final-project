@@ -55,8 +55,8 @@ import KOL from "../pages/ranking/Ranking";
 import Analytics from "../pages/analytics/Analytics";
 
 const Navigation: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState("tab1");
-
+  const [selectedTab, setSelectedTab] = useState("discuss");
+  
   return (
     <IonReactRouter>
       {/* <Menu /> */}

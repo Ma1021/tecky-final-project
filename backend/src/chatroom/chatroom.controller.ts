@@ -142,7 +142,7 @@ export class ChatroomController {
   async findHosted(@Body() enteringChatroomDto: EnteringChatroomDto) {
     try {
       let result = await this.chatroomService.findHosted(enteringChatroomDto);
-      console.log('enter chatroom controller findEnter', result);
+      // console.log('enter chatroom controller findEnter', result);
       return result;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
@@ -188,7 +188,7 @@ export class ChatroomController {
     // unknown as not knowing what user will send
     @Body() messageChatDto: MessageChatroomDto,
   ) {
-    console.log('entering message controller');
+    // console.log('entering message controller');
     let result = await this.chatroomService.sendMessage(messageChatDto);
 
     // use the message to do socket

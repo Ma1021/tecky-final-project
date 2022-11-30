@@ -1,19 +1,20 @@
 import {
-  IonButton,
   IonPage,
   IonHeader,
+  IonToolbar,
   IonContent,
   IonSegment,
   IonSegmentButton,
+  IonLabel,
 } from "@ionic/react";
 import { useState } from "react";
+import PaperTradeAccountModule from "../../components/stock/PaperTradeAccountModule";
 import styled from "styled-components";
-import { useAppSelector } from "../../redux/store";
+import Title from "../../components/All/Title";
 import "./PaperTradeAccount.css";
 
 const PaperTradeAccount: React.FC = () => {
-  const isChinese = useAppSelector((state) => state.theme.isChinese);
-  const [segment, setSegment] = useState("Overview");
+  const [segment, setSegment] = useState("stock");
 
   const onSegmentChange = (e: any) => {
     setSegment(e.detail.value);
@@ -21,15 +22,28 @@ const PaperTradeAccount: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader></IonHeader>
+      <IonHeader
+        translucent={true}
+        collapse="fade"
+        style={{ height: 50 }}
+        className="d-flex align-items-center"
+      >
+        <IonToolbar>
+          <Title title="模擬交易" />
+        </IonToolbar>
+      </IonHeader>
 
       <IonContent>
-        <SegmentTab value={segment} onChange={onSegmentChange}>
-          <SegmentButton>{isChinese ? "總覽" : "Overview"}</SegmentButton>
-          <SegmentButton>{isChinese ? "交易" : "Trade"}</SegmentButton>
+        <SegmentTab value={segment} onIonChange={onSegmentChange}>
+          <SegmentButton value="stock">
+            <IonLabel>股票</IonLabel>
+          </SegmentButton>
+          <SegmentButton value="crypto">
+            <IonLabel>加密貨幣</IonLabel>
+          </SegmentButton>
         </SegmentTab>
 
-        {segment === "Overview" ? <div>Overview</div> : <div>Trade</div>}
+        <PaperTradeAccountModule filter={segment} />
       </IonContent>
     </IonPage>
   );

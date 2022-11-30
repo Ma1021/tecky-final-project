@@ -94,7 +94,7 @@ const ChatroomForm: React.FC = () => {
         duration: 1500,
         position: "bottom",
       });
-      
+
       router.goBack();
     } else {
       let json = await res.json();

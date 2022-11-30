@@ -20,7 +20,7 @@ import {
 } from "@ionic/react";
 import { useEffect, useState } from "react";
 import Title from "../../components/All/Title";
-import img from "../../img/animal_stand_ookami.png";
+import img from "src/img/animal_stand_ookami.png";
 import { people } from "ionicons/icons";
 import ChatroomRecommend from "../../components/Chatroom/ChatroomRecommend";
 import ChatroomAll from "../../components/Chatroom/ChatroomAll";
@@ -54,7 +54,6 @@ const ChatroomList: React.FC = () => {
         <IonHeader
           translucent={true}
           collapse="fade"
-          style={{ height: 50 }}
           className="d-flex align-items-center"
         >
           <IonToolbar>
@@ -109,6 +108,7 @@ export const SegmentOrganizer = styled.div`
   position: sticky;
   top: 0;
   z-index: 1;
+  margin-top:0.5rem;
 
   ion-item-divider {
     --inner-padding-start: 1rem;

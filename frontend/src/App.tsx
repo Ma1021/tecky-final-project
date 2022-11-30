@@ -69,8 +69,9 @@ const App: React.FC = () => {
   // after checking permission from reg_push_notification
   const reg_push_notification_listeners = async () => {
     // ask for acception to push
-    await PushNotifications.addListener("registration", (token) => {
-      // put into local storage
+    await PushNotifications.addListener("registration", (token) => {  
+      // save token to local storage
+      localStorage.setItem("push_notification_token", token.value);
       console.log("Registration token: ", token.value);
     });
 

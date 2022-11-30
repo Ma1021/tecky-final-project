@@ -54,6 +54,8 @@ import KOL from "../pages/ranking/Ranking";
 // User Analysis pages
 import Analytics from "../pages/analytics/Analytics";
 import ChatroomPage from "../pages/chatroom/ChatroomPage";
+import PaperTradeAccount from "../pages/stock/PaperTradeAccount";
+import IndividualAccount from "../pages/stock/IndividualAccount";
 
 const Navigation: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState("discuss");
@@ -91,7 +93,16 @@ const Navigation: React.FC = () => {
 
         <IonTabs>
           <IonRouterOutlet>
-            <Route exact path="/tab1" component={Tab1}></Route>
+            <Route
+              exact
+              path="/paperTrade"
+              component={PaperTradeAccount}
+            ></Route>
+            <Route
+              exact
+              path="/individualAccount/:category"
+              component={IndividualAccount}
+            ></Route>
             <Route exact path="/stockList" component={StockList}></Route>
             <Route exact path="/chatroomList" component={ChatroomList}></Route>
             <Route exact path="/discuss" component={Discuss}></Route>
@@ -116,9 +127,15 @@ const Navigation: React.FC = () => {
             className="tabBar"
             onIonTabsWillChange={(e) => setSelectedTab(e.detail.tab)}
           >
-            <IonTabButton tab="tab1" href="/tab1" className="tabButton">
+            <IonTabButton
+              tab="paperTrade"
+              href="/paperTrade"
+              className="tabButton"
+            >
               <IonIcon
-                icon={selectedTab === "tab1" ? newspaper : newspaperOutline}
+                icon={
+                  selectedTab === "paperTrade" ? newspaper : newspaperOutline
+                }
               />
               <IonLabel>資訊</IonLabel>
             </IonTabButton>

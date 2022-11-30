@@ -7,7 +7,7 @@ import {
 } from "@ionic/react";
 import React from "react";
 import finalPropsSelectorFactory from "react-redux/es/connect/selectorFactory";
-import img from "../../img/animal_stand_ookami.png";
+import img from "src/img/animal_stand_ookami.png";
 import { ChatBubbleProps } from "./ChatSendBubble";
 
 const ChatReceiveBubble: React.FC<ChatBubbleProps> = (props) => {

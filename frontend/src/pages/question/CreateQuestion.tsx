@@ -30,13 +30,15 @@ type TagValues = {
 const CreateQuestion: React.FC = () => {
   const [selectTags, setSelectTags] = useState(Array<TagValues>);
   const [content, setContent] = useState("");
-  let userData
-  let user_id: number
-  
-  if(localStorage.getItem("auth_stockoverflow")) {
-    const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
-    userData = user
-    user_id = user.id
+  let userData;
+  let user_id: number;
+
+  if (localStorage.getItem("auth_stockoverflow")) {
+    const { user } = JSON.parse(
+      localStorage.getItem("auth_stockoverflow") as string
+    );
+    userData = user;
+    user_id = user.id;
   }
 
   const { state } = useLocation();
@@ -135,7 +137,12 @@ const CreateQuestion: React.FC = () => {
           </IonItem>
           <IonItem lines="full">
             <IonLabel>內容</IonLabel>
-            <IonTextarea typeof="text" rows={15} value={content} onIonChange={handleContent} />
+            <IonTextarea
+              typeof="text"
+              rows={15}
+              value={content}
+              onIonChange={handleContent}
+            />
           </IonItem>
           <IonButton onClick={submit}>提出問題</IonButton>
         </Container>
@@ -164,7 +171,14 @@ const StockTag = styled.div`
   margin: 0px 3px;
   height: 2rem;
   line-height: 2rem;
-  background-image: linear-gradient(to right bottom, #ffc748, #ffba53, #ffae5e, #ffa46a, #ff9b75);
+  background-image: linear-gradient(
+    to right bottom,
+    #ffc748,
+    #ffba53,
+    #ffae5e,
+    #ffa46a,
+    #ff9b75
+  );
   border-radius: 0.9rem;
   padding: 0.5rem;
   color: #fff;
@@ -204,7 +218,6 @@ const Container = styled.div`
   }
 
   ion-item:nth-child(2) {
-    
   }
 
   ion-button {
@@ -216,7 +229,6 @@ const Container = styled.div`
   ion-textarea {
     padding: 1rem;
   }
-
-`
+`;
 
 export default CreateQuestion;

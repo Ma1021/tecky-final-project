@@ -93,7 +93,7 @@ section {
   color: red;
 }
 
-button {
+.top-section button {
   width: 100%;
   background-color: rgb(29, 31, 35);
   color: gray;

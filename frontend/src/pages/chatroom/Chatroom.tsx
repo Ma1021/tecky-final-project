@@ -33,7 +33,7 @@ import {
   QuestionContainer,
 } from "../../components/discuss/Allquestion";
 import { useSocket } from "../../helper/use-socket";
-import img from "../../img/animal_stand_ookami.png";
+import img from "src/img/animal_stand_ookami.png";
 import {
   fetchChatroomsRecord,
   loadChatroomsRecord,

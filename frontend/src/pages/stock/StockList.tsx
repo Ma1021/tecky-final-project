@@ -55,16 +55,11 @@ const StockList: React.FC = () => {
 
   return (
     <IonPage>
-<<<<<<< HEAD
-      <IonHeader translucent={true} collapse="fade" className="d-flex align-items-center">
-=======
       <IonHeader
         translucent={true}
         collapse="fade"
-        style={{ height: 50 }}
         className="d-flex align-items-center"
       >
->>>>>>> 4d3d051a81ff9b0534000dcdce8cdffb69424a7d
         <IonToolbar>
           <Title title="市場" />
         </IonToolbar>

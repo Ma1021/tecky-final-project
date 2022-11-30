@@ -24,7 +24,7 @@ ssh $server "
   cat image.zst | unzstd | docker load
 "
 
-rsync -SavLP docker-compose.yml $server:~/stockoverflow/
+# rsync -SavLP docker-compose.yml $server:~/stockoverflow/
 ssh $server "
   cd stockoverflow && \
   docker-compose up -d

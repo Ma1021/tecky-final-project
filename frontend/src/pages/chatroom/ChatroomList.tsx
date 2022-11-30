@@ -31,7 +31,7 @@ import styled from "styled-components";
 import ChatroomHosted from "../../components/Chatroom/ChatroomHosted";
 
 const ChatroomList: React.FC = () => {
-  const [chatroomSegment, setChatroomSegment] = useState("entered");
+  const [chatroomSegment, setChatroomSegment] = useState("hosted");
   const user = useAppSelector((state) => state.auth.user);
 
   interface SegmentChangeEventDetail {
@@ -81,21 +81,21 @@ const ChatroomList: React.FC = () => {
             </IonItemDivider>
           </SegmentOrganizer>
           <IonList>
-            {/* {chatroomSegment === "entered" ? (
-              <ChatroomEntered list={list} />
+            {chatroomSegment === "entered" ? (
+              <ChatroomEntered />
             ) : chatroomSegment === "recommendation" ? (
-              <ChatroomRecommend list={list} />
+              <ChatroomRecommend />
             ) : chatroomSegment === "hosted" ? (
               <ChatroomHosted />
-            ) : null
-            // <ChatroomAll list={hosted as any} />
-            } */}
-            {chatroomSegment === "entered" ? null : chatroomSegment === // <ChatroomEntered list={list} />
+            ) : (
+              <ChatroomAll />
+            )}
+            {/* {chatroomSegment === "entered" ? null : chatroomSegment === // <ChatroomEntered list={list} />
               "recommendation" ? (
               <ChatroomRecommend />
             ) : chatroomSegment === "hosted" ? null : ( // <ChatroomHosted />
               <ChatroomAll />
-            )}
+            )} */}
           </IonList>
         </IonContent>
       </IonPage>

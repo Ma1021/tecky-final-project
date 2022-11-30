@@ -10,6 +10,7 @@ import { chatroomAddReducer } from "./chatroomAdd/reducer";
 import { themeReducer } from "./theme/theme.reducer";
 import subscriptionReducer from "./subscription/subscriptionSlice";
 import { chatroomRecordReducer } from "./chatroomRecord/reducer";
+import { chatroomListReducer } from "./chatroomList/reducer";
 
 export type RootState = ReturnType<typeof store.getState>;
 
@@ -20,6 +21,7 @@ export let store = configureStore({
     question: questionReducer,
     chatroomAdd: chatroomAddReducer,
     chatroomRecord: chatroomRecordReducer,
+    chatroomList: chatroomListReducer,
     theme: themeReducer,
     subscription: subscriptionReducer,
   }),

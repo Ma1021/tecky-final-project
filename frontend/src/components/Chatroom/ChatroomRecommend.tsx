@@ -27,8 +27,8 @@ const ChatroomRecommend: React.FC = () => {
     dispatch(fetchChatroomsRecommend(userId as number));
   }, [dispatch]);
 
-  console.log("loading", loading);
-  console.log("data", chatInfo);
+  // console.log("loading", loading);
+  // console.log("data", chatInfo);
 
   return (
     <>

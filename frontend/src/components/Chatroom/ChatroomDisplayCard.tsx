@@ -11,26 +11,29 @@ import {
 } from "@ionic/react";
 import { people } from "ionicons/icons";
 import React from "react";
-// import { ChatroomDisplayProps } from "./ChatroomAll";
-// import { useAppDispatch } from "../../redux/store";
-// interface ChatroomRecommendObjProps {
-//   props: ChatroomDisplayProps;
-// }
+import { useHistory } from "react-router";
+import { ChatroomList } from "../../redux/chatroomList/state";
+import defaultGroupIcon from "../../img/logo.jpeg";
 
-const ChatroomDisplayCard: React.FC = (props) => {
-  const router = useIonRouter();
+interface ChatroomDisplayCardProps {
+  props: ChatroomList;
+}
+
+const ChatroomDisplayCard: React.FC<ChatroomDisplayCardProps> = (props) => {
+  const history = useHistory();
 
   const directChatroom = (e: any) => {
-    router.push(`/chatroom/${e.currentTarget.dataset.id}`, "forward", "push");
+    history.push(`/chatroom/${e.currentTarget.dataset.id}`, "forward");
   };
+
   return (
     <>
-      {/* <IonCard
-        data-id={props.id}
+      <IonCard
+        data-id={props.props.chatroomid}
         className="d-flex flex-row align-items-center"
         onClick={directChatroom}
-      > */}
-      {/* <div className="d-flex flex-row">
+      >
+        <div className="d-flex flex-row">
           <div className="ion-padding d-flex flex-column align-items-center">
             <IonAvatar
               style={{
@@ -38,7 +41,11 @@ const ChatroomDisplayCard: React.FC = (props) => {
               }}
             >
               <img
-                src={props.props.avatar}
+                src={
+                  props.props.chatroomicon
+                    ? props.props.chatroomicon
+                    : defaultGroupIcon
+                }
                 alt="user icon"
                 style={{
                   width: "100%",
@@ -69,29 +76,29 @@ const ChatroomDisplayCard: React.FC = (props) => {
                   textAlign: "center",
                 }}
               >
-                {props.props.head_count}
+                {props.props.member_count}
               </span>
             </div>
           </div>
           <div className="d-flex flex-column" style={{ flexGrow: 1 }}>
             <IonCardHeader>
               <IonCardTitle style={{ fontSize: "1.2rem" }}>
-                {props.props.name}
+                {props.props.chatroomname}
               </IonCardTitle>
             </IonCardHeader>
             <IonCardContent>
-              <IonCardSubtitle>{props.props.last_user}</IonCardSubtitle>
-              {props.props.last_msg}
+              <IonCardSubtitle>{props.props.username}</IonCardSubtitle>
+              {props.props.record}
               <div
                 className="pr-3 pt-1"
                 style={{ textAlign: "start", fontSize: "0.6rem" }}
               >
-                {props.props.last_time}
+                {props.props.record_created_at}
               </div>
             </IonCardContent>
           </div>
-        </div> */}
-      {/* </IonCard> */}
+        </div>
+      </IonCard>
     </>
   );
 };

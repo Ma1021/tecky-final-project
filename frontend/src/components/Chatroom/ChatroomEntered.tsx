@@ -1,30 +1,32 @@
-import { IonButton, useIonRouter } from "@ionic/react";
+import { IonButton, IonSpinner, useIonRouter } from "@ionic/react";
 import { people } from "ionicons/icons";
-import React from "react";
+import React, { useEffect } from "react";
+import { useHistory } from "react-router";
+import { fetchChatroomsEntered } from "../../redux/chatroomList/actions";
+import {
+  ChatroomList,
+  ChatroomListState,
+} from "../../redux/chatroomList/state";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { LoadingScreen, QuestionContainer } from "../discuss/Allquestion";
 import ChatroomAddCard from "./ChatroomAddCard";
 import ChatroomDisplayCard from "./ChatroomDisplayCard";
 
-interface ChatroomRecommendList {
-  list: ChatroomRecommendProps[];
-}
+const ChatroomEntered: React.FC = () => {
+  const dispatch = useAppDispatch();
 
-interface ChatroomRecommendProps {
-  id: number;
-  host: string;
-  name: string;
-  last_msg: string;
-  last_time: string;
-  avatar: string;
-  head_count: number;
-  introduction: string;
-  last_user: string;
-}
-
-const ChatroomEntered: React.FC<ChatroomRecommendList> = (props) => {
-  console.log("已進入", props);
-  const router = useIonRouter();
+  const { chatroomInfo, loading, error } = useAppSelector(
+    (state) => state.chatroomList
+  );
+  const userId = useAppSelector((state) => {
+    return state.auth.user?.id;
+  });
+  useEffect(() => {
+    dispatch(fetchChatroomsEntered(userId as number));
+  }, [dispatch]);
+  const history = useHistory();
   const createChat = () => {
-    router.push("/chatroom/create", "forward", "push");
+    history.push("/chatroom/create", "forward");
   };
 
   return (
@@ -32,9 +34,29 @@ const ChatroomEntered: React.FC<ChatroomRecommendList> = (props) => {
       <IonButton expand="block" className="ion-margin" onClick={createChat}>
         開設聊天室
       </IonButton>
-      {props.list.map((room: ChatroomRecommendProps) => {
-        return <>{/* <ChatroomDisplayCard props={room} /> */}</>;
-      })}
+      {
+        // if loading
+        loading ? (
+          <LoadingScreen>
+            <IonSpinner name="crescent" /> 載入中...
+          </LoadingScreen>
+        ) : //if error
+        error ? (
+          <QuestionContainer>
+            <div style={{ marginTop: 10 }}>載入失敗</div>
+          </QuestionContainer>
+        ) : chatroomInfo.length > 0 ? (
+          // if can load
+          <>
+            {chatroomInfo.map((chatroom: ChatroomList) => (
+              <ChatroomDisplayCard key={chatroom.chatroomid} props={chatroom} />
+            ))}
+          </>
+        ) : (
+          // if no chatroom yet
+          <div style={{ marginTop: 10 }}>未有聊天室</div>
+        )
+      }
     </>
   );
 };

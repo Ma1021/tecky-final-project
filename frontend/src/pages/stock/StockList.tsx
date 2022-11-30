@@ -1,4 +1,5 @@
 import {
+  IonPage,
   IonContent,
   IonButtons,
   IonButton,
@@ -7,20 +8,19 @@ import {
   IonSegmentButton,
   IonHeader,
   IonToolbar,
-  IonText
+  IonText,
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
-import "./StockList.css";
-import StockRow from "../../components/stock/StockRow";
+import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import {
   changeColorTheme,
   changeLanguage,
 } from "../../redux/theme/theme.action";
 import { StockInfo } from "../../type";
-import { IonPage } from "@ionic/react";
-import styled from "styled-components";
+import StockRow from "../../components/stock/StockRow";
 import Title from "../../components/All/Title";
+import "./StockList.css";
 
 const StockList: React.FC = () => {
   const userID = 1;
@@ -55,11 +55,17 @@ const StockList: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader translucent={true} collapse="fade" style={{height:50}} className="d-flex align-items-center">
+      <IonHeader
+        translucent={true}
+        collapse="fade"
+        style={{ height: 50 }}
+        className="d-flex align-items-center"
+      >
         <IonToolbar>
           <Title title="市場" />
         </IonToolbar>
       </IonHeader>
+
       <IonContent>
         <SegmentTab value={segment} onIonChange={onSegmentChange}>
           <SegmentButton value="watchList">
@@ -70,7 +76,10 @@ const StockList: React.FC = () => {
           </SegmentButton>
         </SegmentTab>
 
-        <IonButtons className="d-flex align-items-center" style={{padding:"0rem 0.5rem"}}>
+        <IonButtons
+          className="d-flex align-items-center"
+          style={{ padding: "0rem 0.5rem" }}
+        >
           <IonButton
             onClick={() => {
               console.log("clicked");
@@ -98,7 +107,7 @@ const StockList: React.FC = () => {
             }}
           >
             {/* {isChinese ? "按名稱排序" : "Sort by Symbol"} */}
-            <IonText style={{fontSize:14}}>按名稱排序</IonText>
+            <IonText style={{ fontSize: 14 }}>按名稱排序</IonText>
           </IonButton>
           <IonButton
             onClick={() => {
@@ -125,7 +134,7 @@ const StockList: React.FC = () => {
             }}
           >
             {/* {isChinese ? "按價格排序" : "Sort by Price"} */}
-            <IonText style={{fontSize:14}}>按價格排序</IonText>
+            <IonText style={{ fontSize: 14 }}>按價格排序</IonText>
           </IonButton>
           <IonButton
             onClick={() => {
@@ -152,7 +161,7 @@ const StockList: React.FC = () => {
             }}
           >
             {/* {isChinese ? "按升跌幅排序" : "Sort by Change"} */}
-            <IonText style={{fontSize:14}}>按升跌幅排序</IonText>
+            <IonText style={{ fontSize: 14 }}>按升跌幅排序</IonText>
           </IonButton>
           {/* <IonButton
             onClick={() => {

@@ -16,7 +16,7 @@ import MainChart from "../../components/stock/MultipleSeriesChart";
 import StockForum from "../../components/stock/StockForum";
 import StockNews from "../../components/stock/StockNews";
 import StockAnalysis from "../../components/stock/StockAnalysis";
-import PaperTradePanel from "../../components/stock/PaperTrade";
+import PaperTradePanel from "../../components/stock/PaperTradePanel";
 import styled from "styled-components";
 import "./IndividualStockInfo.css";
 import StockInfo from "../../components/stock/StockInfo";

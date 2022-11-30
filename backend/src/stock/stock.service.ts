@@ -206,7 +206,7 @@ export class StockService {
     const volumeDataArray: VolumeData[] = [];
 
     const MongoDB = await connectMongoDB();
-    const result = await MongoDB.db('for_gary_test')
+    const result = await MongoDB.db('alltime_us_stock_datas')
       .collection(symbol)
       .find({})
       .toArray();

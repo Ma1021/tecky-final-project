@@ -1,7 +1,7 @@
 import { IonButton, IonContent, IonPage } from "@ionic/react";
 import { Redirect, useHistory } from "react-router";
 import styled from "styled-components";
-import background from "../img/coverphoto.png";
+import background from "src/img/coverphoto.png";
 import { useAppSelector } from "../redux/store";
 // import { useEffect } from "react";
 // import { Preferences } from "@capacitor/preferences";
@@ -22,11 +22,7 @@ const Home: React.FC = () => {
       <IonPage>
         <IonContent>
           <Container>
-            <img
-              src={background}
-              alt="古惑狼的標誌"
-              style={{ width: "75%"}}
-            />
+            <img src={background} alt="古惑狼的標誌" style={{ width: "75%" }} />
             <div className="loginCard">
               <div className="d-flex flex-column align-items-center w100">
                 <h1 className="ion-margin">歡迎使用</h1>
@@ -74,7 +70,7 @@ const Container = styled.div`
 
   .loginCard {
     width: 100%;
-    padding:5% 15%;
+    padding: 5% 15%;
 
     .buttonContainer {
       flex-direction: column;

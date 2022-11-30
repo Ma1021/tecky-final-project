@@ -11,10 +11,10 @@ import {
   IonBackButton,
 } from "@ionic/react";
 import { useState } from "react";
-import Title from "../../components/All/Title";
+import IndividualAccountModule from "../../components/stock/IndividualAccountModule";
 
 const IndividualAccount: React.FC = () => {
-  const [currentAccount, setCurrentAccount] = useState("us");
+  const [currentAccount, setCurrentAccount] = useState("US");
 
   const onListChange = (e: any) => {
     setCurrentAccount(e.detail.value);
@@ -28,6 +28,7 @@ const IndividualAccount: React.FC = () => {
             <IonButtons slot="start">
               <IonBackButton defaultHref="/paperTrade"></IonBackButton>
             </IonButtons>
+            <strong>模擬交易</strong>
           </IonToolbar>
         </IonHeader>
 
@@ -39,8 +40,8 @@ const IndividualAccount: React.FC = () => {
                 value={currentAccount}
                 onIonChange={onListChange}
               >
-                <IonSelectOption value="us">美股模擬賬戶</IonSelectOption>
-                <IonSelectOption value="hk">港股模擬賬戶</IonSelectOption>
+                <IonSelectOption value="US">美股模擬賬戶</IonSelectOption>
+                <IonSelectOption value="HK">港股模擬賬戶</IonSelectOption>
                 <IonSelectOption value="crypto">
                   加密貨幣模擬賬戶
                 </IonSelectOption>
@@ -48,10 +49,15 @@ const IndividualAccount: React.FC = () => {
             </IonItem>
           </IonList>
 
-          <h1>Paper Trade Account Page</h1>
-          {currentAccount === "us"}
-          {currentAccount === "hk"}
-          {currentAccount === "crypto"}
+          {currentAccount === "US" && (
+            <IndividualAccountModule category={currentAccount} />
+          )}
+          {currentAccount === "HK" && (
+            <IndividualAccountModule category={currentAccount} />
+          )}
+          {currentAccount === "crypto" && (
+            <IndividualAccountModule category={currentAccount} />
+          )}
         </IonContent>
       </IonPage>
     </>

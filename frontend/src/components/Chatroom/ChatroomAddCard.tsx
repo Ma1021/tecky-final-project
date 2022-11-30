@@ -16,7 +16,7 @@ import { useHistory } from "react-router";
 import { ChatroomAdd, ChatroomAddState } from "../../redux/chatroomAdd/state";
 import { useAppSelector } from "../../redux/store";
 // import { useAppDispatch } from "../../redux/store";
-import defaultGroupIcon from "../../img/logo.jpeg";
+import defaultGroupIcon from "src/img/logo.jpeg";
 
 interface ChatroomAddCardProps {
   props: ChatroomAdd;

@@ -31,7 +31,7 @@ import {
 } from "react";
 import Cropper from "react-easy-crop";
 import { Point, Area } from "react-easy-crop/types";
-import "./ChatroomForm.css";
+import "src/pages/chatroom/ChatroomForm.css";
 import getCroppedImg, { dataURLToBlob } from "../../helper/cropImage";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 
@@ -94,7 +94,7 @@ const ChatroomForm: React.FC = () => {
         duration: 1500,
         position: "bottom",
       });
-      
+
       router.goBack();
     } else {
       let json = await res.json();

@@ -9,7 +9,7 @@ import {
   LineStyle,
 } from "lightweight-charts";
 import { Indicator, TimeFrameButtonState } from "../../type";
-import "./MultipleSeriesChart.css";
+import "src/components/stock/MultipleSeriesChart.css";
 
 interface NewProps {
   symbol: string;

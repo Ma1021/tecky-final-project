@@ -312,5 +312,3 @@ const RegisterLoop: React.FC = () => {
 };
 
 export default RegisterLoop;
-
-

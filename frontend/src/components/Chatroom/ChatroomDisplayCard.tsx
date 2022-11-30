@@ -13,7 +13,7 @@ import { people } from "ionicons/icons";
 import React from "react";
 import { useHistory } from "react-router";
 import { ChatroomList } from "../../redux/chatroomList/state";
-import defaultGroupIcon from "../../img/logo.jpeg";
+import defaultGroupIcon from "src/img/logo.jpeg";
 
 interface ChatroomDisplayCardProps {
   props: ChatroomList;

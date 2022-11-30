@@ -20,7 +20,7 @@ import {
 import { StockInfo } from "../../type";
 import StockRow from "../../components/stock/StockRow";
 import Title from "../../components/All/Title";
-import "./StockList.css";
+import "src/pages/stock/StockList.css";
 
 const StockList: React.FC = () => {
   const userID = 1;

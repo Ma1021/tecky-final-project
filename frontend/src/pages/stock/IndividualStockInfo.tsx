@@ -18,7 +18,7 @@ import StockNews from "../../components/stock/StockNews";
 import StockAnalysis from "../../components/stock/StockAnalysis";
 import PaperTradePanel from "../../components/stock/PaperTradePanel";
 import styled from "styled-components";
-import "./IndividualStockInfo.css";
+import "src/pages/stock/IndividualStockInfo.css";
 import StockInfo from "../../components/stock/StockInfo";
 
 const IndividualStockInfo: React.FC = () => {

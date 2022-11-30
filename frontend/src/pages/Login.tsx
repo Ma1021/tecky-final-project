@@ -104,7 +104,7 @@ const Login: React.FC = () => {
                 main(json);
               } else {
                 presentAlert({
-                  cssClass:'alert',
+                  cssClass: "alert",
                   header: "錯誤",
                   subHeader: json.message,
                   buttons: ["OK"],
@@ -112,7 +112,7 @@ const Login: React.FC = () => {
               }
             } catch (err) {
               presentAlert({
-                cssClass:'alert',
+                cssClass: "alert",
                 header: "錯誤",
                 subHeader: (err as any).message,
                 buttons: ["OK"],

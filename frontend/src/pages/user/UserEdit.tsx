@@ -17,14 +17,14 @@ import {
   IonSegment,
   IonSegmentButton,
 } from "@ionic/react";
-import "./UserInfo.css";
+import "src/pages/user/UserInfo.css";
 import {
   personOutline,
   paperPlaneOutline,
   diamondOutline,
   happyOutline,
 } from "ionicons/icons";
-import img from "../../img/animal_stand_ookami.png";
+import img from "src/img/animal_stand_ookami.png";
 import Notification from "../../components/All/Notification";
 
 const UserInfo: React.FC = () => {

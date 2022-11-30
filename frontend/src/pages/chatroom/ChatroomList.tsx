@@ -20,7 +20,7 @@ import {
 } from "@ionic/react";
 import { useEffect, useState } from "react";
 import Title from "../../components/All/Title";
-import img from "../../img/animal_stand_ookami.png";
+import img from "src/img/animal_stand_ookami.png";
 import { people } from "ionicons/icons";
 import ChatroomRecommend from "../../components/Chatroom/ChatroomRecommend";
 import ChatroomAll from "../../components/Chatroom/ChatroomAll";

@@ -11,7 +11,7 @@ import { useState } from "react";
 import PaperTradeAccountModule from "../../components/stock/PaperTradeAccountModule";
 import styled from "styled-components";
 import Title from "../../components/All/Title";
-import "./PaperTradeAccount.css";
+import "src/pages/stock/PaperTradeAccount.css";
 
 const PaperTradeAccount: React.FC = () => {
   const [segment, setSegment] = useState("stock");

@@ -20,7 +20,7 @@ import {
   flame,
   flameOutline,
 } from "ionicons/icons";
-import "./Navigation.css";
+import "src/components/Navigation.css";
 
 import Tab1 from "../pages/Tab1";
 import Tab2 from "../pages/Tab2";
@@ -99,7 +99,7 @@ const Navigation: React.FC = () => {
             ></Route>
             <Route
               exact
-              path="/individualAccount"
+              path="/individualAccount/:category"
               component={IndividualAccount}
             ></Route>
             <Route exact path="/stockList" component={StockList}></Route>

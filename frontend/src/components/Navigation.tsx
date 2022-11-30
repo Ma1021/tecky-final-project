@@ -99,7 +99,7 @@ const Navigation: React.FC = () => {
             ></Route>
             <Route
               exact
-              path="/individualAccount"
+              path="/individualAccount/:category"
               component={IndividualAccount}
             ></Route>
             <Route exact path="/stockList" component={StockList}></Route>

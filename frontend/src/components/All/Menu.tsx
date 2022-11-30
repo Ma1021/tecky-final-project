@@ -24,7 +24,7 @@ import {
   logoWhatsapp,
   logOutOutline,
   trashOutline,
-  statsChart
+  statsChart,
 } from "ionicons/icons";
 import "./Menu.css";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
@@ -40,7 +40,7 @@ const Menu: React.FC<MenuProps> = () => {
   const dispatch = useAppDispatch();
   const selector = useAppSelector((state) => state.auth.user);
   const [presentAlert] = useIonAlert();
-  
+
   const logoutPage = () => {
     // phone version
     // async () => {
@@ -206,13 +206,19 @@ const Menu: React.FC<MenuProps> = () => {
                   <IonIcon icon={settingsOutline}></IonIcon> 系統設定
                 </IonLabel>
               </IonItem>
-              {selector?.user_type === 'kol' &&
-                <IonItem className="menu" lines="none" onClick={() => router.push(`/analysis/${selector.id}`, "forward", "push")}>
+              {selector?.user_type === "kol" && (
+                <IonItem
+                  className="menu"
+                  lines="none"
+                  onClick={() =>
+                    router.push(`/analysis/${selector.id}`, "forward", "push")
+                  }
+                >
                   <IonLabel>
                     <IonIcon icon={statsChart}></IonIcon> 數據分析
                   </IonLabel>
                 </IonItem>
-              }
+              )}
               <IonItem className="menu" lines="none">
                 <IonLabel onClick={logoutPage}>
                   <IonIcon icon={logOutOutline}></IonIcon>

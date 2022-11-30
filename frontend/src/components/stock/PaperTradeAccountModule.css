@@ -1,0 +1,44 @@
+.modules-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.module {
+  background: rgba(80, 80, 80, 0.7);
+  display: flex;
+  flex-direction: column;
+  height: 20vh;
+  width: 70vw;
+  margin: 1rem 0;
+  border-radius: 1rem;
+  padding: 1rem 3rem;
+}
+
+.top-row {
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title-icon-container {
+  display: flex;
+  column-gap: 1rem;
+}
+
+.bottom-row {
+  flex-grow: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.account-amount {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.today {
+  color: gray;
+}

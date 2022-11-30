@@ -18,8 +18,9 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
+import React from "react";
 import finalPropsSelectorFactory from "react-redux/es/connect/selectorFactory";
-import img from "../../img/animal_stand_ookami.png";
+import img from "src/img/animal_stand_ookami.png";
 import { ChatroomRecord } from "../../redux/chatroomRecord/state";
 
 export interface ChatBubbleProps {
@@ -31,7 +32,7 @@ const ChatSendBubble: React.FC<ChatBubbleProps> = (props) => {
     <>
       <div
         className="d-flex flex-row-reverse"
-        data-message-id={props.props.recordid}
+        data-message={props.props.recordid}
       >
         <div className="d-flex flex-row ion-margin ml-0">
           <IonAvatar
@@ -71,10 +72,14 @@ const ChatSendBubble: React.FC<ChatBubbleProps> = (props) => {
               </p>
             </IonCardContent>
           </IonCard>
-          {new Date(props.props.created_at).toLocaleString()}
+          {new Date(props.props.created_at).toLocaleString([], {
+            hour12: false,
+            dateStyle: "medium",
+            timeStyle: "short",
+          })}
         </div>
       </div>
     </>
   );
 };
-export default ChatSendBubble;
+export default React.memo(ChatSendBubble);

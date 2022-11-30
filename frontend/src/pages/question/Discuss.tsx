@@ -29,15 +29,16 @@ import Menu from "../../components/All/Menu";
 const Discuss: React.FC = () => {
   const [segment, setSegment] = useState("all");
   const [keyword, setKeyword] = useState("");
-  let user
-  let user_id: number
+  let user;
+  let user_id: number;
 
-  if(localStorage.getItem("auth_stockoverflow") !== null) {
-    user = JSON.parse(localStorage.getItem("auth_stockoverflow") as string).user || undefined;
+  if (localStorage.getItem("auth_stockoverflow") !== null) {
+    user =
+      JSON.parse(localStorage.getItem("auth_stockoverflow") as string).user ||
+      undefined;
     user_id = +user.id;
   }
 
-  
   const onSegmentChange = (e: any) => {
     setSegment(e.detail.value);
   };
@@ -45,7 +46,7 @@ const Discuss: React.FC = () => {
   function handleKeywordChange(e: any) {
     setKeyword(e.target.value);
   }
-  
+
   const dispatch = useAppDispatch();
 
   const initQuestion = useCallback(async () => {
@@ -72,7 +73,16 @@ const Discuss: React.FC = () => {
     <>
       <Menu />
       <IonPage id="main-content">
+<<<<<<< HEAD
         <IonHeader translucent={true} collapse="fade" className="d-flex align-items-center">
+=======
+        <IonHeader
+          translucent={true}
+          collapse="fade"
+          style={{ height: 50 }}
+          className="d-flex align-items-center"
+        >
+>>>>>>> 4d3d051a81ff9b0534000dcdce8cdffb69424a7d
           <IonToolbar>
             <Title title="討論區" />
           </IonToolbar>
@@ -159,7 +169,14 @@ const SegmentTab = styled(IonSegment)`
 `;
 
 const SegmentButton = styled(IonSegmentButton)`
-  --indicator-color: linear-gradient(to right bottom, #ffa930, #ff9d3f, #ff924d, #ff885b, #ff7f67);
+  --indicator-color: linear-gradient(
+    to right bottom,
+    #ffa930,
+    #ff9d3f,
+    #ff924d,
+    #ff885b,
+    #ff7f67
+  );
   --color-checked: #fff;
   font-weight: 800;
 `;

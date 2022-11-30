@@ -33,7 +33,10 @@ import UserDiscussion from "../../components/UserContent/UserDiscussion";
 import UserIntro from "../../components/UserContent/UserIntro";
 import UserBadge from "../../components/All/UserBadge";
 import { RootState, useAppSelector, useAppDispatch } from "../../redux/store";
-import { loadFollowings, loadFollowers } from "../../redux/subscription/subscriptionSlice";
+import {
+  loadFollowings,
+  loadFollowers,
+} from "../../redux/subscription/subscriptionSlice";
 
 const UserInfo: React.FC = () => {
   const userInfo = {
@@ -60,7 +63,9 @@ const UserInfo: React.FC = () => {
     setUserSegment(event.detail.value || "userIntro");
   };
 
-  const { user } = JSON.parse(localStorage.getItem("auth_stockoverflow") as string)
+  const { user } = JSON.parse(
+    localStorage.getItem("auth_stockoverflow") as string
+  );
   const user_id = +user.id;
 
   const dispatch = useAppDispatch();
@@ -77,7 +82,7 @@ const UserInfo: React.FC = () => {
   useEffect(() => {
     initFollowings();
     initFollowers();
-  }, [])
+  }, []);
 
   const { followerList, followingList } = useAppSelector(
     (state: RootState) => state.subscription
@@ -118,13 +123,13 @@ const UserInfo: React.FC = () => {
                 style={{
                   width: "100%",
                   objectFit: "cover",
-                }}   
+                }}
               />
             </IonAvatar>
             <div className="d-flex flex-row  align-items-center">
               <IonText>{user.username}</IonText>
             </div>
-            <UserBadge isKOL={user.user_type === 'kol'} />
+            <UserBadge isKOL={user.user_type === "kol"} />
             <div className="flex-row pt-1 pb-1">
               <IonButton className="userInfo-button" size="small" shape="round">
                 <IonIcon slot="start" icon={personOutline}></IonIcon>
@@ -136,11 +141,21 @@ const UserInfo: React.FC = () => {
               </IonButton>
             </div>
             <div className="d-flex flex-row pt-1 pb-1">
-              <div className="flex-column text-align-center p-1 pr-2 border-right" onClick={() => { router.push(`/user/subscription/${user_id}`) }}>
+              <div
+                className="flex-column text-align-center p-1 pr-2 border-right"
+                onClick={() => {
+                  router.push(`/user/subscription/${user_id}`);
+                }}
+              >
                 <div>{followingList.length}</div>
                 <div>關注中</div>
               </div>
-              <div className="flex-column text-align-center p-1 pl-2" onClick={() => { router.push(`/user/subscription/${user_id}`) }}>
+              <div
+                className="flex-column text-align-center p-1 pl-2"
+                onClick={() => {
+                  router.push(`/user/subscription/${user_id}`);
+                }}
+              >
                 <div>{followerList.length}</div>
                 <div>粉絲數</div>
               </div>
@@ -149,7 +164,7 @@ const UserInfo: React.FC = () => {
         </IonItem>
         {/* user information above */}
         {/* user history below */}
-        <div style={{padding:"0.5rem 1rem"}}>
+        <div style={{ padding: "0.5rem 1rem" }}>
           <IonSegment onIonChange={segmentChangeAction}>
             <IonSegmentButton value="userIntro">
               <IonLabel>自我介紹</IonLabel>
@@ -177,4 +192,3 @@ const UserInfo: React.FC = () => {
 };
 
 export default UserInfo;
- 

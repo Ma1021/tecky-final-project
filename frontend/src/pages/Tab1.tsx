@@ -2,7 +2,7 @@ import { IonContent, IonHeader, IonPage, IonToolbar } from "@ionic/react";
 import Menu from "../components/All/Menu";
 import Title from "../components/All/Title";
 import ExploreContainer from "../components/ExploreContainer";
-import "./Tab1.css";
+import "src/pages/Tab1.css";
 
 const Tab1: React.FC = () => {
   return (

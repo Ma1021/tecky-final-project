@@ -32,7 +32,7 @@ import {
   QuestionContainer,
 } from "../../components/discuss/Allquestion";
 import { useSocket } from "../../helper/use-socket";
-import img from "../../img/animal_stand_ookami.png";
+import img from "src/img/animal_stand_ookami.png";
 import {
   fetchChatroomsRecord,
   loadChatroomsRecord,
@@ -88,9 +88,8 @@ const Chatroom: React.FC = () => {
             console.log("they equal");
             return;
           }
-          console.log("they not equal", chatRecord, newMessage);
           dispatch(loadChatroomsRecord([...chatRecord, newMessage]));
-          console.log("after dispatch", chatRecord);
+          setNewMessageId(newMessage.recordid);
         });
         return () => {
           console.log("leave room:", roomId);
@@ -103,10 +102,13 @@ const Chatroom: React.FC = () => {
 
   useLayoutEffect(() => {
     if (!newMessageId) return;
-    let ionCard = document.querySelector(
-      `[dataset-message-id="${newMessageId}"]`
-    );
-  });
+    let ionCard = document.querySelector(`[data-message='${newMessageId}']`);
+
+    console.log({ newMessageId, ionCard });
+    if (ionCard) {
+      ionCard.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+  }, [newMessageId]);
 
   // check if host is speaker
   // if user is host
@@ -194,7 +196,9 @@ const Chatroom: React.FC = () => {
             </>
           ) : (
             // if no chatroom yet
-            <div style={{ marginTop: 10 }}>未有對話</div>
+            <QuestionContainer>
+              <div style={{ marginTop: 10 }}>未有對話</div>
+            </QuestionContainer>
           )
         }
       </IonContent>

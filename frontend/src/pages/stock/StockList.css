@@ -88,3 +88,8 @@ h1 {
 .stock-price {
   font-size: 16px;
 }
+
+.button-container {
+  display: flex;
+  justify-content: space-around;
+}

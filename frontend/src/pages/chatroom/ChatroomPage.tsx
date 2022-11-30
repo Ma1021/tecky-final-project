@@ -41,137 +41,96 @@ import {
 } from "../../redux/chatroomRecord/actions";
 import { ChatroomRecord } from "../../redux/chatroomRecord/state";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
-import { imageParse, username, messageContent } from "../../helper/parser";
-import { useGet } from "../../helper/useGet";
 
-// parser of the whole chatroom
-let chatroomParser = object({
-  id: id(),
-  image: imageParse(),
-  name: username(),
-  messages: array(
-    object({
-      id: id(),
-      content: messageContent(),
-      username: username(),
-    })
-  ),
-});
-
-type ChatroomType = ParseResult<typeof chatroomParser>;
-
-// parser of the new message
-let newMessageParser = object({
-  roomId: id(),
-  message_id: id(),
-  content: messageContent(),
-  username: username(),
-});
-
-const Chatroom: React.FC = () => {
+const ChatroomPage: React.FC = () => {
   // get the new message
   const [message, setMessage] = useState("");
+  const [messageList, setMessageList] = useState<ChatroomRecord[]>([]);
   const [newMessageId, setNewMessageId] = useState<null | number>(null);
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const [present] = useIonToast();
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState("");
 
   const userId = useAppSelector((state) => {
     return state?.auth?.user?.id;
   });
-  const { chatRecord, loading, error } = useAppSelector(
-    (state) => state.chatroomRecord
-  );
+  // const { chatRecord, loading, error } = useAppSelector(
+  //   (state) => state.chatroomRecord
+  // );
 
   // 拎 url 嘅 param
   let url = useRouteMatch<{ id: string }>();
   let roomId = url.url.replace("/chatroom/", "");
 
   // take previous chat record and display
-  // useEffect(() => {
-  //   console.log("do use effect");
-  //   dispatch(fetchChatroomsRecord(userId!, +roomId));
-  // }, [dispatch, roomId, userId]);
+  useEffect(() => {
+    // console.log("do use effect");
+    if (!userId) {
+      present({
+        message: "請登入",
+        duration: 1000,
+        position: "bottom",
+      });
+    }
+    // console.log("json stringify");
+    fetch(`${process.env.REACT_APP_PUBLIC_URL}/chatroom/${+roomId}`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ userId, chatroomId: roomId }),
+    })
+      .then((res) => {
+        res.json().then((json) => {
+          setMessageList(json);
+          setLoading(false);
+        });
+      })
+      .catch((error) => {
+        console.log(`failed to load, ${error}`);
+        present({
+          message: String(err),
+          duration: 15000,
+          color: "danger",
+        });
+      });
+  }, [setMessageList, setLoading, setErr, roomId, userId]);
 
-  const chatroom = useGet<ChatroomType | null>({
-    name: "chatroom data",
-    url: "/chatroom/" + roomId,
-    parser: chatroomParser,
-    initialState: null,
-  });
+  // const chatroom = useGet<ChatroomType | null>({
+  //   name: "chatroom data",
+  //   url: "/chatroom/" + roomId,
+  //   parser: chatroomParser,
+  //   initialState: null,
+  // });
 
-  // // 開新socket
-  // useSocket(
-  //   // why: prevent join room multiple times.
-  //   useCallback(
-  //     (socket: Socket) => {
-  //       // join the room
-  //       socket.emit("join-room", roomId);
-  //       // event listener listening on the socket
-  //       socket.on("new-message", (bubble) => {
-  //         let newMessage: ChatroomRecord = bubble;
-  //         console.log("newMessage", newMessage);
-  //         if (!!newMessage) {
-  //           if (newMessage.chatroomid !== +roomId) {
-  //             return;
-  //           }
-  //         }
-
-  //         // update the list of chats
-  //         console.log("before dispatch", chatRecord);
-
-  //         if (JSON.stringify(newMessage) === JSON.stringify(chatRecord)) {
-  //           console.log("they equal");
-  //           return;
-  //         }
-  //         dispatch(loadChatroomsRecord([...chatRecord, newMessage]));
-  //         setNewMessageId(newMessage.recordid);
-  //       });
-  //       return () => {
-  //         console.log("leave room:", roomId);
-  //         socket.emit("leave-room", roomId);
-  //       };
-  //     },
-  //     [roomId]
-  //   )
-  // );
-
+  // 開新socket
   useSocket(
+    // why: prevent join room multiple times.
     useCallback(
       (socket: Socket) => {
-        console.log("join room:", roomId);
+        // join the room
         socket.emit("join-room", roomId);
-
-        socket.on("new-message", (message) => {
-          console.log("received new message");
-          let newMessage = newMessageParser.parse(message);
-          if (+newMessage.roomId != +roomId) {
-            return;
+        // event listener listening on the socket
+        socket.on("new-message", (bubble) => {
+          let newMessage: ChatroomRecord = bubble;
+          console.log("newMessage", newMessage);
+          if (!!newMessage) {
+            if (newMessage.chatroomid !== +roomId) {
+              return;
+            }
           }
 
-          chatroom.setState((state) => {
-            if (!state) return state;
-            if (
-              state.messages.find(
-                (message) => message.id == newMessage.message_id
-              )
-            ) {
-              return state;
-            }
-            state = { ...state };
-            state.messages = [
-              ...state.messages,
-              {
-                id: newMessage.message_id,
-                content: newMessage.content,
-                username: newMessage.username,
-              },
-            ];
-            return state;
+          // update the list of chats
+          console.log("before dispatch", messageList);
+
+          if (JSON.stringify(newMessage) === JSON.stringify(messageList)) {
+            console.log("they equal");
+            return;
+          }
+          setMessageList((msg) => {
+            return [...(msg as ChatroomRecord[]), newMessage];
           });
-
-          setNewMessageId(newMessage.message_id);
+          setNewMessageId(newMessage.recordid);
         });
-
         return () => {
           console.log("leave room:", roomId);
           socket.emit("leave-room", roomId);
@@ -238,7 +197,11 @@ const Chatroom: React.FC = () => {
               <IonButtons>
                 <IonBackButton defaultHref="/chatroomList"></IonBackButton>
               </IonButtons>
-              <span>{chatRecord[0] ? chatRecord[0].chatroomname : null}</span>
+              <span>
+                {(messageList as ChatroomRecord[])[0]
+                  ? (messageList as ChatroomRecord[])[0].chatroomname
+                  : null}
+              </span>
               <IonIcon className="pr-2" icon={searchOutline}></IonIcon>
             </div>
           </IonTitle>
@@ -247,16 +210,16 @@ const Chatroom: React.FC = () => {
       <IonContent>
         {
           // if loading
-          loading ? (
+          loading === true ? (
             <LoadingScreen>
               <IonSpinner name="crescent" /> 載入中...
             </LoadingScreen>
           ) : //if error
-          error ? (
+          err !== "" ? (
             //if error = 未加入聊天室
-            error.message.includes("未加入") ? (
+            err.includes("未加入") ? (
               <QuestionContainer>
-                <div style={{ marginTop: 10 }}>{error.message}</div>
+                <div style={{ marginTop: 10 }}>{err}</div>
               </QuestionContainer>
             ) : (
               // 其他 error
@@ -264,10 +227,10 @@ const Chatroom: React.FC = () => {
                 <div style={{ marginTop: 10 }}>載入失敗</div>
               </QuestionContainer>
             )
-          ) : chatRecord.length > 0 ? (
+          ) : (messageList as ChatroomRecord[]).length > 0 ? (
             // if can load
             <>
-              {chatRecord.map((record: ChatroomRecord) =>
+              {(messageList as ChatroomRecord[]).map((record: ChatroomRecord) =>
                 record.userid === (userId as number) ? (
                   <ChatSendBubble key={record.recordid} props={record} />
                 ) : (
@@ -283,7 +246,7 @@ const Chatroom: React.FC = () => {
           )
         }
       </IonContent>
-      {error ? null : (
+      {err !== "" ? null : (
         <IonFooter>
           <ChatReplyContainer>
             <IonInput
@@ -302,7 +265,7 @@ const Chatroom: React.FC = () => {
   );
 };
 
-export default Chatroom;
+export default ChatroomPage;
 
 const ChatReplyContainer = styled.div`
   width: 100%;

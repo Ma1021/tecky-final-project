@@ -25,15 +25,9 @@ const ChatroomEntered: React.FC = () => {
     dispatch(fetchChatroomsEntered(userId as number));
   }, [dispatch]);
   const history = useHistory();
-  const createChat = () => {
-    history.push("/chatroom/create", "forward");
-  };
 
   return (
     <>
-      <IonButton expand="block" className="ion-margin" onClick={createChat}>
-        開設聊天室
-      </IonButton>
       {
         // if loading
         loading ? (

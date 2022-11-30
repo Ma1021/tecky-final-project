@@ -33,6 +33,9 @@ const ChatroomHosted: React.FC = () => {
 
   return (
     <>
+      <IonButton expand="block" className="ion-margin" onClick={createChat}>
+        開設聊天室
+      </IonButton>
       {
         // if loading
         loading ? (

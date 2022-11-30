@@ -1,0 +1,503 @@
+-- Merging decision tree log ---
+provider#androidx.core.content.FileProvider
+INJECTED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:48:9-56:20
+	android:grantUriPermissions
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:52:13-47
+	android:authorities
+		INJECTED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:50:13-64
+	android:exported
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:51:13-37
+	android:name
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:49:13-62
+manifest
+ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:2:1-72:12
+INJECTED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:2:1-72:12
+INJECTED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:2:1-72:12
+INJECTED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:2:1-72:12
+MERGED from [:capacitor-app] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
+MERGED from [:capacitor-haptics] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\haptics\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-11:12
+MERGED from [:capacitor-keyboard] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\keyboard\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
+MERGED from [:capacitor-preferences] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\preferences\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
+MERGED from [:capacitor-push-notifications] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\push-notifications\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-19:12
+MERGED from [:capacitor-status-bar] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\status-bar\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
+MERGED from [:capacitor-android] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\android\capacitor\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
+MERGED from [:capacitor-cordova-android-plugins] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\capacitor-cordova-android-plugins\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-13:12
+MERGED from [androidx.appcompat:appcompat:1.4.2] C:\Users\maggi\.gradle\caches\transforms-3\a8e52a507448d4b845688b4ff42bab35\transformed\appcompat-1.4.2\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.2.0] C:\Users\maggi\.gradle\caches\transforms-3\96bfe7ff07b49e78a3a68f6b88db966e\transformed\coordinatorlayout-1.2.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.core:core-splashscreen:1.0.0-rc01] C:\Users\maggi\.gradle\caches\transforms-3\86f2c94e123f7d631ee33b23bd175149\transformed\jetified-core-splashscreen-1.0.0-rc01\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\d4488bf82a46967f585a72807db195de\transformed\cursoradapter-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.appcompat:appcompat-resources:1.4.2] C:\Users\maggi\.gradle\caches\transforms-3\41d6025b73a5b19c933572877ed2e11c\transformed\jetified-appcompat-resources-1.4.2\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\fb5f1a396d63e2855da3803514443261\transformed\drawerlayout-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:17:1-61:12
+MERGED from [com.google.android.gms:play-services-base:18.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8ff1e9f283fdec7034b38b65639640bb\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:16:1-24:12
+MERGED from [com.google.android.gms:play-services-cloud-messaging:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\1f1c4f731c371007f3f618ee4c109543\transformed\jetified-play-services-cloud-messaging-17.0.1\AndroidManifest.xml:2:1-13:12
+MERGED from [com.google.android.gms:play-services-stats:17.0.2] C:\Users\maggi\.gradle\caches\transforms-3\30b5a0f8e4ef48073d8fa2d249f983b7\transformed\jetified-play-services-stats-17.0.2\AndroidManifest.xml:2:1-9:12
+MERGED from [com.google.firebase:firebase-datatransport:18.1.4] C:\Users\maggi\.gradle\caches\transforms-3\8e5fbcaeabc8a8329fa9033227fb26ff\transformed\jetified-firebase-datatransport-18.1.4\AndroidManifest.xml:15:1-34:12
+MERGED from [com.google.firebase:firebase-installations:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8ed32f9624df4af3f0e91fe17bf0603d\transformed\jetified-firebase-installations-17.0.1\AndroidManifest.xml:2:1-24:12
+MERGED from [com.google.firebase:firebase-common:20.1.1] C:\Users\maggi\.gradle\caches\transforms-3\7c277c21e3425d7da700f38bc0945473\transformed\jetified-firebase-common-20.1.1\AndroidManifest.xml:15:1-40:12
+MERGED from [com.google.firebase:firebase-iid-interop:17.1.0] C:\Users\maggi\.gradle\caches\transforms-3\97046e19e9406bda61382429b17a4017\transformed\jetified-firebase-iid-interop-17.1.0\AndroidManifest.xml:2:1-10:12
+MERGED from [com.google.firebase:firebase-installations-interop:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\ebfc4215f84e1eebf835b22785d8c228\transformed\jetified-firebase-installations-interop-17.0.1\AndroidManifest.xml:15:1-23:12
+MERGED from [com.google.android.gms:play-services-tasks:18.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8a5bac1c62317e35c1cb7d50ca126086\transformed\jetified-play-services-tasks-18.0.1\AndroidManifest.xml:2:1-6:12
+MERGED from [com.google.firebase:firebase-measurement-connector:19.0.0] C:\Users\maggi\.gradle\caches\transforms-3\99987d2fd561dd39a2e73550bf48d968\transformed\jetified-firebase-measurement-connector-19.0.0\AndroidManifest.xml:17:1-25:12
+MERGED from [com.google.android.gms:play-services-basement:18.0.0] C:\Users\maggi\.gradle\caches\transforms-3\b514778927d5d649e023cffd6d8fd05c\transformed\jetified-play-services-basement-18.0.0\AndroidManifest.xml:16:1-26:12
+MERGED from [androidx.fragment:fragment:1.4.1] C:\Users\maggi\.gradle\caches\transforms-3\5a219d3c068ea5506e18d296bb64f392\transformed\fragment-1.4.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.activity:activity:1.4.0] C:\Users\maggi\.gradle\caches\transforms-3\e71ceb52ca75293c5a48d5623b54fa45\transformed\jetified-activity-1.4.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1] C:\Users\maggi\.gradle\caches\transforms-3\4b4e9ed46d1ee3454b142d39e515f7b5\transformed\jetified-lifecycle-viewmodel-savedstate-2.3.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.savedstate:savedstate:1.1.0] C:\Users\maggi\.gradle\caches\transforms-3\274cb68ed4def82466c61bde728c0c76\transformed\jetified-savedstate-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.emoji2:emoji2-views-helper:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\513c0c0696e5d489aa246e9add669fdb\transformed\jetified-emoji2-views-helper-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.emoji2:emoji2:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\8876b0ef355d9d3e8b47dae2b38cca4c\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:17:1-37:12
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\a54aa3ef23ce62803280185b3fa1d384\transformed\legacy-support-core-utils-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\473ac422c13cd8be0cc878694deba9aa\transformed\loader-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.3.1] C:\Users\maggi\.gradle\caches\transforms-3\fc928c6024f0f10289319ffe6c0278c6\transformed\lifecycle-viewmodel-2.3.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\1889a0a7d87c90f742417215e8893f4a\transformed\viewpager-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.customview:customview:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\63c31b97c7616c83e49d7e28b134858c\transformed\customview-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.webkit:webkit:1.4.0] C:\Users\maggi\.gradle\caches\transforms-3\139cde389f70573f5dd6bac85edc6cf5\transformed\webkit-1.4.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\maggi\.gradle\caches\transforms-3\81ebd2df0bf5584015a596d312d014e4\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\maggi\.gradle\caches\transforms-3\181c8e2854958a0e385d1224d4e95c79\transformed\vectordrawable-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.core:core-ktx:1.2.0] C:\Users\maggi\.gradle\caches\transforms-3\fed4ea645431ebe73bea2b6204125410\transformed\jetified-core-ktx-1.2.0\AndroidManifest.xml:2:1-9:12
+MERGED from [androidx.core:core:1.8.0] C:\Users\maggi\.gradle\caches\transforms-3\fe0dba67bfac75aa58e7b93d33808165\transformed\core-1.8.0\AndroidManifest.xml:17:1-26:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\maggi\.gradle\caches\transforms-3\aae2458e117fc8cf46c6c0e0eba25151\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\maggi\.gradle\caches\transforms-3\31fc96d9881c54f9b47ddec530ec8052\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:17:1-37:12
+MERGED from [androidx.startup:startup-runtime:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\13d80db27eeb1b7f8279ad504eac1b76\transformed\jetified-startup-runtime-1.0.0\AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\84aae55f1c520831743cec7b2a201f4a\transformed\jetified-tracing-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.datatransport:transport-backend-cct:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c1aef2822e8b2b6f74f8e460a047d660\transformed\jetified-transport-backend-cct-3.1.5\AndroidManifest.xml:15:1-38:12
+MERGED from [com.google.android.datatransport:transport-runtime:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c87e34716cc67cc67f3eb88cab4a1683\transformed\jetified-transport-runtime-3.1.5\AndroidManifest.xml:15:1-41:12
+MERGED from [com.google.android.datatransport:transport-api:3.0.0] C:\Users\maggi\.gradle\caches\transforms-3\22d7b10a3f48caace8125ed435ed98a4\transformed\jetified-transport-api-3.0.0\AndroidManifest.xml:15:1-22:12
+MERGED from [com.google.firebase:firebase-components:17.0.0] C:\Users\maggi\.gradle\caches\transforms-3\cd9b4b1d2a42d5625026d5f772178d60\transformed\jetified-firebase-components-17.0.0\AndroidManifest.xml:15:1-23:12
+MERGED from [com.google.firebase:firebase-encoders-json:18.0.0] C:\Users\maggi\.gradle\caches\transforms-3\39c80344647083fbf94c88d58e07dc95\transformed\jetified-firebase-encoders-json-18.0.0\AndroidManifest.xml:15:1-23:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\a9de27767a213361c9a6f3005faad1ea\transformed\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.4.0] C:\Users\maggi\.gradle\caches\transforms-3\554cf3858fbb3969faf2d3de6eaeebce\transformed\lifecycle-runtime-2.4.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\maggi\.gradle\caches\transforms-3\b77b3d4c4b66880b38770930d4dc8f45\transformed\lifecycle-livedata-2.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.3.1] C:\Users\maggi\.gradle\caches\transforms-3\ac9d1a94e0dfd8e366df39019159aeb6\transformed\lifecycle-livedata-core-2.3.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\maggi\.gradle\caches\transforms-3\50164032edb9f678c1f5e79c6c6889d6\transformed\core-runtime-2.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\172ef3d1b7a42acb4e69721a9c6da8e0\transformed\documentfile-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\a58ddff23ae99d9b15cf65bc08f03e62\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.print:print:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\4662973b01d16eafb11bc24711f32f21\transformed\print-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [org.apache.cordova:framework:10.1.1] C:\Users\maggi\.gradle\caches\transforms-3\b294c7b79e70a99f26ef48fae3bee632\transformed\jetified-framework-10.1.1\AndroidManifest.xml:20:1-27:12
+MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\maggi\.gradle\caches\transforms-3\b2ffb75c7ede1f78772b204cf32e7af2\transformed\jetified-annotation-experimental-1.1.0\AndroidManifest.xml:17:1-24:12
+INJECTED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:2:1-72:12
+INJECTED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:2:1-72:12
+INJECTED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:2:1-72:12
+	package
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:3:5-36
+		INJECTED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:2:1-72:12
+		INJECTED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml
+	android:versionCode
+		INJECTED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:2:1-72:12
+		INJECTED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:2:11-69
+application
+ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:5:5-67:19
+MERGED from [:capacitor-push-notifications] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\push-notifications\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-17:19
+MERGED from [:capacitor-push-notifications] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\push-notifications\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-17:19
+MERGED from [:capacitor-cordova-android-plugins] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\capacitor-cordova-android-plugins\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:5-11:19
+MERGED from [:capacitor-cordova-android-plugins] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\capacitor-cordova-android-plugins\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:5-11:19
+MERGED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:30:5-59:19
+MERGED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:30:5-59:19
+MERGED from [com.google.android.gms:play-services-base:18.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8ff1e9f283fdec7034b38b65639640bb\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:19:5-23:19
+MERGED from [com.google.android.gms:play-services-base:18.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8ff1e9f283fdec7034b38b65639640bb\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:19:5-23:19
+MERGED from [com.google.android.gms:play-services-stats:17.0.2] C:\Users\maggi\.gradle\caches\transforms-3\30b5a0f8e4ef48073d8fa2d249f983b7\transformed\jetified-play-services-stats-17.0.2\AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-stats:17.0.2] C:\Users\maggi\.gradle\caches\transforms-3\30b5a0f8e4ef48073d8fa2d249f983b7\transformed\jetified-play-services-stats-17.0.2\AndroidManifest.xml:7:5-20
+MERGED from [com.google.firebase:firebase-datatransport:18.1.4] C:\Users\maggi\.gradle\caches\transforms-3\8e5fbcaeabc8a8329fa9033227fb26ff\transformed\jetified-firebase-datatransport-18.1.4\AndroidManifest.xml:24:5-32:19
+MERGED from [com.google.firebase:firebase-datatransport:18.1.4] C:\Users\maggi\.gradle\caches\transforms-3\8e5fbcaeabc8a8329fa9033227fb26ff\transformed\jetified-firebase-datatransport-18.1.4\AndroidManifest.xml:24:5-32:19
+MERGED from [com.google.firebase:firebase-installations:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8ed32f9624df4af3f0e91fe17bf0603d\transformed\jetified-firebase-installations-17.0.1\AndroidManifest.xml:14:5-22:19
+MERGED from [com.google.firebase:firebase-installations:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8ed32f9624df4af3f0e91fe17bf0603d\transformed\jetified-firebase-installations-17.0.1\AndroidManifest.xml:14:5-22:19
+MERGED from [com.google.firebase:firebase-common:20.1.1] C:\Users\maggi\.gradle\caches\transforms-3\7c277c21e3425d7da700f38bc0945473\transformed\jetified-firebase-common-20.1.1\AndroidManifest.xml:25:5-38:19
+MERGED from [com.google.firebase:firebase-common:20.1.1] C:\Users\maggi\.gradle\caches\transforms-3\7c277c21e3425d7da700f38bc0945473\transformed\jetified-firebase-common-20.1.1\AndroidManifest.xml:25:5-38:19
+MERGED from [com.google.firebase:firebase-iid-interop:17.1.0] C:\Users\maggi\.gradle\caches\transforms-3\97046e19e9406bda61382429b17a4017\transformed\jetified-firebase-iid-interop-17.1.0\AndroidManifest.xml:7:5-8:19
+MERGED from [com.google.firebase:firebase-iid-interop:17.1.0] C:\Users\maggi\.gradle\caches\transforms-3\97046e19e9406bda61382429b17a4017\transformed\jetified-firebase-iid-interop-17.1.0\AndroidManifest.xml:7:5-8:19
+MERGED from [com.google.android.gms:play-services-tasks:18.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8a5bac1c62317e35c1cb7d50ca126086\transformed\jetified-play-services-tasks-18.0.1\AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-tasks:18.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8a5bac1c62317e35c1cb7d50ca126086\transformed\jetified-play-services-tasks-18.0.1\AndroidManifest.xml:5:5-20
+MERGED from [com.google.firebase:firebase-measurement-connector:19.0.0] C:\Users\maggi\.gradle\caches\transforms-3\99987d2fd561dd39a2e73550bf48d968\transformed\jetified-firebase-measurement-connector-19.0.0\AndroidManifest.xml:22:5-23:19
+MERGED from [com.google.firebase:firebase-measurement-connector:19.0.0] C:\Users\maggi\.gradle\caches\transforms-3\99987d2fd561dd39a2e73550bf48d968\transformed\jetified-firebase-measurement-connector-19.0.0\AndroidManifest.xml:22:5-23:19
+MERGED from [com.google.android.gms:play-services-basement:18.0.0] C:\Users\maggi\.gradle\caches\transforms-3\b514778927d5d649e023cffd6d8fd05c\transformed\jetified-play-services-basement-18.0.0\AndroidManifest.xml:20:5-24:19
+MERGED from [com.google.android.gms:play-services-basement:18.0.0] C:\Users\maggi\.gradle\caches\transforms-3\b514778927d5d649e023cffd6d8fd05c\transformed\jetified-play-services-basement-18.0.0\AndroidManifest.xml:20:5-24:19
+MERGED from [androidx.emoji2:emoji2:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\8876b0ef355d9d3e8b47dae2b38cca4c\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:25:5-35:19
+MERGED from [androidx.emoji2:emoji2:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\8876b0ef355d9d3e8b47dae2b38cca4c\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:25:5-35:19
+MERGED from [androidx.core:core:1.8.0] C:\Users\maggi\.gradle\caches\transforms-3\fe0dba67bfac75aa58e7b93d33808165\transformed\core-1.8.0\AndroidManifest.xml:24:5-89
+MERGED from [androidx.core:core:1.8.0] C:\Users\maggi\.gradle\caches\transforms-3\fe0dba67bfac75aa58e7b93d33808165\transformed\core-1.8.0\AndroidManifest.xml:24:5-89
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\maggi\.gradle\caches\transforms-3\aae2458e117fc8cf46c6c0e0eba25151\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\maggi\.gradle\caches\transforms-3\aae2458e117fc8cf46c6c0e0eba25151\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\maggi\.gradle\caches\transforms-3\31fc96d9881c54f9b47ddec530ec8052\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:25:5-35:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\maggi\.gradle\caches\transforms-3\31fc96d9881c54f9b47ddec530ec8052\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:25:5-35:19
+MERGED from [androidx.startup:startup-runtime:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\13d80db27eeb1b7f8279ad504eac1b76\transformed\jetified-startup-runtime-1.0.0\AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.startup:startup-runtime:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\13d80db27eeb1b7f8279ad504eac1b76\transformed\jetified-startup-runtime-1.0.0\AndroidManifest.xml:25:5-31:19
+MERGED from [com.google.android.datatransport:transport-backend-cct:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c1aef2822e8b2b6f74f8e460a047d660\transformed\jetified-transport-backend-cct-3.1.5\AndroidManifest.xml:28:5-36:19
+MERGED from [com.google.android.datatransport:transport-backend-cct:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c1aef2822e8b2b6f74f8e460a047d660\transformed\jetified-transport-backend-cct-3.1.5\AndroidManifest.xml:28:5-36:19
+MERGED from [com.google.android.datatransport:transport-runtime:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c87e34716cc67cc67f3eb88cab4a1683\transformed\jetified-transport-runtime-3.1.5\AndroidManifest.xml:25:5-39:19
+MERGED from [com.google.android.datatransport:transport-runtime:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c87e34716cc67cc67f3eb88cab4a1683\transformed\jetified-transport-runtime-3.1.5\AndroidManifest.xml:25:5-39:19
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.8.0] C:\Users\maggi\.gradle\caches\transforms-3\fe0dba67bfac75aa58e7b93d33808165\transformed\core-1.8.0\AndroidManifest.xml:24:18-86
+	android:supportsRtl
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:10:9-35
+	android:label
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:8:9-41
+	android:roundIcon
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:9:9-54
+	android:icon
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:7:9-43
+	android:allowBackup
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:6:9-35
+	android:theme
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:11:9-40
+	android:usesCleartextTraffic
+		ADDED from [:capacitor-cordova-android-plugins] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\capacitor-cordova-android-plugins\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:18-53
+activity#com.stockoverflow.app.MainActivity
+ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:33:9-46:20
+	android:label
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:36:13-56
+	android:launchMode
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:38:13-44
+	android:exported
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:39:13-36
+	android:configChanges
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:34:13-129
+	android:theme
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:37:13-62
+	android:name
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:35:13-62
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:41:13-44:29
+action#android.intent.action.MAIN
+ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:42:17-69
+	android:name
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:42:25-66
+category#android.intent.category.LAUNCHER
+ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:43:17-77
+	android:name
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:43:27-74
+uses-permission#android.permission.INTERNET
+ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:71:5-67
+MERGED from [com.google.android.gms:play-services-cloud-messaging:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\1f1c4f731c371007f3f618ee4c109543\transformed\jetified-play-services-cloud-messaging-17.0.1\AndroidManifest.xml:8:5-67
+MERGED from [com.google.android.gms:play-services-cloud-messaging:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\1f1c4f731c371007f3f618ee4c109543\transformed\jetified-play-services-cloud-messaging-17.0.1\AndroidManifest.xml:8:5-67
+MERGED from [com.google.firebase:firebase-installations:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8ed32f9624df4af3f0e91fe17bf0603d\transformed\jetified-firebase-installations-17.0.1\AndroidManifest.xml:11:5-67
+MERGED from [com.google.firebase:firebase-installations:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8ed32f9624df4af3f0e91fe17bf0603d\transformed\jetified-firebase-installations-17.0.1\AndroidManifest.xml:11:5-67
+MERGED from [com.google.android.datatransport:transport-backend-cct:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c1aef2822e8b2b6f74f8e460a047d660\transformed\jetified-transport-backend-cct-3.1.5\AndroidManifest.xml:26:5-67
+MERGED from [com.google.android.datatransport:transport-backend-cct:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c1aef2822e8b2b6f74f8e460a047d660\transformed\jetified-transport-backend-cct-3.1.5\AndroidManifest.xml:26:5-67
+	android:name
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:71:22-64
+uses-sdk
+INJECTED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml
+MERGED from [:capacitor-app] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:capacitor-app] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:capacitor-haptics] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\haptics\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:capacitor-haptics] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\haptics\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:capacitor-keyboard] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\keyboard\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:capacitor-keyboard] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\keyboard\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:capacitor-preferences] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\preferences\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:capacitor-preferences] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\preferences\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:capacitor-push-notifications] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\push-notifications\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:capacitor-push-notifications] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\push-notifications\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:capacitor-status-bar] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\status-bar\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:capacitor-status-bar] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\status-bar\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:capacitor-android] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\android\capacitor\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:capacitor-android] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\android\capacitor\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:capacitor-cordova-android-plugins] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\capacitor-cordova-android-plugins\build\intermediates\merged_manifest\debug\AndroidManifest.xml:6:5-8:41
+MERGED from [:capacitor-cordova-android-plugins] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\capacitor-cordova-android-plugins\build\intermediates\merged_manifest\debug\AndroidManifest.xml:6:5-8:41
+MERGED from [androidx.appcompat:appcompat:1.4.2] C:\Users\maggi\.gradle\caches\transforms-3\a8e52a507448d4b845688b4ff42bab35\transformed\appcompat-1.4.2\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.appcompat:appcompat:1.4.2] C:\Users\maggi\.gradle\caches\transforms-3\a8e52a507448d4b845688b4ff42bab35\transformed\appcompat-1.4.2\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.2.0] C:\Users\maggi\.gradle\caches\transforms-3\96bfe7ff07b49e78a3a68f6b88db966e\transformed\coordinatorlayout-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.2.0] C:\Users\maggi\.gradle\caches\transforms-3\96bfe7ff07b49e78a3a68f6b88db966e\transformed\coordinatorlayout-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core-splashscreen:1.0.0-rc01] C:\Users\maggi\.gradle\caches\transforms-3\86f2c94e123f7d631ee33b23bd175149\transformed\jetified-core-splashscreen-1.0.0-rc01\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core-splashscreen:1.0.0-rc01] C:\Users\maggi\.gradle\caches\transforms-3\86f2c94e123f7d631ee33b23bd175149\transformed\jetified-core-splashscreen-1.0.0-rc01\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\d4488bf82a46967f585a72807db195de\transformed\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\d4488bf82a46967f585a72807db195de\transformed\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat-resources:1.4.2] C:\Users\maggi\.gradle\caches\transforms-3\41d6025b73a5b19c933572877ed2e11c\transformed\jetified-appcompat-resources-1.4.2\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.appcompat:appcompat-resources:1.4.2] C:\Users\maggi\.gradle\caches\transforms-3\41d6025b73a5b19c933572877ed2e11c\transformed\jetified-appcompat-resources-1.4.2\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\fb5f1a396d63e2855da3803514443261\transformed\drawerlayout-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\fb5f1a396d63e2855da3803514443261\transformed\drawerlayout-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:21:5-23:41
+MERGED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:21:5-23:41
+MERGED from [com.google.android.gms:play-services-base:18.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8ff1e9f283fdec7034b38b65639640bb\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:18:5-43
+MERGED from [com.google.android.gms:play-services-base:18.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8ff1e9f283fdec7034b38b65639640bb\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:18:5-43
+MERGED from [com.google.android.gms:play-services-cloud-messaging:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\1f1c4f731c371007f3f618ee4c109543\transformed\jetified-play-services-cloud-messaging-17.0.1\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-cloud-messaging:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\1f1c4f731c371007f3f618ee4c109543\transformed\jetified-play-services-cloud-messaging-17.0.1\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-stats:17.0.2] C:\Users\maggi\.gradle\caches\transforms-3\30b5a0f8e4ef48073d8fa2d249f983b7\transformed\jetified-play-services-stats-17.0.2\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-stats:17.0.2] C:\Users\maggi\.gradle\caches\transforms-3\30b5a0f8e4ef48073d8fa2d249f983b7\transformed\jetified-play-services-stats-17.0.2\AndroidManifest.xml:5:5-44
+MERGED from [com.google.firebase:firebase-datatransport:18.1.4] C:\Users\maggi\.gradle\caches\transforms-3\8e5fbcaeabc8a8329fa9033227fb26ff\transformed\jetified-firebase-datatransport-18.1.4\AndroidManifest.xml:19:5-21:41
+MERGED from [com.google.firebase:firebase-datatransport:18.1.4] C:\Users\maggi\.gradle\caches\transforms-3\8e5fbcaeabc8a8329fa9033227fb26ff\transformed\jetified-firebase-datatransport-18.1.4\AndroidManifest.xml:19:5-21:41
+MERGED from [com.google.firebase:firebase-installations:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8ed32f9624df4af3f0e91fe17bf0603d\transformed\jetified-firebase-installations-17.0.1\AndroidManifest.xml:6:5-8:41
+MERGED from [com.google.firebase:firebase-installations:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8ed32f9624df4af3f0e91fe17bf0603d\transformed\jetified-firebase-installations-17.0.1\AndroidManifest.xml:6:5-8:41
+MERGED from [com.google.firebase:firebase-common:20.1.1] C:\Users\maggi\.gradle\caches\transforms-3\7c277c21e3425d7da700f38bc0945473\transformed\jetified-firebase-common-20.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.firebase:firebase-common:20.1.1] C:\Users\maggi\.gradle\caches\transforms-3\7c277c21e3425d7da700f38bc0945473\transformed\jetified-firebase-common-20.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.firebase:firebase-iid-interop:17.1.0] C:\Users\maggi\.gradle\caches\transforms-3\97046e19e9406bda61382429b17a4017\transformed\jetified-firebase-iid-interop-17.1.0\AndroidManifest.xml:5:5-44
+MERGED from [com.google.firebase:firebase-iid-interop:17.1.0] C:\Users\maggi\.gradle\caches\transforms-3\97046e19e9406bda61382429b17a4017\transformed\jetified-firebase-iid-interop-17.1.0\AndroidManifest.xml:5:5-44
+MERGED from [com.google.firebase:firebase-installations-interop:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\ebfc4215f84e1eebf835b22785d8c228\transformed\jetified-firebase-installations-interop-17.0.1\AndroidManifest.xml:19:5-21:41
+MERGED from [com.google.firebase:firebase-installations-interop:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\ebfc4215f84e1eebf835b22785d8c228\transformed\jetified-firebase-installations-interop-17.0.1\AndroidManifest.xml:19:5-21:41
+MERGED from [com.google.android.gms:play-services-tasks:18.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8a5bac1c62317e35c1cb7d50ca126086\transformed\jetified-play-services-tasks-18.0.1\AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-tasks:18.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8a5bac1c62317e35c1cb7d50ca126086\transformed\jetified-play-services-tasks-18.0.1\AndroidManifest.xml:4:5-43
+MERGED from [com.google.firebase:firebase-measurement-connector:19.0.0] C:\Users\maggi\.gradle\caches\transforms-3\99987d2fd561dd39a2e73550bf48d968\transformed\jetified-firebase-measurement-connector-19.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-measurement-connector:19.0.0] C:\Users\maggi\.gradle\caches\transforms-3\99987d2fd561dd39a2e73550bf48d968\transformed\jetified-firebase-measurement-connector-19.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-basement:18.0.0] C:\Users\maggi\.gradle\caches\transforms-3\b514778927d5d649e023cffd6d8fd05c\transformed\jetified-play-services-basement-18.0.0\AndroidManifest.xml:18:5-43
+MERGED from [com.google.android.gms:play-services-basement:18.0.0] C:\Users\maggi\.gradle\caches\transforms-3\b514778927d5d649e023cffd6d8fd05c\transformed\jetified-play-services-basement-18.0.0\AndroidManifest.xml:18:5-43
+MERGED from [androidx.fragment:fragment:1.4.1] C:\Users\maggi\.gradle\caches\transforms-3\5a219d3c068ea5506e18d296bb64f392\transformed\fragment-1.4.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.4.1] C:\Users\maggi\.gradle\caches\transforms-3\5a219d3c068ea5506e18d296bb64f392\transformed\fragment-1.4.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.4.0] C:\Users\maggi\.gradle\caches\transforms-3\e71ceb52ca75293c5a48d5623b54fa45\transformed\jetified-activity-1.4.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.4.0] C:\Users\maggi\.gradle\caches\transforms-3\e71ceb52ca75293c5a48d5623b54fa45\transformed\jetified-activity-1.4.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1] C:\Users\maggi\.gradle\caches\transforms-3\4b4e9ed46d1ee3454b142d39e515f7b5\transformed\jetified-lifecycle-viewmodel-savedstate-2.3.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1] C:\Users\maggi\.gradle\caches\transforms-3\4b4e9ed46d1ee3454b142d39e515f7b5\transformed\jetified-lifecycle-viewmodel-savedstate-2.3.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate:1.1.0] C:\Users\maggi\.gradle\caches\transforms-3\274cb68ed4def82466c61bde728c0c76\transformed\jetified-savedstate-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate:1.1.0] C:\Users\maggi\.gradle\caches\transforms-3\274cb68ed4def82466c61bde728c0c76\transformed\jetified-savedstate-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.emoji2:emoji2-views-helper:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\513c0c0696e5d489aa246e9add669fdb\transformed\jetified-emoji2-views-helper-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.emoji2:emoji2-views-helper:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\513c0c0696e5d489aa246e9add669fdb\transformed\jetified-emoji2-views-helper-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.emoji2:emoji2:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\8876b0ef355d9d3e8b47dae2b38cca4c\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.emoji2:emoji2:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\8876b0ef355d9d3e8b47dae2b38cca4c\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\a54aa3ef23ce62803280185b3fa1d384\transformed\legacy-support-core-utils-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\a54aa3ef23ce62803280185b3fa1d384\transformed\legacy-support-core-utils-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\473ac422c13cd8be0cc878694deba9aa\transformed\loader-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\473ac422c13cd8be0cc878694deba9aa\transformed\loader-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.3.1] C:\Users\maggi\.gradle\caches\transforms-3\fc928c6024f0f10289319ffe6c0278c6\transformed\lifecycle-viewmodel-2.3.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.3.1] C:\Users\maggi\.gradle\caches\transforms-3\fc928c6024f0f10289319ffe6c0278c6\transformed\lifecycle-viewmodel-2.3.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\1889a0a7d87c90f742417215e8893f4a\transformed\viewpager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\1889a0a7d87c90f742417215e8893f4a\transformed\viewpager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\63c31b97c7616c83e49d7e28b134858c\transformed\customview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\63c31b97c7616c83e49d7e28b134858c\transformed\customview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.webkit:webkit:1.4.0] C:\Users\maggi\.gradle\caches\transforms-3\139cde389f70573f5dd6bac85edc6cf5\transformed\webkit-1.4.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.webkit:webkit:1.4.0] C:\Users\maggi\.gradle\caches\transforms-3\139cde389f70573f5dd6bac85edc6cf5\transformed\webkit-1.4.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\maggi\.gradle\caches\transforms-3\81ebd2df0bf5584015a596d312d014e4\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\maggi\.gradle\caches\transforms-3\81ebd2df0bf5584015a596d312d014e4\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\maggi\.gradle\caches\transforms-3\181c8e2854958a0e385d1224d4e95c79\transformed\vectordrawable-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\maggi\.gradle\caches\transforms-3\181c8e2854958a0e385d1224d4e95c79\transformed\vectordrawable-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core-ktx:1.2.0] C:\Users\maggi\.gradle\caches\transforms-3\fed4ea645431ebe73bea2b6204125410\transformed\jetified-core-ktx-1.2.0\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.core:core-ktx:1.2.0] C:\Users\maggi\.gradle\caches\transforms-3\fed4ea645431ebe73bea2b6204125410\transformed\jetified-core-ktx-1.2.0\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.core:core:1.8.0] C:\Users\maggi\.gradle\caches\transforms-3\fe0dba67bfac75aa58e7b93d33808165\transformed\core-1.8.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.8.0] C:\Users\maggi\.gradle\caches\transforms-3\fe0dba67bfac75aa58e7b93d33808165\transformed\core-1.8.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\maggi\.gradle\caches\transforms-3\aae2458e117fc8cf46c6c0e0eba25151\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\maggi\.gradle\caches\transforms-3\aae2458e117fc8cf46c6c0e0eba25151\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\maggi\.gradle\caches\transforms-3\31fc96d9881c54f9b47ddec530ec8052\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\maggi\.gradle\caches\transforms-3\31fc96d9881c54f9b47ddec530ec8052\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.startup:startup-runtime:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\13d80db27eeb1b7f8279ad504eac1b76\transformed\jetified-startup-runtime-1.0.0\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.startup:startup-runtime:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\13d80db27eeb1b7f8279ad504eac1b76\transformed\jetified-startup-runtime-1.0.0\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\84aae55f1c520831743cec7b2a201f4a\transformed\jetified-tracing-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\84aae55f1c520831743cec7b2a201f4a\transformed\jetified-tracing-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.datatransport:transport-backend-cct:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c1aef2822e8b2b6f74f8e460a047d660\transformed\jetified-transport-backend-cct-3.1.5\AndroidManifest.xml:19:5-21:41
+MERGED from [com.google.android.datatransport:transport-backend-cct:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c1aef2822e8b2b6f74f8e460a047d660\transformed\jetified-transport-backend-cct-3.1.5\AndroidManifest.xml:19:5-21:41
+MERGED from [com.google.android.datatransport:transport-runtime:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c87e34716cc67cc67f3eb88cab4a1683\transformed\jetified-transport-runtime-3.1.5\AndroidManifest.xml:18:5-20:41
+MERGED from [com.google.android.datatransport:transport-runtime:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c87e34716cc67cc67f3eb88cab4a1683\transformed\jetified-transport-runtime-3.1.5\AndroidManifest.xml:18:5-20:41
+MERGED from [com.google.android.datatransport:transport-api:3.0.0] C:\Users\maggi\.gradle\caches\transforms-3\22d7b10a3f48caace8125ed435ed98a4\transformed\jetified-transport-api-3.0.0\AndroidManifest.xml:18:5-20:41
+MERGED from [com.google.android.datatransport:transport-api:3.0.0] C:\Users\maggi\.gradle\caches\transforms-3\22d7b10a3f48caace8125ed435ed98a4\transformed\jetified-transport-api-3.0.0\AndroidManifest.xml:18:5-20:41
+MERGED from [com.google.firebase:firebase-components:17.0.0] C:\Users\maggi\.gradle\caches\transforms-3\cd9b4b1d2a42d5625026d5f772178d60\transformed\jetified-firebase-components-17.0.0\AndroidManifest.xml:19:5-21:41
+MERGED from [com.google.firebase:firebase-components:17.0.0] C:\Users\maggi\.gradle\caches\transforms-3\cd9b4b1d2a42d5625026d5f772178d60\transformed\jetified-firebase-components-17.0.0\AndroidManifest.xml:19:5-21:41
+MERGED from [com.google.firebase:firebase-encoders-json:18.0.0] C:\Users\maggi\.gradle\caches\transforms-3\39c80344647083fbf94c88d58e07dc95\transformed\jetified-firebase-encoders-json-18.0.0\AndroidManifest.xml:19:5-21:41
+MERGED from [com.google.firebase:firebase-encoders-json:18.0.0] C:\Users\maggi\.gradle\caches\transforms-3\39c80344647083fbf94c88d58e07dc95\transformed\jetified-firebase-encoders-json-18.0.0\AndroidManifest.xml:19:5-21:41
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\a9de27767a213361c9a6f3005faad1ea\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\a9de27767a213361c9a6f3005faad1ea\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.4.0] C:\Users\maggi\.gradle\caches\transforms-3\554cf3858fbb3969faf2d3de6eaeebce\transformed\lifecycle-runtime-2.4.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.4.0] C:\Users\maggi\.gradle\caches\transforms-3\554cf3858fbb3969faf2d3de6eaeebce\transformed\lifecycle-runtime-2.4.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\maggi\.gradle\caches\transforms-3\b77b3d4c4b66880b38770930d4dc8f45\transformed\lifecycle-livedata-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\maggi\.gradle\caches\transforms-3\b77b3d4c4b66880b38770930d4dc8f45\transformed\lifecycle-livedata-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.3.1] C:\Users\maggi\.gradle\caches\transforms-3\ac9d1a94e0dfd8e366df39019159aeb6\transformed\lifecycle-livedata-core-2.3.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.3.1] C:\Users\maggi\.gradle\caches\transforms-3\ac9d1a94e0dfd8e366df39019159aeb6\transformed\lifecycle-livedata-core-2.3.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\maggi\.gradle\caches\transforms-3\50164032edb9f678c1f5e79c6c6889d6\transformed\core-runtime-2.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\maggi\.gradle\caches\transforms-3\50164032edb9f678c1f5e79c6c6889d6\transformed\core-runtime-2.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\172ef3d1b7a42acb4e69721a9c6da8e0\transformed\documentfile-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\172ef3d1b7a42acb4e69721a9c6da8e0\transformed\documentfile-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\a58ddff23ae99d9b15cf65bc08f03e62\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\a58ddff23ae99d9b15cf65bc08f03e62\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\4662973b01d16eafb11bc24711f32f21\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\4662973b01d16eafb11bc24711f32f21\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [org.apache.cordova:framework:10.1.1] C:\Users\maggi\.gradle\caches\transforms-3\b294c7b79e70a99f26ef48fae3bee632\transformed\jetified-framework-10.1.1\AndroidManifest.xml:25:5-44
+MERGED from [org.apache.cordova:framework:10.1.1] C:\Users\maggi\.gradle\caches\transforms-3\b294c7b79e70a99f26ef48fae3bee632\transformed\jetified-framework-10.1.1\AndroidManifest.xml:25:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\maggi\.gradle\caches\transforms-3\b2ffb75c7ede1f78772b204cf32e7af2\transformed\jetified-annotation-experimental-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\maggi\.gradle\caches\transforms-3\b2ffb75c7ede1f78772b204cf32e7af2\transformed\jetified-annotation-experimental-1.1.0\AndroidManifest.xml:20:5-22:41
+INJECTED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml
+meta-data#android.support.FILE_PROVIDER_PATHS
+ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:53:13-55:64
+	android:resource
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:55:17-51
+	android:name
+		ADDED from C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\android\app\src\main\AndroidManifest.xml:54:17-67
+uses-permission#android.permission.VIBRATE
+ADDED from [:capacitor-haptics] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\haptics\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-66
+	android:name
+		ADDED from [:capacitor-haptics] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\haptics\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:22-63
+service#com.capacitorjs.plugins.pushnotifications.MessagingService
+ADDED from [:capacitor-push-notifications] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\push-notifications\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:9-16:19
+	android:exported
+		ADDED from [:capacitor-push-notifications] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\push-notifications\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:12:13-37
+	android:name
+		ADDED from [:capacitor-push-notifications] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\push-notifications\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-86
+intent-filter#action:name:com.google.firebase.MESSAGING_EVENT
+ADDED from [:capacitor-push-notifications] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\push-notifications\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:13:13-15:29
+action#com.google.firebase.MESSAGING_EVENT
+ADDED from [:capacitor-push-notifications] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\push-notifications\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:14:17-78
+	android:name
+		ADDED from [:capacitor-push-notifications] C:\Users\maggi\Documents\tecky\tecky-project\tecky-final-project\frontend\node_modules\@capacitor\push-notifications\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:14:25-75
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:25:5-79
+MERGED from [com.google.android.gms:play-services-cloud-messaging:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\1f1c4f731c371007f3f618ee4c109543\transformed\jetified-play-services-cloud-messaging-17.0.1\AndroidManifest.xml:7:5-79
+MERGED from [com.google.android.gms:play-services-cloud-messaging:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\1f1c4f731c371007f3f618ee4c109543\transformed\jetified-play-services-cloud-messaging-17.0.1\AndroidManifest.xml:7:5-79
+MERGED from [com.google.firebase:firebase-installations:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8ed32f9624df4af3f0e91fe17bf0603d\transformed\jetified-firebase-installations-17.0.1\AndroidManifest.xml:10:5-79
+MERGED from [com.google.firebase:firebase-installations:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8ed32f9624df4af3f0e91fe17bf0603d\transformed\jetified-firebase-installations-17.0.1\AndroidManifest.xml:10:5-79
+MERGED from [com.google.android.datatransport:transport-backend-cct:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c1aef2822e8b2b6f74f8e460a047d660\transformed\jetified-transport-backend-cct-3.1.5\AndroidManifest.xml:25:5-79
+MERGED from [com.google.android.datatransport:transport-backend-cct:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c1aef2822e8b2b6f74f8e460a047d660\transformed\jetified-transport-backend-cct-3.1.5\AndroidManifest.xml:25:5-79
+MERGED from [com.google.android.datatransport:transport-runtime:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c87e34716cc67cc67f3eb88cab4a1683\transformed\jetified-transport-runtime-3.1.5\AndroidManifest.xml:22:5-79
+MERGED from [com.google.android.datatransport:transport-runtime:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c87e34716cc67cc67f3eb88cab4a1683\transformed\jetified-transport-runtime-3.1.5\AndroidManifest.xml:22:5-79
+	android:name
+		ADDED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:25:22-76
+uses-permission#android.permission.WAKE_LOCK
+ADDED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:26:5-68
+MERGED from [com.google.android.gms:play-services-cloud-messaging:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\1f1c4f731c371007f3f618ee4c109543\transformed\jetified-play-services-cloud-messaging-17.0.1\AndroidManifest.xml:9:5-68
+MERGED from [com.google.android.gms:play-services-cloud-messaging:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\1f1c4f731c371007f3f618ee4c109543\transformed\jetified-play-services-cloud-messaging-17.0.1\AndroidManifest.xml:9:5-68
+	android:name
+		ADDED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:26:22-65
+uses-permission#com.google.android.c2dm.permission.RECEIVE
+ADDED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:28:5-82
+MERGED from [com.google.android.gms:play-services-cloud-messaging:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\1f1c4f731c371007f3f618ee4c109543\transformed\jetified-play-services-cloud-messaging-17.0.1\AndroidManifest.xml:11:5-82
+MERGED from [com.google.android.gms:play-services-cloud-messaging:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\1f1c4f731c371007f3f618ee4c109543\transformed\jetified-play-services-cloud-messaging-17.0.1\AndroidManifest.xml:11:5-82
+	android:name
+		ADDED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:28:22-79
+receiver#com.google.firebase.iid.FirebaseInstanceIdReceiver
+ADDED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:31:9-38:20
+	android:exported
+		ADDED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:33:13-36
+	android:permission
+		ADDED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:34:13-73
+	android:name
+		ADDED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:32:13-78
+intent-filter#action:name:com.google.android.c2dm.intent.RECEIVE
+ADDED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:35:13-37:29
+action#com.google.android.c2dm.intent.RECEIVE
+ADDED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:36:17-81
+	android:name
+		ADDED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:36:25-78
+service#com.google.firebase.messaging.FirebaseMessagingService
+ADDED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:44:9-51:19
+	android:exported
+		ADDED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:47:13-37
+	android:directBootAware
+		ADDED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:46:13-43
+	android:name
+		ADDED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:45:13-82
+service#com.google.firebase.components.ComponentDiscoveryService
+ADDED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:52:9-58:19
+MERGED from [com.google.firebase:firebase-datatransport:18.1.4] C:\Users\maggi\.gradle\caches\transforms-3\8e5fbcaeabc8a8329fa9033227fb26ff\transformed\jetified-firebase-datatransport-18.1.4\AndroidManifest.xml:25:9-31:19
+MERGED from [com.google.firebase:firebase-datatransport:18.1.4] C:\Users\maggi\.gradle\caches\transforms-3\8e5fbcaeabc8a8329fa9033227fb26ff\transformed\jetified-firebase-datatransport-18.1.4\AndroidManifest.xml:25:9-31:19
+MERGED from [com.google.firebase:firebase-installations:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8ed32f9624df4af3f0e91fe17bf0603d\transformed\jetified-firebase-installations-17.0.1\AndroidManifest.xml:15:9-21:19
+MERGED from [com.google.firebase:firebase-installations:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8ed32f9624df4af3f0e91fe17bf0603d\transformed\jetified-firebase-installations-17.0.1\AndroidManifest.xml:15:9-21:19
+MERGED from [com.google.firebase:firebase-common:20.1.1] C:\Users\maggi\.gradle\caches\transforms-3\7c277c21e3425d7da700f38bc0945473\transformed\jetified-firebase-common-20.1.1\AndroidManifest.xml:33:9-37:35
+MERGED from [com.google.firebase:firebase-common:20.1.1] C:\Users\maggi\.gradle\caches\transforms-3\7c277c21e3425d7da700f38bc0945473\transformed\jetified-firebase-common-20.1.1\AndroidManifest.xml:33:9-37:35
+	android:exported
+		ADDED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:54:13-37
+	tools:targetApi
+		ADDED from [com.google.firebase:firebase-common:20.1.1] C:\Users\maggi\.gradle\caches\transforms-3\7c277c21e3425d7da700f38bc0945473\transformed\jetified-firebase-common-20.1.1\AndroidManifest.xml:37:13-32
+	android:directBootAware
+		ADDED from [com.google.firebase:firebase-common:20.1.1] C:\Users\maggi\.gradle\caches\transforms-3\7c277c21e3425d7da700f38bc0945473\transformed\jetified-firebase-common-20.1.1\AndroidManifest.xml:35:13-43
+	android:name
+		ADDED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:53:13-84
+meta-data#com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingRegistrar
+ADDED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:55:13-57:85
+	android:value
+		ADDED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:57:17-82
+	android:name
+		ADDED from [com.google.firebase:firebase-messaging:23.0.5] C:\Users\maggi\.gradle\caches\transforms-3\71fd8bfa4f00009464628c02658ee415\transformed\jetified-firebase-messaging-23.0.5\AndroidManifest.xml:56:17-119
+activity#com.google.android.gms.common.api.GoogleApiActivity
+ADDED from [com.google.android.gms:play-services-base:18.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8ff1e9f283fdec7034b38b65639640bb\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:20:9-22:45
+	android:exported
+		ADDED from [com.google.android.gms:play-services-base:18.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8ff1e9f283fdec7034b38b65639640bb\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:22:19-43
+	android:theme
+		ADDED from [com.google.android.gms:play-services-base:18.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8ff1e9f283fdec7034b38b65639640bb\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:21:19-78
+	android:name
+		ADDED from [com.google.android.gms:play-services-base:18.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8ff1e9f283fdec7034b38b65639640bb\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:20:19-85
+meta-data#com.google.firebase.components:com.google.firebase.datatransport.TransportRegistrar
+ADDED from [com.google.firebase:firebase-datatransport:18.1.4] C:\Users\maggi\.gradle\caches\transforms-3\8e5fbcaeabc8a8329fa9033227fb26ff\transformed\jetified-firebase-datatransport-18.1.4\AndroidManifest.xml:28:13-30:85
+	android:value
+		ADDED from [com.google.firebase:firebase-datatransport:18.1.4] C:\Users\maggi\.gradle\caches\transforms-3\8e5fbcaeabc8a8329fa9033227fb26ff\transformed\jetified-firebase-datatransport-18.1.4\AndroidManifest.xml:30:17-82
+	android:name
+		ADDED from [com.google.firebase:firebase-datatransport:18.1.4] C:\Users\maggi\.gradle\caches\transforms-3\8e5fbcaeabc8a8329fa9033227fb26ff\transformed\jetified-firebase-datatransport-18.1.4\AndroidManifest.xml:29:17-115
+meta-data#com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar
+ADDED from [com.google.firebase:firebase-installations:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8ed32f9624df4af3f0e91fe17bf0603d\transformed\jetified-firebase-installations-17.0.1\AndroidManifest.xml:18:13-20:85
+	android:value
+		ADDED from [com.google.firebase:firebase-installations:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8ed32f9624df4af3f0e91fe17bf0603d\transformed\jetified-firebase-installations-17.0.1\AndroidManifest.xml:20:17-82
+	android:name
+		ADDED from [com.google.firebase:firebase-installations:17.0.1] C:\Users\maggi\.gradle\caches\transforms-3\8ed32f9624df4af3f0e91fe17bf0603d\transformed\jetified-firebase-installations-17.0.1\AndroidManifest.xml:19:17-127
+provider#com.google.firebase.provider.FirebaseInitProvider
+ADDED from [com.google.firebase:firebase-common:20.1.1] C:\Users\maggi\.gradle\caches\transforms-3\7c277c21e3425d7da700f38bc0945473\transformed\jetified-firebase-common-20.1.1\AndroidManifest.xml:26:9-31:39
+	android:authorities
+		ADDED from [com.google.firebase:firebase-common:20.1.1] C:\Users\maggi\.gradle\caches\transforms-3\7c277c21e3425d7da700f38bc0945473\transformed\jetified-firebase-common-20.1.1\AndroidManifest.xml:28:13-72
+	android:exported
+		ADDED from [com.google.firebase:firebase-common:20.1.1] C:\Users\maggi\.gradle\caches\transforms-3\7c277c21e3425d7da700f38bc0945473\transformed\jetified-firebase-common-20.1.1\AndroidManifest.xml:30:13-37
+	android:directBootAware
+		ADDED from [com.google.firebase:firebase-common:20.1.1] C:\Users\maggi\.gradle\caches\transforms-3\7c277c21e3425d7da700f38bc0945473\transformed\jetified-firebase-common-20.1.1\AndroidManifest.xml:29:13-43
+	android:initOrder
+		ADDED from [com.google.firebase:firebase-common:20.1.1] C:\Users\maggi\.gradle\caches\transforms-3\7c277c21e3425d7da700f38bc0945473\transformed\jetified-firebase-common-20.1.1\AndroidManifest.xml:31:13-36
+	android:name
+		ADDED from [com.google.firebase:firebase-common:20.1.1] C:\Users\maggi\.gradle\caches\transforms-3\7c277c21e3425d7da700f38bc0945473\transformed\jetified-firebase-common-20.1.1\AndroidManifest.xml:27:13-77
+meta-data#com.google.android.gms.version
+ADDED from [com.google.android.gms:play-services-basement:18.0.0] C:\Users\maggi\.gradle\caches\transforms-3\b514778927d5d649e023cffd6d8fd05c\transformed\jetified-play-services-basement-18.0.0\AndroidManifest.xml:21:9-23:69
+	android:value
+		ADDED from [com.google.android.gms:play-services-basement:18.0.0] C:\Users\maggi\.gradle\caches\transforms-3\b514778927d5d649e023cffd6d8fd05c\transformed\jetified-play-services-basement-18.0.0\AndroidManifest.xml:23:13-66
+	android:name
+		ADDED from [com.google.android.gms:play-services-basement:18.0.0] C:\Users\maggi\.gradle\caches\transforms-3\b514778927d5d649e023cffd6d8fd05c\transformed\jetified-play-services-basement-18.0.0\AndroidManifest.xml:22:13-58
+provider#androidx.startup.InitializationProvider
+ADDED from [androidx.emoji2:emoji2:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\8876b0ef355d9d3e8b47dae2b38cca4c\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:26:9-34:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\maggi\.gradle\caches\transforms-3\31fc96d9881c54f9b47ddec530ec8052\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:26:9-34:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\maggi\.gradle\caches\transforms-3\31fc96d9881c54f9b47ddec530ec8052\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:26:9-34:20
+MERGED from [androidx.startup:startup-runtime:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\13d80db27eeb1b7f8279ad504eac1b76\transformed\jetified-startup-runtime-1.0.0\AndroidManifest.xml:26:9-30:34
+MERGED from [androidx.startup:startup-runtime:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\13d80db27eeb1b7f8279ad504eac1b76\transformed\jetified-startup-runtime-1.0.0\AndroidManifest.xml:26:9-30:34
+	tools:node
+		ADDED from [androidx.emoji2:emoji2:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\8876b0ef355d9d3e8b47dae2b38cca4c\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:30:13-31
+	android:authorities
+		ADDED from [androidx.emoji2:emoji2:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\8876b0ef355d9d3e8b47dae2b38cca4c\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:28:13-68
+	android:exported
+		ADDED from [androidx.emoji2:emoji2:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\8876b0ef355d9d3e8b47dae2b38cca4c\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:29:13-37
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\8876b0ef355d9d3e8b47dae2b38cca4c\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:27:13-67
+meta-data#androidx.emoji2.text.EmojiCompatInitializer
+ADDED from [androidx.emoji2:emoji2:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\8876b0ef355d9d3e8b47dae2b38cca4c\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:31:13-33:52
+	android:value
+		ADDED from [androidx.emoji2:emoji2:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\8876b0ef355d9d3e8b47dae2b38cca4c\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:33:17-49
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.0.0] C:\Users\maggi\.gradle\caches\transforms-3\8876b0ef355d9d3e8b47dae2b38cca4c\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:32:17-75
+meta-data#androidx.lifecycle.ProcessLifecycleInitializer
+ADDED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\maggi\.gradle\caches\transforms-3\31fc96d9881c54f9b47ddec530ec8052\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:31:13-33:52
+	android:value
+		ADDED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\maggi\.gradle\caches\transforms-3\31fc96d9881c54f9b47ddec530ec8052\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:33:17-49
+	android:name
+		ADDED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\maggi\.gradle\caches\transforms-3\31fc96d9881c54f9b47ddec530ec8052\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:32:17-78
+service#com.google.android.datatransport.runtime.backends.TransportBackendDiscovery
+ADDED from [com.google.android.datatransport:transport-backend-cct:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c1aef2822e8b2b6f74f8e460a047d660\transformed\jetified-transport-backend-cct-3.1.5\AndroidManifest.xml:29:9-35:19
+MERGED from [com.google.android.datatransport:transport-runtime:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c87e34716cc67cc67f3eb88cab4a1683\transformed\jetified-transport-runtime-3.1.5\AndroidManifest.xml:36:9-38:40
+MERGED from [com.google.android.datatransport:transport-runtime:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c87e34716cc67cc67f3eb88cab4a1683\transformed\jetified-transport-runtime-3.1.5\AndroidManifest.xml:36:9-38:40
+	android:exported
+		ADDED from [com.google.android.datatransport:transport-backend-cct:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c1aef2822e8b2b6f74f8e460a047d660\transformed\jetified-transport-backend-cct-3.1.5\AndroidManifest.xml:31:13-37
+	android:name
+		ADDED from [com.google.android.datatransport:transport-backend-cct:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c1aef2822e8b2b6f74f8e460a047d660\transformed\jetified-transport-backend-cct-3.1.5\AndroidManifest.xml:30:13-103
+meta-data#backend:com.google.android.datatransport.cct.CctBackendFactory
+ADDED from [com.google.android.datatransport:transport-backend-cct:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c1aef2822e8b2b6f74f8e460a047d660\transformed\jetified-transport-backend-cct-3.1.5\AndroidManifest.xml:32:13-34:39
+	android:value
+		ADDED from [com.google.android.datatransport:transport-backend-cct:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c1aef2822e8b2b6f74f8e460a047d660\transformed\jetified-transport-backend-cct-3.1.5\AndroidManifest.xml:34:17-36
+	android:name
+		ADDED from [com.google.android.datatransport:transport-backend-cct:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c1aef2822e8b2b6f74f8e460a047d660\transformed\jetified-transport-backend-cct-3.1.5\AndroidManifest.xml:33:17-94
+service#com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService
+ADDED from [com.google.android.datatransport:transport-runtime:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c87e34716cc67cc67f3eb88cab4a1683\transformed\jetified-transport-runtime-3.1.5\AndroidManifest.xml:26:9-30:19
+	android:exported
+		ADDED from [com.google.android.datatransport:transport-runtime:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c87e34716cc67cc67f3eb88cab4a1683\transformed\jetified-transport-runtime-3.1.5\AndroidManifest.xml:28:13-37
+	android:permission
+		ADDED from [com.google.android.datatransport:transport-runtime:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c87e34716cc67cc67f3eb88cab4a1683\transformed\jetified-transport-runtime-3.1.5\AndroidManifest.xml:29:13-69
+	android:name
+		ADDED from [com.google.android.datatransport:transport-runtime:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c87e34716cc67cc67f3eb88cab4a1683\transformed\jetified-transport-runtime-3.1.5\AndroidManifest.xml:27:13-117
+receiver#com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver
+ADDED from [com.google.android.datatransport:transport-runtime:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c87e34716cc67cc67f3eb88cab4a1683\transformed\jetified-transport-runtime-3.1.5\AndroidManifest.xml:32:9-34:40
+	android:exported
+		ADDED from [com.google.android.datatransport:transport-runtime:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c87e34716cc67cc67f3eb88cab4a1683\transformed\jetified-transport-runtime-3.1.5\AndroidManifest.xml:34:13-37
+	android:name
+		ADDED from [com.google.android.datatransport:transport-runtime:3.1.5] C:\Users\maggi\.gradle\caches\transforms-3\c87e34716cc67cc67f3eb88cab4a1683\transformed\jetified-transport-runtime-3.1.5\AndroidManifest.xml:33:13-132

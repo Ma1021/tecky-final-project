@@ -48,7 +48,7 @@ const Menu: React.FC<MenuProps> = () => {
     // };
     dispatch(logout());
     // web version
-    localStorage.clear();
+    localStorage.removeItem("auth_stockoverflow");
     // console.log(
     //   "after useEffect and set localStorage",
     //   localStorage.getItem("auth_stockoverflow")

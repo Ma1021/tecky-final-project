@@ -312,8 +312,6 @@ const AskerContainer = styled(IonItem)`
   }
 
   .subscribeBtn {
-    height: 1.7rem;
-    line-height: 1.7rem;
     display:flex;
     align-items: center;
     position:absolute;
@@ -352,6 +350,13 @@ const ContentContainer = styled.div`
     color: #ddd;
     display: flex;
     justify-content: space-around;
+    align-items: center;
+
+    .react-share__ShareButton {
+      display: flex;
+      align-items: center;
+    }
+
   }
 
 `

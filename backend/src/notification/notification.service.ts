@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { InjectModel } from 'nest-knexjs';
 import { Knex } from "knex";
-import { Notification_DTO, Notification_Delete_DTO } from "./notification.dto";
+import { Notification_DTO, Notification_Delete_DTO, Push_Token_DTO } from "./notification.dto";
 
 @Injectable()
 export class NotificationService {
@@ -122,7 +122,36 @@ export class NotificationService {
             return objectRes;
         } catch(err) {
             console.log(err);
-            
+        }
+    }
+
+    async checkToken(auth:Push_Token_DTO) {
+        try {
+            // check the token is same to old token or not
+            this.knex('users')
+            .select('push_notification_token', 'id')
+            .where('push_notification_token', auth.token)
+            .andWhere('id', auth.user_id)
+            .andWhere('is_deleted', false)
+            .then((response)=>{                
+                // if no token or is not same then update the token to table
+                if(response.length === 0) {
+                    console.log('update token');
+                    return this.knex('users')
+                    .update({push_notification_token:auth.token})
+                    .where('id', auth.user_id)
+                    .andWhere('is_deleted', false)
+                    .returning('*');
+                } else if(response[0].push_notification_token === auth.token) {
+                    // if the token is same then do nothing
+                    console.log('do nothing');
+                    return
+                }
+            }).catch((err)=>{
+                return err                
+            });
+        } catch(err) {
+            console.log(err);
         }
     }
 }

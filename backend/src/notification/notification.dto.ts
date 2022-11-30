@@ -29,3 +29,12 @@ export class Notification_Delete_DTO {
     @IsNumber()
     target_id: number;
 }
+
+export class Push_Token_DTO {
+    @IsNotEmpty()
+    @IsString()
+    token: string;
+    @IsNotEmpty()
+    @IsNumber()
+    user_id: number;
+}

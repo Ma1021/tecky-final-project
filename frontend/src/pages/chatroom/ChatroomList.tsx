@@ -121,7 +121,6 @@ const ChatroomList: React.FC = () => {
         <IonHeader
           translucent={true}
           collapse="fade"
-          style={{ height: 50 }}
           className="d-flex align-items-center"
         >
           <IonToolbar>
@@ -178,6 +177,7 @@ export const SegmentOrganizer = styled.div`
   position: sticky;
   top: 0;
   z-index: 1;
+  margin-top:0.5rem;
 
   ion-item-divider {
     --inner-padding-start: 1rem;

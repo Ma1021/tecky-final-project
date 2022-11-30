@@ -37,6 +37,24 @@ const Login: React.FC = () => {
   const select = useAppSelector((state) => {
     return state.auth;
   });
+
+  // check push notification token
+  async function checkPushToken(json:any) {
+    const token = await localStorage.getItem("push_notification_token");
+    console.log('push_token:', token);
+    
+    fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/push_token`, {
+      method:"POST",
+      headers:{"content-type":"application/json"},
+      body:JSON.stringify({user_id: json.user.id, token})
+    }).then(async (response)=>{
+      console.log('fetching check push token');
+      if(!response.ok) {
+        console.log(await response.text());
+      }
+    })
+  }
+
   useEffect(() => {
     // phone version
     // async () => {
@@ -50,12 +68,15 @@ const Login: React.FC = () => {
     //   localStorage.getItem("auth_stockoverflow")
     // );
   }, [select]);
+
   let main = async (json: any) => {
     await dispatching(json);
     await gettingStorage();
     // () => <Redirect to="/discuss" />;
+    await checkPushToken(json);
     history.replace("/discuss");
   };
+  
   let dispatching = (json: any) => {
     dispatch(login(json.user, json.token));
   };

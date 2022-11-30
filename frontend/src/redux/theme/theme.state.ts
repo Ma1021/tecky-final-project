@@ -4,6 +4,6 @@ export interface ThemeStateType {
 }
 
 export const initThemeState: ThemeStateType = {
-  isDark: false,
-  isChinese: false,
+  isDark: true,
+  isChinese: true,
 };

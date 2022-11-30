@@ -227,7 +227,7 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
     setVolumeSeries(
       chart.addHistogramSeries({
         priceFormat: { type: "volume" },
-        // overlay: true,
+        overlay: true,
         scaleMargins: { top: 0.9, bottom: 0 },
       })
     );
@@ -585,7 +585,7 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
     );
     const mainLegend = document.createElement("div");
     mainLegend.innerHTML = symbol;
-    mainLegend.setAttribute("style", "color: black;");
+    mainLegend.setAttribute("style", "color: white;");
     mainChartLegendContainer.appendChild(mainLegend);
 
     mainChart?.subscribeCrosshairMove((param) => {
@@ -653,7 +653,7 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
       "position: absolute; left: 12px; top: 12px; z-index: 2; font-size: 14px; font-family: sans-serif; line-height: 18px; font-weight: 300; display: flex; flex-wrap: wrap;"
     );
     const RSILegend = document.createElement("div");
-    RSILegend.setAttribute("style", "color: black;");
+    RSILegend.setAttribute("style", "color: white;");
     RSIChartLegendContainer.appendChild(RSILegend);
 
     RSIChart?.subscribeCrosshairMove((param) => {
@@ -695,7 +695,7 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
       "position: absolute; left: 12px; top: 12px; z-index: 2; font-size: 14px; font-family: sans-serif; line-height: 18px; font-weight: 300; display: flex; flex-wrap: wrap;"
     );
     const MACDLegend = document.createElement("div");
-    MACDLegend.setAttribute("style", "color: black;");
+    MACDLegend.setAttribute("style", "color: white;");
     MACDChartLegendContainer.appendChild(MACDLegend);
 
     MACDChart?.subscribeCrosshairMove((param) => {
@@ -758,11 +758,11 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
           if (linePrice === undefined) {
             return;
           }
-          toolTip.innerHTML = `<div style="color: black; margin: 0 4px">${symbol}</div>
-          <div style="font-size: 12px; margin: 0 4px; color: black;">Open: <strong>${linePrice.toFixed(
+          toolTip.innerHTML = `<div style="color: white; margin: 0 4px">${symbol}</div>
+          <div style="font-size: 12px; margin: 0 4px; color: white;">Open: <strong>${linePrice.toFixed(
             2
           )}</strong></div>
-          <div style="font-size: 12px; margin: 0 4px; color: black;">Volume: <strong>${histogramVolume}</strong></div>`;
+          <div style="font-size: 12px; margin: 0 4px; color: white;">Volume: <strong>${histogramVolume}</strong></div>`;
         } else {
           const candlestickPrice = param.seriesPrices.get(
             candlestickSeries!
@@ -780,20 +780,20 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
           const lowPrice = candlestickPrice.low;
           const closePrice = candlestickPrice.close;
 
-          toolTip.innerHTML = `<div style="color: black; margin: 0 4px">${symbol}</div>
-          <div style="font-size: 12px; margin: 0 4px; color: black;">Open: <strong>${openPrice.toFixed(
+          toolTip.innerHTML = `<div style="color: white; margin: 0 4px">${symbol}</div>
+          <div style="font-size: 12px; margin: 0 4px; color: white;">Open: <strong>${openPrice.toFixed(
             2
           )}</strong></div>
-          <div style="font-size: 12px; margin: 0 4px; color: black;">High: <strong>${highPrice.toFixed(
+          <div style="font-size: 12px; margin: 0 4px; color: white;">High: <strong>${highPrice.toFixed(
             2
           )}</strong></div>
-          <div style="font-size: 12px; margin: 0 4px; color: black;">Low: <strong>${lowPrice.toFixed(
+          <div style="font-size: 12px; margin: 0 4px; color: white;">Low: <strong>${lowPrice.toFixed(
             2
           )}</strong></div>
-          <div style="font-size: 12px; margin: 0 4px; color: black;">Close: <strong>${closePrice.toFixed(
+          <div style="font-size: 12px; margin: 0 4px; color: white;">Close: <strong>${closePrice.toFixed(
             2
           )}</strong></div>
-          <div style="font-size: 12px; margin: 0 4px; color: black;">Volume: <strong>${histogramVolume}</strong></div>`;
+          <div style="font-size: 12px; margin: 0 4px; color: white;">Volume: <strong>${histogramVolume}</strong></div>`;
         }
 
         toolTip.style.display = "block";

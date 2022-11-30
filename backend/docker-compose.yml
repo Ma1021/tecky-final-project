@@ -11,7 +11,7 @@ services:
       - docker.env
     depends_on:
       - db-server
-    image: server:latest
+    image: stockoverflow-server:latest
     ports:
       - 8100:8080
     build:

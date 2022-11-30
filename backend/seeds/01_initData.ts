@@ -270,7 +270,17 @@ export async function seed(knex: Knex): Promise<void> {
     await knex('chatroom_record').insert([
       {
         record: `bye from ${userId[i].id}`,
-        chatroom: +chatroomId[0].id,
+        chatroom: +chatroomId[4].id,
+        user: +userId[i].id,
+      },
+    ]);
+  }
+  // try one  with kol - 2
+  for (let i = 0; i < userId.length - 1; i++) {
+    await knex('chatroom_record').insert([
+      {
+        record: `bye from ${userId[i].id}`,
+        chatroom: +chatroomId[2].id,
         user: +userId[i].id,
       },
     ]);

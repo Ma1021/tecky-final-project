@@ -155,30 +155,78 @@ export class ChatroomService {
   findCreated() {}
 
   async findHosted(enteringChatroomDto: EnteringChatroomDto) {
-    let result = await this.knex.raw(
-      /*sql*/
-      `
-      select chatrooms.id, chatrooms.name, chatrooms.icon, from chatrooms
-      join chatroom_record on chatroom_record.chatroom = chatrooms.id
-      where host = ?
-      order by chatroom_record.created_at, chatrooms.id desc
+    try {
+      let result = await this.knex.raw(
+        /*sql*/
+        `
+      with sort (maxdate, chatid) as (select max(created_at) as maxdate, member.id as chatid from chatroom_record 
+      full outer join (select id from chatrooms where host = ?) as member on member.id = chatroom_record.chatroom group by member.id),
+        countmax (count_chatroomid, member_count) as (select chatrooms.id as count_chatroomid,
+      count(chatroom_user.member) as member_count
+      from chatrooms
+      join users on users.id = chatrooms.host
+      full join chatroom_user on chatrooms.id = chatroom_user.chatroom
+      group by chatrooms.id)
+      select sort.chatid as chatroomid, 
+      chat.record,chatrooms.name as chatroomname, 
+      chat.id as recordid, 
+      users.id as userid, 
+      users.username, 
+      users.avatar, 
+      chatrooms.icon as chatroomicon,
+      sort.maxdate as record_created_at,
+      countmax.member_count
+      from sort  
+      left join chatroom_record as chat on chat.chatroom = sort.chatid and created_at = maxdate
+      join chatrooms on chatrooms.id = sort.chatid
+      left join users on users.id = chat.user
+      join countmax on countmax.count_chatroomid = sort.chatid
+      order by sort.maxdate desc, sort.chatid asc;
       `,
-      [+enteringChatroomDto.user],
-    );
-    result = result.rows;
-    // console.log('chatroom service findHosted result', result);
-    return result;
+        [+enteringChatroomDto.user],
+      );
+      result = result.rows;
+      // console.log('chatroom service findHosted result', result);
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async findEntered(enteringChatroomDto: EnteringChatroomDto) {
     let result = await this.knex.raw(
       /*sql*/
       `
-      select * from chatrooms 
-      where id IN (select chatroom from chatroom_user 
-        where member=? and status='approved');
+        with sort (maxdate, chatid) as 
+        (select max(created_at) as maxdate, member.chatroom as chatid from chatroom_record 
+        full outer join 
+        (select chatroom from chatroom_user where member = ? and status='approved') as member 
+        on member.chatroom = chatroom_record.chatroom group by member.chatroom),
+
+        countmax (count_chatroomid, member_count) as (select chatrooms.id as count_chatroomid,
+        count(chatroom_user.member) as member_count
+        from chatrooms
+        join users on users.id = chatrooms.host
+        full join chatroom_user on chatrooms.id = chatroom_user.chatroom
+        group by chatrooms.id)
+
+        select sort.chatid as chatroomid, 
+        chat.record,chatrooms.name as chatroomname, 
+        chat.id as recordid, 
+        users.id as userid, 
+        users.username, 
+        users.avatar, 
+        chatrooms.icon as chatroomicon,
+            countmax.member_count,
+        sort.maxdate as record_created_at
+        from sort 
+        left join chatroom_record as chat on chat.chatroom = sort.chatid and created_at = maxdate
+        join chatrooms on chatrooms.id = sort.chatid
+        left join users on users.id = chat.user
+            join countmax on countmax.count_chatroomid = sort.chatid
+        order by sort.maxdate desc, sort.chatid asc;
         `,
-      [+enteringChatroomDto.user, +enteringChatroomDto.user],
+      [+enteringChatroomDto.user],
     );
     result = result.rows;
     // console.log('chatroom service findEntered result', result);

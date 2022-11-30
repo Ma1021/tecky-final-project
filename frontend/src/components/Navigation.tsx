@@ -20,7 +20,7 @@ import {
   flame,
   flameOutline,
 } from "ionicons/icons";
-import "src/components/Navigation.css";
+import "./Navigation.css";
 
 import Tab1 from "../pages/Tab1";
 import Tab2 from "../pages/Tab2";

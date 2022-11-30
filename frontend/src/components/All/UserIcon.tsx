@@ -1,6 +1,6 @@
 import { IonButton, IonMenuToggle, IonButtons } from "@ionic/react";
 import React from "react";
-import "src/components/All/UserIcon.css";
+import "./UserIcon.css";
 
 interface UserIconProps {}
 

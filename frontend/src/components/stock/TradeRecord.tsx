@@ -1,5 +1,5 @@
 import React from "react";
-import "src/components/stock/TradeRecord.css";
+import "./TradeRecord.css";
 
 interface TradeRecordProps {
   stockID: number;

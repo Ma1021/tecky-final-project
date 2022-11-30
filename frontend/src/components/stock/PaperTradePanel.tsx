@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
-import "src/components/stock/PaperTradePanel.css";
+import "./PaperTradePanel.css";
 import MultipleSeriesChart from "./MultipleSeriesChart";
 import UserPortfolio from "./UserPortfolio";
 import TradeRecord from "./TradeRecord";

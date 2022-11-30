@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
-import "src/components/stock/PaperTradeAccountModule.css";
+import "./PaperTradeAccountModule.css";
 
 interface UserAccountType {
   region: string;

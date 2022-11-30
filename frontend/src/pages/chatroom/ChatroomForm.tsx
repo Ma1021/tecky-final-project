@@ -31,7 +31,7 @@ import {
 } from "react";
 import Cropper from "react-easy-crop";
 import { Point, Area } from "react-easy-crop/types";
-import "src/pages/chatroom/ChatroomForm.css";
+import "./ChatroomForm.css";
 import getCroppedImg, { dataURLToBlob } from "../../helper/cropImage";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 

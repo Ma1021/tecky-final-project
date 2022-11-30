@@ -26,7 +26,7 @@ import {
   trashOutline,
   statsChart,
 } from "ionicons/icons";
-import "src/components/All/Menu.css";
+import "./Menu.css";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { logout, deleteAcc } from "../../redux/auth/actions";
 import { useState } from "react";

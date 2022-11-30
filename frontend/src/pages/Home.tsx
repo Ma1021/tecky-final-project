@@ -1,7 +1,7 @@
 import { IonButton, IonContent, IonPage } from "@ionic/react";
 import { Redirect, useHistory } from "react-router";
 import styled from "styled-components";
-import background from "src/img/coverphoto.png";
+import background from "../img/coverphoto.png";
 import { useAppSelector } from "../redux/store";
 // import { useEffect } from "react";
 // import { Preferences } from "@capacitor/preferences";

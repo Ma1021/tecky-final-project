@@ -18,14 +18,14 @@ import {
   IonSegmentButton,
   useIonRouter,
 } from "@ionic/react";
-import "src/pages/user/UserInfo.css";
+import "./UserInfo.css";
 import {
   personOutline,
   paperPlaneOutline,
   diamondOutline,
   happyOutline,
 } from "ionicons/icons";
-import img from "src/img/animal_stand_ookami.png";
+import img from "../../img/animal_stand_ookami.png";
 import Notification from "../../components/All/Notification";
 import { useEffect, useState, useCallback } from "react";
 import UserArticles from "../../components/UserContent/UserArticles";

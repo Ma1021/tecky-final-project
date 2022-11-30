@@ -21,8 +21,8 @@ const PaperTradeAccountModule: React.FC<PaperTradeAccountModuleProps> = ({
 
   useEffect(() => {
     const exampleList = [
-      { region: "us", amount: 185307.25, profit: 0, profitPercentage: 0 },
-      { region: "hk", amount: 100100, profit: 100, profitPercentage: 0.1 },
+      { region: "US", amount: 185307.25, profit: 0, profitPercentage: 0 },
+      { region: "HK", amount: 100100, profit: 100, profitPercentage: 0.1 },
       {
         region: "crypto",
         amount: 1110000,
@@ -31,10 +31,10 @@ const PaperTradeAccountModule: React.FC<PaperTradeAccountModuleProps> = ({
       },
     ];
 
-    filter === "stock"
-      ? setUserAccountList(exampleList.filter((obj) => obj.region !== "crypto"))
+    filter === "crypto"
+      ? setUserAccountList(exampleList.filter((obj) => obj.region === "crypto"))
       : setUserAccountList(
-          exampleList.filter((obj) => obj.region === "crypto")
+          exampleList.filter((obj) => obj.region !== "crypto")
         );
   }, [filter]);
 
@@ -47,14 +47,14 @@ const PaperTradeAccountModule: React.FC<PaperTradeAccountModuleProps> = ({
         {userAccountList.map((obj) => (
           <div
             className="module"
-            onClick={() => history.push("/individualAccount")}
+            onClick={() => history.push(`/individualAccount/${obj.region}`)}
           >
             <div className="top-row">
               <div className="title-icon-container">
                 <div className="icon-container">Icon</div>
                 <div className="title-container">
-                  {obj.region === "us" && "美股模擬賬戶"}
-                  {obj.region === "hk" && "港股模擬賬戶"}
+                  {obj.region === "US" && "美股模擬賬戶"}
+                  {obj.region === "HK" && "港股模擬賬戶"}
                   {obj.region === "crypto" && "加密貨幣模擬賬戶"}
                 </div>
               </div>

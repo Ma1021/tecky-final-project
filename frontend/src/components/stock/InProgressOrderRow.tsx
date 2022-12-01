@@ -1,5 +1,6 @@
 import React from "react";
 import { InProgressOrderType } from "./InProgressOrderModule";
+import "./InProgressOrderRow.css";
 
 const InProgressOrderRow: React.FC<InProgressOrderType> = ({
   orderType,
@@ -35,7 +36,9 @@ const InProgressOrderRow: React.FC<InProgressOrderType> = ({
         <div className="progress-order-row-right-container">
           <span className="progress-order-symbol">{symbol}</span>
           <span className="progress-order-stock-cost">{price}</span>
-          <span className="progress-order-time">{orderPlaceTime.split(' ')[1]}</span>
+          <span className="progress-order-time">
+            {orderPlaceTime.split(" ")[1]}
+          </span>
         </div>
       </div>
     </>

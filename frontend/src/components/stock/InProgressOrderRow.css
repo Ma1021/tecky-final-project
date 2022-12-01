@@ -1,0 +1,17 @@
+.progress-order-top-row,
+.progress-order-bottom-row {
+  display: flex;
+}
+
+.progress-order-row-left-container {
+  margin-right: 2rem;
+}
+
+.progress-order-row-right-container {
+  overflow-x: scroll;
+}
+
+
+.progress-order-row-right-container > span {
+    margin-left: 2rem;
+}

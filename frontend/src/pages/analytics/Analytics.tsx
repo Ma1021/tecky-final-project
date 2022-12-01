@@ -187,6 +187,10 @@ export default Analytics;
 const Container = styled.div`
   padding: 1rem 1.5rem;
 
+  @media(min-width: 768px) {
+    padding: 2rem 5rem;
+  }
+
   .totalAmount {
     width: 100%;
     height: 7rem;
@@ -218,6 +222,7 @@ const FansAmountHeader = styled.div`
 const FansAmountAnalysis = styled.div`
   .amountCardContainer {
     display: flex;
+    justify-content: center;
     gap: 0.8rem;
     margin: 1rem 0rem;
 
@@ -237,6 +242,12 @@ const FansAmountAnalysis = styled.div`
       align-items: center;
       justify-content: space-between;
       padding: 0rem 0.8rem;
+
+      @media(min-width: 768px) {
+        width: 12rem;
+        height: 3rem;
+        padding: 0rem 1.5rem;
+      }
 
       ion-text {
         font-weight: 600;

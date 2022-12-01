@@ -113,6 +113,10 @@ const QuestionCard: React.FC<QuestionsProps> = memo((props: QuestionsProps) => {
 const QuestionContainer = styled(IonCard)`
   width: 95%;
   margin: 6px;
+
+  @media(min-width: 768px) {
+    width: 85%;
+  }
 `;
 
 const QuestionHeader = styled(IonCardHeader)`
@@ -126,7 +130,7 @@ const QuestionContent = styled(IonCardContent)`
   width: 70%;
   float: right;
   position: relative;
-  margin: -2rem 1.8rem 1rem 0rem;
+  margin: -2rem 8% 1rem 0rem;
   background-color: #efefef;
   text-align: start;
   padding: 10px;
@@ -135,6 +139,12 @@ const QuestionContent = styled(IonCardContent)`
   font-size: 14px;
   background-color: #333;
   color: #dedede;
+
+  @media(min-width: 768px) {
+    width: 80%;
+    padding: 20px;
+    font-size: 15px;
+  }
 `;
 
 const TagContainer = styled.div`

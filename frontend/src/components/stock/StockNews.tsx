@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import NewsRow from "./NewsRow";
+import styled from "styled-components";
 
 interface News {
   id: number;
@@ -23,18 +24,26 @@ const StockNews: React.FC = () => {
   }, []);
 
   return (
-    <>
-      {newsArray.map((news) => (
+    <NewsContainer>
+      {newsArray.map((news, index) => (
         <NewsRow
           key={news.id}
           title={news.title}
           content={news.content}
           time={news.time}
           hyperlink={news.hyperlink}
+          index={index}
         />
       ))}
-    </>
+    </NewsContainer>
   );
 };
 
 export default StockNews;
+
+const NewsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap:0.3rem;
+`

@@ -456,6 +456,11 @@ const ContentContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
 
+  @media(min-width: 768px) {
+    min-height: 20rem;
+    padding: 2rem;
+  }
+
   .tagContainer {
     width: 100%;
     display: flex;
@@ -486,6 +491,10 @@ const ContentContainer = styled.div`
     display: flex;
     justify-content: space-around;
     align-items: center;
+
+    @media(min-width: 768px) {
+      padding: 0rem 5rem;
+    }
 
     .react-share__ShareButton {
       display: flex;

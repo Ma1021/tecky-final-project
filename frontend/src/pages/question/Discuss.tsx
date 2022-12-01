@@ -79,32 +79,36 @@ const Discuss: React.FC = () => {
           </IonToolbar>
         </IonHeader>
 
-        <SegmentTab value={segment} onIonChange={onSegmentChange}>
-          <SegmentButton value="all">
-            <IonLabel>所有問題</IonLabel>
-          </SegmentButton>
-          <SegmentButton value="question">
-            <IonLabel>我的問題</IonLabel>
-          </SegmentButton>
-          <SegmentButton value="answer">
-            <IonLabel>我的答題</IonLabel>
-          </SegmentButton>
-        </SegmentTab>
+        <div className="d-flex justify-content-center">
+          <SegmentTab value={segment} onIonChange={onSegmentChange}>
+            <SegmentButton value="all">
+              <IonLabel>所有問題</IonLabel>
+            </SegmentButton>
+            <SegmentButton value="question">
+              <IonLabel>我的問題</IonLabel>
+            </SegmentButton>
+            <SegmentButton value="answer">
+              <IonLabel>我的答題</IonLabel>
+            </SegmentButton>
+          </SegmentTab>
+        </div>
 
-        <ToolContainer>
-          <SearchBar
-            value={keyword}
-            placeholder="輸入關鍵字搜索"
-            onIonChange={handleKeywordChange}
-          ></SearchBar>
-          <QuestionBtn
-            onClick={() => {
-              history.push("/discuss/createQuestion");
-            }}
-          >
-            提出問題
-          </QuestionBtn>
-        </ToolContainer>
+        <div className="d-flex justify-content-center">
+          <ToolContainer>
+            <SearchBar
+              value={keyword}
+              placeholder="輸入關鍵字搜索"
+              onIonChange={handleKeywordChange}
+            ></SearchBar>
+            <QuestionBtn
+              onClick={() => {
+                history.push("/discuss/createQuestion");
+              }}
+            >
+              提出問題
+            </QuestionBtn>
+          </ToolContainer>
+        </div>
 
         <IonContent>
           {segment === "all" && (
@@ -129,14 +133,17 @@ const Discuss: React.FC = () => {
 };
 
 const ToolContainer = styled.div`
-  width: 100%;
+  width: 95%;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0px 10px;
   gap: 8px;
   margin-bottom: 0.5rem;
+
+  @media(min-width: 768px) {
+    width: 85%;
+  }
 `;
 
 const SearchBar = styled(IonSearchbar)`
@@ -157,6 +164,10 @@ const SegmentTab = styled(IonSegment)`
   width: 95%;
   margin: 8px 10px;
   color: #dedede;
+
+  @media(min-width: 768px) {
+    width: 85%;
+  }
 `;
 
 const SegmentButton = styled(IonSegmentButton)`

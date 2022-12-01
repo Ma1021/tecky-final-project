@@ -168,4 +168,8 @@ export class NotificationService {
 
         return [token]
     }
+
+    async deleteToken(user_id: number) {
+        return await this.knex('users').update({push_notification_token:null}).where('id', user_id);
+    }
 }

@@ -14,6 +14,11 @@ export class NotificationController {
       return this.notificationService.checkToken(auth);
     }
 
+    @Delete('/push_token/:id')
+    deletePushToken(@Param('id') user_id: string) {
+        return this.notificationService.deleteToken(+user_id);
+    }
+
     @Post()
     async createNotification(@Body() notification: Notification_DTO, @Response() res) {
         const response = await this.notificationService.create(notification);
@@ -24,14 +29,12 @@ export class NotificationController {
     }
 
     @Get('/push_token/:id')
-    getFollowerToken(@Param('id') user_id: string) {
+    getFollowerToken(@Param('id') user_id: string) {        
         return this.notificationService.getFollowerToken(+user_id);
     }
 
     @Post('/push_notification')
-    async pushNotification(@Body() push_notification: Push_Notification_DTO) {  
-        console.log(push_notification);
-        
+    async pushNotification(@Body() push_notification: Push_Notification_DTO) {          
         if(push_notification.notifiers.length === 0) {
             return
         }

@@ -169,10 +169,18 @@ const KOLRanking = styled.div`
   flex-direction: column;
   gap: 0.5rem;
   margin-bottom: 1rem;
+
+  @media(min-width: 768px) {
+    padding: 0rem 8rem;
+  }
 `
 
 const RecommendContainer = styled.div`
   padding: 1rem;
+
+  @media(min-width: 768px) {
+    padding: 0rem 9rem;
+  }
 
   ion-text {
       font-weight: 600;

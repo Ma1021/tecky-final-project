@@ -15,6 +15,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { hash } from 'bcrypt';
 import { AuthService } from 'src/auth/auth.service';
 import { SubscriptionDTO } from './dto/subscription.dto';
+import { UserIdDto } from './dto/userId.dto';
 
 @Controller('user')
 export class UserController {
@@ -87,13 +88,21 @@ export class UserController {
     return result;
   }
 
+  // get the intro of user only
+  @Post(':id/intro')
+  async findIntro(@Param('id') id: number, @Body() userIdDto: UserIdDto) {
+    let result = await this.userService.findIntro(id);
+    // console.log('intro', result);
+    return result;
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(+id, updateUserDto);
   }
 
-  @Delete(':id')
-  async remove(@Param('id') id: string) {
+  @Post(':id/delete')
+  async remove(@Param('id') id: string, @Body() userIdDto: UserIdDto) {
     let result = await this.userService.remove(+id);
     return result;
   }
@@ -133,7 +142,7 @@ export class UserController {
   async findFollowerCount() {
     const res = await this.userService.countFollower();
 
-    if(res.length <= 0) {
+    if (res.length <= 0) {
       throw new HttpException('Follower not found', HttpStatus.NOT_FOUND);
     }
 

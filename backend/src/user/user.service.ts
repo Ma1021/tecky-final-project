@@ -12,21 +12,27 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto) {
     // console.log('enter create user');
-    const newUser = await this.knex.raw(
-      `
-        Insert Into users (username, birthday, gender, email, password_hash) Values (?,?,?,?,?) Returning *;
-        `,
-      [
-        createUserDto.username,
-        createUserDto.birthday,
-        createUserDto.gender,
-        createUserDto.email,
-        createUserDto.password_hash,
-      ],
-    );
-    let result = await newUser;
-    let rows = result.rows;
-    return rows[0];
+    try {
+      const newUser = await this.knex.raw(
+        `
+          Insert Into users (username, birthday, gender, email, password_hash) Values (?,?,?,?,?) Returning *;
+          `,
+        [
+          createUserDto.username,
+          createUserDto.birthday,
+          createUserDto.gender,
+          createUserDto.email,
+          createUserDto.password_hash,
+        ],
+      );
+      let result = await newUser;
+      let rows = result.rows;
+      return rows[0];
+    } catch {
+      (error) => {
+        throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      };
+    }
   }
 
   findAll() {
@@ -35,19 +41,44 @@ export class UserService {
 
   async findOneId(id: string) {
     // return `This action returns #${username} user`;
-    const user = await this.knex('users').select('*').where('id', id);
+    try {
+      const user = await this.knex('users').select('*').where('id', id);
 
-    // console.log('findOneId', user[0]);
-    return user[0];
+      // console.log('findOneId', user[0]);
+      return user[0];
+    } catch {
+      (error) => {
+        throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      };
+    }
   }
 
   async findOne(email: string) {
     // return `This action returns #${username} user`;
-    const user = await this.knex('users')
-      .select('*')
-      .where('email', email)
-      .where('is_deleted', false);
-    return user[0];
+    try {
+      const user = await this.knex('users')
+        .select('*')
+        .where('email', email)
+        .where('is_deleted', false);
+      return user[0];
+    } catch {
+      (error) => {
+        throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      };
+    }
+  }
+
+  async findIntro(id: number) {
+    try {
+      const result = await this.knex('users')
+        .select('introduction')
+        .where('id', id);
+      return result[0];
+    } catch {
+      (error) => {
+        throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      };
+    }
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
@@ -55,12 +86,18 @@ export class UserService {
   }
 
   async remove(id: number) {
-    // return `This action removes a #${id} user`;
-    const user = await this.knex('users')
-      .update({ is_deleted: true })
-      .where('id', id)
-      .returning('id');
-    return user[0];
+    try {
+      // return `This action removes a #${id} user`;
+      const user = await this.knex('users')
+        .update({ is_deleted: true })
+        .where('id', id)
+        .returning('id');
+      return user[0];
+    } catch {
+      (error) => {
+        throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      };
+    }
   }
 
   handleSubscription(subscription: SubscriptionDTO) {
@@ -73,10 +110,14 @@ export class UserService {
         .then(async (subscriptionList) => {
           if (subscriptionList.length > 0) {
             return await this.knex('subscriptions')
-            .update({is_deleted: true, updated_at:this.knex.fn.now(), category:"取消關注"})
-            .where('user_id', subscription.user_id)
-            .andWhere('following_id', subscription.following_id)
-            .returning('*');
+              .update({
+                is_deleted: true,
+                updated_at: this.knex.fn.now(),
+                category: '取消關注',
+              })
+              .where('user_id', subscription.user_id)
+              .andWhere('following_id', subscription.following_id)
+              .returning('*');
           } else {
             return await this.knex('subscriptions')
               .insert(subscription)
@@ -96,7 +137,7 @@ export class UserService {
         'users.username',
         'users.avatar',
         'users.introduction',
-        'subscriptions.created_at'
+        'subscriptions.created_at',
       )
       .where('following_id', user_id)
       .andWhere('subscriptions.is_deleted', false)
@@ -110,7 +151,7 @@ export class UserService {
         'users.id as user_id',
         'users.username',
         'users.avatar',
-        'users.introduction'
+        'users.introduction',
       )
       .where('user_id', user_id)
       .andWhere('subscriptions.is_deleted', false)
@@ -118,12 +159,18 @@ export class UserService {
   }
 
   countFollower() {
-    return this.knex('subscriptions').select('users.id', 'users.username', 'users.introduction', 'users.avatar')
-    .count('following_id as followers')
-    .where('users.user_type', 'kol')
-    .andWhere('subscriptions.is_deleted', false)
-    .innerJoin('users', 'users.id', 'subscriptions.following_id')
-    .groupBy('users.id')
-    .orderBy('followers', 'desc');
+    return this.knex('subscriptions')
+      .select(
+        'users.id',
+        'users.username',
+        'users.introduction',
+        'users.avatar',
+      )
+      .count('following_id as followers')
+      .where('users.user_type', 'kol')
+      .andWhere('subscriptions.is_deleted', false)
+      .innerJoin('users', 'users.id', 'subscriptions.following_id')
+      .groupBy('users.id')
+      .orderBy('followers', 'desc');
   }
 }

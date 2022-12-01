@@ -1,0 +1,45 @@
+.account-overview-module-container {
+  background: rgba(80, 80, 80, 0.7);
+  box-sizing: border-box;
+  border-radius: 1rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.first-row,
+.second-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.5rem;
+}
+
+.third-row,
+.fourth-row {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 1rem;
+}
+
+.market-value-container,
+.buying-power-container,
+.rank-container,
+.total-profit-percentage-container,
+.total-profit-container,
+.empty-container {
+  width: 33.3%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.total-amount {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.today-profit-percentage {
+  font-size: 0.8rem;
+}

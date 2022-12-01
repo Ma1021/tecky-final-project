@@ -1,24 +1,32 @@
-import {
-  IonPage,
-  IonHeader,
-  IonToolbar,
-  IonContent,
-  IonSegment,
-  IonSegmentButton,
-  IonLabel,
-} from "@ionic/react";
-import { useState } from "react";
+import { IonPage, IonHeader, IonToolbar, IonContent } from "@ionic/react";
+import { useEffect, useState } from "react";
 import PaperTradeAccountModule from "../../components/stock/PaperTradeAccountModule";
-import styled from "styled-components";
 import Title from "../../components/All/Title";
 import "./PaperTradeAccount.css";
 
-const PaperTradeAccount: React.FC = () => {
-  const [segment, setSegment] = useState("stock");
+interface UserAccountType {
+  region: string;
+  amount: number;
+  profit: number;
+  profitPercentage: number;
+}
 
-  const onSegmentChange = (e: any) => {
-    setSegment(e.detail.value);
-  };
+const PaperTradeAccount: React.FC = () => {
+  const [userAccountList, setUserAccountList] = useState<UserAccountType[]>([]);
+
+  useEffect(() => {
+    const exampleList = [
+      { region: "US", amount: 185307.25, profit: 0, profitPercentage: 0 },
+      { region: "HK", amount: 100100, profit: 100, profitPercentage: 0.1 },
+      {
+        region: "crypto",
+        amount: 1110000,
+        profit: 10000,
+        profitPercentage: 100,
+      },
+    ];
+    setUserAccountList(exampleList);
+  }, []);
 
   return (
     <IonPage>
@@ -34,38 +42,19 @@ const PaperTradeAccount: React.FC = () => {
       </IonHeader>
 
       <IonContent>
-        <SegmentTab value={segment} onIonChange={onSegmentChange}>
-          <SegmentButton value="stock">
-            <IonLabel>股票</IonLabel>
-          </SegmentButton>
-          <SegmentButton value="crypto">
-            <IonLabel>加密貨幣</IonLabel>
-          </SegmentButton>
-        </SegmentTab>
-
-        <PaperTradeAccountModule filter={segment} />
+        <div className="modules-container">
+          {userAccountList.map((obj) => (
+            <PaperTradeAccountModule
+              region={obj.region}
+              amount={obj.amount}
+              profit={obj.profit}
+              profitPercentage={obj.profitPercentage}
+            />
+          ))}
+        </div>
       </IonContent>
     </IonPage>
   );
 };
 
 export default PaperTradeAccount;
-
-const SegmentTab = styled(IonSegment)`
-  width: 95%;
-  margin: 8px 10px;
-  color: #dedede;
-`;
-
-const SegmentButton = styled(IonSegmentButton)`
-  --indicator-color: linear-gradient(
-    to right bottom,
-    #ffa930,
-    #ff9d3f,
-    #ff924d,
-    #ff885b,
-    #ff7f67
-  );
-  --color-checked: #fff;
-  font-weight: 800;
-`;

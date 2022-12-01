@@ -9,6 +9,7 @@ import {
   IonToolbar,
   IonButtons,
   IonBackButton,
+  IonTitle,
 } from "@ionic/react";
 import { useState } from "react";
 import IndividualAccountModule from "../../components/stock/IndividualAccountModule";
@@ -28,7 +29,7 @@ const IndividualAccount: React.FC = () => {
             <IonButtons slot="start">
               <IonBackButton defaultHref="/paperTrade"></IonBackButton>
             </IonButtons>
-            <strong>模擬交易</strong>
+            <IonTitle>模擬交易</IonTitle>
           </IonToolbar>
         </IonHeader>
 

@@ -13,32 +13,47 @@ const InProgressOrderRow: React.FC<InProgressOrderType> = ({
 }) => {
   return (
     <>
-      <div className="progress-order-top-row">
-        <div className="progress-order-row-left-container">
-          <span className="progress-order-order-type">
+      <div className="progress-order-row-container">
+        <div className="progress-order-first-column">
+          <div
+            className={
+              "progress-order-order-type " +
+              (orderType === 0 ? "positive" : "negative")
+            }
+          >
             {orderType === 0 ? "模擬買入" : "模擬賣出"}
-          </span>
-        </div>
-        <div className="progress-order-row-right-container">
-          <span className="progress-order-name">{name}</span>
-          <span className="progress-order-quantity">{quantity}</span>
-          <span className={"progress-order-date"}>
-            {orderPlaceTime.split(" ")[0]}
-          </span>
-        </div>
-      </div>
-      <div className="progress-order-bottom-row">
-        <div className="progress-order-row-left-container">
-          <span className="progress-order-stock-symbol">
+          </div>
+          <div
+            className={
+              "progress-order-stock-symbol " +
+              (status === 0
+                ? "pending"
+                : status === 1
+                ? "positive"
+                : "negative")
+            }
+          >
             {status === 0 ? "等待成交" : status === 1 ? "已成交" : "訂單取消"}
-          </span>
+          </div>
         </div>
-        <div className="progress-order-row-right-container">
-          <span className="progress-order-symbol">{symbol}</span>
-          <span className="progress-order-stock-cost">{price}</span>
-          <span className="progress-order-time">
+
+        <div className="progress-order-second-column">
+          <div className="progress-order-name">{name}</div>
+          <div className="progress-order-symbol">{symbol}</div>
+        </div>
+
+        <div className="progress-order-third-column">
+          <div className="progress-order-quantity">{quantity}</div>
+          <div className="progress-order-stock-cost">{price}</div>
+        </div>
+        
+        <div className="progress-order-fourth-column">
+          <div className={"progress-order-date"}>
+            {orderPlaceTime.split(" ")[0]}
+          </div>
+          <div className="progress-order-time">
             {orderPlaceTime.split(" ")[1]}
-          </span>
+          </div>
         </div>
       </div>
     </>

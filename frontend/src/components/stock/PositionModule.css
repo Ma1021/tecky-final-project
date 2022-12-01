@@ -1,3 +1,9 @@
+.position-module-container {
+  background: rgba(80, 80, 80, 0.7);
+  border-radius: 1rem;
+  padding: 0.5rem;
+}
+
 .column-name-row {
   color: gray;
   font-size: 0.9rem;

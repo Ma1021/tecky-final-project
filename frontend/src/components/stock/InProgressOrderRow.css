@@ -1,17 +1,18 @@
-.progress-order-top-row,
-.progress-order-bottom-row {
+.progress-order-row-container {
   display: flex;
 }
 
-.progress-order-row-left-container {
-  margin-right: 2rem;
+.progress-order-first-column,
+.progress-order-second-column,
+.progress-order-third-column,
+.progress-order-fourth-column {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
 }
 
-.progress-order-row-right-container {
-  overflow-x: scroll;
-}
-
-
-.progress-order-row-right-container > span {
-    margin-left: 2rem;
+.progress-order-second-column,
+.progress-order-third-column,
+.progress-order-fourth-column {
+  margin-left: 2rem;
 }

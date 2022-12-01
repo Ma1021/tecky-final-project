@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import InProgressOrderRow from "./InProgressOrderRow";
+import "./InProgressOrderModule.css";
 
 export interface InProgressOrderType {
   orderType: number;

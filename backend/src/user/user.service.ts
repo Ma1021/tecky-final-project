@@ -45,7 +45,7 @@ export class UserService {
       const user = await this.knex('users')
         .select('*')
         .where('id', +id);
-      console.log('service finoneid', user[0]);
+      // console.log('service finoneid', user[0]);
       // console.log('findOneId', user[0]);
       return user[0];
     } catch {

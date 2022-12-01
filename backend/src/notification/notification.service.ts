@@ -92,9 +92,10 @@ export class NotificationService {
     async deleteNotification(notification:Notification_Delete_DTO) {
         try {
             const { target_id, target_type_id } = notification
+                        
             // delete notification
-            const objectRes = await this.knex('notification_object').select('id').where('notification_target_id', target_id).andWhere('notification_type_id', target_type_id);        
-            
+            const objectRes = await this.knex('notification_object').select('id').where('notification_target_id', target_id).andWhere('notification_type_id', target_type_id);            
+                                    
             for(let object of objectRes) {
                 await this.knex('notification').where('notification_object_id', object.id).del();
             }
@@ -125,6 +126,7 @@ export class NotificationService {
         }
     }
 
+    // push notification start
     async checkToken(auth:Push_Token_DTO) {
         try {
             // check the token is same to old token or not
@@ -153,5 +155,17 @@ export class NotificationService {
         } catch(err) {
             console.log(err);
         }
+    }
+
+    async getFollowerToken(user_id: number) {
+        const tokenRes = await this.knex('users')
+        .select(
+            'users.push_notification_token'
+        )
+        .where('id', user_id)
+
+        const token = tokenRes[0].push_notification_token
+
+        return [token]
     }
 }

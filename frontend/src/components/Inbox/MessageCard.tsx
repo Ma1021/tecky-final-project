@@ -26,15 +26,23 @@ interface MessageProps {
     },
     handleRead: Function
     handleDeleteOne: Function
+    fetchData: Function
 }
 
 const MessageCard: React.FC<MessageProps> = (props: MessageProps) => {
     const handleRead  = props.handleRead
     
-    let obj = {
+    let readObj = {
         notification_id: props.notification.id,
         notification_type: props.notification.notification_type_id,
-        target_id: props.notification.target.question_id || props.notification.target.subscription_id,
+        target_id: props.notification.target.question_id,
+        is_read: props.notification.is_read 
+    }
+
+    let deleteObj = {
+        notification_id: props.notification.id,
+        notification_type: props.notification.notification_type_id,
+        target_id: props.notification.target.answer_id || props.notification.target.question_id || props.notification.target.subscription_id,
         is_read: props.notification.is_read 
     }
 
@@ -46,7 +54,7 @@ const MessageCard: React.FC<MessageProps> = (props: MessageProps) => {
     return (
         <IonItemSliding>
             <Item lines="full" class="ion-no-padding">
-                <MessageCardContainer isRead={props.notification.is_read} onClick={()=>{handleRead(obj)}}>
+                <MessageCardContainer isRead={props.notification.is_read} onClick={()=>{handleRead(readObj)}}>
                     <IonImg src={props.notification.actor.avatar}/>
                     <div className="cardBody">
                         <div className="header">
@@ -61,8 +69,8 @@ const MessageCard: React.FC<MessageProps> = (props: MessageProps) => {
             </Item>
             <IonItemOptions side="end">
                 <IonItemOption onClick={()=> {
-                    props.handleDeleteOne(obj.notification_type, obj.target_id)
-
+                    props.handleDeleteOne(deleteObj.notification_type, deleteObj.target_id);
+                    props.fetchData();
                 }}>刪除</IonItemOption>
             </IonItemOptions>
         </IonItemSliding>

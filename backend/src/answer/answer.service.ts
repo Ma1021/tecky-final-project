@@ -21,7 +21,7 @@ export class AnswerService {
 
     async delete(answer_id: number) {
         try {
-            return await this.knex('answers').where('id', answer_id).del();
+            return await this.knex('answers').where('id', +answer_id).del();
         } catch(err) {
             console.log(err);
         }

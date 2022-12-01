@@ -1,5 +1,5 @@
 import { Body, Controller, Post, HttpStatus, Response, Get, Param, HttpException, Put, Delete } from "@nestjs/common";
-import { Notification_DTO, Notification_Delete_DTO, Push_Token_DTO} from "./notification.dto";
+import { Notification_DTO, Notification_Delete_DTO, Push_Token_DTO, Push_Notification_DTO} from "./notification.dto";
 import { NotificationService } from "./notification.service";
 import {env} from '../../env';
 import fetch from 'node-fetch';
@@ -20,26 +20,78 @@ export class NotificationController {
         
         if(response.length > 0) {
             res.status(HttpStatus.ACCEPTED).json({message:"notification create successfully"});
+        }
+    }
 
-            // push notification for create question
-            if(notification.notification_type_id === 1) {
+    @Get('/push_token/:id')
+    getFollowerToken(@Param('id') user_id: string) {
+        return this.notificationService.getFollowerToken(+user_id);
+    }
 
-                // get notifier push notification key
+    @Post('/push_notification')
+    async pushNotification(@Body() push_notification: Push_Notification_DTO) {  
+        console.log(push_notification);
+        
+        if(push_notification.notifiers.length === 0) {
+            return
+        }
+        
+        // push notification for create question
+        if(push_notification.notification_type_id === 1) {
+            fetch(`https://fcm.googleapis.com/fcm/send`, {
+                method:"POST",
+                headers:{"content-type": "application/json", "Authorization":`key=${env.FIREBASE_KEY}`},
+                body:JSON.stringify({
+                    registration_ids:push_notification.notifiers,
+                    content_available : true,
+                    priority:"high",
+                    notification : {
+                        title: push_notification.actor_username + " 提出了問題",
+                        body : push_notification.content
+                    }
+                })
+            })
+        } else if (push_notification.notification_type_id === 2) {
+            // get notifier push token
+            const notifier_push_token =  await this.getFollowerToken(push_notification.notifiers[0])
+
+            if(notifier_push_token.length > 0) {
                 fetch(`https://fcm.googleapis.com/fcm/send`, {
                     method:"POST",
                     headers:{"content-type": "application/json", "Authorization":`key=${env.FIREBASE_KEY}`},
                     body:JSON.stringify({
-                        registration_ids:["fGj535iGRv6mdtT_pKdwn3:APA91bE85KV1ythCy7weHJUI2tSoGvJi2GCxNbnodtT5DmbryWFA9vVERa4m-dGSjTh0Q074rKtU-bOJ4qtEKgGxKdYMbco_e8q7wVhdyVxe_IS8VzoUf1K-2wjXdc7JP3bANbQYE9pM", "c38Vo1gbzUhfng7_2jI-t2:APA91bF_tnBOX8VBJDuBYUY5TcJHUgH4IjWh3_SJ9ZZ5VQgxVImhYqRflVQnxPRI3_0XCoVqgYgnmu4K1UF9nfdXq9KBZhFD0iS0q0u9moKoGC8oP-F4lV577aLeZM2yk9pN3X5YOJSd"],
+                        registration_ids:notifier_push_token,
                         content_available : true,
                         priority:"high",
                         notification : {
-                            title: notification.actor_username + " 提出了問題",
-                            body : notification.content
+                            title: push_notification.actor_username + " 回答了你的問題",
+                            body : push_notification.content
                         }
                     })
-                }).then(()=>{
-                    console.log('message sent');
                 })
+            } else {
+                throw new HttpException('Missing user push token', HttpStatus.BAD_REQUEST);
+            }
+
+        } else if(push_notification.notification_type_id === 3) {
+            // get notifier push token
+            const notifier_push_token =  await this.getFollowerToken(push_notification.notifiers[0])
+
+            if(notifier_push_token.length > 0) {
+                fetch(`https://fcm.googleapis.com/fcm/send`, {
+                    method:"POST",
+                    headers:{"content-type": "application/json", "Authorization":`key=${env.FIREBASE_KEY}`},
+                    body:JSON.stringify({
+                        registration_ids:notifier_push_token,
+                        content_available : true,
+                        priority:"high",
+                        notification : {
+                            title: push_notification.actor_username + " 關注了你"
+                        }
+                    })
+                })
+            } else {
+                throw new HttpException('Missing user push token', HttpStatus.BAD_REQUEST);
             }
         }
     }
@@ -68,9 +120,9 @@ export class NotificationController {
     @Delete()
     async deleteOne (@Body() notification: Notification_Delete_DTO, @Response() res) {
         const response = await this.notificationService.deleteNotification(notification);
-        if(response <= 0) {
-            res.status(HttpStatus.NOT_FOUND).json({message:"notification not found"});
-        }
+        // if(response <= 0) {
+        //     res.status(HttpStatus.NOT_FOUND).json({message:"notification not found"});
+        // }
         return response;
     }
 

@@ -211,6 +211,17 @@ const QuestionDetail: React.FC = memo(() => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(notification),
       });
+      await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/push_notification`, {
+        method:"POST",
+        headers:{'Content-Type': 'application/json'},
+        body:JSON.stringify({
+            notification_type_id:3,
+            actor_id: user_id,
+            actor_username: user.username,
+            notifiers: [e.target.parentNode.parentNode.dataset.user_id],
+            content:"subscriptions"
+        })
+      })
     }
   }
 
@@ -414,6 +425,7 @@ const AskerContainer = styled(IonItem)`
     display: flex;
     flex-direction: column;
     margin-left: 0.5rem;
+    gap:0.3rem;
 
     .username {
       font-size: 16px;
@@ -425,13 +437,10 @@ const AskerContainer = styled(IonItem)`
   }
 
   .subscribeBtn {
-<<<<<<< HEAD
     display:flex;
-=======
     height: 1.7rem;
     line-height: 1.7rem;
     display: flex;
->>>>>>> 4d3d051a81ff9b0534000dcdce8cdffb69424a7d
     align-items: center;
     position: absolute;
     right: 1rem;
@@ -529,6 +538,7 @@ const AnswerContainer = styled.div`
       flex-direction: column;
       gap: 0.5rem;
       padding-left: 0.5rem;
+      padding-top: 0.3rem;
 
       .username {
         display: flex;

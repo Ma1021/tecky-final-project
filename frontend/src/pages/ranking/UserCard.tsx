@@ -31,21 +31,20 @@ const UserCard: React.FC<RankingProps> = (props: RankingProps) => {
   const router = useIonRouter();
 
   let user_id: number = 0;
+  let user: {
+    username: string
+    id: number
+  }
 
   if (localStorage.getItem("auth_stockoverflow") !== null) {
-    const user =
-      JSON.parse(localStorage.getItem("auth_stockoverflow") as string).user ||
-      undefined;
+    user = JSON.parse(localStorage.getItem("auth_stockoverflow") as string).user || undefined;
     user_id = +user.id;
   }
 
   async function handleFollowUser(e: any) {
     e.preventDefault();
     await dispatch(
-      followUser({
-        following_id: +e.target.parentNode.dataset.user_id,
-        user_id,
-      })
+      followUser({following_id: +e.target.parentNode.dataset.user_id, user_id, username: user.username})
     );
   }
 
@@ -116,6 +115,7 @@ const Card = styled.div`
     .userInfo {
       display: flex;
       flex-direction: column;
+      gap: 0.3rem;
 
       ion-text:nth-child(2) {
         font-size: 13px;

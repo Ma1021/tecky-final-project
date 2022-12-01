@@ -7,6 +7,9 @@ import {
   IonCardContent,
   IonButton,
   IonSpinner,
+  IonRefresher,
+  IonRefresherContent,
+  RefresherEventDetail,
 } from "@ionic/react";
 import { people } from "ionicons/icons";
 import { useEffect } from "react";
@@ -27,11 +30,21 @@ const ChatroomRecommend: React.FC = () => {
     dispatch(fetchChatroomsRecommend(userId as number));
   }, [dispatch]);
 
+  const handleRefresh = (e: CustomEvent<RefresherEventDetail>) => {
+    dispatch(fetchChatroomsRecommend(userId as number));
+    if (!loading) {
+      e.detail.complete();
+    }
+  };
+
   // console.log("loading", loading);
   // console.log("data", chatInfo);
 
   return (
     <>
+      <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+        <IonRefresherContent pullingText="下拉更新"></IonRefresherContent>
+      </IonRefresher>
       {
         // if loading
         loading ? (
@@ -52,7 +65,11 @@ const ChatroomRecommend: React.FC = () => {
           </>
         ) : (
           // if no chatroom yet
-          <div style={{ marginTop: 10 }}>未有聊天室</div>
+          <QuestionContainer>
+            <div className="ion-padding" style={{ textAlign: "center" }}>
+              未有聊天室
+            </div>
+          </QuestionContainer>
         )
       }
     </>

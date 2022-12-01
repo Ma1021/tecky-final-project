@@ -6,8 +6,6 @@ import {
   IonCardTitle,
   IonCardContent,
   IonCardSubtitle,
-  useIonRouter,
-  IonButton,
 } from "@ionic/react";
 import { people } from "ionicons/icons";
 import React from "react";
@@ -77,7 +75,7 @@ const ChatroomDisplayCard: React.FC<ChatroomDisplayCardProps> = (props) => {
                   textAlign: "center",
                 }}
               >
-                {props.props.member_count}
+                {(props.props.member_count as number) + 1}
               </span>
             </div>
           </div>
@@ -87,16 +85,37 @@ const ChatroomDisplayCard: React.FC<ChatroomDisplayCardProps> = (props) => {
                 {props.props.chatroomname}
               </IonCardTitle>
             </IonCardHeader>
-            <IonCardContent>
-              <IonCardSubtitle>{props.props.username}</IonCardSubtitle>
-              {props.props.record}
-              <div
-                className="pr-3 pt-1"
-                style={{ textAlign: "start", fontSize: "0.6rem" }}
-              >
-                {props.props.record_created_at}
-              </div>
-            </IonCardContent>
+            {props.props.record == null &&
+            props.props.record_created_at == null &&
+            props.props.recordid == null &&
+            props.props.userid == null &&
+            props.props.username == null &&
+            props.props.record_created_at == null ? (
+              // if no record yet
+              <IonCardContent>
+                <IonCardSubtitle>{props.props.username}</IonCardSubtitle>
+                未有聊天記錄
+              </IonCardContent>
+            ) : (
+              <>
+                <IonCardContent>
+                  <IonCardSubtitle>{props.props.username}</IonCardSubtitle>
+                  {props.props.record}
+                  <div
+                    className="pr-3 pt-1"
+                    style={{ textAlign: "start", fontSize: "0.6rem" }}
+                  >
+                    {new Date(
+                      props.props.record_created_at as string
+                    ).toLocaleString([], {
+                      hour12: false,
+                      dateStyle: "medium",
+                      timeStyle: "short",
+                    })}
+                  </div>
+                </IonCardContent>
+              </>
+            )}
           </div>
         </div>
       </IonCard>

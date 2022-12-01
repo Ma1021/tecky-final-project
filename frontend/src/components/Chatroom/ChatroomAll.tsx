@@ -1,4 +1,10 @@
-import { IonSpinner, IonText } from "@ionic/react";
+import {
+  IonRefresher,
+  IonRefresherContent,
+  IonSpinner,
+  IonText,
+  RefresherEventDetail,
+} from "@ionic/react";
 import React from "react";
 import { useEffect } from "react";
 import { fetchChatroomsAll } from "../../redux/chatroomAdd/actions";
@@ -18,11 +24,18 @@ const ChatroomAll: React.FC = () => {
     dispatch(fetchChatroomsAll(userId as number));
   }, [dispatch]);
 
-  console.log("loading", loading);
-  console.log("data", chatInfo);
+  const handleRefresh = (e: CustomEvent<RefresherEventDetail>) => {
+    dispatch(fetchChatroomsAll(userId as number));
+    if (!loading) {
+      e.detail.complete();
+    }
+  };
 
   return (
     <>
+      <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+        <IonRefresherContent pullingText="下拉更新"></IonRefresherContent>
+      </IonRefresher>
       {
         // if loading
         loading ? (

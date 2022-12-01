@@ -1,4 +1,11 @@
-import { IonButton, IonSpinner, useIonRouter } from "@ionic/react";
+import {
+  IonButton,
+  IonRefresher,
+  IonRefresherContent,
+  IonSpinner,
+  RefresherEventDetail,
+  useIonRouter,
+} from "@ionic/react";
 import { people } from "ionicons/icons";
 import React, { useEffect } from "react";
 import { useHistory } from "react-router";
@@ -18,16 +25,27 @@ const ChatroomEntered: React.FC = () => {
   const { chatroomInfo, loading, error } = useAppSelector(
     (state) => state.chatroomList
   );
+
   const userId = useAppSelector((state) => {
     return state.auth.user?.id;
   });
+
   useEffect(() => {
     dispatch(fetchChatroomsEntered(userId as number));
   }, [dispatch]);
-  const history = useHistory();
+
+  const handleRefresh = (e: CustomEvent<RefresherEventDetail>) => {
+    dispatch(fetchChatroomsEntered(userId as number));
+    if (!loading) {
+      e.detail.complete();
+    }
+  };
 
   return (
     <>
+      <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+        <IonRefresherContent pullingText="下拉更新"></IonRefresherContent>
+      </IonRefresher>
       {
         // if loading
         loading ? (

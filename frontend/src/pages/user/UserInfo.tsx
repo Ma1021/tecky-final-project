@@ -37,18 +37,11 @@ import {
   loadFollowings,
   loadFollowers,
 } from "../../redux/subscription/subscriptionSlice";
+import { RouteComponentProps, useHistory, useParams } from "react-router";
 
-const UserInfo: React.FC = () => {
-  const userInfo = {
-    username: "user",
-    userId: 123,
-    email: "user@gmail.com",
-    phone: 12345678,
-    following: 4,
-    followed: 0,
-    isKOL: true,
-  };
-
+const UserInfo: React.FC<RouteComponentProps> = ({
+  match,
+}: RouteComponentProps) => {
   interface SegmentChangeEventDetail {
     value?: string;
   }
@@ -62,6 +55,14 @@ const UserInfo: React.FC = () => {
   const segmentChangeAction = (event: IonSegmentCustomEvent) => {
     setUserSegment(event.detail.value || "userIntro");
   };
+
+  // user id should be gained from params
+  const history = useHistory();
+  const userId = history.location.pathname
+    .replace("/user/", "")
+    .replace("/info", "");
+  console.log("url", JSON.stringify(userId));
+  // const userId = match.;
 
   const { user } = JSON.parse(
     localStorage.getItem("auth_stockoverflow") as string
@@ -97,7 +98,7 @@ const UserInfo: React.FC = () => {
           <IonTitle className="p-0">
             <div className=" d-flex justify-content-round align-items-center w100 h100">
               <IonButtons>
-                <IonBackButton defaultHref="/"></IonBackButton>
+                <IonBackButton defaultHref="/discuss"></IonBackButton>
               </IonButtons>
               <IonSearchbar className="pt-0 pb-0 ion-margin"></IonSearchbar>
               <Notification />
@@ -178,7 +179,7 @@ const UserInfo: React.FC = () => {
           </IonSegment>
         </div>
         {userSegment === "userIntro" ? (
-          <UserIntro />
+          <UserIntro userId={+userId} />
         ) : userSegment === "userArticle" ? (
           <UserArticles />
         ) : (

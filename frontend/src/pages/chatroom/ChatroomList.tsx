@@ -60,25 +60,25 @@ const ChatroomList: React.FC = () => {
             <Title title="聊天室" />
           </IonToolbar>
         </IonHeader>
+        <SegmentOrganizer>
+          <IonItemDivider sticky={true}>
+            <IonSegment value={chatroomSegment} onIonChange={onSegmentChange}>
+              <IonSegmentButton value="hosted">
+                <IonLabel>主持中</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton value="entered">
+                <IonLabel>參與中</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton value="recommendation">
+                <IonLabel>推薦</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton value="all">
+                <IonLabel>所有</IonLabel>
+              </IonSegmentButton>
+            </IonSegment>
+          </IonItemDivider>
+        </SegmentOrganizer>
         <IonContent>
-          <SegmentOrganizer>
-            <IonItemDivider sticky={true}>
-              <IonSegment value={chatroomSegment} onIonChange={onSegmentChange}>
-                <IonSegmentButton value="hosted">
-                  <IonLabel>我的</IonLabel>
-                </IonSegmentButton>
-                <IonSegmentButton value="entered">
-                  <IonLabel>參與中</IonLabel>
-                </IonSegmentButton>
-                <IonSegmentButton value="recommendation">
-                  <IonLabel>推薦</IonLabel>
-                </IonSegmentButton>
-                <IonSegmentButton value="all">
-                  <IonLabel>所有</IonLabel>
-                </IonSegmentButton>
-              </IonSegment>
-            </IonItemDivider>
-          </SegmentOrganizer>
           <IonList>
             {chatroomSegment === "entered" ? (
               <ChatroomEntered />
@@ -108,7 +108,7 @@ export const SegmentOrganizer = styled.div`
   position: sticky;
   top: 0;
   z-index: 1;
-  margin-top:0.5rem;
+  margin-top: 0rem;
 
   ion-item-divider {
     --inner-padding-start: 1rem;

@@ -1,4 +1,10 @@
-import { IonButton, IonSpinner } from "@ionic/react";
+import {
+  IonButton,
+  IonRefresher,
+  IonRefresherContent,
+  IonSpinner,
+  RefresherEventDetail,
+} from "@ionic/react";
 import { useEffect } from "react";
 import { useHistory } from "react-router";
 import { fetchChatroomsHost } from "../../redux/chatroomList/actions";
@@ -26,9 +32,18 @@ const ChatroomHosted: React.FC = () => {
   useEffect(() => {
     dispatch(fetchChatroomsHost(userId as number));
   }, [dispatch]);
+
   const history = useHistory();
+
   const createChat = () => {
     history.push("/chatroom/create", "forward");
+  };
+
+  const handleRefresh = (e: CustomEvent<RefresherEventDetail>) => {
+    dispatch(fetchChatroomsHost(userId as number));
+    if (!loading) {
+      e.detail.complete();
+    }
   };
 
   return (
@@ -36,6 +51,9 @@ const ChatroomHosted: React.FC = () => {
       <IonButton expand="block" className="ion-margin" onClick={createChat}>
         開設聊天室
       </IonButton>
+      <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+        <IonRefresherContent pullingText="下拉更新"></IonRefresherContent>
+      </IonRefresher>
       {
         // if loading
         loading ? (

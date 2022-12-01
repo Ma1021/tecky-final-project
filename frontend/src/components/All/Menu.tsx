@@ -57,7 +57,6 @@ const Menu: React.FC<MenuProps> = () => {
     // return <Redirect to="/home" />;
     // history.replace("/home");
     router.push("/home", "root", "pop");
-    // router.push("/home", "forward", "push");
   };
 
   const confirmDeleteAccount = () =>
@@ -111,7 +110,7 @@ const Menu: React.FC<MenuProps> = () => {
 
   const toInfo = () => {
     console.log("toInfo");
-    history.push(`/user/${selector?.id}/info`);
+    router.push(`/user/${selector?.id}/info`, "forward", "push");
   };
 
   return (

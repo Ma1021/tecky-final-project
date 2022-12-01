@@ -1,31 +1,17 @@
-import {
-  IonCol,
-  IonGrid,
-  IonItem,
-  IonList,
-  IonRow,
-  IonSpinner,
-  useIonToast,
-} from "@ionic/react";
+import { IonSpinner, useIonToast } from "@ionic/react";
 import { useEffect, useState } from "react";
-import { useRouteMatch } from "react-router";
-import styled from "styled-components";
-import { useAppSelector } from "../../redux/store";
 import { LoadingScreen, QuestionContainer } from "../discuss/Allquestion";
 
-const UserIntro: React.FC = () => {
+const UserIntro: React.FC<{ userId: number }> = (props) => {
   const [intro, setIntro] = useState("");
   const [loading, setLoading] = useState(true);
   const [present] = useIonToast();
 
-  let url = useRouteMatch<{ id?: string }>();
-  let userId = url.params.id;
-
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/${+userId!}/intro`, {
+    fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/${props.userId}/intro`, {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ userId }),
+      body: JSON.stringify({ userId: props.userId }),
     })
       .then((res) => {
         res.json().then((data) => {
@@ -40,7 +26,10 @@ const UserIntro: React.FC = () => {
           color: "danger",
         });
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+        console.log(loading, intro);
+      });
   }, [setIntro, setLoading]);
 
   return (

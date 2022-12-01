@@ -97,7 +97,7 @@ const ChatroomAddCard: React.FC<ChatroomAddCardProps> = (props) => {
                   textAlign: "center",
                 }}
               >
-                {props.props.member_count}
+                {(props.props.member_count as number) + 1}
               </span>
             </div>
           </div>

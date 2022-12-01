@@ -50,15 +50,7 @@ const IndividualAccount: React.FC = () => {
             </IonItem>
           </IonList>
 
-          {currentAccount === "US" && (
-            <IndividualAccountModule category={currentAccount} />
-          )}
-          {currentAccount === "HK" && (
-            <IndividualAccountModule category={currentAccount} />
-          )}
-          {currentAccount === "crypto" && (
-            <IndividualAccountModule category={currentAccount} />
-          )}
+          <IndividualAccountModule category={currentAccount} />
         </IonContent>
       </IonPage>
     </>

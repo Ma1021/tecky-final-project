@@ -96,7 +96,8 @@ export class UserService {
         'users.username',
         'users.avatar',
         'users.introduction',
-        'subscriptions.created_at'
+        'subscriptions.created_at',
+        'users.push_notification_token'
       )
       .where('following_id', user_id)
       .andWhere('subscriptions.is_deleted', false)

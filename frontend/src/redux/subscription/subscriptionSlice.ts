@@ -6,7 +6,7 @@ export const loadFollowers = createAsyncThunk<Subscription[], number>(
   "subscription/loadFollowers",
   async (user_id, thunkAPI) => {
     try {
-      const res = await fetch(
+      const res:Response = await fetch(
         `${process.env.REACT_APP_PUBLIC_URL}/user/followers/${user_id}`
       );
       const json = await res.json();
@@ -37,7 +37,7 @@ export const loadFollowingsId = createAsyncThunk<number[], number>(
   "subscription/loadFollowingId",
   async (user_id, thunkAPI) => {
     try {
-      const res = await fetch(
+      const res:Response = await fetch(
         `${process.env.REACT_APP_PUBLIC_URL}/user/followings/${user_id}`
       );
       const json = await res.json();
@@ -53,12 +53,8 @@ export const loadFollowingsId = createAsyncThunk<number[], number>(
 );
 
 //action that follow a user
-export const followUser = createAsyncThunk<
-  number,
-  { following_id: number; user_id: number }
->("subscription/followUser", async (data, thunkAPI) => {
+export const followUser = createAsyncThunk<number,{ following_id: number; user_id: number; username: string }>("subscription/followUser", async (data, thunkAPI) => {
   try {
-    console.log(data);
     const subscriptionRes: Response = await fetch(
       `${process.env.REACT_APP_PUBLIC_URL}/user/subscriptions`,
       {
@@ -82,12 +78,24 @@ export const followUser = createAsyncThunk<
       notifiers: data.following_id,
     };
 
-    await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/`, {
+    fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(notification),
     });
 
+    fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/push_notification`, {
+      method:"POST",
+      headers:{'Content-Type': 'application/json'},
+      body:JSON.stringify({
+          notification_type_id:3,
+          actor_id: data.user_id,
+          actor_username: data.username,
+          notifiers: [data.following_id],
+          content:"subscriptions"
+      })
+    })
+  
     thunkAPI.dispatch(loadFollowers(+data.user_id));
     thunkAPI.dispatch(loadFollowings(+data.user_id));
     thunkAPI.dispatch(loadFollowingsId(+data.user_id));
@@ -104,7 +112,6 @@ export const unFollowUser = createAsyncThunk<
   { following_id: number; user_id: number }
 >("subscription/unFollowUser", async (data, thunkAPI) => {
   try {
-    console.log(data);
     const subscriptionRes: Response = await fetch(
       `${process.env.REACT_APP_PUBLIC_URL}/user/subscriptions`,
       {

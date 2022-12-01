@@ -84,7 +84,7 @@ const QuestionCard: React.FC<QuestionsProps> = memo((props: QuestionsProps) => {
               </AskerContent>
 
               {reverseAnswer.length > 0 && (
-                <>
+                <AnswererContainer>
                   <AnswererInfo>
                     <AnswererAvatar
                       src={reverseAnswer[0].answers.avatar}
@@ -95,7 +95,7 @@ const QuestionCard: React.FC<QuestionsProps> = memo((props: QuestionsProps) => {
                     />
                   </AnswererInfo>
                   <AnswererContent>{reverseAnswer[0].content}</AnswererContent>
-                </>
+                </AnswererContainer>
               )}
 
               <AnswerAmount>
@@ -175,7 +175,7 @@ const AskerInfo = styled.div`
 
   .username {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 0.3rem;
     font-size: 15px;
   }
@@ -188,6 +188,10 @@ const AskerAvatar = styled(IonImg)`
   border-radius: 50%;
   overflow: hidden;
 `;
+
+const AnswererContainer = styled.div`
+  position: relative;
+`
 
 const AnswererInfo = styled.div`
   display: flex;
@@ -207,7 +211,9 @@ const AnswererAvatar = styled(IonImg)`
 
 const AnswererContent = styled(IonText)`
   width: 80%;
-  margin-left: 21%;
+  position: absolute;
+  left: 3.1rem;
+  top: 3.2rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;

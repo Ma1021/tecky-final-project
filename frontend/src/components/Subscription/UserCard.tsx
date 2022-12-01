@@ -17,12 +17,17 @@ const UserCard: React.FC<SubscriptionProps> = (props: SubscriptionProps) => {
   const { followingIdList } = useAppSelector((state) => state.subscription);
 
   let user_id: number;
+  let dataUser:{
+    id: number
+    username: string
+  }
 
   if (localStorage.getItem("auth_stockoverflow")) {
     const { user } = JSON.parse(
       localStorage.getItem("auth_stockoverflow") as string
     );
     user_id = user.id;
+    dataUser = user;
   }
 
   async function handleFollowUser(e: any) {
@@ -31,6 +36,7 @@ const UserCard: React.FC<SubscriptionProps> = (props: SubscriptionProps) => {
       followUser({
         following_id: +e.target.parentNode.dataset.user_id,
         user_id,
+        username: dataUser.username
       })
     );
   }

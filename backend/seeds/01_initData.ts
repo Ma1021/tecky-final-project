@@ -45,11 +45,10 @@ export async function seed(knex: Knex): Promise<void> {
   //Insert subscriptions
   for (let x = 0; x < 500; x++) {
     //random a user id and following id between 0 to user array length
-    const user_id =
-      user_idArray[Math.floor(Math.random() * user_idArray.length)].id;
-    const following_id =
-      user_idArray[Math.floor(Math.random() * user_idArray.length)].id;
-
+    const user_id = user_idArray[Math.floor(Math.random() * user_idArray.length)].id;
+    const following_id = user_idArray[Math.floor(Math.random() * user_idArray.length)].id;
+    
+    if(user_id !== following_id) {
     // checking the subscription peer is existed or not
     await knex('subscriptions')
       .select('*')
@@ -61,7 +60,7 @@ export async function seed(knex: Knex): Promise<void> {
           return;
         } else {
           // random a date within 30 days
-          const date = new Date().getDate() - Math.floor(Math.random() * 27);
+          const date = Math.floor(Math.random() * 30 + 1);
           // if not exist then insert
           await knex('subscriptions').insert({
             user_id,
@@ -69,7 +68,9 @@ export async function seed(knex: Knex): Promise<void> {
             created_at: `2022-11-${date}`,
           });
         }
-      });
+    });
+    }
+
   }
 
   //Insert questions and answer start

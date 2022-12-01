@@ -75,10 +75,12 @@ export const createQuestion = createAsyncThunk<Question, Object>("question/creat
           headers:{'Content-Type': 'application/json'},
           body:JSON.stringify(data)
         })
-        const json = await res.json();        
+        const json = await res.json();     
+
         // insert notification 
         const followerRes = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/followers/${userData.id}`)
         const followerJson = await followerRes.json();
+        const notifier_token = []
         
         if(followerJson.length > 0) {
             for(let follower of followerJson) {
@@ -86,15 +88,32 @@ export const createQuestion = createAsyncThunk<Question, Object>("question/creat
                     notification_type_id:1,
                     notification_target_id: json[0].id,
                     actor_id: userData.id,
-                    actor_username: userData.username,
                     notifiers: follower.user_id,
-                    content: json[0].content
                 }
                 
                 await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/`, {
                     method:'POST',
                     headers:{'Content-Type': 'application/json'},
                     body: JSON.stringify(notification)
+                })
+
+                if(follower.push_notification_token) {
+                    notifier_token.push(follower.push_notification_token);
+                }
+            }
+            
+            // push notification
+            if(notifier_token.length > 0) {
+                await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/push_notification`, {
+                    method:"POST",
+                    headers:{'Content-Type': 'application/json'},
+                    body:JSON.stringify({
+                        notification_type_id:1,
+                        actor_id: userData.id,
+                        actor_username: userData.username,
+                        notifiers: notifier_token,
+                        content: json[0].content
+                    })
                 })
             }
         }
@@ -116,15 +135,14 @@ export const deleteQuestion = createAsyncThunk<Question, {question_id: number, u
         })
         const json = await res.json();
 
+
         // delete notification
-        await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification`, {
+        fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body:JSON.stringify({target_id: data.question_id, target_type_id: 1})
         })
 
-        thunkAPI.dispatch(loadQuestions());
-        // thunkAPI.dispatch(loadAskerQuestions(data.user_id));
         return json;
     } catch(err) {
         return thunkAPI.rejectWithValue(err);
@@ -144,18 +162,33 @@ export const createAnswer = createAsyncThunk<Question, {answerer_id: number, ask
             const json = await res.json();
             
             // create notification
-            const notification = {
-                notification_type_id: 2,
-                notification_target_id: json.answer_id,
-                actor_id: userData.id,
-                notifiers: data.asker_id
+            if(data.asker_id !== data.answerer_id) {
+                const notification = {
+                    notification_type_id: 2,
+                    notification_target_id: json.answer_id,
+                    actor_id: userData.id,
+                    notifiers: data.asker_id
+                }
+    
+                fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/`, {
+                    method:'POST',
+                    headers:{'Content-Type': 'application/json'},
+                    body: JSON.stringify(notification)
+                })
+    
+                // push notification
+                fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/push_notification`, {
+                    method:"POST",
+                    headers:{'Content-Type': 'application/json'},
+                    body:JSON.stringify({
+                        notification_type_id:2,
+                        actor_id: userData.id,
+                        actor_username: userData.username,
+                        notifiers: [data.asker_id],
+                        content: data.content
+                    })
+                })
             }
-
-            await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/`, {
-                method:'POST',
-                headers:{'Content-Type': 'application/json'},
-                body: JSON.stringify(notification)
-            })
 
             thunkAPI.dispatch(loadQuestion(data.question_id));
             thunkAPI.dispatch(loadQuestions());
@@ -170,28 +203,28 @@ export const createAnswer = createAsyncThunk<Question, {answerer_id: number, ask
 // action that delete answer in question
 export const deleteAnswer = createAsyncThunk<Question, {question_id: number, answer_id: number}>("question/deleteAnswer", async(data, thunkAPI)=>{
     try {
+        // delete likes
+        fetch(`${process.env.REACT_APP_PUBLIC_URL}/answer/like`,{
+            method:'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({answer_id:+data.answer_id, user_id:userData.id})
+        })
+
         const res: Response = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/answer/${data.answer_id}`, {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' }
         })
         const json = await res.json();
 
+        thunkAPI.dispatch(loadQuestion(data.question_id));
+        thunkAPI.dispatch(loadQuestions());
+
         // delete notification
-        await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification`, {
+        fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body:JSON.stringify({target_id: +data.answer_id, target_type_id: 2})
-        })
-
-        // delete likes
-        await fetch(`${process.env.REACT_APP_PUBLIC_URL}/answer/like`,{
-            method:'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({answer_id:data.answer_id, user_id:userData.id})
-        })
-
-        thunkAPI.dispatch(loadQuestion(data.question_id));
-        thunkAPI.dispatch(loadQuestions());
+        })        
 
         return json[0];
       } catch (err) {

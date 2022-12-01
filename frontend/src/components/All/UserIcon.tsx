@@ -20,6 +20,7 @@ const UserIcon: React.FC<UserIconProps> = () => {
             e.preventDefault();
             e.stopPropagation();
           }}
+          className="d-flex align-items-center justify-content-center"
         >
           {/* autoHide={false} */}
           {/* <IonButton

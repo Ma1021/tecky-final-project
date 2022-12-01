@@ -36,9 +36,13 @@ const Ranking: React.FC = () => {
   const router = useIonRouter();
 
   let user_id: number = 0
+  let user:{
+    username: string
+    id: number
+  };
 
   if(localStorage.getItem("auth_stockoverflow") !== null) {
-    const user = JSON.parse(localStorage.getItem("auth_stockoverflow") as string).user || undefined;
+    user = JSON.parse(localStorage.getItem("auth_stockoverflow") as string).user || undefined;
     user_id = +user.id;
   }
 
@@ -67,7 +71,7 @@ const Ranking: React.FC = () => {
   async function handleFollowUser(e: any) {
       const following_id = +e.target.parentNode.dataset.user_id
       e.preventDefault();
-      await dispatch(followUser({following_id, user_id}));
+      await dispatch(followUser({following_id, user_id, username: user.username}));
   }
 
   async function handleUnFollowUser(e: any) {
@@ -152,11 +156,11 @@ const Ranking: React.FC = () => {
 export default Ranking;
 
 export const LoadingScreen = styled.div`
-width: 100%;
-height: 50%;
-display: flex;
-justify-content: center;
-align-items: center;
+    width: 100%;
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const KOLRanking = styled.div`
@@ -180,6 +184,7 @@ const RecommendContainer = styled.div`
       margin-top: -3.3rem;
       display: flex;
       align-items: center;
+      justify-content: center;
       color: #dedede;
 
       div {

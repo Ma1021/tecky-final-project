@@ -17,15 +17,10 @@ import {
   IonSegment,
   IonSegmentButton,
   useIonRouter,
+  useIonToast,
 } from "@ionic/react";
 import "./UserInfo.css";
-import {
-  personOutline,
-  paperPlaneOutline,
-  diamondOutline,
-  happyOutline,
-} from "ionicons/icons";
-import img from "../../img/animal_stand_ookami.png";
+import { personOutline, paperPlaneOutline } from "ionicons/icons";
 import Notification from "../../components/All/Notification";
 import { useEffect, useState, useCallback } from "react";
 import UserArticles from "../../components/UserContent/UserArticles";
@@ -37,11 +32,10 @@ import {
   loadFollowings,
   loadFollowers,
 } from "../../redux/subscription/subscriptionSlice";
-import { RouteComponentProps, useHistory, useParams } from "react-router";
+import { useHistory } from "react-router";
+import { UserPort } from "../../redux/auth/state";
 
-const UserInfo: React.FC<RouteComponentProps> = ({
-  match,
-}: RouteComponentProps) => {
+const UserInfo: React.FC = () => {
   interface SegmentChangeEventDetail {
     value?: string;
   }
@@ -58,32 +52,51 @@ const UserInfo: React.FC<RouteComponentProps> = ({
 
   // user id should be gained from params
   const history = useHistory();
-  const userId = history.location.pathname
+  const [present] = useIonToast();
+  const [userData, setUserData] = useState<UserPort | null>(null);
+  const userIdUrl = history.location.pathname
     .replace("/user/", "")
     .replace("/info", "");
-  console.log("url", JSON.stringify(userId));
-  // const userId = match.;
+  console.log("userIdUrl", userIdUrl);
 
-  const { user } = JSON.parse(
-    localStorage.getItem("auth_stockoverflow") as string
-  );
-  const user_id = +user.id;
-
+  const user_id = useAppSelector((state) => {
+    return state.auth?.user?.id;
+  });
   const dispatch = useAppDispatch();
 
   // get user followers and following
   const initFollowings = useCallback(async () => {
-    await dispatch(loadFollowings(user_id));
+    await dispatch(loadFollowings(+userIdUrl));
   }, [dispatch]);
 
   const initFollowers = useCallback(async () => {
-    await dispatch(loadFollowers(user_id));
+    await dispatch(loadFollowers(+userIdUrl));
   }, [dispatch]);
 
   useEffect(() => {
+    console.log("enter userEffect");
+    fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/${+userIdUrl}`).then(
+      (res) => {
+        console.log(res);
+        return res
+          .json()
+          .then((data) => {
+            console.log("user data", data);
+            setUserData(data);
+          })
+          .catch((err) => {
+            present({
+              message: err.message,
+              position: "bottom",
+              color: "danger",
+            });
+          });
+      }
+    );
+    console.log("leaveuserEffect ");
     initFollowings();
     initFollowers();
-  }, []);
+  }, [setUserData]);
 
   const { followerList, followingList } = useAppSelector(
     (state: RootState) => state.subscription
@@ -119,7 +132,7 @@ const UserInfo: React.FC<RouteComponentProps> = ({
               }}
             >
               <img
-                src={user.avatar}
+                src={userData?.avatar}
                 alt="user icon"
                 style={{
                   width: "100%",
@@ -128,14 +141,20 @@ const UserInfo: React.FC<RouteComponentProps> = ({
               />
             </IonAvatar>
             <div className="d-flex flex-row  align-items-center">
-              <IonText>{user.username}</IonText>
+              <IonText>{userData?.username}</IonText>
             </div>
-            <UserBadge isKOL={user.user_type === "kol"} />
+            <UserBadge isKOL={userData?.user_type === "kol"} />
             <div className="flex-row pt-1 pb-1">
-              <IonButton className="userInfo-button" size="small" shape="round">
-                <IonIcon slot="start" icon={personOutline}></IonIcon>
-                帳戶
-              </IonButton>
+              {+userIdUrl === (user_id as number) ? (
+                <IonButton
+                  className="userInfo-button"
+                  size="small"
+                  shape="round"
+                >
+                  <IonIcon slot="start" icon={personOutline}></IonIcon>
+                  帳戶
+                </IonButton>
+              ) : null}
               <IonButton className="userInfo-button" size="small" shape="round">
                 <IonIcon slot="start" icon={paperPlaneOutline}></IonIcon>
                 分享
@@ -145,7 +164,7 @@ const UserInfo: React.FC<RouteComponentProps> = ({
               <div
                 className="flex-column text-align-center p-1 pr-2 border-right"
                 onClick={() => {
-                  router.push(`/user/subscription/${user_id}`);
+                  router.push(`/user/subscription/${+userIdUrl}`);
                 }}
               >
                 <div>{followingList.length}</div>
@@ -154,7 +173,7 @@ const UserInfo: React.FC<RouteComponentProps> = ({
               <div
                 className="flex-column text-align-center p-1 pl-2"
                 onClick={() => {
-                  router.push(`/user/subscription/${user_id}`);
+                  router.push(`/user/subscription/${+userIdUrl}`);
                 }}
               >
                 <div>{followerList.length}</div>
@@ -179,7 +198,7 @@ const UserInfo: React.FC<RouteComponentProps> = ({
           </IonSegment>
         </div>
         {userSegment === "userIntro" ? (
-          <UserIntro userId={+userId} />
+          <UserIntro userId={+userIdUrl} />
         ) : userSegment === "userArticle" ? (
           <UserArticles />
         ) : (

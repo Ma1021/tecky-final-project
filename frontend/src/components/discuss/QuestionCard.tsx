@@ -114,7 +114,7 @@ const QuestionContainer = styled(IonCard)`
   width: 95%;
   margin: 6px;
 
-  @media(min-width: 768px) {
+  @media (min-width: 768px) {
     width: 85%;
   }
 `;
@@ -140,7 +140,7 @@ const QuestionContent = styled(IonCardContent)`
   background-color: #333;
   color: #dedede;
 
-  @media(min-width: 768px) {
+  @media (min-width: 768px) {
     width: 80%;
     padding: 20px;
     font-size: 15px;
@@ -201,7 +201,7 @@ const AskerAvatar = styled(IonImg)`
 
 const AnswererContainer = styled.div`
   position: relative;
-`
+`;
 
 const AnswererInfo = styled.div`
   display: flex;

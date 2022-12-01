@@ -6,6 +6,7 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import { people } from "ionicons/icons";
+import { useHistory } from "react-router";
 import styled from "styled-components";
 import { useAppSelector, useAppDispatch } from "../../redux/store";
 import {
@@ -32,19 +33,25 @@ const UserCard: React.FC<RankingProps> = (props: RankingProps) => {
 
   let user_id: number = 0;
   let user: {
-    username: string
-    id: number
-  }
+    username: string;
+    id: number;
+  };
 
   if (localStorage.getItem("auth_stockoverflow") !== null) {
-    user = JSON.parse(localStorage.getItem("auth_stockoverflow") as string).user || undefined;
+    user =
+      JSON.parse(localStorage.getItem("auth_stockoverflow") as string).user ||
+      undefined;
     user_id = +user.id;
   }
 
   async function handleFollowUser(e: any) {
     e.preventDefault();
     await dispatch(
-      followUser({following_id: +e.target.parentNode.dataset.user_id, user_id, username: user.username})
+      followUser({
+        following_id: +e.target.parentNode.dataset.user_id,
+        user_id,
+        username: user.username,
+      })
     );
   }
 
@@ -58,11 +65,24 @@ const UserCard: React.FC<RankingProps> = (props: RankingProps) => {
     );
   }
 
+  const history = useHistory();
+  // go the the user profile
+  const getProfile = (e: any) => {
+    console.log("getprofile");
+    let userInfoId = e.currentTarget.dataset.userid;
+    // console.log("userInfoId", e.currentTarget);
+    history.push(`/user/${+userInfoId}/info`);
+  };
+
   return (
     <Card data-user_id={props.kol.id}>
       <IonText>{props.cardId}</IonText>
       <div className="cardContent">
-        <IonImg src={props.kol.avatar} />
+        <IonImg
+          src={props.kol.avatar}
+          onClick={getProfile}
+          data-userId={props.kol.id}
+        />
         <div className="userInfo">
           <div className="amountInfo">
             <IonText>{props.kol.username}</IonText>
@@ -75,7 +95,11 @@ const UserCard: React.FC<RankingProps> = (props: RankingProps) => {
         </div>
       </div>
       {props.kol.id === user_id ? (
-        <IonButton onClick={() => router.push("/user/info", "forward", "push")}>
+        <IonButton
+          onClick={() =>
+            router.push(`/user/${user_id}/info`, "forward", "push")
+          }
+        >
           個人專頁
         </IonButton>
       ) : followingIdList.includes(props.kol.id) ? (

@@ -45,7 +45,7 @@ const UserInfo: React.FC = () => {
           <IonTitle className="p-0">
             <div className=" d-flex justify-content-round align-items-center w100 h100">
               <IonButtons>
-                <IonBackButton defaultHref="/"></IonBackButton>
+                <IonBackButton defaultHref="/discuss"></IonBackButton>
               </IonButtons>
               <div style={{ flexGrow: 1, textAlign: "center" }}>編輯用戶</div>
               <Notification />

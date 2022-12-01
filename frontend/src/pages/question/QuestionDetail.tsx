@@ -58,6 +58,7 @@ const QuestionDetail: React.FC = memo(() => {
 
   useEffect(() => {
     if (!question_id) return;
+    console.log(question_id);
     dispatch(loadQuestion(+question_id));
   }, [question_id]);
 
@@ -211,17 +212,20 @@ const QuestionDetail: React.FC = memo(() => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(notification),
       });
-      await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/push_notification`, {
-        method:"POST",
-        headers:{'Content-Type': 'application/json'},
-        body:JSON.stringify({
-            notification_type_id:3,
+      await fetch(
+        `${process.env.REACT_APP_PUBLIC_URL}/notification/push_notification`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            notification_type_id: 3,
             actor_id: user_id,
             actor_username: user.username,
             notifiers: [e.target.parentNode.parentNode.dataset.user_id],
-            content:"subscriptions"
-        })
-      })
+            content: "subscriptions",
+          }),
+        }
+      );
     }
   }
 
@@ -248,6 +252,13 @@ const QuestionDetail: React.FC = memo(() => {
     reverseAnswer = [...question.answer].reverse();
   }
 
+  // go the the user profile
+  // const getProfile = (e: any) => {
+  //   let userInfoId = e.currentTarget.dataset.userid;
+  //   // console.log("userInfoId", e.currentTarget);
+  //   history.push(`/user/${+userInfoId}/info`);
+  // };
+
   return (
     <IonPage id="main-content">
       <IonHeader>
@@ -269,7 +280,11 @@ const QuestionDetail: React.FC = memo(() => {
       </IonHeader>
       <IonContent>
         <AskerContainer lines="full" data-user_id={question.asker_id}>
-          <IonImg src={`${question.asker_avatar}`} />
+          <IonImg
+            // onClick={getProfile}
+            data-userId={question.asker_id}
+            src={`${question.asker_avatar}`}
+          />
           <div className="askerInfo">
             <div className="username">
               <IonText>{question.asker_username}</IonText>
@@ -328,7 +343,11 @@ const QuestionDetail: React.FC = memo(() => {
                   data-answer_id={answer.id}
                   data-user_id={answer.answers.id}
                 >
-                  <div className="answererAvatar">
+                  <div
+                    className="answererAvatar"
+                    // onClick={getProfile}
+                    data-userId={answer.answers.id}
+                  >
                     <IonImg src={answer.answers.avatar} />
                     {followings_id.includes(answer.answers.id) &&
                     user_id !== answer.answers.id ? (
@@ -425,7 +444,7 @@ const AskerContainer = styled(IonItem)`
     display: flex;
     flex-direction: column;
     margin-left: 0.5rem;
-    gap:0.3rem;
+    gap: 0.3rem;
 
     .username {
       font-size: 16px;
@@ -437,7 +456,7 @@ const AskerContainer = styled(IonItem)`
   }
 
   .subscribeBtn {
-    display:flex;
+    display: flex;
     height: 1.7rem;
     line-height: 1.7rem;
     display: flex;
@@ -456,7 +475,7 @@ const ContentContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
 
-  @media(min-width: 768px) {
+  @media (min-width: 768px) {
     min-height: 20rem;
     padding: 2rem;
   }
@@ -492,7 +511,7 @@ const ContentContainer = styled.div`
     justify-content: space-around;
     align-items: center;
 
-    @media(min-width: 768px) {
+    @media (min-width: 768px) {
       padding: 0rem 5rem;
     }
 
@@ -500,7 +519,6 @@ const ContentContainer = styled.div`
       display: flex;
       align-items: center;
     }
-
   }
 `;
 

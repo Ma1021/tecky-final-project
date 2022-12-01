@@ -6,11 +6,19 @@ import {
   IonCardSubtitle,
 } from "@ionic/react";
 import React from "react";
-import finalPropsSelectorFactory from "react-redux/es/connect/selectorFactory";
-import img from "src/img/animal_stand_ookami.png";
+import { useHistory } from "react-router";
 import { ChatBubbleProps } from "./ChatSendBubble";
 
 const ChatReceiveBubble: React.FC<ChatBubbleProps> = (props) => {
+  const history = useHistory();
+
+  // go the the user profile
+  const getProfile = (e: any) => {
+    let userInfoId = e.currentTarget.dataset.userid;
+    // console.log("userInfoId", e.currentTarget);
+    history.push(`/user/${+userInfoId}/info`);
+  };
+
   return (
     <>
       <div className="d-flex" data-message={props.props.recordid}>
@@ -19,6 +27,8 @@ const ChatReceiveBubble: React.FC<ChatBubbleProps> = (props) => {
             style={{
               backgroundColor: "pink",
             }}
+            onClick={getProfile}
+            data-userId={props.props.userid}
           >
             <img
               src={props.props.useravatar}
@@ -61,4 +71,4 @@ const ChatReceiveBubble: React.FC<ChatBubbleProps> = (props) => {
     </>
   );
 };
-export default React.memo(ChatReceiveBubble);
+export default ChatReceiveBubble;

@@ -43,3 +43,15 @@
 .today-profit-percentage {
   font-size: 0.8rem;
 }
+
+.rank {
+  color: #ffa73c;
+}
+
+.positive {
+  color: green;
+}
+
+.negative {
+  color: red;
+}

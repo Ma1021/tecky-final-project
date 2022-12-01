@@ -24,10 +24,28 @@ const AccountOverviewModule: React.FC<AccountOverviewModuleProps> = ({
             {accountDetail.totalAmount.toFixed(2)}
           </span>
           <div className="today-profit-container">
-            <div className="today-profit gray">
+            <div
+              className={
+                "today-profit " +
+                (accountDetail.todayProfit === 0
+                  ? "gray"
+                  : accountDetail.todayProfit > 0
+                  ? "positive"
+                  : "negative")
+              }
+            >
               {accountDetail.todayProfit.toFixed(2)}
             </div>
-            <div className="today-profit-percentage gray">
+            <div
+              className={
+                "today-profit-percentage " +
+                (accountDetail.todayProfitPercentage === 0
+                  ? "gray"
+                  : accountDetail.todayProfitPercentage > 0
+                  ? "positive"
+                  : "negative")
+              }
+            >
               {accountDetail.todayProfitPercentage.toFixed(2)}%
             </div>
           </div>
@@ -44,18 +62,40 @@ const AccountOverviewModule: React.FC<AccountOverviewModuleProps> = ({
           </div>
           <div className="rank-container">
             <span className="gray">排行</span>
-            <span>{accountDetail.rank === 0 ? "--" : accountDetail.rank}</span>
+            <span className={accountDetail.rank === 0 ? "" : "rank"}>
+              {accountDetail.rank === 0 ? "--" : accountDetail.rank}
+            </span>
           </div>
         </div>
 
         <div className="fourth-row">
           <div className="total-profit-percentage-container">
             <span className="gray">總收益率</span>
-            <span>{accountDetail.totalProfitPercentage.toFixed(2)}</span>
+            <span
+              className={
+                accountDetail.totalProfitPercentage === 0
+                  ? "gray"
+                  : accountDetail.totalProfitPercentage > 0
+                  ? "positive"
+                  : "negative"
+              }
+            >
+              {accountDetail.totalProfitPercentage.toFixed(2)}%
+            </span>
           </div>
           <div className="total-profit-container">
             <span className="gray">總盈虧金額</span>
-            <span>{accountDetail.totalProfit.toFixed(2)}</span>
+            <span
+              className={
+                accountDetail.totalProfit === 0
+                  ? "gray"
+                  : accountDetail.totalProfit > 0
+                  ? "positive"
+                  : "negative"
+              }
+            >
+              {accountDetail.totalProfit.toFixed(2)}
+            </span>
           </div>
           <div className="empty-container"></div>
         </div>

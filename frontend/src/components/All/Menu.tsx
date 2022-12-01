@@ -46,9 +46,17 @@ const Menu: React.FC<MenuProps> = () => {
     // async () => {
     //   await Preferences.set({ key: "auth_stockoverflow", value: "" });
     // };
+
+    // delete push notification token
+    fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/push_token/${selector?.id}`, {
+      method:"DELETE",
+      headers:{"content-type":"application/json"}
+    })
+
     dispatch(logout());
     // web version
     localStorage.removeItem("auth_stockoverflow");
+
     // console.log(
     //   "after useEffect and set localStorage",
     //   localStorage.getItem("auth_stockoverflow")

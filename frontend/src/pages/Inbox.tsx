@@ -51,7 +51,7 @@ const Inbox: React.FC = () => {
   const history = useHistory();
   const [toastPresent] = useIonToast();
 
-  function fetchData() {
+  function fetchData() {    
     fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/${user_id}`)
       .then((response) => response.json())
       .then((data) => setNotificationList(data));
@@ -59,7 +59,7 @@ const Inbox: React.FC = () => {
 
   useEffect(() => {
     fetchData();
-  }, [notificationList]);
+  }, [notificationList.length]);
 
   const handleRead = useCallback(
     (obj: {
@@ -68,8 +68,6 @@ const Inbox: React.FC = () => {
       target_id: number;
       is_read: boolean;
     }) => {
-      console.log(obj);
-
       if (!obj.is_read) {
         fetch(
           `${process.env.REACT_APP_PUBLIC_URL}/notification/${obj.notification_id}`,
@@ -94,24 +92,27 @@ const Inbox: React.FC = () => {
     [notificationList]
   );
 
-  async function handleDeleteAll() {
-    const res = await fetch(
+  function handleDeleteAll() {
+    setNotificationList([]);
+    fetch(
       `${process.env.REACT_APP_PUBLIC_URL}/notification/user/${user_id}`,
       {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       }
-    );
-    if (res.status === 409) {
-      toastPresent({
-        message: "沒有訊息可刪除",
-        duration: 1500,
-        position: "bottom",
-      });
-    }
+    ).then((response)=>{
+      if (response.status === 409) {
+        toastPresent({
+          message: "沒有訊息可刪除",
+          duration: 1500,
+          position: "bottom",
+        });
+        return
+      }
+    })
   }
 
-  async function handleDeleteOne(target_type_id: number, target_id: number) {
+  async function handleDeleteOne(target_type_id: number, target_id: number) {    
     const res = await fetch(
       `${process.env.REACT_APP_PUBLIC_URL}/notification`,
       {
@@ -184,7 +185,9 @@ const Inbox: React.FC = () => {
                     </svg>
                     <IonText style={{ marginLeft: 10 }}>標記全部已讀</IonText>
                   </ModalItem>
-                  <ModalItem lines="full" onClick={handleDeleteAll}>
+                  <ModalItem lines="full" onClick={()=>{
+                      handleDeleteAll();
+                  }}>
                     <svg
                       width="18"
                       height="18"
@@ -267,6 +270,7 @@ const Inbox: React.FC = () => {
                     notification={notification}
                     handleRead={handleRead}
                     handleDeleteOne={handleDeleteOne}
+                    fetchData={fetchData}
                   />
                 ))}
               </IonList>

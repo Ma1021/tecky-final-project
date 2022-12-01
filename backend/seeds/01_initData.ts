@@ -50,28 +50,30 @@ export async function seed(knex: Knex): Promise<void> {
     const following_id =
       user_idArray[Math.floor(Math.random() * user_idArray.length)].id;
 
-    // checking the subscription peer is existed or not
-    await knex('subscriptions')
-      .select('*')
-      .where('user_id', user_id)
-      .andWhere('following_id', following_id)
-      .then(async (subscription) => {
-        if (subscription.length > 0) {
-          // if existed do nothing
-          return;
-        } else {
-          // random a date within 30 days
-          // const date = new Date().getDate() - Math.floor(Math.random() * 27);
-          const date = 30 - Math.floor(Math.random() * 27);
-          // console.log(date);
-          // if not exist then insert
-          await knex('subscriptions').insert({
-            user_id,
-            following_id,
-            created_at: `2022-11-${date}`,
-          });
-        }
-      });
+    if (user_id !== following_id) {
+      // checking the subscription peer is existed or not
+      await knex('subscriptions')
+        .select('*')
+        .where('user_id', user_id)
+        .andWhere('following_id', following_id)
+        .then(async (subscription) => {
+          if (subscription.length > 0) {
+            // if existed do nothing
+            return;
+          } else {
+            // random a date within 30 days
+            // const date = new Date().getDate() - Math.floor(Math.random() * 27);
+            const date = 30 - Math.floor(Math.random() * 27);
+            // console.log(date);
+            // if not exist then insert
+            await knex('subscriptions').insert({
+              user_id,
+              following_id,
+              created_at: `2022-11-${date}`,
+            });
+          }
+        });
+    }
   }
 
   //Insert questions and answer start

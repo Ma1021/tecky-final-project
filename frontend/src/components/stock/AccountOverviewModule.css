@@ -5,6 +5,9 @@
   padding: 1rem;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: bold;
 }
 
 .first-row,
@@ -13,6 +16,7 @@
   justify-content: space-between;
   align-items: center;
   margin: 0.5rem;
+  width: 100%;
 }
 
 .third-row,
@@ -21,6 +25,7 @@
   justify-content: space-around;
   align-items: center;
   margin: 1rem;
+  width: 100%;
 }
 
 .market-value-container,
@@ -37,7 +42,6 @@
 
 .total-amount {
   font-size: 2rem;
-  font-weight: bold;
 }
 
 .today-profit-percentage {

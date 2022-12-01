@@ -74,6 +74,7 @@ const IndividualAccountModule: React.FC<IndividualAccountModuleProps> = ({
         category={category}
         accountDetail={accountDetail}
       />
+      <div style={{ height: "10px" }}></div>
       <UserPositionModule />
     </>
   );

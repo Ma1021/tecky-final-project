@@ -1,0 +1,12 @@
+.position-top-row,
+.position-bottom-row {
+  display: flex;
+}
+
+.position-row-left-container {
+  margin-right: 2rem;
+}
+
+.position-row-right-container {
+  overflow-x: scroll;
+}

@@ -1,0 +1,22 @@
+.column-name-row {
+  color: gray;
+  font-size: 0.9rem;
+  padding: 0 0.5rem;
+  display: flex;
+}
+
+.left-column-name {
+  margin-right: 2rem;
+}
+
+.right-column-names {
+  overflow-x: scroll;
+}
+
+.column-name {
+  margin: 0 1rem;
+}
+
+.no-position {
+  text-align: center;
+}

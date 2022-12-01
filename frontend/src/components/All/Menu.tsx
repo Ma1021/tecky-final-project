@@ -56,8 +56,8 @@ const Menu: React.FC<MenuProps> = () => {
 
     // return <Redirect to="/home" />;
     // history.replace("/home");
-    // router.push("/home", "root", "pop");
-    router.push("/home", "forward", "push");
+    router.push("/home", "root", "pop");
+    // router.push("/home", "forward", "push");
   };
 
   const confirmDeleteAccount = () =>
@@ -82,9 +82,14 @@ const Menu: React.FC<MenuProps> = () => {
     // };
     // deleteAccount in backend
     console.log("enter deleteAccount", selector);
-    await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/${selector?.id}`, {
-      method: "DELETE",
-    });
+    await fetch(
+      `${process.env.REACT_APP_PUBLIC_URL}/user/${selector?.id}/delete`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ user: selector?.id }),
+      }
+    );
     dispatch(deleteAcc());
     // web version
     localStorage.setItem("auth_stockoverflow", "");
@@ -95,19 +100,18 @@ const Menu: React.FC<MenuProps> = () => {
 
     // return <Redirect to="/home" />;
     // history.replace("/home");
-    // router.push("/home", "root", "pop");
-    router.push("/home", "forward", "push");
+    // router.push("/home", "forward", "push");
   };
 
   const toEdit = (e: any) => {
     e?.stopPropagation();
     console.log("toEdit");
-    history.push("/user/edit");
+    history.push(`/user/${selector?.id}/edit`);
   };
 
   const toInfo = () => {
     console.log("toInfo");
-    history.push("/user/info");
+    history.push(`/user/${selector?.id}/info`);
   };
 
   return (

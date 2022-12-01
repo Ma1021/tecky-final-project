@@ -67,8 +67,8 @@ const Navigation: React.FC = () => {
         <Route exact path="/register" component={Register}></Route>
         <Route exact path="/login" component={Login}></Route>
         <Route exact path="/home" component={Home}></Route>
-        <Route exact path="/user/info/" component={UserInfo}></Route>
-        <Route exact path="/user/edit/" component={UserEdit}></Route>
+        <Route exact path="/user/:id/info/" component={UserInfo}></Route>
+        <Route exact path="/user/:id/edit/" component={UserEdit}></Route>
         <Route exact path="/question/:id" component={QuestionDetail}></Route>
         <Route exact path="/inbox/:id" component={Inbox}></Route>
         <Route exact path="/chatroom/:id" component={ChatroomPage}></Route>

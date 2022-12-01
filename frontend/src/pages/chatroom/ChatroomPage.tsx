@@ -122,7 +122,10 @@ const ChatroomPage: React.FC = () => {
           // update the list of chats
           console.log("before dispatch", messageList);
 
-          if (JSON.stringify(newMessage) === JSON.stringify(messageList)) {
+          if (
+            JSON.stringify(newMessage) ===
+            JSON.stringify(messageList[messageList.length - 1])
+          ) {
             console.log("they equal");
             return;
           }

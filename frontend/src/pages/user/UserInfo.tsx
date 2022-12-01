@@ -177,7 +177,6 @@ const UserInfo: React.FC = () => {
             </IonSegmentButton>
           </IonSegment>
         </div>
-
         {userSegment === "userIntro" ? (
           <UserIntro />
         ) : userSegment === "userArticle" ? (

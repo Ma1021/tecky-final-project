@@ -131,7 +131,7 @@ export class ChatroomController {
       let result = await this.chatroomService.findRecommend(
         enteringChatroomDto,
       );
-      // console.log('enter chatroom controller find recommend', result);
+      console.log('enter chatroom controller find recommend', result);
       return result;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);

@@ -61,7 +61,9 @@ export async function seed(knex: Knex): Promise<void> {
           return;
         } else {
           // random a date within 30 days
-          const date = new Date().getDate() - Math.floor(Math.random() * 27);
+          // const date = new Date().getDate() - Math.floor(Math.random() * 27);
+          const date = 30 - Math.floor(Math.random() * 27);
+          // console.log(date);
           // if not exist then insert
           await knex('subscriptions').insert({
             user_id,
@@ -194,18 +196,34 @@ export async function seed(knex: Knex): Promise<void> {
     { host: 4, name: 'user group 4' },
     {
       host: 5,
-      name: 'kol group 1',
+      name: 'user group 5',
       introduction: 'join us now!',
       icon: 'https://stockoverflow-photoss.s3.ap-southeast-1.amazonaws.com/2022-11-25T15%3A33%3A59.804Z_0',
     },
-    { host: 6, name: 'kol group 2' },
-    { host: 7, name: 'kol group 3' },
-    { host: 8, name: 'kol group 4' },
-    { host: 9, name: 'kol group 5' },
-    { host: 10, name: 'kol group 6' },
-    { host: 11, name: 'kol group 7' },
-    { host: 12, name: 'kol group 8' },
-    { host: 13, name: 'kol group 9' },
+    { host: 6, name: 'user group 6' },
+    { host: 7, name: 'user group 7' },
+    { host: 8, name: 'user group 8' },
+    { host: 9, name: 'user group 9' },
+    { host: 10, name: 'user group 10' },
+    { host: 11, name: 'user group 11' },
+    { host: 12, name: 'user group 12' },
+    { host: 13, name: 'user group 13' },
+    { host: 14, name: 'user group 14' },
+    { host: 15, name: 'user group 15' },
+    { host: 16, name: 'user group 16' },
+    { host: 17, name: 'user group 17' },
+    { host: 18, name: 'user group 18' },
+    { host: 19, name: 'user group 19' },
+    { host: 20, name: 'user group 20' },
+    { host: 21, name: 'kol group 21' },
+    { host: 22, name: 'kol group 22' },
+    { host: 23, name: 'kol group 23' },
+    { host: 24, name: 'kol group 24' },
+    { host: 25, name: 'kol group 25' },
+    { host: 26, name: 'kol group 26' },
+    { host: 27, name: 'kol group 27' },
+    { host: 28, name: 'kol group 28' },
+    { host: 29, name: 'kol group 29' },
   ]);
   //-----------------------------------------------------------------------
   // create chatroom member
@@ -229,25 +247,25 @@ export async function seed(knex: Knex): Promise<void> {
       },
     ]);
   }
-  // all user will join kol group 13
+  // all user will join kol group 21
   for (let id of userId) {
-    if (+id.id == 13) {
+    if (+id.id == 21) {
       continue;
     }
     await knex('chatroom_user').insert([
       {
-        chatroom: +chatroomId[chatroomId.length - 1].id,
+        chatroom: +chatroomId[21].id,
         member: +id.id,
         status: 'approved',
       },
     ]);
   }
-  // 14-5 user will join kol group 2
+  // 14-5 user will join kol group 22
   for (let i = 5; i < userId.length - 1; i++) {
-    if (userId[i].id === 6) continue;
+    if (userId[i].id === 22) continue;
     await knex('chatroom_user').insert([
       {
-        chatroom: +chatroomId[4].id,
+        chatroom: +chatroomId[22].id,
         member: +userId[i].id,
         status: 'approved',
       },
@@ -270,17 +288,17 @@ export async function seed(knex: Knex): Promise<void> {
     await knex('chatroom_record').insert([
       {
         record: `bye from ${userId[i].id}`,
-        chatroom: +chatroomId[4].id,
+        chatroom: +chatroomId[21].id,
         user: +userId[i].id,
       },
     ]);
   }
   // try one  with kol - 2
-  for (let i = 0; i < userId.length - 1; i++) {
+  for (let i = 5; i < userId.length - 1; i++) {
     await knex('chatroom_record').insert([
       {
         record: `bye from ${userId[i].id}`,
-        chatroom: +chatroomId[2].id,
+        chatroom: +chatroomId[22].id,
         user: +userId[i].id,
       },
     ]);

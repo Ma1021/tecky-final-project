@@ -116,40 +116,46 @@ export class ChatroomService {
 
   async findRecommend(enteringChatroomDto: EnteringChatroomDto) {
     // find all no host and no user with only kol -- top 10
-    let result = await this.knex.raw(
-      /*sql*/
-      `
-      select chatrooms.*
-      ,count(chatroom_user.member) as member_count
-      from chatrooms
-      full join chatroom_user on chatrooms.id = chatroom_user.chatroom
-      where chatrooms.host NOT IN (?)
-      and chatrooms.id NOT in (
-          select chatrooms.id
-          from chatroom_user
-              join chatrooms on chatrooms.id = chatroom_user.chatroom
-          where chatroom_user.member = ?
-      )
-      and chatrooms.id IN(
-          SELECT chatrooms.id
-          from chatrooms
-          where chatrooms.host IN (
-                  select id
-                  from users
-                  where user_type = 'kol'
-              )
-      )
-      group by chatrooms.id
-      ORDER BY member_count desc
-      ,chatrooms.id
-      limit 10;
-        `,
-      [+enteringChatroomDto.user, +enteringChatroomDto.user],
-    );
+    try {
+      let result = await this.knex.raw(
+        /*sql*/
+        `
+        select chatrooms.*
+        ,count(chatroom_user.member) as member_count
+        from chatrooms
+        full join chatroom_user on chatrooms.id = chatroom_user.chatroom
+        where chatrooms.host NOT IN (?)
+        and chatrooms.id NOT in (
+            select chatrooms.id
+            from chatroom_user
+                join chatrooms on chatrooms.id = chatroom_user.chatroom
+            where chatroom_user.member = ?
+        )
+        and chatrooms.id IN(
+            SELECT chatrooms.id
+            from chatrooms
+            where chatrooms.host IN (
+                    select id
+                    from users
+                    where user_type = 'kol'
+                )
+        )
+        group by chatrooms.id
+        ORDER BY member_count desc
+        ,chatrooms.id
+        limit 10;
+          `,
 
-    result = result.rows;
-    // need to fix if joined
-    return result;
+        [+enteringChatroomDto.user, +enteringChatroomDto.user],
+      );
+
+      result = result.rows;
+      // need to fix if joined
+      return result;
+    } catch (error) {
+      console.log(error);
+      throw new HttpException('未能找到推薦', HttpStatus.BAD_REQUEST);
+    }
   }
 
   findCreated() {}

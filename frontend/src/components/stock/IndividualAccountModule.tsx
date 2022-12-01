@@ -66,14 +66,11 @@ const IndividualAccountModule: React.FC<IndividualAccountModuleProps> = ({
         totalProfitPercentage: -90,
       });
     }
-  }, []);
+  }, [category]);
 
   return (
     <>
-      <AccountOverviewModule
-        category={category}
-        accountDetail={accountDetail}
-      />
+      <AccountOverviewModule accountDetail={accountDetail} />
       <div style={{ height: "10px" }}></div>
       <UserPositionModule />
     </>

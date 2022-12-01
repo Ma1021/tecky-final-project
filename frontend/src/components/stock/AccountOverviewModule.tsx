@@ -3,12 +3,10 @@ import { AccountDetailType } from "./IndividualAccountModule";
 import "./AccountOverviewModule.css";
 
 interface AccountOverviewModuleProps {
-  category: string;
   accountDetail: AccountDetailType;
 }
 
 const AccountOverviewModule: React.FC<AccountOverviewModuleProps> = ({
-  category,
   accountDetail,
 }) => {
   return (

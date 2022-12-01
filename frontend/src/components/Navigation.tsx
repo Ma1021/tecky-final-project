@@ -53,6 +53,7 @@ import KOL from "../pages/ranking/Ranking";
 
 // User Analysis pages
 import Analytics from "../pages/analytics/Analytics";
+import ChatroomPage from "../pages/chatroom/ChatroomPage";
 import PaperTradeAccount from "../pages/stock/PaperTradeAccount";
 import IndividualAccount from "../pages/stock/IndividualAccount";
 
@@ -70,7 +71,7 @@ const Navigation: React.FC = () => {
         <Route exact path="/user/edit/" component={UserEdit}></Route>
         <Route exact path="/question/:id" component={QuestionDetail}></Route>
         <Route exact path="/inbox/:id" component={Inbox}></Route>
-        <Route exact path="/chatroom/:id" component={Chatroom}></Route>
+        <Route exact path="/chatroom/:id" component={ChatroomPage}></Route>
         <Route exact path="/analysis/:id" component={Analytics}></Route>
         <Route
           exact

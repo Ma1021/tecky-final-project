@@ -13,7 +13,7 @@ export function chatroomRecordReducer(
         return { ...state };
       return {
         ...state,
-        chatRecord: [...state.chatRecord, ...action.chatRecord],
+        chatRecord: action.chatRecord,
       };
     case "@@chatroom/LOAD_CHATROOMS_RECORD_START":
       return {

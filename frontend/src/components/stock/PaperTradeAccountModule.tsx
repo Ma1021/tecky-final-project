@@ -1,76 +1,50 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useHistory } from "react-router";
 import "./PaperTradeAccountModule.css";
 
-interface UserAccountType {
+interface PaperTradeAccountModuleProps {
   region: string;
   amount: number;
   profit: number;
   profitPercentage: number;
 }
 
-interface PaperTradeAccountModuleProps {
-  filter: string;
-}
-
 const PaperTradeAccountModule: React.FC<PaperTradeAccountModuleProps> = ({
-  filter,
+  region,
+  amount,
+  profit,
+  profitPercentage,
 }) => {
-  const [userAccountList, setUserAccountList] = useState<UserAccountType[]>([]);
   const history = useHistory();
-
-  useEffect(() => {
-    const exampleList = [
-      { region: "US", amount: 185307.25, profit: 0, profitPercentage: 0 },
-      { region: "HK", amount: 100100, profit: 100, profitPercentage: 0.1 },
-      {
-        region: "crypto",
-        amount: 1110000,
-        profit: 10000,
-        profitPercentage: 100,
-      },
-    ];
-
-    filter === "crypto"
-      ? setUserAccountList(exampleList.filter((obj) => obj.region === "crypto"))
-      : setUserAccountList(
-          exampleList.filter((obj) => obj.region !== "crypto")
-        );
-  }, [filter]);
-
-  // fetch database to get user profit, amount, trade history
-  //   useEffect(() => {}, []);
 
   return (
     <>
       <div className="modules-container">
-        {userAccountList.map((obj) => (
-          <div
-            className="module"
-            onClick={() => history.push(`/individualAccount/${obj.region}`)}
-          >
-            <div className="top-row">
-              <div className="title-icon-container">
-                <div className="icon-container">Icon</div>
-                <div className="title-container">
-                  {obj.region === "US" && "美股模擬賬戶"}
-                  {obj.region === "HK" && "港股模擬賬戶"}
-                  {obj.region === "crypto" && "加密貨幣模擬賬戶"}
-                </div>
+        <div
+          className="module"
+          onClick={() => history.push(`/individualAccount/${region}`)}
+        >
+          <div className="top-row">
+            <div className="title-icon-container">
+              <div className="icon-container">Icon</div>
+              <div className="title-container">
+                {region === "US" && "美股模擬賬戶"}
+                {region === "HK" && "港股模擬賬戶"}
+                {region === "crypto" && "加密貨幣模擬賬戶"}
               </div>
-              <div className="today">今日盈虧</div>
             </div>
-            <div className="bottom-row">
-              <div className="account-amount">{obj.amount.toFixed(2)}</div>
-              <div className="today-profit">
-                <div className="profit today">{obj.profit.toFixed(2)}</div>
-                <div className="profit-percentage today">
-                  {obj.profitPercentage.toFixed(2)}%
-                </div>
+            <div className="gray">今日盈虧</div>
+          </div>
+          <div className="bottom-row">
+            <div className="account-amount">{amount.toFixed(2)}</div>
+            <div className="today-profit-container">
+              <div className="profit gray">{profit.toFixed(2)}</div>
+              <div className="profit-percentage gray">
+                {profitPercentage.toFixed(2)}%
               </div>
             </div>
           </div>
-        ))}
+        </div>
       </div>
     </>
   );

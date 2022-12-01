@@ -23,7 +23,8 @@ const ChatroomDisplayCard: React.FC<ChatroomDisplayCardProps> = (props) => {
   const history = useHistory();
 
   const directChatroom = (e: any) => {
-    history.push(`/chatroom/${e.currentTarget.dataset.id}`, "forward");
+    let id = +e.currentTarget.dataset.id;
+    history.push(`/chatroom/${id}`);
   };
 
   return (

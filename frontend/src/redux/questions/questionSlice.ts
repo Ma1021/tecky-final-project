@@ -74,7 +74,14 @@ export const loadQuestion = createAsyncThunk<Question, number>("question/loadQue
           method: 'GET',
           headers: { 'Content-Type': 'application/json' }
         })
-        const json = await res.json();        
+        const json = await res.json();
+        
+        if(json[0].answer.length > 0) {
+            json[0].answer = [...json[0].answer].reverse();
+        } else {
+            json[0].answer = null
+        }
+
         return json[0];
       } catch (err) {
         return thunkAPI.rejectWithValue(err);

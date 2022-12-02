@@ -52,11 +52,11 @@ import KOL from "../pages/ranking/Ranking";
 import Analytics from "../pages/analytics/Analytics";
 import ChatroomPage from "../pages/chatroom/ChatroomPage";
 
-import PaperTradeAccountOverview from "../pages/stock/PaperTradeAccountOverview";
-import IndividualAccount from "../pages/stock/IndividualAccount";
-import PaperTradePanel from "../pages/stock/PaperTradePanel";
-import PaperTradeRecords from "../pages/stock/PaperTradeRecords";
-import PaperTradeAnalysis from "../pages/stock/PaperTradeAnalysis";
+import PaperTradeAccountOverview from "../pages/paperTrade/PaperTradeAccountOverview";
+import IndividualAccount from "../pages/paperTrade/IndividualAccount";
+import OrderPanel from "../pages/paperTrade/OrderPanel";
+import PaperTradeRecords from "../pages/paperTrade/PaperTradeRecords";
+import PaperTradeAnalysis from "../pages/paperTrade/PaperTradeAnalysis";
 
 const Navigation: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState("discuss");
@@ -85,11 +85,7 @@ const Navigation: React.FC = () => {
           path="/individualStockInfo/:symbol"
           component={IndividualStockInfo}
         ></Route>
-        <Route
-          exact
-          path="/paperTradePanel"
-          component={PaperTradePanel}
-        ></Route>
+        <Route exact path="/paperTradePanel" component={OrderPanel}></Route>
         <Route
           exact
           path="/paperTradeRecords/:userID"

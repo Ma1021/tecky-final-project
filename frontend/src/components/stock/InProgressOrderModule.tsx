@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import InProgressOrderRow from "./InProgressOrderRow";
 import "./InProgressOrderModule.css";
 
 export interface InProgressOrderType {
@@ -42,36 +41,60 @@ const InProgressOrderModule: React.FC = () => {
 
   return (
     <>
-      <div className="progress-order-module-container">
-        <div className="column-name-row">
-          <div className="left-column-name">
-            <span className="column-name">訂單狀態</span>
-          </div>
-          <div className="right-column-names">
-            <span className="column-name">名稱代碼</span>
-            <span className="column-name">數量/價格</span>
-            <span className="column-name">下單時間</span>
-          </div>
-        </div>
-
-        <div className="progress-order-list-container">
-          {inProgressOrderList.length > 0 ? (
-            inProgressOrderList.map((inProgressOrder) => (
-              <InProgressOrderRow
-                orderType={inProgressOrder.orderType}
-                status={inProgressOrder.status}
-                name={inProgressOrder.name}
-                symbol={inProgressOrder.symbol}
-                quantity={inProgressOrder.quantity}
-                price={inProgressOrder.price}
-                orderPlaceTime={inProgressOrder.orderPlaceTime}
-              />
-            ))
-          ) : (
-            <div>暫無訂單</div>
-          )}
-        </div>
-      </div>
+      {inProgressOrderList.length > 0 ? (
+        <table className="order-table">
+          <tbody>
+            <tr>
+              <th className="order-table-column-name">訂單狀態</th>
+              <th className="order-table-column-name">名稱代碼</th>
+              <th className="order-table-column-name">數量/價格</th>
+              <th className="order-table-column-name">下單時間</th>
+            </tr>
+            {inProgressOrderList.map((inProgressOrder) => (
+              <>
+                <tr>
+                  <td
+                    className={
+                      "progress-order-order-type " +
+                      (inProgressOrder.orderType === 0
+                        ? "positive"
+                        : "negative")
+                    }
+                  >
+                    {inProgressOrder.orderType === 0 ? "模擬買入" : "模擬賣出"}
+                  </td>
+                  <td>{inProgressOrder.name}</td>
+                  <td>{inProgressOrder.quantity}</td>
+                  <td>{inProgressOrder.orderPlaceTime.split(" ")[0]}</td>
+                </tr>
+                <tr className="order-bottom-row">
+                  <td
+                    className={
+                      "progress-order-stock-symbol " +
+                      (inProgressOrder.status === 0
+                        ? "pending"
+                        : inProgressOrder.status === 1
+                        ? "positive"
+                        : "negative")
+                    }
+                  >
+                    {inProgressOrder.status === 0
+                      ? "等待成交"
+                      : inProgressOrder.status === 1
+                      ? "已成交"
+                      : "訂單取消"}
+                  </td>
+                  <td>{inProgressOrder.symbol}</td>
+                  <td>{inProgressOrder.price}</td>
+                  <td>{inProgressOrder.orderPlaceTime.split(" ")[1]}</td>
+                </tr>
+              </>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <div>暫無訂單</div>
+      )}
     </>
   );
 };

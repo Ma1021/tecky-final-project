@@ -18,7 +18,7 @@ const StockNews: React.FC = () => {
   const [newsArray, setNewsArray] = useState<News[]>([]);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/stock/getNewsFromDB?symbol=${symbol}`)
+    fetch(`${process.env.REACT_APP_PUBLIC_URL}/stock/getNewsFromDB?symbol=${symbol}`)
       .then((res) => res.json())
       .then((result) => setNewsArray(result));
   }, []);

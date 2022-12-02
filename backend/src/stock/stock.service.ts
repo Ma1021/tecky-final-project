@@ -325,11 +325,10 @@ export class StockService {
 
     const res = await fetch(`http://35.213.167.63/mongo/${symbol}`);
     const result = await res.json();
-    console.log(result);
 
     result.forEach((element) => {
       const volumeColor =
-        element.Close - element.Open > 0
+        element.close - element.open > 0
           ? 'rgba(38, 166, 155, 0.5)'
           : 'rgba(239, 83, 80, 0.5)';
       candlestickDataArray.push(element);
@@ -404,9 +403,7 @@ export class StockService {
     const { fastLineResultArray, slowLineResultArray, histogramResultArray } =
       calculateMACD(lineEMA12Array, lineEMA26Array);
 
-    console.log('fetching getDayDataFromMongoDB');
-
-    // await MongoDB.close();
+    console.log('fetching getDayDataFromMongoAPI');
 
     return {
       convertedLineDataArray,

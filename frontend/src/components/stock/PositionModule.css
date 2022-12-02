@@ -1,28 +1,32 @@
-.position-module-container {
+table.position-table {
+  margin: 0.5rem;
+  text-align: center;
   background: rgba(80, 80, 80, 0.7);
   border-radius: 1rem;
-  padding: 0.5rem;
 }
 
-.column-name-row {
-  color: gray;
-  font-size: 0.9rem;
-  padding: 0 0.5rem;
-  display: flex;
+th.position-table-column-name {
+  width: 20vw;
 }
 
-.left-column-name {
-  margin-right: 2rem;
+tr > th {
+  padding: 0.5rem 0;
 }
 
-.right-column-names {
-  overflow-x: scroll;
+tr.position-bottom-row > td {
+  padding: 0 0 1rem 0.5rem;
 }
 
-.column-name {
-  margin: 0 1rem;
+.no-center {
+  text-align: left;
+  font-size: 1.2rem;
+  padding-left: 0.5rem;
 }
 
-.no-position {
-  text-align: center;
+.positive {
+  color: green;
+}
+
+.negative {
+  color: red;
 }

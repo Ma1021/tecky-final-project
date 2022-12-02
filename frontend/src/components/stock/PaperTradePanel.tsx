@@ -30,7 +30,7 @@ const PaperTradePanel: React.FC = () => {
   );
 
   useEffect(() => {
-    fetch(`http://localhost:8080/stock/getUserTradeRecords?userID=${userID}`)
+    fetch(`${process.env.REACT_APP_PUBLIC_URL}/stock/getUserTradeRecords?userID=${userID}`)
       .then((res) => res.json())
       .then((result) => setUserTradeRecords(result));
   }, []);

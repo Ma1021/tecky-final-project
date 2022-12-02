@@ -1,15 +1,19 @@
 {
-  "appId": "com.stockoverflow.app",
-  "appName": "stockoverflow",
-  "webDir": "build",
-  "bundledWebRuntime": false,
-  "plugins": {
-    "SplashScreen": {
-      "launchShowDuration": 0
-    },
-    "PushNotifications": {
-      "presentationOptions": ["badge", "sound", "alert"]
-    }
-  },
-  "cordova": {}
+	"appId": "com.stockoverflow.app",
+	"appName": "stockoverflow",
+	"webDir": "build",
+	"bundledWebRuntime": false,
+	"plugins": {
+		"SplashScreen": {
+			"launchShowDuration": 0
+		},
+		"PushNotifications": {
+			"presentationOptions": [
+				"badge",
+				"sound",
+				"alert"
+			]
+		}
+	},
+	"cordova": {}
 }

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AccountOverviewModule from "./AccountOverviewModule";
+import PaperTradeForum from "./PaperTradeForum";
+import PaperTradeRankList from "./PaperTradeRankList";
 import UserPositionModule from "./UserPositionModule";
 
 interface IndividualAccountModuleProps {
@@ -73,6 +75,10 @@ const IndividualAccountModule: React.FC<IndividualAccountModuleProps> = ({
       <AccountOverviewModule accountDetail={accountDetail} />
       <div style={{ height: "10px" }}></div>
       <UserPositionModule />
+      <div style={{ height: "10px" }}></div>
+      <PaperTradeForum />
+      <div style={{ height: "10px" }}></div>
+      <PaperTradeRankList />
     </>
   );
 };

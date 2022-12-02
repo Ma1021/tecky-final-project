@@ -79,7 +79,7 @@ const StockInfo: React.FC<StockInfoProps> = ({ symbol }) => {
   useEffect(() => {
     // get stock data from database
     fetch(
-      `http://localhost:8080/stock/getAllDataFromStockInfo?symbol=${symbol}`
+      `${process.env.REACT_APP_PUBLIC_URL}/stock/getAllDataFromStockInfo?symbol=${symbol}`
     )
       .then((res) => res.json())
       .then((result) => {

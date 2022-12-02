@@ -11,7 +11,6 @@ import {
 } from "@ionic/react";
 import { useState } from "react";
 import { useLocation } from "react-router";
-import { useAppSelector } from "../../redux/store";
 import MainChart from "../../components/stock/MultipleSeriesChart";
 import StockForum from "../../components/stock/StockForum";
 import StockNews from "../../components/stock/StockNews";
@@ -55,9 +54,6 @@ const IndividualStockInfo: React.FC = () => {
           <SegmentButton value="stockAnalysis">
             <IonLabel>分析</IonLabel>
           </SegmentButton>
-          {/* <SegmentButton value="paperTrade">
-            <IonLabel>Paper Trade</IonLabel>
-          </SegmentButton> */}
         </SegmentTab>
 
         <IonContent>

@@ -39,20 +39,20 @@ const Login: React.FC = () => {
   });
 
   // check push notification token
-  async function checkPushToken(json:any) {
+  async function checkPushToken(json: any) {
     const token = await localStorage.getItem("push_notification_token");
-    console.log('push_token:', token);
-    
+    console.log("push_token:", token);
+
     fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/push_token`, {
-      method:"POST",
-      headers:{"content-type":"application/json"},
-      body:JSON.stringify({user_id: json.user.id, token})
-    }).then(async (response)=>{
-      console.log('fetching check push token');
-      if(!response.ok) {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ user_id: json.user.id, token }),
+    }).then(async (response) => {
+      console.log("fetching check push token");
+      if (!response.ok) {
         console.log(await response.text());
       }
-    })
+    });
   }
 
   useEffect(() => {
@@ -76,7 +76,7 @@ const Login: React.FC = () => {
     await checkPushToken(json);
     history.replace("/discuss");
   };
-  
+
   let dispatching = (json: any) => {
     dispatch(login(json.user, json.token));
   };
@@ -124,6 +124,7 @@ const Login: React.FC = () => {
               if (res.ok) {
                 main(json);
               } else {
+                console.log(select);
                 presentAlert({
                   cssClass: "alert",
                   header: "錯誤",

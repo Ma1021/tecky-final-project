@@ -52,8 +52,9 @@ const Menu: React.FC<MenuProps> = () => {
       method:"DELETE",
       headers:{"content-type":"application/json"}
     })
-
+    
     dispatch(logout());
+    
     // web version
     localStorage.removeItem("auth_stockoverflow");
 

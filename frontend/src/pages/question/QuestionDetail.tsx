@@ -15,7 +15,7 @@ import {
   IonFooter,
   IonSpinner,
   useIonToast,
-  useIonAlert,
+  useIonAlert
 } from "@ionic/react";
 import { memo, useCallback, useEffect, useState } from "react";
 import { useLocation, useHistory } from "react-router-dom";
@@ -126,6 +126,7 @@ const QuestionDetail: React.FC = memo(() => {
     const obj = {
       question_id: question.id,
       answer_id: e.target.parentNode.parentNode.parentNode.dataset.answer_id,
+      user_id
     };
     alertPresent({
       cssClass: "alert",
@@ -155,6 +156,7 @@ const QuestionDetail: React.FC = memo(() => {
     const obj = {
       answerer_id: user_id,
       asker_id: question.asker_id,
+      answerer_username: user.username,
       question_id: question.id,
       content: replyContent,
     };
@@ -246,10 +248,7 @@ const QuestionDetail: React.FC = memo(() => {
 
   const getProfile = (e: any) => {          
     history.push(`/user/${+e.target.dataset.userid}/info`);
-  };
-
-  console.log(question);
-  
+  };  
 
   return (
     <IonPage id="main-content">
@@ -257,7 +256,7 @@ const QuestionDetail: React.FC = memo(() => {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref="/discuss" />
+            <IonBackButton defaultHref="/discuss"/>
           </IonButtons>
           <IonTitle>{question.asker_username}的問題</IonTitle>
           {question.asker_id === user_id && (
@@ -520,7 +519,6 @@ const ContentContainer = styled.div`
 
 const AnswerContainer = styled.div`
   width: 100%;
-  min-height: 50%;
   margin-top: 0.5rem;
   background-color: #222;
   padding: 1rem;

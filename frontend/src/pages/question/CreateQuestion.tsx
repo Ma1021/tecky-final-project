@@ -30,7 +30,7 @@ type TagValues = {
 const CreateQuestion: React.FC = () => {
   const [selectTags, setSelectTags] = useState(Array<TagValues>);
   const [content, setContent] = useState("");
-  let userData;
+  let userData: any;
   let user_id: number;
 
   if (localStorage.getItem("auth_stockoverflow")) {
@@ -68,7 +68,12 @@ const CreateQuestion: React.FC = () => {
   async function submit(e: any) {
     e.preventDefault();
     const stock_id: number[] = [];
-    let obj = {};
+    let obj: {
+      stock_id?: number | number[]
+      content: string
+      asker_id: number
+      asker_username: string
+    };
 
     if (content === "") {
       present("請輸入內容", 1500);
@@ -84,17 +89,22 @@ const CreateQuestion: React.FC = () => {
         stock_id,
         content,
         asker_id: user_id,
+        asker_username: userData.username 
       };
     } else {
       obj = {
         content,
         asker_id: user_id,
+        asker_username: userData.username 
       };
     }
 
-    dispatch(createQuestion(obj));
-    present("成功提出問題", 1500);
-    history.replace("/discuss");
+    if(obj) {
+      dispatch(createQuestion(obj)).then(()=>{
+        present("成功提出問題", 1500);
+        history.replace("/discuss");
+      });
+    }
   }
 
   return (

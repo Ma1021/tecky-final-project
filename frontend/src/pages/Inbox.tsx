@@ -109,28 +109,39 @@ const Inbox: React.FC = () => {
         });
         return
       }
+      toastPresent({
+        message: "刪除訊息成功",
+        duration: 1500,
+        position: "bottom",
+      });
     })
   }
 
-  async function handleDeleteOne(target_type_id: number, target_id: number) {    
-    const res = await fetch(
-      `${process.env.REACT_APP_PUBLIC_URL}/notification`,
+  function handleDeleteOne(target_type_id: number, target_id: number) {    
+    fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification`,
       {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ target_type_id, target_id }),
       }
-    );
-
-    if (res.status === 404) {
+    ).then(response => {      
+      if (response.status === 404) {
+        toastPresent({
+          message: "沒有訊息可刪除",
+          duration: 1500,
+          position: "bottom",
+        });
+        return
+      }
       toastPresent({
-        message: "沒有訊息可刪除",
+        message: "刪除訊息成功",
         duration: 1500,
         position: "bottom",
       });
-    }
-  }
-
+      fetchData();
+    });    
+  }  
+  
   return (
     <IonPage id="main-content">
       <IonHeader translucent={true} collapse="fade">

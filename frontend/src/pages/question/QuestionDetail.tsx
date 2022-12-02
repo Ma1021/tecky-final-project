@@ -49,7 +49,6 @@ const QuestionDetail: React.FC = memo(() => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const [replyContent, setReplyContent] = useState("");
-  let reverseAnswer = [] as any;
   const [followings_id, setFollowings_id] = useState(Array<number>);
   const { user } = JSON.parse(
     localStorage.getItem("auth_stockoverflow") as string
@@ -58,9 +57,8 @@ const QuestionDetail: React.FC = memo(() => {
 
   useEffect(() => {
     if (!question_id) return;
-    console.log(question_id);
     dispatch(loadQuestion(+question_id));
-  }, [question_id]);
+  }, []);
 
   const fetchFollowing = useCallback(async () => {
     const id_array: Array<number> = [];
@@ -246,21 +244,16 @@ const QuestionDetail: React.FC = memo(() => {
     }
   }
 
-  if (question.id === undefined) {
-    return <></>;
-  } else {
-    reverseAnswer = [...question.answer].reverse();
-  }
+  const getProfile = (e: any) => {          
+    history.push(`/user/${+e.target.dataset.userid}/info`);
+  };
 
-  // go the the user profile
-  // const getProfile = (e: any) => {
-  //   let userInfoId = e.currentTarget.dataset.userid;
-  //   // console.log("userInfoId", e.currentTarget);
-  //   history.push(`/user/${+userInfoId}/info`);
-  // };
+  console.log(question);
+  
 
   return (
     <IonPage id="main-content">
+      {question.id &&
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
@@ -278,10 +271,12 @@ const QuestionDetail: React.FC = memo(() => {
           )}
         </IonToolbar>
       </IonHeader>
+      }
       <IonContent>
+        {question.id && <>
         <AskerContainer lines="full" data-user_id={question.asker_id}>
           <IonImg
-            // onClick={getProfile}
+            onClick={getProfile}
             data-userId={question.asker_id}
             src={`${question.asker_avatar}`}
           />
@@ -306,6 +301,7 @@ const QuestionDetail: React.FC = memo(() => {
             </IonButton>
           )}
         </AskerContainer>
+        
         <ContentContainer>
           <div>
             <IonText>{question.content}</IonText>
@@ -324,18 +320,18 @@ const QuestionDetail: React.FC = memo(() => {
           <div className="buttonContainer">
             <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
               <IonIcon icon={chatboxEllipses} />
-              <IonText style={{ fontSize: 14 }}>{reverseAnswer.length}</IonText>
+              <IonText style={{ fontSize: 14 }}>{question.answer !== null ? question.answer.length : 0}</IonText>
             </div>
             <WhatsappShareButton url="分享問題： https://google.com">
               <IonIcon icon={shareSocial}></IonIcon>
             </WhatsappShareButton>
           </div>
         </ContentContainer>
-
-        {reverseAnswer.length > 0 && (
+        </>}
+        {question.answer && (
           <AnswerContainer>
             <IonText>回答</IonText>
-            {reverseAnswer.map((answer: any, index: number) => {
+            {question.answer.map((answer: any, index: number) => {
               return (
                 <div
                   className="answerCard"
@@ -343,12 +339,12 @@ const QuestionDetail: React.FC = memo(() => {
                   data-answer_id={answer.id}
                   data-user_id={answer.answers.id}
                 >
-                  <div
-                    className="answererAvatar"
-                    // onClick={getProfile}
-                    data-userId={answer.answers.id}
-                  >
-                    <IonImg src={answer.answers.avatar} />
+                  <div className="answererAvatar">
+                    <IonImg
+                      src={answer.answers.avatar} 
+                      onClick={getProfile}
+                      data-userId={answer.answers.id}
+                    />
                     {followings_id.includes(answer.answers.id) &&
                     user_id !== answer.answers.id ? (
                       <IonButton onClick={handleSubscription}>
@@ -524,6 +520,7 @@ const ContentContainer = styled.div`
 
 const AnswerContainer = styled.div`
   width: 100%;
+  min-height: 50%;
   margin-top: 0.5rem;
   background-color: #222;
   padding: 1rem;

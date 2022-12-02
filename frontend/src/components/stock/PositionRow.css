@@ -1,4 +1,30 @@
-.position-top-row,
+.position-row-container {
+  display: flex;
+}
+
+.position-row-right-container {
+  display: flex;
+  overflow-x: scroll;
+}
+.position-first-column,
+.position-second-column,
+.position-third-column,
+.position-fourth-column,
+.position-fifth-column {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+
+.position-second-column,
+.position-third-column,
+.position-fourth-column,
+.position-fifth-column {
+  margin-left: 2rem;
+}
+
+/* .position-top-row,
 .position-bottom-row {
   display: flex;
 }
@@ -10,3 +36,7 @@
 .position-row-right-container {
   overflow-x: scroll;
 }
+
+.position-row-right-container > span {
+  margin-left: 1rem;
+} */

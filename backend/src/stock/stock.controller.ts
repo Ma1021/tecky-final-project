@@ -36,12 +36,20 @@ export class StockController {
     return await this.appService.getMinuteDataFromMongoDB(symbol, timeFrame);
   }
 
+  // @Get('/getDayDataFromMongoDB')
+  // async getDayDataFromMongoDB(
+  //   @Query('symbol') symbol: string,
+  //   @Query('timeFrame') timeFrame: string,
+  // ) {
+  //   return await this.appService.getDayDataFromMongoDB(symbol, timeFrame);
+  // }
+
   @Get('/getDayDataFromMongoDB')
-  async getDayDataFromMongoDB(
+  async getDayDataFromMongoAPI(
     @Query('symbol') symbol: string,
     @Query('timeFrame') timeFrame: string,
   ) {
-    return await this.appService.getDayDataFromMongoDB(symbol, timeFrame);
+    return await this.appService.getDayDataFromMongoAPI(symbol, timeFrame);
   }
 
   @Get('/getNewsFromDB')

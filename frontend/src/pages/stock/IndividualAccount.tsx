@@ -12,10 +12,14 @@ import {
   IonTitle,
 } from "@ionic/react";
 import { useState } from "react";
+import { useLocation } from "react-router";
 import IndividualAccountModule from "../../components/stock/IndividualAccountModule";
 
 const IndividualAccount: React.FC = () => {
-  const [currentAccount, setCurrentAccount] = useState("US");
+  const location = useLocation();
+  const [currentAccount, setCurrentAccount] = useState(
+    location.pathname.split("/")[location.pathname.split("/").length - 1]
+  );
 
   const onListChange = (e: any) => {
     setCurrentAccount(e.detail.value);

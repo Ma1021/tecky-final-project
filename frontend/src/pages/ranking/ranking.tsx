@@ -15,6 +15,7 @@ import { people } from "ionicons/icons";
 import UserCard from "./UserCard";
 import {useCallback, useEffect, useState} from 'react';
 import { useAppSelector, useAppDispatch } from "../../redux/store";
+import { useHistory } from "react-router";
 import { loadFollowingsId, followUser, unFollowUser } from '../../redux/subscription/subscriptionSlice';
 
 interface FollowerCountList {
@@ -79,6 +80,14 @@ const Ranking: React.FC = () => {
       e.preventDefault();
       await dispatch(unFollowUser({following_id, user_id}));
   }
+
+  const history = useHistory();
+
+  const getProfile = (e: any) => {    
+    let userInfoId = e.target.parentNode.dataset.user_id;
+    // console.log("userInfoId", e.currentTarget);
+    history.push(`/user/${+userInfoId}/info`);
+  };
   
   return (
       <IonPage id="main-content">
@@ -95,7 +104,7 @@ const Ranking: React.FC = () => {
                       {topThree.length > 0 &&
                       <div className="ranking">
                           <div className="2nd" data-user_id={topThree[1].id}>
-                              <IonImg className="icon" src={topThree[1].avatar} />
+                              <IonImg className="icon" src={topThree[1].avatar} onClick={getProfile}/>
                               <div className="rankMark">
                                   <IonImg src={require("./2nd.png")} />
                                   <IonText>{topThree[1].username}</IonText>
@@ -104,12 +113,12 @@ const Ranking: React.FC = () => {
                                   <IonIcon icon={people} />
                                   <IonText>{topThree[1].followers}</IonText>
                               </div>
-                              {topThree[1].id === user_id ? <IonButton onClick={()=>router.push('/user/info', 'forward', 'push')}>個人專頁</IonButton> 
+                              {topThree[1].id === user_id ? <IonButton onClick={getProfile}>個人專頁</IonButton> 
                               : followingIdList.includes(topThree[1].id) ? <IonButton onClick={handleUnFollowUser}>取消關注</IonButton> 
                               :  <IonButton onClick={handleFollowUser}>關注</IonButton>}
                           </div>
                           <div className="1st" data-user_id={topThree[0].id}>
-                              <IonImg className="icon" src={topThree[0].avatar} />
+                              <IonImg className="icon" src={topThree[0].avatar} onClick={getProfile}/>
                               <div className="rankMark">
                                   <IonImg src={require("./1st.png")} />
                                   <IonText>{topThree[0].username}</IonText>
@@ -118,12 +127,12 @@ const Ranking: React.FC = () => {
                                   <IonIcon icon={people} />
                                   <IonText>{topThree[0].followers}</IonText>
                               </div>
-                              {topThree[0].id === user_id ? <IonButton onClick={()=>router.push('/user/info', 'forward', 'push')}>個人專頁</IonButton> 
+                              {topThree[0].id === user_id ? <IonButton onClick={getProfile}>個人專頁</IonButton> 
                               : followingIdList.includes(topThree[0].id) ? <IonButton onClick={handleUnFollowUser}>取消關注</IonButton> 
                               :  <IonButton onClick={handleFollowUser}>關注</IonButton>}
                           </div>
                           <div className="3rd" data-user_id={topThree[2].id}>
-                              <IonImg className="icon" src={topThree[2].avatar} />
+                              <IonImg className="icon" src={topThree[2].avatar} onClick={getProfile}/>
                               <div className="rankMark">
                                   <IonImg src={require("./3rd.png")} />
                                   <IonText>{topThree[2].username}</IonText>
@@ -132,7 +141,7 @@ const Ranking: React.FC = () => {
                                   <IonIcon icon={people} />
                                   <IonText>{topThree[2].followers}</IonText>
                               </div>
-                              {topThree[2].id === user_id ? <IonButton onClick={()=>router.push('/user/info', 'forward', 'push')}>個人專頁</IonButton> 
+                              {topThree[2].id === user_id ? <IonButton onClick={getProfile}>個人專頁</IonButton> 
                               : followingIdList.includes(topThree[2].id) ? <IonButton onClick={handleUnFollowUser}>取消關注</IonButton> 
                               :  <IonButton onClick={handleFollowUser}>關注</IonButton>}
                           </div>

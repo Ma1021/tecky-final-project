@@ -26,7 +26,57 @@ const PositionRow: React.FC<PositionRowProps> = ({
 }) => {
   return (
     <>
-      <div className="position-top-row">
+      <div className="position-row-container">
+        <div className="position-first-column">
+          <div className="position-stock-name">{name}</div>
+          <div className="position-stock-symbol">{symbol}</div>
+        </div>
+
+        <div className="position-row-right-container">
+          <div className="position-second-column">
+            <div className="position-market-value">
+              {marketValue.toFixed(2)}
+            </div>
+            <div className="position-stock-quantity gray">{quantity}</div>
+          </div>
+
+          <div className="position-third-column">
+            <div className="position-current-price">
+              {currentPrice.toFixed(2)}
+            </div>
+            <div className="position-stock-cost gray">{cost.toFixed(3)}</div>
+          </div>
+
+          <div className="position-fourth-column">
+            <div
+              className={
+                "position-stock-profit " +
+                (profit === 0 ? "gray" : profit > 0 ? "positive" : "negative")
+              }
+            >
+              {profit > 0 ? `+${profit.toFixed(2)}` : profit.toFixed(2)}
+            </div>
+            <div
+              className={
+                "stock-profit-percentage " +
+                (profit === 0 ? "gray" : profit > 0 ? "positive" : "negative")
+              }
+            >
+              {profitPercentage > 0
+                ? `+${profitPercentage.toFixed(2)}`
+                : profitPercentage.toFixed(2)}
+              %
+            </div>
+          </div>
+
+          <div className="position-fifth-column">
+            <div className="position-stock-ratio">{ratio.toFixed(2)}</div>
+            <div className="empty"></div>
+          </div>
+        </div>
+      </div>
+
+      {/* <div className="position-top-row">
         <div className="position-row-left-container">
           <span className="position-stock-name">{name}</span>
         </div>
@@ -68,7 +118,7 @@ const PositionRow: React.FC<PositionRowProps> = ({
           </span>
           <span className="empty"></span>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

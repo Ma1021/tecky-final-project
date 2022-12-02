@@ -27,17 +27,16 @@ const PositionModule: React.FC = () => {
         quantity: 1,
         symbol: "TSLA",
         cost: 180.76,
-        profitPercentage: 13.94 / 180.76 * 100,
+        profitPercentage: (13.94 / 180.76) * 100,
       },
     ]);
   }, []);
 
   return (
     <>
-      <h1>Position Module</h1>
       <div className="position-module-container">
         <div className="column-name-row">
-          <span className="left-column-name">持倉股票</span>
+          <div className="left-column-name">持倉股票</div>
           <div className="right-column-names">
             <span className="column-name">市值/數量</span>
             <span className="column-name">現價/成本</span>

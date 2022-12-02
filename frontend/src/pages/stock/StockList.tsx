@@ -12,11 +12,11 @@ import {
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useAppDispatch, useAppSelector } from "../../redux/store";
-import {
-  changeColorTheme,
-  changeLanguage,
-} from "../../redux/theme/theme.action";
+// import { useAppDispatch, useAppSelector } from "../../redux/store";
+// import {
+//   changeColorTheme,
+//   changeLanguage,
+// } from "../../redux/theme/theme.action";
 import { StockInfo } from "../../type";
 import StockRow from "../../components/stock/StockRow";
 import Title from "../../components/All/Title";
@@ -31,9 +31,9 @@ const StockList: React.FC = () => {
   const [sortByPrice, setSortByPrice] = useState<0 | 1 | 2>(0);
   const [sortByChange, setSortByChange] = useState<0 | 1 | 2>(0);
   const [segment, setSegment] = useState("watchList");
-  const isDark = useAppSelector((state) => state.theme.isDark);
-  const isChinese = useAppSelector((state) => state.theme.isChinese);
-  const dispatch = useAppDispatch();
+  // const isDark = useAppSelector((state) => state.theme.isDark);
+  // const isChinese = useAppSelector((state) => state.theme.isChinese);
+  // const dispatch = useAppDispatch();
 
   const onSegmentChange = (e: any) => {
     setSegment(e.detail.value);

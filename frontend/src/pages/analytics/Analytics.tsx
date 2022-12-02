@@ -172,9 +172,6 @@ const Analytics: React.FC = () => {
             <FansAgeAnalysis>
               <AgeChart user_id={user_id} />
             </FansAgeAnalysis>
-
-            <IonText>聊天室數據</IonText>
-            <ChatroomAnalysis></ChatroomAnalysis>
           </Container>
         )}
       </IonContent>
@@ -266,14 +263,6 @@ const FansGenderAnalysis = styled.div`
 `;
 
 const FansAgeAnalysis = styled.div`
-  width: 100%;
-  height: 13rem;
-  margin-top: 0.5rem;
-  background-color: #222;
-  border-radius: 0.8rem;
-`;
-
-const ChatroomAnalysis = styled.div`
   width: 100%;
   height: 13rem;
   margin-top: 0.5rem;

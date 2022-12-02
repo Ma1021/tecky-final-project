@@ -76,7 +76,7 @@ const QuestionCard: React.FC<QuestionsProps> = memo((props: QuestionsProps) => {
                   {question.stock.map((stock) => {
                     if (stock) {
                       return (
-                        <StockTag key={stock.id}>#{stock.symbol}</StockTag>
+                        <StockTag key={stock.id} data-symbol={stock.symbol}>#{stock.symbol}</StockTag>
                       );
                     }
                   })}

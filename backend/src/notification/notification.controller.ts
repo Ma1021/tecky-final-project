@@ -50,7 +50,8 @@ export class NotificationController {
                     priority:"high",
                     notification : {
                         title: push_notification.actor_username + " 提出了問題",
-                        body : push_notification.content
+                        body : push_notification.content,
+                        sound: "default"
                     }
                 })
             })
@@ -121,12 +122,8 @@ export class NotificationController {
 
     // delete one notification
     @Delete()
-    async deleteOne (@Body() notification: Notification_Delete_DTO, @Response() res) {
-        const response = await this.notificationService.deleteNotification(notification);
-        // if(response <= 0) {
-        //     res.status(HttpStatus.NOT_FOUND).json({message:"notification not found"});
-        // }
-        return response;
+    async deleteOne (@Body() notification: Notification_Delete_DTO) {
+        return await this.notificationService.deleteNotification(notification);
     }
 
     // delete all notification by user id
@@ -138,7 +135,9 @@ export class NotificationController {
 
         const response = await this.notificationService.deleteAllNotification(+user_id);
         
-        if(response.length === 0) {
+        console.log(response);
+
+        if(response <= 0) {
             res.status(HttpStatus.CONFLICT).json({message:"inbox is empty, nothing can be delete"});
         }
 

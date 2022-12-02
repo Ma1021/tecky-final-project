@@ -78,6 +78,21 @@ export const loadQuestion = createAsyncThunk<Question, number>("question/loadQue
     }
 })
 
+// action that get all question by stock symbol
+export const loadStockQuestion = createAsyncThunk<Question[], string>("question/loadStockQuestions", async(symbol, thunkAPI)=>{
+    try {
+        const res:Response = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/question/stock/symbol?symbol=${symbol}`, {
+            method:'GET',
+            headers:{'Content-Type': 'application/json'}
+        })
+        const json = await res.json();
+        
+        return json;
+    } catch(err) {
+        return thunkAPI.rejectWithValue(err);
+    }
+})
+
 // actions that post data
 export const createQuestion = createAsyncThunk<Question, {content: string, stock_id?: number | number[], asker_id: number, asker_username: string}>("question/createQuestion", async(data, thunkAPI)=>{
     try {
@@ -87,9 +102,7 @@ export const createQuestion = createAsyncThunk<Question, {content: string, stock
           body:JSON.stringify(data)
         })
         const json = await res.json();     
-        
-        console.log(data);
-        
+                
         // insert notification 
             const followerRes = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/followers/${data.asker_id}`)
             const followerJson = await followerRes.json();
@@ -148,7 +161,6 @@ export const deleteQuestion = createAsyncThunk<Question, {question_id: number, u
             headers: { 'Content-Type': 'application/json' }
         })
         const json = await res.json();
-
 
         // delete notification
         fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification`, {
@@ -315,6 +327,18 @@ export const questionSlice = createSlice({
             state.loading = false;
         })
         builder.addCase(loadUserQuestions.rejected, (state, action)=>{
+            state.errors = action.payload;
+            state.loading = false;
+        })
+
+        builder.addCase(loadStockQuestion.pending, (state, action)=>{
+            state.loading = true;
+        })
+        builder.addCase(loadStockQuestion.fulfilled, (state, action)=>{
+            state.stockQuestionList = action.payload;
+            state.loading = false;
+        })
+        builder.addCase(loadStockQuestion.rejected, (state, action)=>{
             state.errors = action.payload;
             state.loading = false;
         })

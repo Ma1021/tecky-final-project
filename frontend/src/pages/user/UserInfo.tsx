@@ -117,7 +117,7 @@ const UserInfo: React.FC = () => {
           <IonTitle className="p-0">
             <div className=" d-flex justify-content-round align-items-center w100 h100">
               <IonButtons>
-                <IonBackButton defaultHref="/discuss"></IonBackButton>
+                <IonBackButton defaultHref="/discuss" text="返回"></IonBackButton>
               </IonButtons>
               <IonSearchbar className="pt-0 pb-0 ion-margin"></IonSearchbar>
               {+userIdUrl === (user_id as number) ? (

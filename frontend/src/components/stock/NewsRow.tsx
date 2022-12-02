@@ -22,16 +22,12 @@ function formatDate(date: string) {
 const NewsRow: React.FC<NewsProps> = ({ title, content, time, hyperlink, index }) => {
   const [ selected, setSelected] = useState(-1);
   
-  const toggle = (index: number) => {
-    console.log('click toggle');
-    
+  const toggle = (index: number) => {    
     if(index == selected) {
       return setSelected(-1)
     }
     setSelected(index)
   }
-
-  console.log(selected);
   
   return (
     <NewsCard>

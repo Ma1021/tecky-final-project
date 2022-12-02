@@ -33,7 +33,7 @@ const UserDiscussion: React.FC<{ userId: number }> = (props) => {
               }}
             >
               你似乎未問過問題
-              <IonRouterLink href="/discuss">去問問題吧~</IonRouterLink>
+              <IonRouterLink href="/discuss/createQuestion">去問問題吧~</IonRouterLink>
             </div>
           ) : (<div style={{
             marginTop: 10, display: "flex",

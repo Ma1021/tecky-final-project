@@ -112,7 +112,7 @@ const CreateQuestion: React.FC = () => {
       <IonHeader translucent={true} collapse="fade">
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref="/discuss" />
+            <IonBackButton defaultHref="/discuss" text="返回"/>
           </IonButtons>
           <IonTitle>提出問題</IonTitle>
         </IonToolbar>

@@ -147,7 +147,7 @@ const Inbox: React.FC = () => {
       <IonHeader translucent={true} collapse="fade">
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref="/discuss" />
+            <IonBackButton defaultHref="/discuss" text="返回"/>
           </IonButtons>
           <IonTitle>訊息</IonTitle>
         </IonToolbar>

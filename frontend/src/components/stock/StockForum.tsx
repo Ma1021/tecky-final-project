@@ -5,7 +5,7 @@ import { useHistory } from "react-router";
 import styled from "styled-components";
 import { loadStockQuestion } from "../../redux/questions/questionSlice";
 import QuestionCard from "../discuss/QuestionCard";
-import {IonSpinner, IonText} from "@ionic/react";
+import {IonSpinner, IonText, IonRouterLink} from "@ionic/react";
 
 const StockForum: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -33,6 +33,12 @@ const StockForum: React.FC = () => {
       </div>
       : <QuestionCard questions={stockQuestionList}/>
       }
+      {stockQuestionList.length === 0 && 
+      <div className="d-flex flex-column align-items-center" style={{marginTop:"70%"}}>
+        <div>未有相關問題</div>
+        <IonRouterLink href="/discuss/createQuestion">去問問題吧~</IonRouterLink>
+      </div>
+      }
     </QuestionContainer>
   );
 };
@@ -45,4 +51,9 @@ export const QuestionContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding-bottom: 0.5rem;
+  
+  ion-router-link {
+    text-decoration: underline;
+    margin-top: 1rem;
+  }
 `;

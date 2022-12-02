@@ -256,7 +256,7 @@ const QuestionDetail: React.FC = memo(() => {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref="/discuss"/>
+            <IonBackButton defaultHref="/discuss" text="返回"/>
           </IonButtons>
           <IonTitle>{question.asker_username}的問題</IonTitle>
           {question.asker_id === user_id && (

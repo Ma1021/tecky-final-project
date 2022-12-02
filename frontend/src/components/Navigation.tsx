@@ -22,9 +22,6 @@ import {
 } from "ionicons/icons";
 import "./Navigation.css";
 
-import Tab1 from "../pages/Tab1";
-import Tab2 from "../pages/Tab2";
-
 // discuss pages
 import Discuss from "../pages/question/Discuss";
 import CreateQuestion from "../pages/question/CreateQuestion";
@@ -54,8 +51,12 @@ import KOL from "../pages/ranking/Ranking";
 // User Analysis pages
 import Analytics from "../pages/analytics/Analytics";
 import ChatroomPage from "../pages/chatroom/ChatroomPage";
-import PaperTradeAccount from "../pages/stock/PaperTradeAccount";
+
+import PaperTradeAccountOverview from "../pages/stock/PaperTradeAccountOverview";
 import IndividualAccount from "../pages/stock/IndividualAccount";
+import PaperTradePanel from "../pages/stock/PaperTradePanel";
+import PaperTradeRecords from "../pages/stock/PaperTradeRecords";
+import PaperTradeAnalysis from "../pages/stock/PaperTradeAnalysis";
 
 const Navigation: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState("discuss");
@@ -84,6 +85,21 @@ const Navigation: React.FC = () => {
           path="/individualStockInfo/:symbol"
           component={IndividualStockInfo}
         ></Route>
+        <Route
+          exact
+          path="/paperTradePanel"
+          component={PaperTradePanel}
+        ></Route>
+        <Route
+          exact
+          path="/paperTradeRecords/:userID"
+          component={PaperTradeRecords}
+        ></Route>
+        <Route
+          exact
+          path="/paperTradeAnalysis/:userID"
+          component={PaperTradeAnalysis}
+        ></Route>
         <Route exact path="/">
           <Redirect to="/home" />
         </Route>
@@ -96,7 +112,7 @@ const Navigation: React.FC = () => {
             <Route
               exact
               path="/paperTrade"
-              component={PaperTradeAccount}
+              component={PaperTradeAccountOverview}
             ></Route>
             <Route
               exact

@@ -1,5 +1,5 @@
 import React from "react";
-import { AccountDetailType } from "./IndividualAccountModule";
+import { AccountDetailType } from "../../pages/stock/IndividualAccount";
 import "./AccountOverviewModule.css";
 
 interface AccountOverviewModuleProps {

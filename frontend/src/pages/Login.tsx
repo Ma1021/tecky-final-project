@@ -124,6 +124,7 @@ const Login: React.FC = () => {
               if (res.ok) {
                 main(json);
               } else {
+                console.log(select);
                 presentAlert({
                   cssClass: "alert",
                   header: "錯誤",

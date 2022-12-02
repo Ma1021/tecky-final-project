@@ -40,17 +40,25 @@ const StockList: React.FC = () => {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:8080/stock/getUserList?userID=${userID}`)
-      .then((response) => response.json())
-      .then((result) => {
-        setStockList(result);
-        setInitStockList(JSON.parse(JSON.stringify(result)));
-      });
-    fetch(`http://localhost:8080/stock/getUserList?userID=2`)
-      .then((response) => response.json())
-      .then((result) => {
-        setStockList2(result);
-      });
+    try {
+      fetch(
+        `${process.env.REACT_APP_PUBLIC_URL}/stock/getUserList?userID=${userID}`
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          console.log(result);
+
+          setStockList(result);
+          setInitStockList(JSON.parse(JSON.stringify(result)));
+        });
+      fetch(`${process.env.REACT_APP_PUBLIC_URL}/stock/getUserList?userID=2`)
+        .then((response) => response.json())
+        .then((result) => {
+          setStockList2(result);
+        });
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   return (

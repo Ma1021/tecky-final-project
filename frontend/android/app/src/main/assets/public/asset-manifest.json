@@ -1,12 +1,7 @@
 {
   "files": {
-<<<<<<< HEAD
-    "main.css": "/static/css/main.d3c66c6f.css",
-    "main.js": "/static/js/main.d57ecb69.js",
-=======
-    "main.css": "/static/css/main.7d87c75f.css",
-    "main.js": "/static/js/main.7a71e77d.js",
->>>>>>> 93d639e406ee81dd1edfa0262fd70f33beb1381b
+    "main.css": "/static/css/main.8df23842.css",
+    "main.js": "/static/js/main.c39ccfaa.js",
     "static/js/443.4f63130a.chunk.js": "/static/js/443.4f63130a.chunk.js",
     "static/js/738.d1548544.chunk.js": "/static/js/738.d1548544.chunk.js",
     "static/js/372.f865f629.chunk.js": "/static/js/372.f865f629.chunk.js",
@@ -17,7 +12,6 @@
     "static/js/841.d11f7d06.chunk.js": "/static/js/841.d11f7d06.chunk.js",
     "static/js/186.8d61a4c1.chunk.js": "/static/js/186.8d61a4c1.chunk.js",
     "static/js/377.20a09993.chunk.js": "/static/js/377.20a09993.chunk.js",
-    "static/media/animal_stand_ookami.png": "/static/media/animal_stand_ookami.668bb8bccaeb2b19560d.png",
     "static/media/logo.jpeg": "/static/media/logo.901387f3a152b055e21a.jpeg",
     "static/media/coverphoto.png": "/static/media/coverphoto.00ab85a403f91d9b1a3c.png",
     "service-worker.js": "/service-worker.js",
@@ -25,13 +19,8 @@
     "static/media/3rd.png": "/static/media/3rd.83e94f5a12b390e2992d.png",
     "static/media/2nd.png": "/static/media/2nd.23be2239502b95ef989d.png",
     "index.html": "/index.html",
-<<<<<<< HEAD
-    "main.d3c66c6f.css.map": "/static/css/main.d3c66c6f.css.map",
-    "main.d57ecb69.js.map": "/static/js/main.d57ecb69.js.map",
-=======
-    "main.7d87c75f.css.map": "/static/css/main.7d87c75f.css.map",
-    "main.7a71e77d.js.map": "/static/js/main.7a71e77d.js.map",
->>>>>>> 93d639e406ee81dd1edfa0262fd70f33beb1381b
+    "main.8df23842.css.map": "/static/css/main.8df23842.css.map",
+    "main.c39ccfaa.js.map": "/static/js/main.c39ccfaa.js.map",
     "443.4f63130a.chunk.js.map": "/static/js/443.4f63130a.chunk.js.map",
     "738.d1548544.chunk.js.map": "/static/js/738.d1548544.chunk.js.map",
     "372.f865f629.chunk.js.map": "/static/js/372.f865f629.chunk.js.map",
@@ -43,13 +32,8 @@
     "186.8d61a4c1.chunk.js.map": "/static/js/186.8d61a4c1.chunk.js.map",
     "377.20a09993.chunk.js.map": "/static/js/377.20a09993.chunk.js.map"
   },
-<<<<<<< HEAD
   "entrypoints": [
-    "static/css/main.d3c66c6f.css",
-    "static/js/main.d57ecb69.js"
+    "static/css/main.8df23842.css",
+    "static/js/main.c39ccfaa.js"
   ]
 }
-=======
-  "entrypoints": ["static/css/main.7d87c75f.css", "static/js/main.7a71e77d.js"]
-}
->>>>>>> 93d639e406ee81dd1edfa0262fd70f33beb1381b

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import "./PaperTradePanel.css";
-import MultipleSeriesChart from "./MultipleSeriesChart";
-import UserPortfolio from "./UserPortfolio";
-import TradeRecord from "./TradeRecord";
+import MultipleSeriesChart from "../stock/MultipleSeriesChart";
+import UserPortfolio from "../paperTradeAccount/UserPortfolio";
+import TradeRecord from "../paperTradeAccount/TradeRecord";
 
 interface UserTradeRecords {
   id: number;
@@ -30,7 +30,9 @@ const PaperTradePanel: React.FC = () => {
   );
 
   useEffect(() => {
-    fetch(`http://localhost:8080/stock/getUserTradeRecords?userID=${userID}`)
+    fetch(
+      `${process.env.REACT_APP_PUBLIC_URL}/stock/getUserTradeRecords?userID=${userID}`
+    )
       .then((res) => res.json())
       .then((result) => setUserTradeRecords(result));
   }, []);

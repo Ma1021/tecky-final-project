@@ -429,7 +429,9 @@ const UserPortfolio: React.FC<UserPortfolioProps> = ({ symbol }) => {
   const [stockDataPoints, setStockDataPoints] = useState([] as number[]);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/stock/getIntraDayDataFromMongoDB?symbol=${symbol}`)
+    fetch(
+      `${process.env.REACT_APP_PUBLIC_URL}/stock/getIntraDayDataFromMongoDB?symbol=${symbol}`
+    )
       .then((response) => response.json())
       .then((result: number[]) => {
         setStockDataPoints(result);

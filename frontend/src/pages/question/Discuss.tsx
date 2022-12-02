@@ -73,7 +73,11 @@ const Discuss: React.FC = () => {
     <>
       <Menu />
       <IonPage id="main-content">
-        <IonHeader translucent={true} collapse="fade" className="d-flex align-items-center">
+        <IonHeader
+          translucent={true}
+          collapse="fade"
+          className="d-flex align-items-center"
+        >
           <IonToolbar>
             <Title title="討論區" />
           </IonToolbar>
@@ -112,17 +116,15 @@ const Discuss: React.FC = () => {
 
         <IonContent>
           {segment === "all" && (
-            <Allquestion loadQuestion={initQuestion} keyword={keyword} />
+            <Allquestion keyword={keyword} />
           )}
           {segment === "question" && (
             <MyQuestion
-              loadAskerQuestion={initAskerQuestion}
               keyword={keyword}
             />
           )}
           {segment === "answer" && (
             <MyAnswer
-              loadAnswererQuestion={initAnswererQuestion}
               keyword={keyword}
             />
           )}
@@ -141,7 +143,7 @@ const ToolContainer = styled.div`
   gap: 8px;
   margin-bottom: 0.5rem;
 
-  @media(min-width: 768px) {
+  @media (min-width: 768px) {
     width: 85%;
   }
 `;
@@ -160,17 +162,17 @@ const QuestionBtn = styled(IonButton)`
   margin: 0px;
 `;
 
-const SegmentTab = styled(IonSegment)`
+export const SegmentTab = styled(IonSegment)`
   width: 95%;
   margin: 8px 10px;
   color: #dedede;
 
-  @media(min-width: 768px) {
+  @media (min-width: 768px) {
     width: 85%;
   }
 `;
 
-const SegmentButton = styled(IonSegmentButton)`
+export const SegmentButton = styled(IonSegmentButton)`
   --indicator-color: linear-gradient(
     to right bottom,
     #ffa930,

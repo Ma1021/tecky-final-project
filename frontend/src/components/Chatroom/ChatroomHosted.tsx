@@ -29,9 +29,9 @@ const ChatroomHosted: React.FC = () => {
   const userId = useAppSelector((state) => {
     return state.auth.user?.id;
   });
-  useEffect(() => {
-    dispatch(fetchChatroomsHost(userId as number));
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchChatroomsHost(userId as number));
+  // }, [dispatch]);
 
   const history = useHistory();
 

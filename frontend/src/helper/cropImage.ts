@@ -1,6 +1,6 @@
 export function dataURLToBlob(fileDataURL: string, filename: string) {
-  let arr = fileDataURL.split(","),
-    mime = (arr as any)[0].match(/:(.*?);/)[1],
+  let arr = fileDataURL.split(",");
+  let mime = (arr as any)[0].match(/:(.*?);/)[1],
     bstr = atob(arr[1]),
     n = bstr.length,
     u8arr = new Uint8Array(n);

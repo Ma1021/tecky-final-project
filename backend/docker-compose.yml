@@ -28,6 +28,6 @@ services:
     env_file:
       - docker.env
     ports:
-      - 15432:5432
+      - x5432:5432
     volumes:
       - ./pgdata:/var/lib/postgresql/data

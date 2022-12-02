@@ -87,8 +87,38 @@ export class UserService {
     }
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    try {
+      let result = [];
+      console.log('entered update service', updateUserDto);
+      if (!updateUserDto.icon) {
+        result = await this.knex('users')
+          .update({
+            introduction: updateUserDto.introduction,
+            birthday: updateUserDto.birthday,
+            gender: updateUserDto.gender,
+            username: updateUserDto.username,
+          })
+          .where('id', id)
+          .returning('id');
+      } else {
+        result = await this.knex('users')
+          .update({
+            introduction: updateUserDto.introduction,
+            birthday: updateUserDto.birthday,
+            gender: updateUserDto.gender,
+            username: updateUserDto.username,
+            avatar: updateUserDto.icon,
+          })
+          .where('id', id)
+          .returning('id');
+      }
+      console.log('service user update', result[0]);
+      return result[0];
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async remove(id: number) {

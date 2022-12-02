@@ -137,7 +137,7 @@ export const unFollowUser = createAsyncThunk<
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ target_id: subscription_id, target_type_id: 3 }),
     });
-
+    
     return subscription_json[0].following_id;
   } catch (err) {
     return thunkAPI.rejectWithValue(err);

@@ -20,9 +20,9 @@ const ChatroomAll: React.FC = () => {
   );
   const userId = useAppSelector((state) => state?.auth?.user?.id);
 
-  useEffect(() => {
-    dispatch(fetchChatroomsAll(userId as number));
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchChatroomsAll(userId as number));
+  // }, [dispatch]);
 
   const handleRefresh = (e: CustomEvent<RefresherEventDetail>) => {
     dispatch(fetchChatroomsAll(userId as number));

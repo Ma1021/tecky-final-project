@@ -48,11 +48,14 @@ const Menu: React.FC<MenuProps> = () => {
     // };
 
     // delete push notification token
-    fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/push_token/${selector?.id}`, {
-      method:"DELETE",
-      headers:{"content-type":"application/json"}
-    })
-    
+    fetch(
+      `${process.env.REACT_APP_PUBLIC_URL}/notification/push_token/${selector?.id}`,
+      {
+        method: "DELETE",
+        headers: { "content-type": "application/json" },
+      }
+    );
+
     dispatch(logout());
     
     // web version
@@ -163,7 +166,7 @@ const Menu: React.FC<MenuProps> = () => {
               <IonItem lines="none" className="menu-userId menu ">
                 <div className="d-flex w100 justify-content-between align-items-center ">
                   <IonText>用戶碼: {selector?.id}</IonText>
-                  <IonButton color="primary">複製</IonButton>
+                  {/* <IonButton color="primary">複製</IonButton> */}
                 </div>
               </IonItem>
               {/* user id */}

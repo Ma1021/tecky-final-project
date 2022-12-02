@@ -1,26 +1,12 @@
 import {
   IonAvatar,
-  IonBackButton,
-  IonButton,
-  IonButtons,
   IonCard,
   IonCardContent,
   IonCardHeader,
   IonCardSubtitle,
-  IonCardTitle,
-  IonContent,
-  IonFooter,
-  IonHeader,
-  IonIcon,
-  IonInput,
-  IonPage,
-  IonText,
-  IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import React from "react";
-import finalPropsSelectorFactory from "react-redux/es/connect/selectorFactory";
-import img from "src/img/animal_stand_ookami.png";
 import { ChatroomRecord } from "../../redux/chatroomRecord/state";
 
 export interface ChatBubbleProps {

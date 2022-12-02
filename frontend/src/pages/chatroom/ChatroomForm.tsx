@@ -13,27 +13,19 @@ import {
   IonIcon,
   IonTextarea,
   IonModal,
-  IonCheckbox,
   useIonToast,
   useIonRouter,
-  useIonLoading,
 } from "@ionic/react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { ErrorMessage } from "@hookform/error-message";
 import { image } from "ionicons/icons";
-import {
-  ReactEventHandler,
-  useEffect,
-  useRef,
-  useCallback,
-  useState,
-} from "react";
+import { useCallback, useState } from "react";
 import Cropper from "react-easy-crop";
-import { Point, Area } from "react-easy-crop/types";
+import { Area } from "react-easy-crop/types";
 import "./ChatroomForm.css";
 import getCroppedImg, { dataURLToBlob } from "../../helper/cropImage";
-import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { useAppSelector } from "../../redux/store";
 
 const ChatroomForm: React.FC = () => {
   // form
@@ -156,7 +148,7 @@ const ChatroomForm: React.FC = () => {
 
   const onClose = useCallback(() => {
     setCroppedImage(null);
-  }, []);
+  }, [setCroppedImage]);
 
   const textAreaChange = (e: any) => {
     setIntro((e.target as HTMLInputElement).value);

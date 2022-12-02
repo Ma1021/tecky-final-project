@@ -14,9 +14,10 @@ import { people } from "ionicons/icons";
 import React from "react";
 import { useHistory } from "react-router";
 import { ChatroomAdd, ChatroomAddState } from "../../redux/chatroomAdd/state";
-import { useAppSelector } from "../../redux/store";
-// import { useAppDispatch } from "../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import defaultGroupIcon from "../../img/logo.jpeg";
+import { fetchChatroomsEntered } from "../../redux/chatroomList/actions";
+import QuestionCard, { QuestionContainer } from "../discuss/QuestionCard";
 
 interface ChatroomAddCardProps {
   props: ChatroomAdd;
@@ -24,14 +25,10 @@ interface ChatroomAddCardProps {
 
 const ChatroomAddCard: React.FC<ChatroomAddCardProps> = (props) => {
   const [present] = useIonToast();
+  const dispatch = useAppDispatch();
   const userId = useAppSelector((state) => {
     return state.auth.user?.id;
   });
-
-  // change the photo if null
-  // if (!props.props.icon) {
-  //   props.props.icon = defaultGroupIcon;
-  // }
 
   const joinChat = async (e: any) => {
     let res = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/chatroom/join`, {
@@ -41,6 +38,7 @@ const ChatroomAddCard: React.FC<ChatroomAddCardProps> = (props) => {
     });
 
     if (res.ok) {
+      dispatch(fetchChatroomsEntered(userId as number));
       present({
         message: "成功加入聊天室！",
         duration: 1500,
@@ -57,7 +55,7 @@ const ChatroomAddCard: React.FC<ChatroomAddCardProps> = (props) => {
 
   return (
     <>
-      <IonCard>
+      <QuestionContainer>
         <div className="d-flex flex-row">
           <div className="ion-padding d-flex flex-column align-items-center">
             <IonAvatar
@@ -117,7 +115,7 @@ const ChatroomAddCard: React.FC<ChatroomAddCardProps> = (props) => {
             </IonCardContent>
           </div>
         </div>
-      </IonCard>
+      </QuestionContainer>
     </>
   );
 };

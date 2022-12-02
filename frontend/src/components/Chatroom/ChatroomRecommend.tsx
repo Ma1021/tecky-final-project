@@ -26,9 +26,9 @@ const ChatroomRecommend: React.FC = () => {
   );
   const userId = useAppSelector((state) => state?.auth?.user?.id);
 
-  useEffect(() => {
-    dispatch(fetchChatroomsRecommend(userId as number));
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchChatroomsRecommend(userId as number));
+  // }, [dispatch]);
 
   const handleRefresh = (e: CustomEvent<RefresherEventDetail>) => {
     dispatch(fetchChatroomsRecommend(userId as number));

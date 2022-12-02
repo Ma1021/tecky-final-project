@@ -1,11 +1,11 @@
 import { UserPort } from "./state";
 
 export function login(user: UserPort, token: string) {
-  // console.log({
-  //   type: "@@auth/LOGIN" as const,
-  //   user,
-  //   token,
-  // });
+  console.log({
+    type: "@@auth/LOGIN" as const,
+    user,
+    token,
+  });
   return {
     type: "@@auth/LOGIN" as const,
     user,

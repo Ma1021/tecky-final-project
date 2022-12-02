@@ -22,7 +22,6 @@ import { registerAuth } from "../redux/auth/actions";
 import { useEffect } from "react";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
 
 // import { Preferences } from "@capacitor/preferences";
 
@@ -158,7 +157,7 @@ const RegisterLoop: React.FC = () => {
               <IonInput
                 clearInput={true}
                 {...register("username", {
-                  required: { value: true, message: "請輸入電郵" },
+                  required: { value: true, message: "請輸入名稱" },
                 })}
               ></IonInput>
             </IonItem>

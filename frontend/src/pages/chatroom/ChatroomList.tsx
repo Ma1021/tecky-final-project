@@ -1,15 +1,6 @@
 import {
-  IonAvatar,
-  IonButton,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
   IonContent,
   IonHeader,
-  IonIcon,
-  IonItem,
   IonItemDivider,
   IonLabel,
   IonList,
@@ -20,20 +11,29 @@ import {
 } from "@ionic/react";
 import { useEffect, useState } from "react";
 import Title from "../../components/All/Title";
-import img from "src/img/animal_stand_ookami.png";
-import { people } from "ionicons/icons";
 import ChatroomRecommend from "../../components/Chatroom/ChatroomRecommend";
 import ChatroomAll from "../../components/Chatroom/ChatroomAll";
 import ChatroomEntered from "../../components/Chatroom/ChatroomEntered";
+import ChatroomHosted from "../../components/Chatroom/ChatroomHosted";
 import Menu from "../../components/All/Menu";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import styled from "styled-components";
-import ChatroomHosted from "../../components/Chatroom/ChatroomHosted";
+import {
+  fetchChatroomsAll,
+  fetchChatroomsRecommend,
+} from "../../redux/chatroomAdd/actions";
+import {
+  fetchChatroomsHost,
+  fetchChatroomsEntered,
+} from "../../redux/chatroomList/actions";
+import { SegmentTab, SegmentButton } from "../question/Discuss";
 
 const ChatroomList: React.FC = () => {
   const [chatroomSegment, setChatroomSegment] = useState("hosted");
-  const user = useAppSelector((state) => state.auth.user);
+  const dispatch = useAppDispatch();
 
+  const user = useAppSelector((state) => state.auth.user);
+  const userId = user?.id;
   interface SegmentChangeEventDetail {
     value?: string;
   }
@@ -47,6 +47,15 @@ const ChatroomList: React.FC = () => {
     let value = event.detail.value;
     setChatroomSegment(value || "userIntro");
   };
+
+  // get all data first
+  useEffect(() => {
+    dispatch(fetchChatroomsAll(userId as number));
+    dispatch(fetchChatroomsRecommend(userId as number));
+    dispatch(fetchChatroomsHost(userId as number));
+    dispatch(fetchChatroomsEntered(userId as number));
+  }, [dispatch]);
+
   return (
     <>
       <Menu />
@@ -60,24 +69,20 @@ const ChatroomList: React.FC = () => {
             <Title title="聊天室" />
           </IonToolbar>
         </IonHeader>
-        <SegmentOrganizer>
-          <IonItemDivider sticky={true}>
-            <IonSegment value={chatroomSegment} onIonChange={onSegmentChange}>
-              <IonSegmentButton value="hosted">
-                <IonLabel>主持中</IonLabel>
-              </IonSegmentButton>
-              <IonSegmentButton value="entered">
-                <IonLabel>參與中</IonLabel>
-              </IonSegmentButton>
-              <IonSegmentButton value="recommendation">
-                <IonLabel>推薦</IonLabel>
-              </IonSegmentButton>
-              <IonSegmentButton value="all">
-                <IonLabel>所有</IonLabel>
-              </IonSegmentButton>
-            </IonSegment>
-          </IonItemDivider>
-        </SegmentOrganizer>
+        <SegmentTab value={chatroomSegment} onIonChange={onSegmentChange}>
+          <SegmentButton value="hosted">
+            <IonLabel>主持中</IonLabel>
+          </SegmentButton>
+          <SegmentButton value="entered">
+            <IonLabel>參與中</IonLabel>
+          </SegmentButton>
+          <SegmentButton value="recommendation">
+            <IonLabel>推薦</IonLabel>
+          </SegmentButton>
+          <SegmentButton value="all">
+            <IonLabel>所有</IonLabel>
+          </SegmentButton>
+        </SegmentTab>
         <IonContent>
           <IonList>
             {chatroomSegment === "entered" ? (

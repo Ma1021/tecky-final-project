@@ -12,9 +12,9 @@ import {
 import {
   chatboxEllipses,
   trendingUp,
-  newspaper,
+  wallet,
   chatbubbles,
-  newspaperOutline,
+  walletOutline,
   chatboxEllipsesOutline,
   chatbubblesOutline,
   flame,
@@ -133,11 +133,9 @@ const Navigation: React.FC = () => {
               className="tabButton"
             >
               <IonIcon
-                icon={
-                  selectedTab === "paperTrade" ? newspaper : newspaperOutline
-                }
+                icon={selectedTab === "paperTrade" ? wallet : walletOutline}
               />
-              <IonLabel>資訊</IonLabel>
+              <IonLabel>模擬交易</IonLabel>
             </IonTabButton>
             <IonTabButton
               tab="stockList"

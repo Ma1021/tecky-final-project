@@ -8,6 +8,8 @@ import {
   Delete,
   HttpException,
   HttpStatus,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -16,12 +18,15 @@ import { hash } from 'bcrypt';
 import { AuthService } from 'src/auth/auth.service';
 import { SubscriptionDTO } from './dto/subscription.dto';
 import { UserIdDto } from './dto/userId.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { S3Service } from 'src/s3.service';
 
 @Controller('user')
 export class UserController {
   constructor(
     private readonly userService: UserService,
     private authService: AuthService,
+    private readonly s3Service: S3Service,
   ) {}
 
   @Post()
@@ -73,6 +78,43 @@ export class UserController {
         '註冊失敗, 請再試一次或聯絡客服',
         HttpStatus.CONFLICT,
       );
+    }
+  }
+  // update user data
+  @Post(':id/update')
+  @UseInterceptors(FileInterceptor('icon'))
+  async updateInfo(
+    @Param('id') id: number,
+    @Body() updateUserDto: UpdateUserDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    // createChatroomDto is ""
+    // ! createChatroomDto = true
+    try {
+      console.log('entered upuate');
+      let result;
+      if (!!file) {
+        let fileUpload = {
+          fileBuffer: file.buffer,
+          fileName: file.originalname,
+          fileMimetype: file.mimetype,
+        };
+        let s3File = await this.s3Service.uploadFile(fileUpload);
+        console.log(s3File);
+        if (s3File == 'error') {
+          throw new Error('圖片發生錯誤, 請重新輸入');
+        }
+        updateUserDto.icon = s3File;
+        result = await this.userService.update(id, updateUserDto);
+        // error when sending icon to s3
+      } else {
+        updateUserDto.icon = null;
+        result = await this.userService.update(id, updateUserDto);
+      }
+      console.log('controller update user', result);
+      return result;
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
 

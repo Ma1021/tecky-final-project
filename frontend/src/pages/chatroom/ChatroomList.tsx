@@ -1,15 +1,6 @@
 import {
-  IonAvatar,
-  IonButton,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
   IonContent,
   IonHeader,
-  IonIcon,
-  IonItem,
   IonItemDivider,
   IonLabel,
   IonList,
@@ -18,17 +9,15 @@ import {
   IonSegmentButton,
   IonToolbar,
 } from "@ionic/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Title from "../../components/All/Title";
-import img from "src/img/animal_stand_ookami.png";
-import { people } from "ionicons/icons";
 import ChatroomRecommend from "../../components/Chatroom/ChatroomRecommend";
 import ChatroomAll from "../../components/Chatroom/ChatroomAll";
 import ChatroomEntered from "../../components/Chatroom/ChatroomEntered";
-import Menu from "../../components/All/Menu";
-import { useAppDispatch, useAppSelector } from "../../redux/store";
-import styled from "styled-components";
 import ChatroomHosted from "../../components/Chatroom/ChatroomHosted";
+import Menu from "../../components/All/Menu";
+import { useAppSelector } from "../../redux/store";
+import styled from "styled-components";
 
 const ChatroomList: React.FC = () => {
   const [chatroomSegment, setChatroomSegment] = useState("hosted");

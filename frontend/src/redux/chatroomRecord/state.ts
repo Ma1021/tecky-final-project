@@ -1,6 +1,3 @@
-import ChatroomAddCard from "../../components/Chatroom/ChatroomAddCard";
-import img from "src/img/animal_stand_ookami.png";
-
 export interface ChatroomRecord {
   recordid: number;
   record: string;

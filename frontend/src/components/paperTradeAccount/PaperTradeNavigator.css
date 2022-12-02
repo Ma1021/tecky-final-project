@@ -1,0 +1,8 @@
+.navigation-button-container {
+  padding: 0;
+  margin: 0;
+}
+
+ion-button.navigation-button {
+  width: 33.3vw;
+}

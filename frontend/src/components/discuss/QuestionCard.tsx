@@ -110,7 +110,7 @@ const QuestionCard: React.FC<QuestionsProps> = memo((props: QuestionsProps) => {
   );
 });
 
-const QuestionContainer = styled(IonCard)`
+export const QuestionContainer = styled(IonCard)`
   width: 95%;
   margin: 6px;
 

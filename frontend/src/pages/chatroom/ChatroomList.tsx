@@ -26,6 +26,7 @@ import {
   fetchChatroomsHost,
   fetchChatroomsEntered,
 } from "../../redux/chatroomList/actions";
+import { SegmentTab, SegmentButton } from "../question/Discuss";
 
 const ChatroomList: React.FC = () => {
   const [chatroomSegment, setChatroomSegment] = useState("hosted");
@@ -68,24 +69,20 @@ const ChatroomList: React.FC = () => {
             <Title title="聊天室" />
           </IonToolbar>
         </IonHeader>
-        <SegmentOrganizer>
-          <IonItemDivider sticky={true}>
-            <IonSegment value={chatroomSegment} onIonChange={onSegmentChange}>
-              <IonSegmentButton value="hosted">
-                <IonLabel>主持中</IonLabel>
-              </IonSegmentButton>
-              <IonSegmentButton value="entered">
-                <IonLabel>參與中</IonLabel>
-              </IonSegmentButton>
-              <IonSegmentButton value="recommendation">
-                <IonLabel>推薦</IonLabel>
-              </IonSegmentButton>
-              <IonSegmentButton value="all">
-                <IonLabel>所有</IonLabel>
-              </IonSegmentButton>
-            </IonSegment>
-          </IonItemDivider>
-        </SegmentOrganizer>
+        <SegmentTab value={chatroomSegment} onIonChange={onSegmentChange}>
+          <SegmentButton value="hosted">
+            <IonLabel>主持中</IonLabel>
+          </SegmentButton>
+          <SegmentButton value="entered">
+            <IonLabel>參與中</IonLabel>
+          </SegmentButton>
+          <SegmentButton value="recommendation">
+            <IonLabel>推薦</IonLabel>
+          </SegmentButton>
+          <SegmentButton value="all">
+            <IonLabel>所有</IonLabel>
+          </SegmentButton>
+        </SegmentTab>
         <IonContent>
           <IonList>
             {chatroomSegment === "entered" ? (

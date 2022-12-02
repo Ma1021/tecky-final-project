@@ -3,10 +3,15 @@ import { useAppSelector } from "../../redux/store";
 import styled from "styled-components";
 import QuestionCard from "../discuss/QuestionCard";
 
-const UserDiscussion: React.FC = () => {
-  const { askerQuestionList, loading } = useAppSelector(
+const UserDiscussion: React.FC<{ userId: number }> = (props) => {
+  const { userQuestionList, loading } = useAppSelector(
     (state) => state.question
   );
+
+  let user;
+  if (localStorage.getItem("auth_stockoverflow") !== null) {
+    user = JSON.parse(localStorage.getItem("auth_stockoverflow") as string).user || undefined;
+  }
 
   return (
     <>
@@ -16,9 +21,9 @@ const UserDiscussion: React.FC = () => {
         </LoadingScreen>
       ) : (
         <QuestionContainer>
-          {askerQuestionList.length > 0 ? (
-            <QuestionCard questions={askerQuestionList} />
-          ) : (
+          {userQuestionList.length > 0 ? (
+            <QuestionCard questions={userQuestionList} />
+          ) : user.id === props.userId ? (
             <div
               style={{
                 marginTop: 10,
@@ -30,7 +35,11 @@ const UserDiscussion: React.FC = () => {
               你似乎未問過問題
               <IonRouterLink href="/discuss">去問問題吧~</IonRouterLink>
             </div>
-          )}
+          ) : (<div style={{
+            marginTop: 10, display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}>此用戶沒有提出問題</div>)}
         </QuestionContainer>
       )}
     </>

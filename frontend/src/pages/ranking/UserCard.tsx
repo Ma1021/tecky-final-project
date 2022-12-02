@@ -3,7 +3,6 @@ import {
   IonImg,
   IonButton,
   IonIcon,
-  useIonRouter,
 } from "@ionic/react";
 import { people } from "ionicons/icons";
 import { useHistory } from "react-router";
@@ -29,7 +28,6 @@ const UserCard: React.FC<RankingProps> = (props: RankingProps) => {
   const { followingIdList } = useAppSelector((state) => state.subscription);
 
   const dispatch = useAppDispatch();
-  const router = useIonRouter();
 
   let user_id: number = 0;
   let user: {
@@ -97,7 +95,7 @@ const UserCard: React.FC<RankingProps> = (props: RankingProps) => {
       {props.kol.id === user_id ? (
         <IonButton
           onClick={() =>
-            router.push(`/user/${user_id}/info`, "forward", "push")
+            history.push(`/user/${user_id}/info`)
           }
         >
           個人專頁

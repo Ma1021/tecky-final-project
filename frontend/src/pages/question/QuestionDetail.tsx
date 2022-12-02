@@ -246,18 +246,15 @@ const QuestionDetail: React.FC = memo(() => {
     }
   }
 
-  if (question.id === undefined) {
-    return <></>;
+  if (!question.id) {
+    return <></>
   } else {
     reverseAnswer = [...question.answer].reverse();
   }
 
-  // go the the user profile
-  // const getProfile = (e: any) => {
-  //   let userInfoId = e.currentTarget.dataset.userid;
-  //   // console.log("userInfoId", e.currentTarget);
-  //   history.push(`/user/${+userInfoId}/info`);
-  // };
+  const getProfile = (e: any) => {          
+    history.push(`/user/${+e.target.dataset.userid}/info`);
+  };
 
   return (
     <IonPage id="main-content">
@@ -281,7 +278,7 @@ const QuestionDetail: React.FC = memo(() => {
       <IonContent>
         <AskerContainer lines="full" data-user_id={question.asker_id}>
           <IonImg
-            // onClick={getProfile}
+            onClick={getProfile}
             data-userId={question.asker_id}
             src={`${question.asker_avatar}`}
           />
@@ -343,12 +340,12 @@ const QuestionDetail: React.FC = memo(() => {
                   data-answer_id={answer.id}
                   data-user_id={answer.answers.id}
                 >
-                  <div
-                    className="answererAvatar"
-                    // onClick={getProfile}
-                    data-userId={answer.answers.id}
-                  >
-                    <IonImg src={answer.answers.avatar} />
+                  <div className="answererAvatar">
+                    <IonImg
+                      src={answer.answers.avatar} 
+                      onClick={getProfile}
+                      data-userId={answer.answers.id}
+                    />
                     {followings_id.includes(answer.answers.id) &&
                     user_id !== answer.answers.id ? (
                       <IonButton onClick={handleSubscription}>

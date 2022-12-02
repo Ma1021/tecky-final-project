@@ -32,6 +32,7 @@ import {
   loadFollowings,
   loadFollowers,
 } from "../../redux/subscription/subscriptionSlice";
+import { loadUserQuestions } from "../../redux/questions/questionSlice";
 import { useHistory } from "react-router";
 import { UserPort } from "../../redux/auth/state";
 
@@ -73,6 +74,10 @@ const UserInfo: React.FC = () => {
     await dispatch(loadFollowers(+userIdUrl));
   }, [dispatch]);
 
+  const initQuestion = useCallback(async ()=>{
+    await dispatch(loadUserQuestions(+userIdUrl))
+  }, [dispatch]);
+
   useEffect(() => {
     console.log("enter userEffect");
     fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/${+userIdUrl}`).then(
@@ -96,6 +101,7 @@ const UserInfo: React.FC = () => {
     console.log("leaveuserEffect ");
     initFollowings();
     initFollowers();
+    initQuestion();
   }, [setUserData]);
 
   const { followerList, followingList } = useAppSelector(
@@ -202,7 +208,7 @@ const UserInfo: React.FC = () => {
         ) : userSegment === "userArticle" ? (
           <UserArticles />
         ) : (
-          <UserDiscussion />
+          <UserDiscussion userId={+userIdUrl}/>
         )}
         {/* user history above */}
       </IonContent>

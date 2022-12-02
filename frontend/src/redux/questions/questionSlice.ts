@@ -53,6 +53,20 @@ export const loadAnswererQuestions = createAsyncThunk<Question[], number>("quest
     }
 })
 
+//action that get user questions
+export const loadUserQuestions = createAsyncThunk<Question[], number>("question/loadUserQuestions", async(id, thunkAPI)=>{
+    try {
+        const res:Response = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/question/user/${id}`, {
+            method:'GET',
+            headers:{'Content-Type': 'application/json'}
+        })
+        const json = await res.json();
+        return json;
+    } catch(err) {
+        return thunkAPI.rejectWithValue(err);
+    }
+})
+
 // actions that get one question
 export const loadQuestion = createAsyncThunk<Question, number>("question/loadQuestion", async(id, thunkAPI)=>{
     try {
@@ -289,6 +303,18 @@ export const questionSlice = createSlice({
             state.loading = false;
         })
         builder.addCase(loadAnswererQuestions.rejected, (state, action)=>{
+            state.errors = action.payload;
+            state.loading = false;
+        })
+
+        builder.addCase(loadUserQuestions.pending, (state, action)=>{
+            state.loading = true;
+        })
+        builder.addCase(loadUserQuestions.fulfilled, (state, action)=>{
+            state.userQuestionList = action.payload;
+            state.loading = false;
+        })
+        builder.addCase(loadUserQuestions.rejected, (state, action)=>{
             state.errors = action.payload;
             state.loading = false;
         })

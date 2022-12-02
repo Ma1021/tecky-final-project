@@ -52,9 +52,9 @@ export class StockController {
     return await this.appService.getDayDataFromMongoAPI(symbol, timeFrame);
   }
 
-  @Get('/getNewsFromDB')
-  async getNewsFromDB(@Query('symbol') symbol: string) {
-    return await this.appService.getNewsFromDB(symbol);
+  @Get('/getNewsFromPostgres')
+  async getNewsFromPostgres(@Query('symbol') symbol: string) {
+    return await this.appService.getNewsFromPostgres(symbol);
   }
 
   @Get('/getUserTradeRecords')

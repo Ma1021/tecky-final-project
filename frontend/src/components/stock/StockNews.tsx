@@ -18,7 +18,9 @@ const StockNews: React.FC = () => {
   const [newsArray, setNewsArray] = useState<News[]>([]);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_PUBLIC_URL}/stock/getNewsFromDB?symbol=${symbol}`)
+    fetch(
+      `${process.env.REACT_APP_PUBLIC_URL}/stock/getNewsFromPostgres?symbol=${symbol}`
+    )
       .then((res) => res.json())
       .then((result) => setNewsArray(result));
   }, []);
@@ -45,5 +47,5 @@ const NewsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap:0.3rem;
-`
+  gap: 0.3rem;
+`;

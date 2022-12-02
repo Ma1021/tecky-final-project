@@ -7,17 +7,17 @@ import {
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nest-knexjs';
 import { Knex } from 'knex';
-import { MongoClient } from 'mongodb';
+// import { MongoClient } from 'mongodb';
 
-async function connectMongoDB() {
-  const url =
-    'mongodb://03b083fd0aadc8883198881ba88111ab:f9023000f29773649f3850298becb9544b5fd6a9@35.213.167.63/?authMechanism=DEFAULT';
-  const mongoClient = new MongoClient(url);
-  await mongoClient.connect();
-  console.log('MongoDB connected...........');
+// async function connectMongoDB() {
+//   const url =
+//     'mongodb://03b083fd0aadc8883198881ba88111ab:f9023000f29773649f3850298becb9544b5fd6a9@35.213.167.63/?authMechanism=DEFAULT';
+//   const mongoClient = new MongoClient(url);
+//   await mongoClient.connect();
+//   console.log('MongoDB connected...........');
 
-  return mongoClient;
-}
+//   return mongoClient;
+// }
 
 @Injectable()
 export class StockService {
@@ -61,11 +61,13 @@ export class StockService {
   async getIntraDayDataFromMongoDB(symbol: string) {
     const valueArray: number[] = [];
 
-    const MongoDB = await connectMongoDB();
-    const result = await MongoDB.db('stocks_price_data')
-      .collection(symbol)
-      .find({})
-      .toArray();
+    // const MongoDB = await connectMongoDB();
+    // const result = await MongoDB.db('stocks_price_data')
+    //   .collection(symbol)
+    //   .find({})
+    //   .toArray();
+
+    const result = [];
 
     result
       .filter(
@@ -77,7 +79,7 @@ export class StockService {
         valueArray.push(element.Close);
       });
 
-    await MongoDB.close();
+    // await MongoDB.close();
 
     return valueArray;
   }
@@ -87,11 +89,12 @@ export class StockService {
     const lineDataArray: LineData[] = [];
     const volumeDataArray: VolumeData[] = [];
 
-    const MongoDB = await connectMongoDB();
-    const result = await MongoDB.db('stocks_price_data')
-      .collection(symbol)
-      .find({})
-      .toArray();
+    // const MongoDB = await connectMongoDB();
+    // const result = await MongoDB.db('stocks_price_data')
+    //   .collection(symbol)
+    //   .find({})
+    //   .toArray();
+    const result = [];
 
     result.forEach((element) => {
       const volumeColor =
@@ -178,7 +181,7 @@ export class StockService {
 
     console.log('fetching getMinuteDataFromMongoDB');
 
-    await MongoDB.close();
+    // await MongoDB.close();
 
     return {
       convertedLineDataArray,
@@ -205,11 +208,12 @@ export class StockService {
     const lineDataArray: LineData[] = [];
     const volumeDataArray: VolumeData[] = [];
 
-    const MongoDB = await connectMongoDB();
-    const result = await MongoDB.db('alltime_us_stock_datas')
-      .collection(symbol)
-      .find({})
-      .toArray();
+    // const MongoDB = await connectMongoDB();
+    // const result = await MongoDB.db('alltime_us_stock_datas')
+    //   .collection(symbol)
+    //   .find({})
+    //   .toArray();
+    const result = [];
 
     result.forEach((element) => {
       const volumeColor =
@@ -296,7 +300,7 @@ export class StockService {
 
     console.log('fetching getDayDataFromMongoDB');
 
-    await MongoDB.close();
+    // await MongoDB.close();
 
     return {
       convertedLineDataArray,
@@ -425,7 +429,7 @@ export class StockService {
     };
   }
 
-  async getNewsFromDB(symbol: string) {
+  async getNewsFromPostgres(symbol: string) {
     const result = await this.knex
       .select([
         'stock_news.id',

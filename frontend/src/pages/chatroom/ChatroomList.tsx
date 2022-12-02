@@ -9,20 +9,30 @@ import {
   IonSegmentButton,
   IonToolbar,
 } from "@ionic/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Title from "../../components/All/Title";
 import ChatroomRecommend from "../../components/Chatroom/ChatroomRecommend";
 import ChatroomAll from "../../components/Chatroom/ChatroomAll";
 import ChatroomEntered from "../../components/Chatroom/ChatroomEntered";
 import ChatroomHosted from "../../components/Chatroom/ChatroomHosted";
 import Menu from "../../components/All/Menu";
-import { useAppSelector } from "../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import styled from "styled-components";
+import {
+  fetchChatroomsAll,
+  fetchChatroomsRecommend,
+} from "../../redux/chatroomAdd/actions";
+import {
+  fetchChatroomsHost,
+  fetchChatroomsEntered,
+} from "../../redux/chatroomList/actions";
 
 const ChatroomList: React.FC = () => {
   const [chatroomSegment, setChatroomSegment] = useState("hosted");
-  const user = useAppSelector((state) => state.auth.user);
+  const dispatch = useAppDispatch();
 
+  const user = useAppSelector((state) => state.auth.user);
+  const userId = user?.id;
   interface SegmentChangeEventDetail {
     value?: string;
   }
@@ -36,6 +46,15 @@ const ChatroomList: React.FC = () => {
     let value = event.detail.value;
     setChatroomSegment(value || "userIntro");
   };
+
+  // get all data first
+  useEffect(() => {
+    dispatch(fetchChatroomsAll(userId as number));
+    dispatch(fetchChatroomsRecommend(userId as number));
+    dispatch(fetchChatroomsHost(userId as number));
+    dispatch(fetchChatroomsEntered(userId as number));
+  }, [dispatch]);
+
   return (
     <>
       <Menu />

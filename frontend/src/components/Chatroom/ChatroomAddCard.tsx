@@ -14,9 +14,9 @@ import { people } from "ionicons/icons";
 import React from "react";
 import { useHistory } from "react-router";
 import { ChatroomAdd, ChatroomAddState } from "../../redux/chatroomAdd/state";
-import { useAppSelector } from "../../redux/store";
-// import { useAppDispatch } from "../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import defaultGroupIcon from "../../img/logo.jpeg";
+import { fetchChatroomsEntered } from "../../redux/chatroomList/actions";
 
 interface ChatroomAddCardProps {
   props: ChatroomAdd;
@@ -24,6 +24,7 @@ interface ChatroomAddCardProps {
 
 const ChatroomAddCard: React.FC<ChatroomAddCardProps> = (props) => {
   const [present] = useIonToast();
+  const dispatch = useAppDispatch();
   const userId = useAppSelector((state) => {
     return state.auth.user?.id;
   });
@@ -41,6 +42,7 @@ const ChatroomAddCard: React.FC<ChatroomAddCardProps> = (props) => {
     });
 
     if (res.ok) {
+      dispatch(fetchChatroomsEntered(userId as number));
       present({
         message: "成功加入聊天室！",
         duration: 1500,

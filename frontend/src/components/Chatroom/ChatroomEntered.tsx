@@ -30,9 +30,9 @@ const ChatroomEntered: React.FC = () => {
     return state.auth.user?.id;
   });
 
-  useEffect(() => {
-    dispatch(fetchChatroomsEntered(userId as number));
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchChatroomsEntered(userId as number));
+  // }, [dispatch]);
 
   const handleRefresh = (e: CustomEvent<RefresherEventDetail>) => {
     dispatch(fetchChatroomsEntered(userId as number));

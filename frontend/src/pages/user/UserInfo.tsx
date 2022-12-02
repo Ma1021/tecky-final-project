@@ -74,8 +74,8 @@ const UserInfo: React.FC = () => {
     await dispatch(loadFollowers(+userIdUrl));
   }, [dispatch]);
 
-  const initQuestion = useCallback(async ()=>{
-    await dispatch(loadUserQuestions(+userIdUrl))
+  const initQuestion = useCallback(async () => {
+    await dispatch(loadUserQuestions(+userIdUrl));
   }, [dispatch]);
 
   useEffect(() => {
@@ -120,7 +120,11 @@ const UserInfo: React.FC = () => {
                 <IonBackButton defaultHref="/discuss"></IonBackButton>
               </IonButtons>
               <IonSearchbar className="pt-0 pb-0 ion-margin"></IonSearchbar>
-              <Notification />
+              {+userIdUrl === (user_id as number) ? (
+                <Notification />
+              ) : (
+                <div style={{ width: "3rem" }}></div>
+              )}
             </div>
           </IonTitle>
         </IonToolbar>
@@ -208,7 +212,7 @@ const UserInfo: React.FC = () => {
         ) : userSegment === "userArticle" ? (
           <UserArticles />
         ) : (
-          <UserDiscussion userId={+userIdUrl}/>
+          <UserDiscussion userId={+userIdUrl} />
         )}
         {/* user history above */}
       </IonContent>

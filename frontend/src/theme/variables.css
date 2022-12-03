@@ -246,6 +246,10 @@ body {
 }
 /* } */
 
+.alert-button-group {
+  color: white;
+}
+
 .d-flex {
   display: flex;
 }

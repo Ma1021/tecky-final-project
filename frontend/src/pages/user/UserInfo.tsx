@@ -18,9 +18,15 @@ import {
   IonSegmentButton,
   useIonRouter,
   useIonToast,
+  useIonAlert,
 } from "@ionic/react";
 import "./UserInfo.css";
-import { personOutline, paperPlaneOutline } from "ionicons/icons";
+import {
+  personOutline,
+  paperPlaneOutline,
+  alertCircleOutline,
+  lockOpenOutline,
+} from "ionicons/icons";
 import Notification from "../../components/All/Notification";
 import { useEffect, useState, useCallback } from "react";
 import UserArticles from "../../components/UserContent/UserArticles";
@@ -35,6 +41,7 @@ import {
 import { loadUserQuestions } from "../../redux/questions/questionSlice";
 import { useHistory } from "react-router";
 import { UserPort } from "../../redux/auth/state";
+import { fetchBlockList, fetchUnblockList } from "../../redux/block/actions";
 
 const UserInfo: React.FC = () => {
   interface SegmentChangeEventDetail {
@@ -47,6 +54,9 @@ const UserInfo: React.FC = () => {
   }
 
   let [userSegment, setUserSegment] = useState("userIntro");
+  const [presentAlert] = useIonAlert();
+  const blockList = useAppSelector((state) => state.block.blockedUserList);
+
   const segmentChangeAction = (event: IonSegmentCustomEvent) => {
     setUserSegment(event.detail.value || "userIntro");
   };
@@ -58,11 +68,18 @@ const UserInfo: React.FC = () => {
   const userIdUrl = history.location.pathname
     .replace("/user/", "")
     .replace("/info", "");
-  console.log("userIdUrl", userIdUrl);
+
+  // console.log("userIdUrl", userIdUrl);
+  // console.log("blockList initiate in userInfo", blockList);
+  // console.log(
+  //   "blockList initiate, block true false",
+  //   blockList.includes(+userIdUrl)
+  // );
 
   const user_id = useAppSelector((state) => {
     return state.auth?.user?.id;
   });
+
   const dispatch = useAppDispatch();
 
   // get user followers and following
@@ -79,14 +96,12 @@ const UserInfo: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log("enter userEffect");
     fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/${+userIdUrl}`).then(
       (res) => {
         console.log(res);
         return res
           .json()
           .then((data) => {
-            console.log("user data", data);
             setUserData(data);
           })
           .catch((err) => {
@@ -109,6 +124,62 @@ const UserInfo: React.FC = () => {
   );
 
   const router = useIonRouter();
+
+  const toEdit = (e: any) => {
+    e?.stopPropagation();
+    history.push(`/user/${user_id as number}/edit`);
+  };
+
+  // block user
+  const toBlock = (e: any) => {
+    e?.stopPropagation();
+    presentAlert({
+      header: "確認封鎖?",
+      subHeader: "一經封鎖, 不能檢視用戶發言",
+      buttons: [
+        {
+          text: "封鎖",
+          handler: async () => {
+            await blockAccount();
+          },
+        },
+        { text: "取消", role: "cancel" },
+      ],
+    });
+  };
+
+  // block user
+  const blockAccount = async () => {
+    dispatch(
+      fetchBlockList({ userId: user_id as number, blockedUserId: +userIdUrl })
+    );
+  };
+
+  // unblock user
+  const toUnblock = (e: any) => {
+    e?.stopPropagation();
+    presentAlert({
+      header: "確認解封?",
+      subHeader: "一經解封, 即可檢視用戶發言",
+      buttons: [
+        {
+          text: "解封",
+          handler: async () => {
+            await unblockAccount();
+          },
+        },
+        { text: "取消", role: "cancel" },
+      ],
+    });
+  };
+  const unblockAccount = async () => {
+    dispatch(
+      fetchUnblockList({
+        userId: user_id as number,
+        unblockedUserId: +userIdUrl,
+      })
+    );
+  };
 
   return (
     <IonPage>
@@ -161,10 +232,34 @@ const UserInfo: React.FC = () => {
                   size="small"
                   shape="round"
                 >
-                  <IonIcon slot="start" icon={personOutline}></IonIcon>
+                  <IonIcon
+                    slot="start"
+                    icon={personOutline}
+                    onClick={toEdit}
+                  ></IonIcon>
                   帳戶
                 </IonButton>
-              ) : null}
+              ) : blockList.includes(+userIdUrl) === true ? (
+                <IonButton
+                  className="userInfo-button"
+                  size="small"
+                  shape="round"
+                  onClick={toUnblock}
+                >
+                  <IonIcon slot="start" icon={lockOpenOutline}></IonIcon>
+                  解封
+                </IonButton>
+              ) : (
+                <IonButton
+                  className="userInfo-button"
+                  size="small"
+                  shape="round"
+                  onClick={toBlock}
+                >
+                  <IonIcon slot="start" icon={alertCircleOutline}></IonIcon>
+                  封鎖
+                </IonButton>
+              )}
               <IonButton className="userInfo-button" size="small" shape="round">
                 <IonIcon slot="start" icon={paperPlaneOutline}></IonIcon>
                 分享

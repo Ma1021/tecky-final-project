@@ -66,7 +66,11 @@ const ChatroomEntered: React.FC = () => {
           </>
         ) : (
           // if no chatroom yet
-          <div style={{ marginTop: 10 }}>未有聊天室</div>
+          <QuestionContainer>
+            <div className="ion-padding" style={{ textAlign: "center" }}>
+              未有聊天室
+            </div>
+          </QuestionContainer>
         )
       }
     </>

@@ -36,24 +36,25 @@ import UserInfo from "../pages/user/UserInfo";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import UserEdit from "../pages/user/UserEdit";
-import ChatroomList from "../pages/chatroom/ChatroomList";
 import Subscription from "../pages/user/Subscription";
 
 //common pages
 import Menu from "./All/Menu";
 import Home from "../pages/Home";
 import Inbox from "../pages/Inbox";
-import Chatroom from "../pages/chatroom/Chatroom";
 import IndividualStockInfo from "../pages/stock/IndividualStockInfo";
 import StockList from "../pages/stock/StockList";
+
+// chat pages
 import ChatroomForm from "../pages/chatroom/ChatroomForm";
+import ChatroomPage from "../pages/chatroom/ChatroomPage";
+import ChatroomList from "../pages/chatroom/ChatroomList";
 
 //KOL ranking pages
 import KOL from "../pages/ranking/Ranking";
 
 // User Analysis pages
 import Analytics from "../pages/analytics/Analytics";
-import ChatroomPage from "../pages/chatroom/ChatroomPage";
 import PaperTradeAccount from "../pages/stock/PaperTradeAccount";
 import IndividualAccount from "../pages/stock/IndividualAccount";
 

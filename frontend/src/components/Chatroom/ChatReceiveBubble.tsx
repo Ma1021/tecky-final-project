@@ -4,9 +4,11 @@ import {
   IonCardContent,
   IonCardHeader,
   IonCardSubtitle,
+  IonText,
 } from "@ionic/react";
 import React from "react";
 import { useHistory } from "react-router";
+import styled from "styled-components";
 import { ChatBubbleProps } from "./ChatSendBubble";
 
 const ChatReceiveBubble: React.FC<ChatBubbleProps> = (props) => {
@@ -40,35 +42,69 @@ const ChatReceiveBubble: React.FC<ChatBubbleProps> = (props) => {
             />
           </IonAvatar>
         </div>
-        <div>
+        <div className="d-flex flex-column">
+          <BubbleSpeaker>{props.props.username}</BubbleSpeaker>
           <IonCard
-            className="ion-margin pb-0"
+            className="ion-margin pb-0 mb-0 pt-0 mt-0"
             style={{
               maxWidth: "75vw",
               borderRadius: "10px",
               borderTopLeftRadius: "0px",
             }}
           >
-            <IonCardHeader className="pt-1 pb-1">
-              <IonCardSubtitle style={{ textTransform: "none" }}>
-                {props.props.username}
-              </IonCardSubtitle>
-            </IonCardHeader>
-            <IonCardContent className="pb-1">
-              {props.props.record}
-              <p className="pt-1 pb-0" style={{ fontSize: "0.7rem" }}>
+            <BubbleContent>
+              <p>{props.props.record}</p>
+              <span
+                className="pt-1 pb-0"
+                style={{ fontSize: "0.6rem", color: "#999999" }}
+              >
                 內容只供參考, 不構成投資建議
-              </p>
-            </IonCardContent>
+              </span>
+            </BubbleContent>
           </IonCard>
-          {new Date(props.props.created_at).toLocaleString([], {
-            hour12: false,
-            dateStyle: "medium",
-            timeStyle: "short",
-          })}
+          <DateIonText>
+            {new Date(props.props.created_at).toLocaleString("zh-HK", {
+              hour12: true,
+              // dateStyle: "medium",
+              // timeStyle: "short",
+              minute: "2-digit",
+              hour: "2-digit",
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            })}
+          </DateIonText>
         </div>
       </div>
     </>
   );
 };
 export default ChatReceiveBubble;
+
+export const DateIonText = styled(IonText)`
+  text-align: end;
+  padding-right: calc(1rem);
+  font-size: 0.7rem;
+  color: #808080;
+  );
+`;
+
+export const BubbleSpeaker = styled(IonText)`
+  color: #a6a6a6;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding-top: 1rem;
+  padding-left: 1rem;
+  padding-bottom: 0rem;
+  margin-bottom: 0.2rem;
+  color: #b3b3b3;
+`;
+
+export const BubbleContent = styled(IonCardContent)`
+  padding-bottom: calc(1rem * 0.25);
+  padding-top: calc(1rem * 0.5);
+  padding-left: calc(1rem * 0.5);
+  padding-right: calc(1rem * 0.5);
+  background-color: #404040;
+  color: white;
+`;

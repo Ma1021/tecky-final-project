@@ -29,7 +29,6 @@
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
     "@types/styled-components": "^5.1.26",
-    "cast.ts": "^1.5.1",
     "chart.js": "^4.0.1",
     "dotenv": "^16.0.3",
     "fs": "^0.0.1-security",

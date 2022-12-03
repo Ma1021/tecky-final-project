@@ -20,7 +20,6 @@ import {
   IonToolbar,
   useIonToast,
 } from "@ionic/react";
-import { object, id, array, ParseResult } from "cast.ts";
 import { image, searchOutline, send } from "ionicons/icons";
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useRouteMatch } from "react-router";
@@ -172,9 +171,9 @@ const ChatroomPage: React.FC = () => {
     });
   };
 
+  let ionCard = document.querySelector(`.contentBottom`);
   useLayoutEffect(() => {
     if (!newMessageId) return;
-    let ionCard = document.querySelector(`[data-message='${newMessageId}']`);
 
     console.log({ newMessageId, ionCard });
     if (ionCard) {
@@ -248,6 +247,7 @@ const ChatroomPage: React.FC = () => {
             </QuestionContainer>
           )
         }
+        <div className="contentBottom"></div>
       </IonContent>
       {err !== "" ? null : (
         <IonFooter>

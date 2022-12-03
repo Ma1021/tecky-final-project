@@ -23,6 +23,7 @@ import { registerAuth } from "../redux/auth/actions";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
+import { fetchGetBlockList } from "../redux/block/actions";
 
 // import { Preferences } from "@capacitor/preferences";
 
@@ -93,9 +94,12 @@ const RegisterLoop: React.FC = () => {
     history.replace("/discuss");
   };
 
+  let blockedList = useAppSelector((state) => state.block);
   let dispatching = (json: any) => {
     // console.log("dispatching");
     dispatch(registerAuth(json.user, json.token.access_token));
+    dispatch(fetchGetBlockList(+json.user.id));
+    console.log(blockedList);
   };
 
   let gettingStorage = () => {

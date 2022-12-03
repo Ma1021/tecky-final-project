@@ -19,6 +19,7 @@ import { useAppDispatch, useAppSelector } from "../redux/store";
 import { useEffect } from "react";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
+import { fetchGetBlockList } from "../redux/block/actions";
 
 const Login: React.FC = () => {
   let history = useHistory();
@@ -79,6 +80,7 @@ const Login: React.FC = () => {
 
   let dispatching = (json: any) => {
     dispatch(login(json.user, json.token));
+    dispatch(fetchGetBlockList(+json.user.id));
   };
   let gettingStorage = () => {
     // mobile version

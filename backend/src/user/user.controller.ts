@@ -31,7 +31,7 @@ export class UserController {
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
-    console.log('enter create user');
+    // console.log('enter create user');
     try {
       if (createUserDto.password !== createUserDto.rePassword) {
         throw new Error('密碼不一致');
@@ -91,7 +91,7 @@ export class UserController {
     // createChatroomDto is ""
     // ! createChatroomDto = true
     try {
-      console.log('entered upuate');
+      // console.log('entered upuate');
       let result;
       if (!!file) {
         let fileUpload = {
@@ -100,7 +100,7 @@ export class UserController {
           fileMimetype: file.mimetype,
         };
         let s3File = await this.s3Service.uploadFile(fileUpload);
-        console.log(s3File);
+        // console.log(s3File);
         if (s3File == 'error') {
           throw new Error('圖片發生錯誤, 請重新輸入');
         }
@@ -111,7 +111,7 @@ export class UserController {
         updateUserDto.icon = null;
         result = await this.userService.update(id, updateUserDto);
       }
-      console.log('controller update user', result);
+      // console.log('controller update user', result);
       return result;
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
@@ -136,6 +136,30 @@ export class UserController {
   async findIntro(@Param('id') id: number, @Body() userIdDto: UserIdDto) {
     let result = await this.userService.findIntro(id);
     // console.log('intro', result);
+    return result;
+  }
+
+  // getblock certain user
+  @Post('/block')
+  async getBlockList(@Body() userIdDto: UserIdDto) {
+    let result = await this.userService.getBlockUser(userIdDto);
+    // console.log('user controller, blocker list', result);
+    return result;
+  }
+
+  // block certain user
+  @Post(':id/block')
+  async block(@Param('id') id: number, @Body() userIdDto: UserIdDto) {
+    let result = await this.userService.blockUser(id, userIdDto);
+    // console.log('user controller block', result);
+    return result;
+  }
+
+  // unblock certain user
+  @Post(':id/unblock')
+  async unblock(@Param('id') id: number, @Body() userIdDto: UserIdDto) {
+    let result = await this.userService.unBlockUser(id, userIdDto);
+    // console.log('user controller unblock', result);
     return result;
   }
 

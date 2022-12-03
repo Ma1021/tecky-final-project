@@ -1,13 +1,7 @@
-import {
-  IonAvatar,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonToolbar,
-} from "@ionic/react";
+import { IonAvatar, IonCard } from "@ionic/react";
 import React from "react";
 import { ChatroomRecord } from "../../redux/chatroomRecord/state";
+import { BubbleContent, BubbleSpeaker, DateIonText } from "./ChatReceiveBubble";
 
 export interface ChatBubbleProps {
   props: ChatroomRecord;
@@ -36,33 +30,38 @@ const ChatSendBubble: React.FC<ChatBubbleProps> = (props) => {
             />
           </IonAvatar>
         </div>
-        <div>
+        <div className="d-flex flex-column">
+          <BubbleSpeaker>{props.props.username}</BubbleSpeaker>
           <IonCard
-            className="ion-margin pb-0"
+            className="ion-margin pb-0 mb-0 pt-0 mt-0"
             style={{
               maxWidth: "75vw",
               borderRadius: "10px",
               borderTopRightRadius: "0px",
             }}
           >
-            <IonCardHeader className="pt-1 pb-1">
-              <IonCardSubtitle style={{ textTransform: "none" }}>
-                {props.props.username}
-              </IonCardSubtitle>
-            </IonCardHeader>
-            <IonCardContent className="pb-1">
-              {props.props.record}
-
-              <p className="pt-1 pb-0" style={{ fontSize: "0.7rem" }}>
+            <BubbleContent>
+              <p>{props.props.record}</p>
+              <p
+                className="pt-1 pb-0"
+                style={{ fontSize: "0.6rem", color: "#999999" }}
+              >
                 內容只供參考, 不構成投資建議
               </p>
-            </IonCardContent>
+            </BubbleContent>
           </IonCard>
-          {new Date(props.props.created_at).toLocaleString([], {
-            hour12: false,
-            dateStyle: "medium",
-            timeStyle: "short",
-          })}
+          <DateIonText>
+            {new Date(props.props.created_at).toLocaleString("zh-HK", {
+              hour12: true,
+              // dateStyle: "medium",
+              // timeStyle: "short",
+              minute: "2-digit",
+              hour: "2-digit",
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            })}
+          </DateIonText>
         </div>
       </div>
     </>

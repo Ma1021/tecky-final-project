@@ -55,7 +55,7 @@ const InProgressOrderModule: React.FC = () => {
                 <tr>
                   <td
                     className={
-                      "progress-order-order-type " +
+                      "order-order-type " +
                       (inProgressOrder.orderType === 0
                         ? "positive"
                         : "negative")
@@ -70,7 +70,7 @@ const InProgressOrderModule: React.FC = () => {
                 <tr className="order-bottom-row">
                   <td
                     className={
-                      "progress-order-stock-symbol " +
+                      "order-stock-symbol " +
                       (inProgressOrder.status === 0
                         ? "pending"
                         : inProgressOrder.status === 1

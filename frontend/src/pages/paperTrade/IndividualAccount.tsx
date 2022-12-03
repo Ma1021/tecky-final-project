@@ -84,14 +84,15 @@ const IndividualAccount: React.FC = () => {
     }
   }, [currentAccount]);
 
-  const onListChange = (e: any) => {
-    setCurrentAccount(e.detail.value);
-  };
-
   return (
     <>
       <IonPage>
-        <IonHeader>
+        <IonHeader
+          translucent={true}
+          collapse="fade"
+          style={{ height: 50 }}
+          className="d-flex align-items-center"
+        >
           <IonToolbar>
             <IonButtons slot="start">
               <IonBackButton defaultHref="/paperTrade"></IonBackButton>
@@ -106,7 +107,9 @@ const IndividualAccount: React.FC = () => {
               <IonSelect
                 interface="action-sheet"
                 value={currentAccount}
-                onIonChange={onListChange}
+                onIonChange={(e: any) => {
+                  setCurrentAccount(e.detail.value);
+                }}
               >
                 <IonSelectOption value="US">美股模擬賬戶</IonSelectOption>
                 <IonSelectOption value="HK">港股模擬賬戶</IonSelectOption>
@@ -118,7 +121,7 @@ const IndividualAccount: React.FC = () => {
           </IonList>
 
           <AccountOverviewModule accountDetail={accountDetail} />
-          <PaperTradeNavigator />
+          <PaperTradeNavigator currentAccount={currentAccount} />
           <div style={{ height: "10px" }}></div>
           <PositionAndOrderModule />
           <div style={{ height: "10px" }}></div>

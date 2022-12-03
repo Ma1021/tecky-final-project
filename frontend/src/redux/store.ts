@@ -6,11 +6,12 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { TypedUseSelectorHook } from "react-redux";
 import questionReducer from "./questions/questionSlice";
-import { chatroomAddReducer } from "./chatroomAdd/reducer";
 import { themeReducer } from "./theme/theme.reducer";
 import subscriptionReducer from "./subscription/subscriptionSlice";
 import { chatroomRecordReducer } from "./chatroomRecord/reducer";
+import { chatroomAddReducer } from "./chatroomAdd/reducer";
 import { chatroomListReducer } from "./chatroomList/reducer";
+import { blockReducer } from "./block/reducer";
 
 export type RootState = ReturnType<typeof store.getState>;
 
@@ -20,8 +21,9 @@ export let store = configureStore({
     auth: authReducer,
     question: questionReducer,
     chatroomAdd: chatroomAddReducer,
-    chatroomRecord: chatroomRecordReducer,
     chatroomList: chatroomListReducer,
+    chatroomRecord: chatroomRecordReducer,
+    block: blockReducer,
     theme: themeReducer,
     subscription: subscriptionReducer,
   }),

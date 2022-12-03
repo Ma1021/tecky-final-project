@@ -28,21 +28,26 @@ import { AuthState } from "./redux/auth/state";
 
 // import for push notification
 import { PushNotifications } from "@capacitor/push-notifications";
-import { Capacitor } from '@capacitor/core';
+import { Capacitor } from "@capacitor/core";
+import { fetchGetBlockList } from "./redux/block/actions";
 
-const isPushNotificationsAvailable = Capacitor.isPluginAvailable('PushNotifications');
+const isPushNotificationsAvailable =
+  Capacitor.isPluginAvailable("PushNotifications");
 
 setupIonicReact();
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
   const selector = useAppSelector((state) => state.auth);
+  const blockList = useAppSelector((state) => state.block.blockedUserList);
+
   // check if user was logged in
   useEffect(() => {
     // const auth = async () => {
     //   await Preferences.get({ key: "auth_stockoverflow" });
     // };
     const localAuthString = localStorage.getItem("auth_stockoverflow");
+
     if (!!localAuthString) {
       const localAuthJson: AuthState = JSON.parse(localAuthString);
       console.log("Navigation: authJson after parse", localAuthJson);
@@ -51,6 +56,8 @@ const App: React.FC = () => {
         return;
       }
       dispatch(login(localAuthJson.user, localAuthJson.token));
+      dispatch(fetchGetBlockList(+localAuthJson.user.id));
+      console.log("blockList initiate", blockList);
     }
   }, []);
 
@@ -61,7 +68,7 @@ const App: React.FC = () => {
       await reg_push_notification_listeners();
     };
 
-    if(isPushNotificationsAvailable) {
+    if (isPushNotificationsAvailable) {
       main();
     }
   }, []);
@@ -69,7 +76,7 @@ const App: React.FC = () => {
   // after checking permission from reg_push_notification
   const reg_push_notification_listeners = async () => {
     // ask for acception to push
-    await PushNotifications.addListener("registration", (token) => {  
+    await PushNotifications.addListener("registration", (token) => {
       // save token to local storage
       localStorage.setItem("push_notification_token", token.value);
       console.log("Registration token: ", token.value);

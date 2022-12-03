@@ -18,6 +18,8 @@ import ChatroomHosted from "../../components/Chatroom/ChatroomHosted";
 import Menu from "../../components/All/Menu";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import styled from "styled-components";
+
+import { SegmentTab, SegmentButton } from "../question/Discuss";
 import {
   fetchChatroomsAll,
   fetchChatroomsRecommend,
@@ -26,7 +28,6 @@ import {
   fetchChatroomsHost,
   fetchChatroomsEntered,
 } from "../../redux/chatroomList/actions";
-import { SegmentTab, SegmentButton } from "../question/Discuss";
 
 const ChatroomList: React.FC = () => {
   const [chatroomSegment, setChatroomSegment] = useState("hosted");
@@ -50,11 +51,24 @@ const ChatroomList: React.FC = () => {
 
   // get all data first
   useEffect(() => {
-    dispatch(fetchChatroomsAll(userId as number));
-    dispatch(fetchChatroomsRecommend(userId as number));
-    dispatch(fetchChatroomsHost(userId as number));
-    dispatch(fetchChatroomsEntered(userId as number));
-  }, [dispatch]);
+    switch (chatroomSegment) {
+      case "hosted":
+        dispatch(fetchChatroomsHost(userId as number));
+        return;
+      case "entered":
+        dispatch(fetchChatroomsEntered(userId as number));
+        return;
+      case "recommendation":
+        dispatch(fetchChatroomsRecommend(userId as number));
+        return;
+      case "all":
+        dispatch(fetchChatroomsAll(userId as number));
+        return;
+      default:
+        dispatch(fetchChatroomsHost(userId as number));
+        return;
+    }
+  }, [dispatch, chatroomSegment]);
 
   return (
     <>
@@ -69,20 +83,22 @@ const ChatroomList: React.FC = () => {
             <Title title="聊天室" />
           </IonToolbar>
         </IonHeader>
-        <SegmentTab value={chatroomSegment} onIonChange={onSegmentChange}>
-          <SegmentButton value="hosted">
-            <IonLabel>主持中</IonLabel>
-          </SegmentButton>
-          <SegmentButton value="entered">
-            <IonLabel>參與中</IonLabel>
-          </SegmentButton>
-          <SegmentButton value="recommendation">
-            <IonLabel>推薦</IonLabel>
-          </SegmentButton>
-          <SegmentButton value="all">
-            <IonLabel>所有</IonLabel>
-          </SegmentButton>
-        </SegmentTab>
+        <div className="d-flex justify-content-center">
+          <SegmentTab value={chatroomSegment} onIonChange={onSegmentChange}>
+            <SegmentButton value="hosted">
+              <IonLabel>主持中</IonLabel>
+            </SegmentButton>
+            <SegmentButton value="entered">
+              <IonLabel>參與中</IonLabel>
+            </SegmentButton>
+            <SegmentButton value="recommendation">
+              <IonLabel>推薦</IonLabel>
+            </SegmentButton>
+            <SegmentButton value="all">
+              <IonLabel>所有</IonLabel>
+            </SegmentButton>
+          </SegmentTab>
+        </div>
         <IonContent>
           <IonList>
             {chatroomSegment === "entered" ? (
@@ -94,12 +110,6 @@ const ChatroomList: React.FC = () => {
             ) : (
               <ChatroomAll />
             )}
-            {/* {chatroomSegment === "entered" ? null : chatroomSegment === // <ChatroomEntered list={list} />
-              "recommendation" ? (
-              <ChatroomRecommend />
-            ) : chatroomSegment === "hosted" ? null : ( // <ChatroomHosted />
-              <ChatroomAll />
-            )} */}
           </IonList>
         </IonContent>
       </IonPage>

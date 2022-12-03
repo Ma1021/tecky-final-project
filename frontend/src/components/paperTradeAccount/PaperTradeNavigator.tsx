@@ -2,7 +2,13 @@ import { IonButtons, IonButton } from "@ionic/react";
 import { useHistory } from "react-router";
 import "./PaperTradeNavigator.css";
 
-const PaperTradeNavigator: React.FC = () => {
+interface PaperTradeNavigatorProps {
+  currentAccount: string;
+}
+
+const PaperTradeNavigator: React.FC<PaperTradeNavigatorProps> = ({
+  currentAccount,
+}) => {
   const history = useHistory();
   const userID = 1;
 
@@ -13,7 +19,7 @@ const PaperTradeNavigator: React.FC = () => {
           <IonButton
             className="navigation-button"
             onClick={() => {
-              history.push("/paperTradePanel");
+              history.push(`/paperOrderPanel/${currentAccount}`);
             }}
           >
             交易
@@ -21,7 +27,7 @@ const PaperTradeNavigator: React.FC = () => {
           <IonButton
             className="navigation-button"
             onClick={() => {
-              history.push(`/paperTradeRecords/${userID}`);
+              history.push(`/paperTradeRecords/${currentAccount}/${userID}`);
             }}
           >
             訂單紀錄
@@ -29,7 +35,7 @@ const PaperTradeNavigator: React.FC = () => {
           <IonButton
             className="navigation-button"
             onClick={() => {
-              history.push(`/paperTradeAnalysis/${userID}`);
+              history.push(`/paperTradeAnalysis/${currentAccount}/${userID}`);
             }}
           >
             資產分析

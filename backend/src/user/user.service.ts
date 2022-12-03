@@ -145,7 +145,7 @@ export class UserService {
         .andWhere('is_deleted', false)
         .then(async (subscriptionList) => {
           if (subscriptionList.length > 0) {
-            return await this.knex('subscriptions')
+            const res = await this.knex('subscriptions')
               .update({
                 is_deleted: true,
                 updated_at: this.knex.fn.now(),
@@ -153,7 +153,11 @@ export class UserService {
               })
               .where('user_id', subscription.user_id)
               .andWhere('following_id', subscription.following_id)
-              .returning('*');
+              .returning('id')
+
+              const max = Math.max(...res.map(obj => obj.id))
+              
+              return [{id:max}];  
           } else {
             return await this.knex('subscriptions')
               .insert(subscription)

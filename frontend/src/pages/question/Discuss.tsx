@@ -8,8 +8,10 @@ import {
   IonLabel,
   IonSearchbar,
   IonButton,
+  IonSlides,
+  IonSlide,
 } from "@ionic/react";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { useAppDispatch } from "../../redux/store";
@@ -27,7 +29,7 @@ import Title from "../../components/All/Title";
 import Menu from "../../components/All/Menu";
 
 const Discuss: React.FC = () => {
-  const [segment, setSegment] = useState("all");
+  const [segment, setSegment] = useState("0");
   const [keyword, setKeyword] = useState("");
   let user;
   let user_id: number;
@@ -39,8 +41,22 @@ const Discuss: React.FC = () => {
     user_id = +user.id;
   }
 
+  const slider = useRef<HTMLIonSlidesElement>(null);
+  const slideOpts = {
+    initialSlide: 0,
+    speed: 400,
+    loop: false
+  };
+
+  const handleSlideChange = async (event: any) => {
+    let index: number = 0;
+    await event.target.getActiveIndex().then((value: any) => (index=value));
+    setSegment(''+index)
+  }
+
   const onSegmentChange = (e: any) => {
     setSegment(e.detail.value);
+    slider.current!.slideTo(e.detail.value);
   };
 
   function handleKeywordChange(e: any) {
@@ -85,13 +101,13 @@ const Discuss: React.FC = () => {
 
         <div className="d-flex justify-content-center">
           <SegmentTab value={segment} onIonChange={onSegmentChange}>
-            <SegmentButton value="all">
+            <SegmentButton value="0">
               <IonLabel>所有問題</IonLabel>
             </SegmentButton>
-            <SegmentButton value="question">
+            <SegmentButton value="1">
               <IonLabel>我的問題</IonLabel>
             </SegmentButton>
-            <SegmentButton value="answer">
+            <SegmentButton value="2">
               <IonLabel>我的答題</IonLabel>
             </SegmentButton>
           </SegmentTab>
@@ -115,19 +131,17 @@ const Discuss: React.FC = () => {
         </div>
 
         <IonContent>
-          {segment === "all" && (
-            <Allquestion keyword={keyword} />
-          )}
-          {segment === "question" && (
-            <MyQuestion
-              keyword={keyword}
-            />
-          )}
-          {segment === "answer" && (
-            <MyAnswer
-              keyword={keyword}
-            />
-          )}
+          <IonSlides options={slideOpts} onIonSlideDidChange={(e) => handleSlideChange(e)} ref={slider}>
+            <IonSlide>
+              <Allquestion keyword={keyword} />
+            </IonSlide>
+            <IonSlide>
+              <MyQuestion keyword={keyword}/>
+            </IonSlide>
+            <IonSlide>
+              <MyAnswer keyword={keyword}/>
+            </IonSlide>
+          </IonSlides>
         </IonContent>
       </IonPage>
     </>

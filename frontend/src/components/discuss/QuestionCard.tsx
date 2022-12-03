@@ -65,7 +65,7 @@ const QuestionCard: React.FC<QuestionsProps> = memo((props: QuestionsProps) => {
                   <UserBadge isKOL={question.user_type === "kol"} />
                 </div>
               </AskerInfo>
-              <IonText style={{ fontSize: 12 }}>
+              <IonText style={{ fontSize: 12, color:'#999'}}>
                 {formatDate(question.created_at)}
               </IonText>
             </QuestionHeader>
@@ -99,6 +99,7 @@ const QuestionCard: React.FC<QuestionsProps> = memo((props: QuestionsProps) => {
               )}
 
               <AnswerAmount>
+                <IonText style={{fontSize:12, color:'#999', marginRight:10}}>舉報</IonText>
                 <IonIcon icon={chatboxEllipses} />
                 <IonText>{reverseAnswer.length}</IonText>
               </AnswerAmount>
@@ -151,7 +152,7 @@ const TagContainer = styled.div`
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  margin-top: 0.8rem;
+  margin-top: 1rem;
 `;
 
 const StockTag = styled(IonText)`
@@ -201,6 +202,7 @@ const AskerAvatar = styled(IonImg)`
 
 const AnswererContainer = styled.div`
   position: relative;
+  margin-top: 1rem;
 `;
 
 const AnswererInfo = styled.div`
@@ -230,13 +232,15 @@ const AnswererContent = styled(IonText)`
   overflow: hidden;
   text-overflow: ellipsis;
 `;
+
 const AnswerAmount = styled.div`
   height: 2rem;
-  margin-top: 2rem;
+  margin-top: 3rem;
   margin-right: 0.4rem;
   align-self: flex-end;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
 
   ion-icon {

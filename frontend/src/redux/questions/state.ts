@@ -1,5 +1,6 @@
 export interface Question {
   id: number;
+  is_reported: boolean;
   content: string;
   created_at: string;
   asker_id: number;

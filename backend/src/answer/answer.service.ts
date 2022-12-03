@@ -21,6 +21,9 @@ export class AnswerService {
 
     async delete(answer_id: number) {
         try {
+            // delete likes
+            await this.knex('ans_likes').where('answer_id', +answer_id).del();
+
             return await this.knex('answers').where('id', +answer_id).del();
         } catch(err) {
             console.log(err);
@@ -43,5 +46,14 @@ export class AnswerService {
             console.log(err);
         }
     }
-    
+
+    report(answer_id: number) {
+        try {
+            return this.knex('answers')
+            .update('is_reported', true)
+            .where('id', answer_id)
+        } catch(err) {
+            console.log('ban answer:', err);
+        }
+    }
 }

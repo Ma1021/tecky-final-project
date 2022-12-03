@@ -101,8 +101,8 @@ export const createQuestion = createAsyncThunk<Question, {content: string, stock
           headers:{'Content-Type': 'application/json'},
           body:JSON.stringify(data)
         })
-        const json = await res.json();     
-                
+        const json = await res.json();    
+                        
         // insert notification 
             const followerRes = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/followers/${data.asker_id}`)
             const followerJson = await followerRes.json();

@@ -1,26 +1,28 @@
 import {
   IonPage,
   IonHeader,
-  IonTitle,
-  IonButtons,
-  IonBackButton,
+  IonToolbar,
   IonContent,
   IonList,
   IonItem,
   IonSelect,
   IonSelectOption,
+  IonButtons,
+  IonBackButton,
+  IonTitle,
 } from "@ionic/react";
 import { useState } from "react";
 import { useLocation } from "react-router";
-import PaperTradeRecordsModule from "../../components/paperTrade/PaperTradeRecordsModule";
+import OrderPanel from "../../components/paperTrade/OrderPanel";
+import PositionAndOrderModule from "../../components/paperTradeAccount/PositionAndOrderModule";
 
-const PaperTradeRecords: React.FC = () => {
+const PaperTradeOrder: React.FC = () => {
   const location = useLocation();
   const account =
-    location.pathname.split("/")[location.pathname.split("/").length - 2];
-  const userID =
     location.pathname.split("/")[location.pathname.split("/").length - 1];
   const [currentAccount, setCurrentAccount] = useState(account);
+  console.log("account", account);
+  console.log("currentAccount", currentAccount);
 
   return (
     <>
@@ -31,11 +33,18 @@ const PaperTradeRecords: React.FC = () => {
           style={{ height: 50 }}
           className="d-flex align-items-center"
         >
-          <IonButtons>
-            <IonBackButton>Back</IonBackButton>
-          </IonButtons>
-          <IonTitle>訂單紀錄</IonTitle>
+          <IonToolbar>
+            <IonButtons slot="start">
+              <IonBackButton
+                defaultHref={`/individualAccount/${currentAccount}`}
+              >
+                Back
+              </IonBackButton>
+            </IonButtons>
+            <IonTitle>模擬交易</IonTitle>
+          </IonToolbar>
         </IonHeader>
+        <div style={{ height: "10px" }}></div>
 
         <IonContent>
           <IonList>
@@ -56,11 +65,15 @@ const PaperTradeRecords: React.FC = () => {
             </IonItem>
           </IonList>
 
-          <PaperTradeRecordsModule />
+          <div style={{ height: "10px" }}></div>
+
+          <OrderPanel />
+
+          <PositionAndOrderModule />
         </IonContent>
       </IonPage>
     </>
   );
 };
 
-export default PaperTradeRecords;
+export default PaperTradeOrder;

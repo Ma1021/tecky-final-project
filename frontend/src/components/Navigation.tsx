@@ -54,9 +54,10 @@ import ChatroomPage from "../pages/chatroom/ChatroomPage";
 
 import PaperTradeAccountOverview from "../pages/paperTrade/PaperTradeAccountOverview";
 import IndividualAccount from "../pages/paperTrade/IndividualAccount";
-import OrderPanel from "../pages/paperTrade/OrderPanel";
+import PaperTradeOrder from "../pages/paperTrade/PaperTradeOrder";
 import PaperTradeRecords from "../pages/paperTrade/PaperTradeRecords";
 import PaperTradeAnalysis from "../pages/paperTrade/PaperTradeAnalysis";
+import SearchPage from "../pages/Search";
 
 const Navigation: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState("discuss");
@@ -68,6 +69,7 @@ const Navigation: React.FC = () => {
         <Route exact path="/register" component={Register}></Route>
         <Route exact path="/login" component={Login}></Route>
         <Route exact path="/home" component={Home}></Route>
+        <Route exact path="/search" component={SearchPage}></Route>
         <Route exact path="/user/:id/info/" component={UserInfo}></Route>
         <Route exact path="/user/:id/edit/" component={UserEdit}></Route>
         <Route exact path="/question/:id" component={QuestionDetail}></Route>
@@ -85,15 +87,19 @@ const Navigation: React.FC = () => {
           path="/individualStockInfo/:symbol"
           component={IndividualStockInfo}
         ></Route>
-        <Route exact path="/paperTradePanel" component={OrderPanel}></Route>
         <Route
           exact
-          path="/paperTradeRecords/:userID"
+          path="/paperOrderPanel/:account"
+          component={PaperTradeOrder}
+        ></Route>
+        <Route
+          exact
+          path="/paperTradeRecords/:account/:userID"
           component={PaperTradeRecords}
         ></Route>
         <Route
           exact
-          path="/paperTradeAnalysis/:userID"
+          path="/paperTradeAnalysis/:account/:userID"
           component={PaperTradeAnalysis}
         ></Route>
         <Route exact path="/">

@@ -197,7 +197,7 @@ const ChatroomPage: React.FC = () => {
           <IonTitle className="p-0">
             <div className=" d-flex justify-content-between align-items-center w100 ">
               <IonButtons>
-                <IonBackButton defaultHref="/chatroomList"></IonBackButton>
+                <IonBackButton defaultHref="/chatroomList" text="返回"></IonBackButton>
               </IonButtons>
               <span>
                 {(messageList as ChatroomRecord[])[0]

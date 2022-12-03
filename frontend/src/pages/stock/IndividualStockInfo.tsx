@@ -11,12 +11,11 @@ import {
 } from "@ionic/react";
 import { useState } from "react";
 import { useLocation } from "react-router";
-import { useAppSelector } from "../../redux/store";
 import MainChart from "../../components/stock/MultipleSeriesChart";
 import StockForum from "../../components/stock/StockForum";
 import StockNews from "../../components/stock/StockNews";
 import StockAnalysis from "../../components/stock/StockAnalysis";
-import PaperTradePanel from "../../components/stock/PaperTradePanel";
+import PaperTradeModule from "../../components/paperTrade/PaperTradePanel";
 import styled from "styled-components";
 import "./IndividualStockInfo.css";
 import StockInfo from "../../components/stock/StockInfo";
@@ -55,9 +54,6 @@ const IndividualStockInfo: React.FC = () => {
           <SegmentButton value="stockAnalysis">
             <IonLabel>分析</IonLabel>
           </SegmentButton>
-          {/* <SegmentButton value="paperTrade">
-            <IonLabel>Paper Trade</IonLabel>
-          </SegmentButton> */}
         </SegmentTab>
 
         <IonContent>
@@ -72,7 +68,7 @@ const IndividualStockInfo: React.FC = () => {
           {segment === "stockForum" && <StockForum />}
           {segment === "stockNews" && <StockNews />}
           {segment === "stockAnalysis" && <StockAnalysis />}
-          {segment === "paperTrade" && <PaperTradePanel />}
+          {segment === "paperTrade" && <PaperTradeModule />}
         </IonContent>
       </IonPage>
     </>

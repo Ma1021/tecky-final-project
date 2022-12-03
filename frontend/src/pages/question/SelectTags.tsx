@@ -82,7 +82,7 @@ const SelectTags: React.FC = memo(() => {
       <IonHeader translucent={true} collapse="fade">
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref="/discuss/createQuestion" />
+            <IonBackButton defaultHref="/discuss/createQuestion" text="返回"/>
           </IonButtons>
           <IonTitle>選擇標籤</IonTitle>
         </IonToolbar>

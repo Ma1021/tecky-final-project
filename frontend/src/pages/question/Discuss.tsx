@@ -116,17 +116,15 @@ const Discuss: React.FC = () => {
 
         <IonContent>
           {segment === "all" && (
-            <Allquestion loadQuestion={initQuestion} keyword={keyword} />
+            <Allquestion keyword={keyword} />
           )}
           {segment === "question" && (
             <MyQuestion
-              loadAskerQuestion={initAskerQuestion}
               keyword={keyword}
             />
           )}
           {segment === "answer" && (
             <MyAnswer
-              loadAnswererQuestion={initAnswererQuestion}
               keyword={keyword}
             />
           )}

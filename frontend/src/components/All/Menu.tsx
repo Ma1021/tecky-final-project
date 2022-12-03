@@ -57,6 +57,7 @@ const Menu: React.FC<MenuProps> = () => {
     );
 
     dispatch(logout());
+    
     // web version
     localStorage.removeItem("auth_stockoverflow");
 

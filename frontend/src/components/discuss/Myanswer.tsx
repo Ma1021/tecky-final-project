@@ -5,13 +5,13 @@ import {
   IonSpinner,
 } from "@ionic/react";
 import { memo, useEffect, useState } from "react";
-import { useAppSelector } from "../../redux/store";
+import { useAppSelector, useAppDispatch } from "../../redux/store";
 import styled from "styled-components";
 import QuestionCard from "./QuestionCard";
 import { Questions } from "./Allquestion";
+import { loadAnswererQuestions } from "../../redux/questions/questionSlice";
 
 interface QuestionProps {
-  loadAnswererQuestion: Function;
   keyword: string;
 }
 
@@ -29,8 +29,12 @@ const MyAnswer: React.FC<QuestionProps> = memo((props: QuestionProps) => {
     user_id = user.id;
   }
 
+  const dispatch = useAppDispatch();
+
   function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
-    props.loadAnswererQuestion(user_id);
+    if(user_id) {
+      dispatch(loadAnswererQuestions(user_id));
+    }
     if (!loading) {
       event.detail.complete();
     }

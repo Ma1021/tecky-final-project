@@ -7,11 +7,11 @@ import {
 import { memo, useEffect, useState } from "react";
 import QuestionCard from "./QuestionCard";
 import styled from "styled-components";
-import { useAppSelector } from "../../redux/store";
+import { useAppSelector, useAppDispatch } from "../../redux/store";
 import { Questions } from "./Allquestion";
+import { loadAskerQuestions } from "../../redux/questions/questionSlice";
 
 interface QuestionProps {
-  loadAskerQuestion: Function;
   keyword: string;
 }
 
@@ -29,8 +29,12 @@ const MyQuestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
     user_id = user.id;
   }
 
+  const dispatch = useAppDispatch();
+
   function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
-    props.loadAskerQuestion(user_id);
+    if(user_id) {
+      dispatch(loadAskerQuestions(user_id));
+    }
     if (!loading) {
       event.detail.complete();
     }

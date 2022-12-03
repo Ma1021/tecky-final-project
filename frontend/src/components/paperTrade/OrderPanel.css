@@ -1,0 +1,15 @@
+.order-panel-label {
+  margin-right: 5rem;
+}
+
+.order-confirm-button {
+  width: 100%;
+}
+
+.long {
+  color: green;
+}
+
+.short {
+  color: red;
+}

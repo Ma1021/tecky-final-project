@@ -1,8 +1,8 @@
 import { IonPage, IonHeader, IonToolbar, IonContent } from "@ionic/react";
 import { useEffect, useState } from "react";
-import PaperTradeAccountModule from "../../components/stock/PaperTradeAccountModule";
+import PaperTradeAccountModule from "../../components/paperTradeAccount/PaperTradeAccountModule";
 import Title from "../../components/All/Title";
-import "./PaperTradeAccount.css";
+import "./PaperTradeAccountOverview.css";
 
 interface UserAccountType {
   region: string;
@@ -11,7 +11,7 @@ interface UserAccountType {
   profitPercentage: number;
 }
 
-const PaperTradeAccount: React.FC = () => {
+const PaperTradeAccountOverview: React.FC = () => {
   const [userAccountList, setUserAccountList] = useState<UserAccountType[]>([]);
 
   useEffect(() => {
@@ -57,4 +57,4 @@ const PaperTradeAccount: React.FC = () => {
   );
 };
 
-export default PaperTradeAccount;
+export default PaperTradeAccountOverview;

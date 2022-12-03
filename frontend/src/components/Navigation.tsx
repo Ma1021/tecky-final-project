@@ -22,9 +22,6 @@ import {
 } from "ionicons/icons";
 import "./Navigation.css";
 
-import Tab1 from "../pages/Tab1";
-import Tab2 from "../pages/Tab2";
-
 // discuss pages
 import Discuss from "../pages/question/Discuss";
 import CreateQuestion from "../pages/question/CreateQuestion";
@@ -55,8 +52,13 @@ import KOL from "../pages/ranking/Ranking";
 
 // User Analysis pages
 import Analytics from "../pages/analytics/Analytics";
-import PaperTradeAccount from "../pages/stock/PaperTradeAccount";
-import IndividualAccount from "../pages/stock/IndividualAccount";
+
+import PaperTradeAccountOverview from "../pages/paperTrade/PaperTradeAccountOverview";
+import IndividualAccount from "../pages/paperTrade/IndividualAccount";
+import PaperTradeOrder from "../pages/paperTrade/PaperTradeOrder";
+import PaperTradeRecords from "../pages/paperTrade/PaperTradeRecords";
+import PaperTradeAnalysis from "../pages/paperTrade/PaperTradeAnalysis";
+import SearchPage from "../pages/Search";
 
 const Navigation: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState("discuss");
@@ -68,6 +70,7 @@ const Navigation: React.FC = () => {
         <Route exact path="/register" component={Register}></Route>
         <Route exact path="/login" component={Login}></Route>
         <Route exact path="/home" component={Home}></Route>
+        <Route exact path="/search" component={SearchPage}></Route>
         <Route exact path="/user/:id/info/" component={UserInfo}></Route>
         <Route exact path="/user/:id/edit/" component={UserEdit}></Route>
         <Route exact path="/question/:id" component={QuestionDetail}></Route>
@@ -85,6 +88,21 @@ const Navigation: React.FC = () => {
           path="/individualStockInfo/:symbol"
           component={IndividualStockInfo}
         ></Route>
+        <Route
+          exact
+          path="/paperOrderPanel/:account"
+          component={PaperTradeOrder}
+        ></Route>
+        <Route
+          exact
+          path="/paperTradeRecords/:account/:userID"
+          component={PaperTradeRecords}
+        ></Route>
+        <Route
+          exact
+          path="/paperTradeAnalysis/:account/:userID"
+          component={PaperTradeAnalysis}
+        ></Route>
         <Route exact path="/">
           <Redirect to="/home" />
         </Route>
@@ -97,7 +115,7 @@ const Navigation: React.FC = () => {
             <Route
               exact
               path="/paperTrade"
-              component={PaperTradeAccount}
+              component={PaperTradeAccountOverview}
             ></Route>
             <Route
               exact

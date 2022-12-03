@@ -1,16 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { Question, initialState } from './state'
 
-const userStorage = localStorage.getItem("auth_stockoverflow") as string;
-let userData: any
-
-if(userStorage) {
-    const { user } = JSON.parse(userStorage)
-    if(user) {
-        userData = user
-    }
-}
-
 // actions that get data
 export const loadQuestions = createAsyncThunk<Question[]>("question/loadQuestions", async(_, thunkAPI)=>{
     try {        
@@ -88,8 +78,23 @@ export const loadQuestion = createAsyncThunk<Question, number>("question/loadQue
     }
 })
 
+// action that get all question by stock symbol
+export const loadStockQuestion = createAsyncThunk<Question[], string>("question/loadStockQuestions", async(symbol, thunkAPI)=>{
+    try {
+        const res:Response = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/question/stock/symbol?symbol=${symbol}`, {
+            method:'GET',
+            headers:{'Content-Type': 'application/json'}
+        })
+        const json = await res.json();
+        
+        return json;
+    } catch(err) {
+        return thunkAPI.rejectWithValue(err);
+    }
+})
+
 // actions that post data
-export const createQuestion = createAsyncThunk<Question, Object>("question/createQuestion", async(data, thunkAPI)=>{
+export const createQuestion = createAsyncThunk<Question, {content: string, stock_id?: number | number[], asker_id: number, asker_username: string}>("question/createQuestion", async(data, thunkAPI)=>{
     try {
         const res:Response = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/question`, {
           method: 'POST',
@@ -97,47 +102,48 @@ export const createQuestion = createAsyncThunk<Question, Object>("question/creat
           body:JSON.stringify(data)
         })
         const json = await res.json();     
-
+                
         // insert notification 
-        const followerRes = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/followers/${userData.id}`)
-        const followerJson = await followerRes.json();
-        const notifier_token = []
-        
-        if(followerJson.length > 0) {
-            for(let follower of followerJson) {
-                const notification = {
-                    notification_type_id:1,
-                    notification_target_id: json[0].id,
-                    actor_id: userData.id,
-                    notifiers: follower.user_id,
+            const followerRes = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/followers/${data.asker_id}`)
+            const followerJson = await followerRes.json();
+            const notifier_token = []
+            
+            if(followerJson.length > 0) {
+                for(let follower of followerJson) {
+                    const notification = {
+                        notification_type_id:1,
+                        notification_target_id: json[0].id,
+                        actor_id: data.asker_id,
+                        notifiers: follower.user_id,
+                    }
+                    
+                    await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/`, {
+                        method:'POST',
+                        headers:{'Content-Type': 'application/json'},
+                        body: JSON.stringify(notification)
+                    })
+
+                    if(follower.push_notification_token) {
+                        notifier_token.push(follower.push_notification_token);
+                    }
                 }
                 
-                await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/`, {
-                    method:'POST',
-                    headers:{'Content-Type': 'application/json'},
-                    body: JSON.stringify(notification)
-                })
-
-                if(follower.push_notification_token) {
-                    notifier_token.push(follower.push_notification_token);
+                // push notification
+                if(notifier_token.length > 0) {
+                    await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/push_notification`, {
+                        method:"POST",
+                        headers:{'Content-Type': 'application/json'},
+                        body:JSON.stringify({
+                            notification_type_id:1,
+                            actor_id: data.asker_id,
+                            actor_username: data.asker_username,
+                            notifiers: notifier_token,
+                            content: json[0].content
+                        })
+                    })
                 }
             }
-            
-            // push notification
-            if(notifier_token.length > 0) {
-                await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/push_notification`, {
-                    method:"POST",
-                    headers:{'Content-Type': 'application/json'},
-                    body:JSON.stringify({
-                        notification_type_id:1,
-                        actor_id: userData.id,
-                        actor_username: userData.username,
-                        notifiers: notifier_token,
-                        content: json[0].content
-                    })
-                })
-            }
-        }
+        
 
         thunkAPI.dispatch(loadQuestions());
 
@@ -156,7 +162,6 @@ export const deleteQuestion = createAsyncThunk<Question, {question_id: number, u
         })
         const json = await res.json();
 
-
         // delete notification
         fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification`, {
             method: 'DELETE',
@@ -171,7 +176,7 @@ export const deleteQuestion = createAsyncThunk<Question, {question_id: number, u
 });
 
 // action that create answer in question
-export const createAnswer = createAsyncThunk<Question, {answerer_id: number, asker_id: number, question_id: number, content: string}>(
+export const createAnswer = createAsyncThunk<Question, {answerer_id: number, asker_id: number, answerer_username:string, question_id: number, content: string}>(
     "question/createAnswer",
     async(data, thunkAPI) => {
         try {
@@ -187,7 +192,7 @@ export const createAnswer = createAsyncThunk<Question, {answerer_id: number, ask
                 const notification = {
                     notification_type_id: 2,
                     notification_target_id: json.answer_id,
-                    actor_id: userData.id,
+                    actor_id: data.answerer_id,
                     notifiers: data.asker_id
                 }
     
@@ -203,8 +208,8 @@ export const createAnswer = createAsyncThunk<Question, {answerer_id: number, ask
                     headers:{'Content-Type': 'application/json'},
                     body:JSON.stringify({
                         notification_type_id:2,
-                        actor_id: userData.id,
-                        actor_username: userData.username,
+                        actor_id: data.answerer_id,
+                        actor_username: data.answerer_username,
                         notifiers: [data.asker_id],
                         content: data.content
                     })
@@ -222,13 +227,13 @@ export const createAnswer = createAsyncThunk<Question, {answerer_id: number, ask
 )
 
 // action that delete answer in question
-export const deleteAnswer = createAsyncThunk<Question, {question_id: number, answer_id: number}>("question/deleteAnswer", async(data, thunkAPI)=>{
+export const deleteAnswer = createAsyncThunk<Question, {question_id: number, answer_id: number, user_id: number}>("question/deleteAnswer", async(data, thunkAPI)=>{
     try {
         // delete likes
         fetch(`${process.env.REACT_APP_PUBLIC_URL}/answer/like`,{
             method:'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({answer_id:+data.answer_id, user_id:userData.id})
+            body: JSON.stringify({answer_id:+data.answer_id, user_id:data.user_id})
         })
 
         const res: Response = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/answer/${data.answer_id}`, {
@@ -322,6 +327,18 @@ export const questionSlice = createSlice({
             state.loading = false;
         })
         builder.addCase(loadUserQuestions.rejected, (state, action)=>{
+            state.errors = action.payload;
+            state.loading = false;
+        })
+
+        builder.addCase(loadStockQuestion.pending, (state, action)=>{
+            state.loading = true;
+        })
+        builder.addCase(loadStockQuestion.fulfilled, (state, action)=>{
+            state.stockQuestionList = action.payload;
+            state.loading = false;
+        })
+        builder.addCase(loadStockQuestion.rejected, (state, action)=>{
             state.errors = action.payload;
             state.loading = false;
         })

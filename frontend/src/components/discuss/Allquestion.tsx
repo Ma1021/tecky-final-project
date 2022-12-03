@@ -7,7 +7,11 @@ import {
 import { memo, useEffect, useState } from "react";
 import styled from "styled-components";
 import QuestionCard from "./QuestionCard";
-import { RootState, useAppSelector } from "../../redux/store";
+import { RootState, useAppSelector, useAppDispatch } from "../../redux/store";
+
+import {
+  loadQuestions,
+} from "../../redux/questions/questionSlice";
 
 export interface Questions {
   id: number;
@@ -40,14 +44,13 @@ export interface Questions {
 }
 
 interface QuestionProps {
-  loadQuestion: Function;
   keyword: string;
 }
 
 // memo 防止父組件更新時子組件也更新的問題，改善效能 （只能用在純html的component）
 const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
   const { questionList, loading } = useAppSelector(
-    (state: RootState) => state.question
+    (state) => state.question
   );
   let user_id: number;
 
@@ -60,8 +63,10 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
 
   const [filteredQuestions, setFilteredQuestions] = useState(Array<Questions>);
 
+  const dispatch = useAppDispatch();
+
   function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
-    props.loadQuestion();
+    dispatch(loadQuestions());
     if (!loading) {
       event.detail.complete();
     }
@@ -80,7 +85,7 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
           ) || question.content.replace(/\s/g, "").toLowerCase().includes(word)
       )
     );
-  }, [props.keyword]);
+  }, [props.keyword, questionList]);
 
   return (
     <>

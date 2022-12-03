@@ -12,6 +12,7 @@ export class AuthService {
 
   // must be username and password_hash unless updated in local strategy
   async validateUser(email: string, password: string): Promise<any> {
+    console.log('validate');
     const user = await this.usersService.findOne(email);
     if (user) {
       if (await compare(password, user.password_hash)) {

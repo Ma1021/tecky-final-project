@@ -63,10 +63,14 @@ export class UserService {
         .select('*')
         .where('email', email)
         .where('is_deleted', false);
+      console.log('findone service', user);
       return user[0];
     } catch {
       (error) => {
-        throw new HttpException(error, HttpStatus.BAD_REQUEST);
+        throw new HttpException(
+          `find one error ${error}`,
+          HttpStatus.BAD_REQUEST,
+        );
       };
     }
   }

@@ -1,6 +1,7 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Response } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query, Response } from '@nestjs/common';
 import { QuestionService } from './question.service';
 import { Question_DTO } from './question.dto'
+import { query } from 'express';
 
 @Controller('/question')
 export class QuestionController {
@@ -34,6 +35,16 @@ export class QuestionController {
     }
 
     return await this.questionService.findAnswererQuestions(+answerer_id);
+  }
+
+  // get all questions by stock symbol
+  @Get('/stock/symbol?')
+  getQuestionBySymbol(@Query() query) {
+    if(!query.symbol) {
+      throw new HttpException('Missing stock symbol', HttpStatus.BAD_REQUEST)
+    }
+
+    return this.questionService.findQuestionBySymbol(query.symbol.toUpperCase());
   }
 
   @Post()

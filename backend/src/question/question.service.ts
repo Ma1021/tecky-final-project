@@ -155,6 +155,44 @@ export class QuestionService {
   return questions.rows;
   }
 
+  // get all questions by stock symbol
+  async findQuestionBySymbol(symbol: string) {    
+    const questions = await this.knex
+    .raw(`
+      SELECT questions.id, questions.content, questions.created_at,
+      users.id as asker_id, users.username as asker_username, users.avatar as asker_avatar, users.user_type, tags.tag_id,
+      coalesce(jsonb_agg(DISTINCT jsonb_build_object(
+        'id', stocks.id,
+        'name', stocks.name,
+        'symbol', stocks.symbol
+      )) filter (where stocks.* is not null), '[]') as stock,
+      coalesce(jsonb_agg(DISTINCT jsonb_build_object(
+          'id', answers.id,
+          'content', answers.content,
+          'created_at', answers.created_at,
+          'answers', (SELECT json_build_object(
+              'id', users.id,
+              'type', users.user_type,
+              'avatar', users.avatar,
+              'username', users.username)
+              from users where users.id = answers.answerer_id),
+          'likes_user_id',(SELECT coalesce(jsonb_agg(to_jsonb(ans_likes.user_id))
+          filter (where ans_likes.* is not null), '[]') 
+          from ans_likes where ans_likes.answer_id = answers.id))
+          ) filter (where answers.* is not null), '[]') as answer
+      from questions
+      inner join tags on questions.tag_id = tags.tag_id 
+      full outer join stocks on tags.stock_id = stocks.id
+      inner join users on users.id = questions.asker_id
+      full outer join answers on questions.id = answers.question_id
+      where stocks.symbol = ?
+      group by questions.id, users.id, tags.tag_id
+      order by questions.created_at desc;
+    `, [symbol]);
+
+    return questions.rows;
+  }
+
   async create(questions: Question_DTO) {
     try {
       const { asker_id, content, stock_id } = questions;

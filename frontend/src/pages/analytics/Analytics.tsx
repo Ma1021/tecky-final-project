@@ -81,7 +81,7 @@ const Analytics: React.FC = () => {
       <IonHeader translucent={true} collapse="fade">
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref="/discuss" />
+            <IonBackButton defaultHref="/discuss" text="返回"/>
           </IonButtons>
           <IonTitle>數據分析</IonTitle>
         </IonToolbar>

@@ -34,6 +34,7 @@ export interface QuestionState {
   askerQuestionList: Question[];
   answererQuestionList: Question[];
   userQuestionList: Question[];
+  stockQuestionList: Question[];
   loading: boolean;
   errors: any;
 }
@@ -44,6 +45,7 @@ export const initialState: QuestionState = {
   askerQuestionList: [],
   answererQuestionList: [],
   userQuestionList: [],
+  stockQuestionList:[],
   loading: false,
   errors: null,
 };

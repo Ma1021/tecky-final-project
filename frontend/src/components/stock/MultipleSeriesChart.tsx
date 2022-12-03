@@ -388,7 +388,7 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
       timeFrame === "1Y"
     ) {
       fetch(
-        `http://localhost:8080/stock/getDayDataFromMongoDB?symbol=${symbol}&timeFrame=${timeFrame}`
+        `${process.env.REACT_APP_PUBLIC_URL}/stock/getDayDataFromMongoDB?symbol=${symbol}&timeFrame=${timeFrame}`
       )
         .then((res) => res.json())
         .then((result) => {
@@ -412,7 +412,7 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
       console.log("data set into series");
     } else {
       fetch(
-        `http://localhost:8080/stock/getMinuteDataFromMongoDB?symbol=${symbol}&timeFrame=${timeFrame}`
+        `${process.env.REACT_APP_PUBLIC_URL}/stock/getMinuteDataFromMongoDB?symbol=${symbol}&timeFrame=${timeFrame}`
       )
         .then((res) => res.json())
         .then((result) => {

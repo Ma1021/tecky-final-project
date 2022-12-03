@@ -52,7 +52,7 @@ const InProgressOrderModule: React.FC = () => {
             </tr>
             {inProgressOrderList.map((inProgressOrder) => (
               <>
-                <tr>
+                <tr className="order-upper-row">
                   <td
                     className={
                       "order-order-type " +

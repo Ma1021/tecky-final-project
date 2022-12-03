@@ -139,6 +139,30 @@ export class UserController {
     return result;
   }
 
+  // getblock certain user
+  @Post('/block')
+  async getBlockList(@Body() userIdDto: UserIdDto) {
+    let result = await this.userService.getBlockUser(userIdDto);
+    console.log('user controller, blocker list', result);
+    return result;
+  }
+
+  // block certain user
+  @Post(':id/block')
+  async block(@Param('id') id: number, @Body() userIdDto: UserIdDto) {
+    let result = await this.userService.blockUser(id, userIdDto);
+    console.log('user controller block', result);
+    return result;
+  }
+
+  // unblock certain user
+  @Post(':id/unblock')
+  async unblock(@Param('id') id: number, @Body() userIdDto: UserIdDto) {
+    let result = await this.userService.unBlockUser(id, userIdDto);
+    console.log('user controller unblock', result);
+    return result;
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(+id, updateUserDto);

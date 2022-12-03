@@ -5,6 +5,7 @@ import { hash } from 'bcrypt';
 import { Knex } from 'nestjs-knex';
 import { InjectModel } from 'nest-knexjs';
 import { SubscriptionDTO } from './dto/subscription.dto';
+import { UserIdDto } from './dto/userId.dto';
 
 @Injectable()
 export class UserService {
@@ -76,6 +77,78 @@ export class UserService {
         .select('introduction')
         .where('id', id);
       return result[0];
+    } catch {
+      (error) => {
+        throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      };
+    }
+  }
+
+  async getBlockUser(userIdDto: UserIdDto) {
+    try {
+      console.log('entered block user list');
+      let result = await this.knex.raw(
+        /*sql*/
+        `
+      select ARRAY_AGG(is_blocked) blocked_list from block_list 
+      where blocker = ?
+      group by blocker; 
+      `,
+        [+userIdDto.userId],
+      );
+      result = result.rows[0].blocked_list;
+      // console.log('user service, blocker list', result);
+      return result;
+    } catch {
+      (error) => {
+        throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      };
+    }
+  }
+
+  async blockUser(id: number, userIdDto: UserIdDto) {
+    try {
+      await this.knex('block_list').insert({
+        blocker: userIdDto.userId,
+        is_blocked: id,
+      });
+      let result = await this.knex.raw(
+        /*sql*/
+        `
+      select ARRAY_AGG(is_blocked) blocked_list from block_list 
+      where blocker = ?
+      group by blocker; 
+      `,
+        [+userIdDto.userId],
+      );
+      result = result.rows[0].blocked_list;
+      // console.log('user service, update block list', result);
+      return result;
+    } catch {
+      (error) => {
+        throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      };
+    }
+  }
+
+  async unBlockUser(id: number, userIdDto: UserIdDto) {
+    try {
+      await this.knex('block_list')
+        .del()
+        .where({ blocker: userIdDto.userId, is_blocked: id })
+        .returning('id');
+      let result = await this.knex.raw(
+        /*sql*/
+        `
+        select ARRAY_AGG(is_blocked) blocked_list from block_list 
+        where blocker = ?
+        group by blocker; 
+        `,
+        [+userIdDto.userId],
+      );
+      result = result.rows[0].blocked_list;
+      // console.log('user service, update unblock list', result);
+      return result;
     } catch {
       (error) => {
         throw new HttpException(error, HttpStatus.BAD_REQUEST);

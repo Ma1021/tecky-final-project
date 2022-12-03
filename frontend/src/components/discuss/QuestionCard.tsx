@@ -12,6 +12,7 @@ import { useHistory } from "react-router-dom";
 import { Questions } from "./Allquestion";
 import { chatboxEllipses } from "ionicons/icons";
 import UserBadge from "../All/UserBadge";
+import { useAppSelector } from "../../redux/store";
 
 interface QuestionsProps {
   questions: Questions[];
@@ -41,15 +42,16 @@ const QuestionCard: React.FC<QuestionsProps> = memo((props: QuestionsProps) => {
     return time;
   }
 
+  const { blockedUserList } = useAppSelector((state)=> state.block);
+
   return (
     <>
       {props.questions.map((question) => {
-        if (Array.isArray(question.answer)) {
           reverseAnswer = [...question.answer].reverse();
-        } else {
-          reverseAnswer.push(question.answer);
-        }
-
+          reverseAnswer = reverseAnswer.filter((answer)=>{
+            return !blockedUserList.includes(answer.answers.id)
+          })
+        
         return (
           <QuestionContainer
             key={question.id}

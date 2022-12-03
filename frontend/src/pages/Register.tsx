@@ -30,6 +30,7 @@ const RegisterLoop: React.FC = () => {
   const dispatch = useAppDispatch();
   const [presentAlert] = useIonAlert();
   const [agree, setAgree] = useState(false);
+  const [ageCheck, setAgeCheck] = useState<number | null>(null);
   const history = useHistory();
 
   const select = useAppSelector((state) => {
@@ -275,11 +276,44 @@ const RegisterLoop: React.FC = () => {
     });
   };
 
+  // calculate Age
+  const calculate_age = (e: any) => {
+    let today_date = new Date();
+    let birth = new Date(e.target.value);
+    let today_year = today_date.getFullYear();
+    let today_month = today_date.getMonth();
+    let today_day = today_date.getDate();
+    let age = today_year - birth.getFullYear();
+
+    if (today_month < birth.getMonth() - 1) {
+      age--;
+    }
+    if (birth.getMonth() - 1 == today_month && today_day < birth.getDate()) {
+      age--;
+    }
+    console.log("calculate_age", age);
+    setAgeCheck(age);
+  };
+
   let submit = async () => {
-    console.log("enter submit register", "agree", agree);
+    console.log("enter submit register", "ageCheck", ageCheck);
     if (agree === false) {
       presentAlert({
         header: "請先同意使用條款及免責聲明",
+        buttons: ["了解"],
+      });
+      return;
+    }
+    if (ageCheck === null) {
+      presentAlert({
+        header: "使用者必須滿18歲, 詳情請閱讀同意使用條款及免責聲明",
+        buttons: ["了解"],
+      });
+      return;
+    }
+    if (ageCheck < 18) {
+      presentAlert({
+        header: "使用者必須滿18歲, 詳情請閱讀同意使用條款及免責聲明",
         buttons: ["了解"],
       });
       return;
@@ -350,6 +384,7 @@ const RegisterLoop: React.FC = () => {
               <IonInput
                 type="date"
                 // clearInput={true}
+                onIonChange={calculate_age}
                 {...register("birthday", {
                   required: { value: true, message: "請輸入出生日期" },
                 })}

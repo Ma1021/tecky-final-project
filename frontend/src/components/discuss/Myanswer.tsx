@@ -21,13 +21,14 @@ const MyAnswer: React.FC<QuestionProps> = memo((props: QuestionProps) => {
   );
   const [filteredQuestions, setFilteredQuestions] = useState(Array<Questions>);
   let user_id: number;
-
+  
   if (localStorage.getItem("auth_stockoverflow")) {
     const { user } = JSON.parse(
       localStorage.getItem("auth_stockoverflow") as string
     );
     user_id = user.id;
   }
+  const { blockedUserList } = useAppSelector((state)=> state.block);
 
   const dispatch = useAppDispatch();
 
@@ -43,19 +44,25 @@ const MyAnswer: React.FC<QuestionProps> = memo((props: QuestionProps) => {
   useEffect(() => {
     const word = props.keyword.replace(/\s/g, "").toLowerCase();
     if (answererQuestionList.length > 0) {
+      const keywordFilter = answererQuestionList.filter(
+        (question) =>
+          question.stock.some(
+            (stock) =>
+              stock.name.replace(/\s/g, "").toLowerCase().includes(word) ||
+              stock.symbol.toLowerCase().includes(word)
+          ) ||
+          question.content.replace(/\s/g, "").toLowerCase().includes(word)
+      )
+
       setFilteredQuestions(
-        answererQuestionList.filter(
-          (question) =>
-            question.stock.some(
-              (stock) =>
-                stock.name.replace(/\s/g, "").toLowerCase().includes(word) ||
-                stock.symbol.toLowerCase().includes(word)
-            ) ||
-            question.content.replace(/\s/g, "").toLowerCase().includes(word)
-        )
-      );
+        keywordFilter.filter((question)=>{
+          for(let blocked_id of blockedUserList) {
+            return question.asker_id !== blocked_id
+          }
+        })
+      )
     }
-  }, [props.keyword]);
+  }, [props.keyword, answererQuestionList]);
 
   return (
     <>

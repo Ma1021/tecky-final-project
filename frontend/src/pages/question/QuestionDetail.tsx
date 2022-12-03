@@ -54,11 +54,26 @@ const QuestionDetail: React.FC = memo(() => {
     localStorage.getItem("auth_stockoverflow") as string
   );
   const user_id = +user.id;
+  const { blockedUserList } = useAppSelector((state)=> state.block);
+  const [answerFilter, setAnswerFilter] = useState([] as any)
 
   useEffect(() => {
     if (!question_id) return;
     dispatch(loadQuestion(+question_id));
   }, []);
+
+  useEffect(()=>{
+    filterAnswer();
+  },[question])
+  
+  async function filterAnswer() {
+    const answer = await question.answer    
+    setAnswerFilter(
+      answer.filter((answer)=>{        
+        return !blockedUserList.includes(answer.answers.id)
+      })
+    )
+  }    
 
   const fetchFollowing = useCallback(async () => {
     const id_array: Array<number> = [];
@@ -197,8 +212,6 @@ const QuestionDetail: React.FC = memo(() => {
           (id) => id !== +e.target.parentNode.parentNode.dataset.user_id
         )
       );
-
-      console.log(subscription_json);
       
       await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification`, {
         method: "DELETE",
@@ -334,11 +347,11 @@ const QuestionDetail: React.FC = memo(() => {
               <IonText style={{ fontSize: 10, color:"#999" }}>
                 {formatDate(question.created_at)}
               </IonText>
-              {question.asker_id !== user_id && !question.is_reported ? 
+              {question.asker_id !== user_id ? !question.is_reported ? 
                 <IonText style={{ fontSize: 10, color:"#999", marginLeft:10}} onClick={handleQuestionReport}>舉報</IonText>  
                 :
-                <IonText style={{ fontSize: 10, color:"#999", marginLeft:10}} onClick={handleQuestionReport}>已舉報</IonText>
-              }
+                <IonText style={{ fontSize: 10, color:"#999", marginLeft:10}} onClick={handleQuestionReport}>已舉報</IonText> : <></>
+              } 
             </div>
           </div>
           {question.asker_id !== user_id && (
@@ -380,10 +393,10 @@ const QuestionDetail: React.FC = memo(() => {
           </div>
         </ContentContainer>
         </>}
-        {question.answer && (
+        {answerFilter.length > 0 && (
           <AnswerContainer>
             <IonText>回答</IonText>
-            {question.answer.map((answer: any, index: number) => {
+            {answerFilter.map((answer: any, index: number) => {
               return (
                 <div
                   className="answerCard"
@@ -422,10 +435,10 @@ const QuestionDetail: React.FC = memo(() => {
                           timeStyle: "short",
                         })}
                       </IonText>
-                      {answer.answers.id !== user_id && answer.is_reported ? (
+                      {answer.answers.id !== user_id ? answer.is_reported ? (
                         <IonText style={{ fontWeight: 600 }} onClick={handleAnswerReport}>已舉報</IonText>
                       ) :
-                        <IonText style={{ fontWeight: 600 }} onClick={handleAnswerReport}>舉報</IonText>
+                        <IonText style={{ fontWeight: 600 }} onClick={handleAnswerReport}>舉報</IonText> : <></>
                       }
                       {answer.answers.id === user_id && (
                         <IonText

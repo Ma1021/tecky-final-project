@@ -52,6 +52,7 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
   const { questionList, loading } = useAppSelector(
     (state) => state.question
   );
+  const { blockedUserList } = useAppSelector((state)=> state.block);
   let user_id: number;
 
   if (localStorage.getItem("auth_stockoverflow")) {
@@ -74,17 +75,24 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
 
   useEffect(() => {
     const word = props.keyword.replace(/\s/g, "").toLowerCase();
-
-    setFilteredQuestions(
-      questionList.filter(
+    
+    const keywordFilter = questionList.filter(
         (question) =>
           question.stock.some(
             (stock) =>
               stock.name.replace(/\s/g, "").toLowerCase().includes(word) ||
               stock.symbol.toLowerCase().includes(word)
           ) || question.content.replace(/\s/g, "").toLowerCase().includes(word)
-      )
-    );
+    )
+    
+    setFilteredQuestions(
+      keywordFilter.filter((question)=>{
+        for(let blocked_id of blockedUserList) {
+          return question.asker_id !== blocked_id
+        }
+      })
+    )
+    
   }, [props.keyword, questionList]);
 
   return (

@@ -1,4 +1,4 @@
-import { IonPage, IonHeader, IonToolbar, IonContent } from "@ionic/react";
+import { IonPage, IonHeader, IonToolbar, IonContent, IonText } from "@ionic/react";
 import { useEffect, useState } from "react";
 import PaperTradeAccountModule from "../../components/paperTradeAccount/PaperTradeAccountModule";
 import Title from "../../components/All/Title";
@@ -27,7 +27,7 @@ const PaperTradeAccountOverview: React.FC = () => {
     ];
     setUserAccountList(exampleList);
   }, []);
-
+  
   return (
     <IonPage>
       <IonHeader
@@ -42,15 +42,18 @@ const PaperTradeAccountOverview: React.FC = () => {
       </IonHeader>
 
       <IonContent>
-        <div className="modules-container">
-          {userAccountList.map((obj) => (
-            <PaperTradeAccountModule
-              region={obj.region}
-              amount={obj.amount}
-              profit={obj.profit}
-              profitPercentage={obj.profitPercentage}
-            />
-          ))}
+        <div style={{padding:'5%'}}>
+          <IonText style={{fontWeight:600, marginLeft:5}}>股票賬戶</IonText>
+          <div className="modules-container">
+            {userAccountList.map((obj) => (
+              <PaperTradeAccountModule
+                region={obj.region}
+                amount={obj.amount}
+                profit={obj.profit}
+                profitPercentage={obj.profitPercentage}
+              />
+            ))}
+          </div>
         </div>
       </IonContent>
     </IonPage>

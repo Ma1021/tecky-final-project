@@ -64,11 +64,10 @@ const PaperTradeOrder: React.FC = () => {
               </IonSelect>
             </IonItem>
           </IonList>
-
+                
           <div style={{ height: "10px" }}></div>
-
+          
           <OrderPanel />
-
           <PositionAndOrderModule />
         </IonContent>
       </IonPage>

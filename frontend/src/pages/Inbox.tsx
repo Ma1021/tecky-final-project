@@ -14,11 +14,13 @@ import {
   IonList,
   IonButton,
   IonItem,
+  IonImg,
 } from "@ionic/react";
 import MessageCard from "../components/Inbox/MessageCard";
 import styled from "styled-components";
 import { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router";
+import Mailbox from '../img/mailbox.png'
 
 interface Notification {
   id: number;
@@ -282,7 +284,10 @@ const Inbox: React.FC = () => {
                 ))}
               </IonList>
             ) : (
-              <div>沒有訊息</div>
+              <div style={{height:'40vh'}} className="d-flex flex-column align-items-center justify-content-center">
+                <IonImg style={{width:150, height: 150}} src={Mailbox}></IonImg>
+                <IonText>沒有訊息</IonText>
+              </div>
             )}
           </InboxMessageContainer>
         </MessageContainer>

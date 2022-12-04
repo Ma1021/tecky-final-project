@@ -295,12 +295,11 @@ const RegisterLoop: React.FC = () => {
     if (birth.getMonth() - 1 == today_month && today_day < birth.getDate()) {
       age--;
     }
-    console.log("calculate_age", age);
     setAgeCheck(age);
   };
 
   let submit = async () => {
-    console.log("enter submit register", "ageCheck", ageCheck);
+    // console.log("enter submit register", "ageCheck", ageCheck);
     if (agree === false) {
       presentAlert({
         header: "請先同意使用條款及免責聲明",
@@ -394,13 +393,14 @@ const RegisterLoop: React.FC = () => {
                 })}
               ></IonInput>
             </IonItem>
+            {ageCheck !== null && ageCheck < 18 ? (
+              <IonLabel className="ion-padding" style={{ color: "red" }}>
+                使用者需年滿18
+              </IonLabel>
+            ) : null}
             <IonItem lines="full">
-              <IonLabel>性別</IonLabel>
-              <IonRadioGroup
-                {...register("gender", {
-                  required: { value: true, message: "請選擇性別" },
-                })}
-              >
+              <IonLabel>性別 (可選填)</IonLabel>
+              <IonRadioGroup allowEmptySelection={true}>
                 <div className="d-flex">
                   <IonItem lines="none">
                     <IonLabel>男</IonLabel>

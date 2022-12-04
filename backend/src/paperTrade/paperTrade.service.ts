@@ -16,18 +16,41 @@ export class PaperTradeService {
     let orderTypeLong = undefined;
     orderType === 'long' ? (orderTypeLong = true) : (orderTypeLong = false);
     try {
-      this.knex.insert([
-        { user_id: userID },
-        { stock_id: stockID },
-        { long: orderTypeLong },
-        { order_price: price },
-        { quantity: quantity },
-        { order_place_time: new Date() },
-        { order_status: 0 },
-      ]);
-      return 'Place order succeed.';
+      await this.knex
+        .insert({
+          user_id: userID,
+          stock_id: stockID,
+          long: orderTypeLong,
+          order_price: price,
+          quantity: quantity,
+          order_place_time: new Date(),
+          order_status: 0,
+        })
+        .into('user_trades');
+      return { message: 'Place order succeed.' };
     } catch (error) {
       throw new Error('Place order failed.');
     }
+  }
+
+  async getInProgressOrderList(userID: string) {
+    const result = await this.knex
+      .select([
+        'user_trades.id',
+        'symbol',
+        'name',
+        'chinese_name',
+        'long',
+        'order_price',
+        'quantity',
+        'order_place_time',
+        'order_status',
+      ])
+      .from('user_trades')
+      .join('stock_info', 'user_trades.stock_id', 'stock_info.id')
+      .where({ user_id: userID, order_complete_time: null })
+      .orderBy('order_place_time', 'desc');
+
+    return result;
   }
 }

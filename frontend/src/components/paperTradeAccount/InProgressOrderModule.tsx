@@ -2,41 +2,31 @@ import React, { useEffect, useState } from "react";
 import "./InProgressOrderModule.css";
 
 export interface InProgressOrderType {
-  orderType: number;
-  status: number;
-  name: string;
+  id: number;
   symbol: string;
+  name: string;
+  chinese_name: string;
+  long: boolean;
+  order_price: number;
   quantity: number;
-  price: number;
-  orderPlaceTime: string;
+  order_place_time: string;
+  order_status: number;
 }
 
 const InProgressOrderModule: React.FC = () => {
   const [inProgressOrderList, setInProgressOrderList] = useState<
     InProgressOrderType[]
   >([]);
+  const userID = 1;
 
   useEffect(() => {
-    setInProgressOrderList([
-      {
-        orderType: 0,
-        status: 0,
-        name: "小鵬汽車",
-        symbol: "XPEV",
-        quantity: 1,
-        price: 10.81,
-        orderPlaceTime: "2022-12-01 18:39:32",
-      },
-      {
-        orderType: 1,
-        status: 0,
-        name: "小鵬汽車",
-        symbol: "XPEV",
-        quantity: 1,
-        price: 10.81,
-        orderPlaceTime: "2022-12-01 18:39:32",
-      },
-    ]);
+    fetch(
+      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getInProgressOrderList?userID=${userID}`
+    )
+      .then((res) => res.json())
+      .then((result) => {
+        setInProgressOrderList(result);
+      });
   }, []);
 
   return (
@@ -56,37 +46,35 @@ const InProgressOrderModule: React.FC = () => {
                   <td
                     className={
                       "order-order-type " +
-                      (inProgressOrder.orderType === 0
-                        ? "positive"
-                        : "negative")
+                      (inProgressOrder.long === true ? "positive" : "negative")
                     }
                   >
-                    {inProgressOrder.orderType === 0 ? "模擬買入" : "模擬賣出"}
+                    {inProgressOrder.long === true ? "模擬買入" : "模擬賣出"}
                   </td>
-                  <td>{inProgressOrder.name}</td>
+                  <td>{inProgressOrder.chinese_name}</td>
                   <td>{inProgressOrder.quantity}</td>
-                  <td>{inProgressOrder.orderPlaceTime.split(" ")[0]}</td>
+                  <td>{inProgressOrder.order_place_time.split("T")[0]}</td>
                 </tr>
                 <tr className="order-bottom-row">
                   <td
                     className={
                       "order-stock-symbol " +
-                      (inProgressOrder.status === 0
+                      (inProgressOrder.order_status === 0
                         ? "pending"
-                        : inProgressOrder.status === 1
+                        : inProgressOrder.order_status === 1
                         ? "positive"
                         : "negative")
                     }
                   >
-                    {inProgressOrder.status === 0
+                    {inProgressOrder.order_status === 0
                       ? "等待成交"
-                      : inProgressOrder.status === 1
+                      : inProgressOrder.order_status === 1
                       ? "已成交"
                       : "訂單取消"}
                   </td>
                   <td>{inProgressOrder.symbol}</td>
-                  <td>{inProgressOrder.price}</td>
-                  <td>{inProgressOrder.orderPlaceTime.split(" ")[1]}</td>
+                  <td>{inProgressOrder.order_price}</td>
+                  <td>{inProgressOrder.order_place_time.split("T")[1]}</td>
                 </tr>
               </>
             ))}

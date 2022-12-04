@@ -17,6 +17,8 @@ const OrderPanel: React.FC = () => {
   const [orderType, setOrderType] = useState("fix");
   const [orderPrice, setOrderPrice] = useState<number>(0);
   const [quantity, setQuantity] = useState<number>(0);
+  const userID = 1;
+  const stockID = 1;
   const principal = 1000000;
   const ownedTickets = 100;
   const stockPrice = 300;
@@ -156,7 +158,12 @@ const OrderPanel: React.FC = () => {
           }`}</IonLabel>
         </IonItem>
 
-        <IonButton className="order-confirm-button">
+        <IonButton
+          className="order-confirm-button"
+          onClick={() =>
+            placeOrder(userID, stockID, orderDirection, orderPrice, quantity)
+          }
+        >
           {orderDirection === "long" ? "模擬買入" : "模擬賣出"}
         </IonButton>
       </IonList>
@@ -166,3 +173,29 @@ const OrderPanel: React.FC = () => {
 };
 
 export default OrderPanel;
+
+async function placeOrder(
+  userID: number,
+  stockID: number,
+  orderDirection: string,
+  price: number,
+  quantity: number
+) {
+  const formData = new FormData();
+  formData.append("userID", userID.toString());
+  formData.append("stockID", stockID.toString());
+  formData.append("orderType", orderDirection);
+  formData.append("price", price.toString());
+  formData.append("quantity", quantity.toString());
+
+  const res = await fetch(
+    `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/placeOrder`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "multipart/form-data" },
+      body: formData,
+    }
+  );
+  const result = await res.json();
+  console.log(result);
+}

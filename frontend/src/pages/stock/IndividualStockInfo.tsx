@@ -15,7 +15,6 @@ import MainChart from "../../components/stock/MultipleSeriesChart";
 import StockForum from "../../components/stock/StockForum";
 import StockNews from "../../components/stock/StockNews";
 import StockAnalysis from "../../components/stock/StockAnalysis";
-import PaperTradeModule from "../../components/paperTrade/PaperTradePanel";
 import styled from "styled-components";
 import "./IndividualStockInfo.css";
 import StockInfo from "../../components/stock/StockInfo";
@@ -68,7 +67,6 @@ const IndividualStockInfo: React.FC = () => {
           {segment === "stockForum" && <StockForum />}
           {segment === "stockNews" && <StockNews />}
           {segment === "stockAnalysis" && <StockAnalysis />}
-          {segment === "paperTrade" && <PaperTradeModule />}
         </IonContent>
       </IonPage>
     </>

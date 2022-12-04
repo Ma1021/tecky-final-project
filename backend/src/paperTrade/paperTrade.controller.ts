@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Req } from '@nestjs/common';
+import { PlaceOrderDTO } from './paperTrade.dto';
 import { PaperTradeService } from './paperTrade.service';
 
 @Controller('/paperTrade')
@@ -6,13 +7,11 @@ export class PaperTradeController {
   constructor(private readonly paperTradeService: PaperTradeService) {}
 
   @Post('/placeOrder')
-  async placeOrder(
-    @Query('userID') userID: string,
-    @Query('stockID') stockID: string,
-    @Query('orderType') orderType: string,
-    @Query('price') price: string,
-    @Query('quantity') quantity: string,
-  ) {
+  async placeOrder(@Body() order: PlaceOrderDTO) {
+    console.log('controller body:', order);
+
+    const { userID, stockID, orderType, price, quantity } = order;
+
     return await this.paperTradeService.placeOrder(
       userID,
       stockID,
@@ -20,5 +19,10 @@ export class PaperTradeController {
       price,
       quantity,
     );
+  }
+
+  @Get('/getInProgressOrderList')
+  async getInProgressOrderList(@Query('userID') userID: string) {
+    return await this.paperTradeService.getInProgressOrderList(userID);
   }
 }

@@ -1,28 +1,76 @@
-import { Body, Controller, Get, Post, Query, Req } from '@nestjs/common';
-import { PlaceOrderDTO } from './paperTrade.dto';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { CloseOrderDTO, PlaceOrderDTO } from './paperTrade.dto';
 import { PaperTradeService } from './paperTrade.service';
 
 @Controller('/paperTrade')
 export class PaperTradeController {
   constructor(private readonly paperTradeService: PaperTradeService) {}
 
-  @Post('/placeOrder')
-  async placeOrder(@Body() order: PlaceOrderDTO) {
-    console.log('controller body:', order);
+  @Post('/placeNewOrder')
+  async placeNewOrder(@Body() order: PlaceOrderDTO) {
+    const { userID, symbol, orderType, price, quantity, account } = order;
 
-    const { userID, stockID, orderType, price, quantity } = order;
-
-    return await this.paperTradeService.placeOrder(
+    return await this.paperTradeService.placeNewOrder(
       userID,
-      stockID,
+      symbol,
       orderType,
       price,
       quantity,
+      account,
     );
   }
 
+  @Post('/closePosition')
+  async closePosition(@Body() order: CloseOrderDTO) {
+    console.log(order);
+
+    const { id, userID, symbol, isLong, price, quantity, account } = order;
+    return await this.paperTradeService.closePosition(
+      id,
+      userID,
+      symbol,
+      isLong,
+      price,
+      quantity,
+      account,
+    );
+  }
+
+  @Patch('/cancelOrder/:id')
+  async cancelOrder(@Param('id') id: string) {
+    return await this.paperTradeService.cancelOrder(id);
+  }
+
   @Get('/getInProgressOrderList')
-  async getInProgressOrderList(@Query('userID') userID: string) {
-    return await this.paperTradeService.getInProgressOrderList(userID);
+  async getInProgressOrderList(
+    @Query('userID') userID: string,
+    @Query('account') account: string,
+  ) {
+    return await this.paperTradeService.getInProgressOrderList(userID, account);
+  }
+
+  @Get('/getFullOrderList')
+  async getFullOrderList(
+    @Query('userID') userID: string,
+    @Query('account') account: string,
+  ) {
+    return await this.paperTradeService.getFullOrderList(userID, account);
+  }
+
+  @Get('/getPositionList')
+  async getPositionList(
+    @Query('userID') userID: string,
+    @Query('account') account: string,
+  ) {
+    return await this.paperTradeService.getPositionList(userID, account);
   }
 }

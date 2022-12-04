@@ -1,3 +1,4 @@
+import { useIonAlert } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import "./InProgressOrderModule.css";
 
@@ -13,21 +14,39 @@ export interface InProgressOrderType {
   order_status: number;
 }
 
-const InProgressOrderModule: React.FC = () => {
+interface InProgressOrderModuleProps {
+  currentAccount: string;
+}
+
+const InProgressOrderModule: React.FC<InProgressOrderModuleProps> = ({
+  currentAccount,
+}) => {
   const [inProgressOrderList, setInProgressOrderList] = useState<
     InProgressOrderType[]
   >([]);
+  const [isUpdate, setIsUpdate] = useState<boolean>(false);
+  const [ionAlert] = useIonAlert();
   const userID = 1;
 
   useEffect(() => {
     fetch(
-      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getInProgressOrderList?userID=${userID}`
+      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getInProgressOrderList?userID=${userID}&account=${currentAccount}`
     )
       .then((res) => res.json())
       .then((result) => {
         setInProgressOrderList(result);
       });
-  }, []);
+  }, [currentAccount, isUpdate]);
+
+  async function cancelOrder(id: number) {
+    const res = await fetch(
+      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/cancelOrder/${id}`,
+      { method: "PATCH" }
+    );
+    const result = await res.json();
+    console.log(result);
+    setIsUpdate(!isUpdate);
+  }
 
   return (
     <>
@@ -41,8 +60,23 @@ const InProgressOrderModule: React.FC = () => {
               <th className="order-table-column-name">下單時間</th>
             </tr>
             {inProgressOrderList.map((inProgressOrder) => (
-              <>
-                <tr className="order-upper-row">
+              <React.Fragment key={inProgressOrder.id}>
+                <tr
+                  className="order-upper-row"
+                  onClick={() => {
+                    ionAlert({
+                      header: "取消訂單?",
+                      buttons: [
+                        { text: "取消", role: "dismiss" },
+                        {
+                          text: "確認",
+                          role: "confirm",
+                          handler: () => cancelOrder(inProgressOrder.id),
+                        },
+                      ],
+                    });
+                  }}
+                >
                   <td
                     className={
                       "order-order-type " +
@@ -55,7 +89,22 @@ const InProgressOrderModule: React.FC = () => {
                   <td>{inProgressOrder.quantity}</td>
                   <td>{inProgressOrder.order_place_time.split("T")[0]}</td>
                 </tr>
-                <tr className="order-bottom-row">
+                <tr
+                  className="order-bottom-row"
+                  onClick={() => {
+                    ionAlert({
+                      header: "取消訂單?",
+                      buttons: [
+                        { text: "取消", role: "dismiss" },
+                        {
+                          text: "確認",
+                          role: "confirm",
+                          handler: () => cancelOrder(inProgressOrder.id),
+                        },
+                      ],
+                    });
+                  }}
+                >
                   <td
                     className={
                       "order-stock-symbol " +
@@ -76,7 +125,7 @@ const InProgressOrderModule: React.FC = () => {
                   <td>{inProgressOrder.order_price}</td>
                   <td>{inProgressOrder.order_place_time.split("T")[1]}</td>
                 </tr>
-              </>
+              </React.Fragment>
             ))}
           </tbody>
         </table>

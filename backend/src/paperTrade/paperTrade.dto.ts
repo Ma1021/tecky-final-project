@@ -5,7 +5,7 @@ export class PlaceOrderDTO {
   userID: string;
 
   @IsNotEmpty()
-  stockID: string;
+  symbol: string;
 
   @IsNotEmpty()
   orderType: string;
@@ -15,4 +15,30 @@ export class PlaceOrderDTO {
 
   @IsNotEmpty()
   quantity: string;
+
+  @IsNotEmpty()
+  account: string;
+}
+
+export class CloseOrderDTO {
+  @IsNotEmpty()
+  id: number;
+
+  @IsNotEmpty()
+  userID: number;
+
+  @IsNotEmpty()
+  symbol: string;
+
+  @IsNotEmpty()
+  isLong: boolean;
+
+  @IsNotEmpty()
+  price: number;
+
+  @IsNotEmpty()
+  quantity: number;
+
+  @IsNotEmpty()
+  account: string;
 }

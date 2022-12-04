@@ -76,7 +76,7 @@ export class UserController {
       console.log(err.message);
       throw new HttpException(
         '註冊失敗, 請再試一次或聯絡客服',
-        HttpStatus.CONFLICT,
+        HttpStatus.BAD_REQUEST,
       );
     }
   }
@@ -143,7 +143,7 @@ export class UserController {
   @Post('/block')
   async getBlockList(@Body() userIdDto: UserIdDto) {
     let result = await this.userService.getBlockUser(userIdDto);
-    // console.log('user controller, blocker list', result);
+    console.log('user controller, blocker list', result);
     return result;
   }
 

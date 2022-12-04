@@ -31,6 +31,7 @@ export class UserService {
       return rows[0];
     } catch {
       (error) => {
+        console.log(error);
         throw new HttpException(error, HttpStatus.BAD_REQUEST);
       };
     }
@@ -90,7 +91,7 @@ export class UserService {
 
   async getBlockUser(userIdDto: UserIdDto) {
     try {
-      console.log('entered block user list');
+      console.log('entered block ukser list', userIdDto);
       let result = await this.knex.raw(
         /*sql*/
         `
@@ -100,11 +101,16 @@ export class UserService {
       `,
         [+userIdDto.userId],
       );
+      if (result.rows.length === 0) {
+        console.log('user service, blocker list', result);
+        return [];
+      }
       result = result.rows[0].blocked_list;
-      // console.log('user service, blocker list', result);
+      console.log('user service, blocker list', result);
       return result;
     } catch {
       (error) => {
+        console.log(error);
         throw new HttpException(error, HttpStatus.BAD_REQUEST);
       };
     }
@@ -126,7 +132,7 @@ export class UserService {
         [+userIdDto.userId],
       );
       result = result.rows[0].blocked_list;
-      // console.log('user service, update block list', result);
+      console.log('user service, update block list', result);
       return result;
     } catch {
       (error) => {
@@ -150,8 +156,12 @@ export class UserService {
         `,
         [+userIdDto.userId],
       );
+      if (result.rows.length === 0) {
+        console.log('user service, unblocker list', result);
+        return [];
+      }
       result = result.rows[0].blocked_list;
-      // console.log('user service, update unblock list', result);
+      console.log('user service, update unblock list', result);
       return result;
     } catch {
       (error) => {

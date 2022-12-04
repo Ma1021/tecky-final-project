@@ -7,7 +7,6 @@ export class UpdateUserDto {
   @IsNotEmpty()
   birthday: Date;
 
-  @IsNotEmpty()
   gender: 'M' | 'F';
 
   @IsNotEmpty()

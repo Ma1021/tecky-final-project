@@ -40,8 +40,8 @@ const InProgressOrderModule: React.FC<InProgressOrderModuleProps> = ({
 
   async function cancelOrder(id: number) {
     const res = await fetch(
-      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/deleteOrder/${id}`,
-      { method: "DELETE" }
+      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/cancelOrder/${id}`,
+      { method: "PATCH" }
     );
     const result = await res.json();
     console.log(result);

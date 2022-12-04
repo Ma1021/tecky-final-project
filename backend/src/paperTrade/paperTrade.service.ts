@@ -35,10 +35,13 @@ export class PaperTradeService {
     }
   }
 
-  async deleteOrder(id: string) {
+  async cancelOrder(id: string) {
     try {
-      await this.knex.delete('*').from('user_trades').where({ id: id });
-      return { message: 'Order deleted.' };
+      await this.knex
+        .update({ order_status: 2, order_complete_time: new Date() })
+        .from('user_trades')
+        .where({ id: id });
+      return { message: 'Order cancelled.' };
     } catch (error) {
       throw new Error(error);
     }

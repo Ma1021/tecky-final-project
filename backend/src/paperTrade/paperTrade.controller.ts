@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Query,
 } from '@nestjs/common';
@@ -28,9 +29,9 @@ export class PaperTradeController {
     );
   }
 
-  @Delete('/deleteOrder/:id')
-  async deleteOrder(@Param('id') id: string) {
-    return await this.paperTradeService.deleteOrder(id);
+  @Patch('/cancelOrder/:id')
+  async cancelOrder(@Param('id') id: string) {
+    return await this.paperTradeService.cancelOrder(id);
   }
 
   @Get('/getInProgressOrderList')

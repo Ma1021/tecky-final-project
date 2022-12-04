@@ -25,6 +25,7 @@ export function updateBlockUserError(error: string) {
 }
 
 export function fetchGetBlockList(userId: number) {
+  console.log("fetchget locklist", JSON.stringify({ userId }));
   return (dispatch: AppDispatch) => {
     fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/block`, {
       method: "POST",
@@ -44,7 +45,6 @@ export function fetchBlockList(block: {
   userId: number;
   blockedUserId: number;
 }) {
-  console.log("block the user ");
   return (dispatch: AppDispatch) => {
     fetch(
       `${process.env.REACT_APP_PUBLIC_URL}/user/${block.blockedUserId}/block`,

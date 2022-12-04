@@ -1,5 +1,5 @@
 import { IonAvatar, IonCard } from "@ionic/react";
-import React from "react";
+import React, { createRef } from "react";
 import { ChatroomRecord } from "../../redux/chatroomRecord/state";
 import { BubbleContent, BubbleSpeaker, DateIonText } from "./ChatReceiveBubble";
 
@@ -13,6 +13,7 @@ const ChatSendBubble: React.FC<ChatBubbleProps> = (props) => {
       <div
         className="d-flex flex-row-reverse"
         data-message={props.props.recordid}
+        ref={createRef}
       >
         <div className="d-flex flex-row ion-margin ml-0">
           <IonAvatar

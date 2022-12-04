@@ -6,13 +6,14 @@ import {
   IonCardSubtitle,
   IonText,
 } from "@ionic/react";
-import React from "react";
+import React, { createRef } from "react";
 import { useHistory } from "react-router";
 import styled from "styled-components";
 import { ChatBubbleProps } from "./ChatSendBubble";
 
 const ChatReceiveBubble: React.FC<ChatBubbleProps> = (props) => {
   const history = useHistory();
+  const contentRef = createRef<HTMLIonContentElement>();
 
   // go the the user profile
   const getProfile = (e: any) => {
@@ -23,7 +24,11 @@ const ChatReceiveBubble: React.FC<ChatBubbleProps> = (props) => {
 
   return (
     <>
-      <div className="d-flex" data-message={props.props.recordid}>
+      <div
+        ref={createRef}
+        className="d-flex"
+        data-message={props.props.recordid}
+      >
         <div className="d-flex flex-row ion-margin mr-0">
           <IonAvatar
             style={{
@@ -79,7 +84,7 @@ const ChatReceiveBubble: React.FC<ChatBubbleProps> = (props) => {
     </>
   );
 };
-export default ChatReceiveBubble;
+export default React.memo(ChatReceiveBubble);
 
 export const DateIonText = styled(IonText)`
   text-align: end;

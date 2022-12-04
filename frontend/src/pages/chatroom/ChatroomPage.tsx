@@ -20,8 +20,14 @@ import {
   IonToolbar,
   useIonToast,
 } from "@ionic/react";
-import { image, searchOutline, send } from "ionicons/icons";
-import { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { searchOutline as ellipsisVertical, send } from "ionicons/icons";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+  createRef,
+} from "react";
 import { useRouteMatch } from "react-router";
 import { Socket } from "socket.io-client";
 import styled from "styled-components";
@@ -50,6 +56,15 @@ const ChatroomPage: React.FC = () => {
   const [present] = useIonToast();
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
+
+  // for scroll
+  const contentRef = createRef<HTMLIonContentElement>();
+
+  function scrollToBottom() {
+    // Passing a duration to the method makes it so the scroll slowly
+    // goes to the bottom instead of instantly
+    contentRef.current?.scrollIntoView();
+  }
 
   const userId = useAppSelector((state) => {
     return state?.auth?.user?.id;
@@ -87,21 +102,17 @@ const ChatroomPage: React.FC = () => {
       .catch((error) => {
         console.log(`failed to load, ${error}`);
         present({
-          message: String(err),
+          message: String(error),
           duration: 15000,
           color: "danger",
         });
       });
-  }, [setMessageList, setLoading, setErr, roomId, userId]);
 
-  // const chatroom = useGet<ChatroomType | null>({
-  //   name: "chatroom data",
-  //   url: "/chatroom/" + roomId,
-  //   parser: chatroomParser,
-  //   initialState: null,
-  // });
+    scrollToBottom();
+  }, [setMessageList, setLoading, roomId, userId, newMessageId, present]);
 
   // 開新socket
+  let count = 0;
   useSocket(
     // why: prevent join room multiple times.
     useCallback(
@@ -111,29 +122,28 @@ const ChatroomPage: React.FC = () => {
         // event listener listening on the socket
         socket.on("new-message", (bubble) => {
           let newMessage: ChatroomRecord = bubble;
-          console.log("newMessage", newMessage);
           if (!!newMessage) {
             if (newMessage.chatroomid !== +roomId) {
               return;
             }
           }
 
-          // update the list of chats
-          console.log("before dispatch", messageList);
-
           if (
             JSON.stringify(newMessage) ===
             JSON.stringify(messageList[messageList.length - 1])
           ) {
-            console.log("they equal");
             return;
           }
+          console.log("socket times", count++);
           setMessageList((msg) => {
-            return [...(msg as ChatroomRecord[]), newMessage];
+            console.log("newMessage", newMessage);
+            return [newMessage];
           });
           setNewMessageId(newMessage.recordid);
+          return;
         });
         return () => {
+          count = 0;
           console.log("leave room:", roomId);
           socket.emit("leave-room", roomId);
         };
@@ -171,15 +181,14 @@ const ChatroomPage: React.FC = () => {
     });
   };
 
-  let ionCard = document.querySelector(`.contentBottom`);
-  useLayoutEffect(() => {
-    if (!newMessageId) return;
+  // useLayoutEffect(() => {
+  //   if (!newMessageId) return;
 
-    console.log({ newMessageId, ionCard });
-    if (ionCard) {
-      ionCard.scrollIntoView({ behavior: "smooth", block: "end" });
-    }
-  }, [newMessageId]);
+  //   console.log({ newMessageId, ionCard });
+  //   if (ionCard) {
+  //     ionCard.scrollIntoView({ behavior: "smooth", block: "end" });
+  //   }
+  // }, [newMessageId]);
 
   // check if host is speaker
   // if user is host
@@ -190,6 +199,9 @@ const ChatroomPage: React.FC = () => {
     setMessage(msg);
   };
 
+  // popUpOptions
+  const popUpOptions = () => {};
+
   return (
     <IonPage>
       <IonHeader>
@@ -197,14 +209,21 @@ const ChatroomPage: React.FC = () => {
           <IonTitle className="p-0">
             <div className=" d-flex justify-content-between align-items-center w100 ">
               <IonButtons>
-                <IonBackButton defaultHref="/chatroomList" text="返回"></IonBackButton>
+                <IonBackButton
+                  defaultHref="/chatroomList"
+                  text="返回"
+                ></IonBackButton>
               </IonButtons>
               <span>
                 {(messageList as ChatroomRecord[])[0]
                   ? (messageList as ChatroomRecord[])[0].chatroomname
                   : null}
               </span>
-              <IonIcon className="pr-2" icon={searchOutline}></IonIcon>
+              <IonIcon
+                className="pr-2"
+                icon={ellipsisVertical}
+                onClick={popUpOptions}
+              ></IonIcon>
             </div>
           </IonTitle>
         </IonToolbar>

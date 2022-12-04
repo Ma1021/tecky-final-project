@@ -14,9 +14,7 @@ import {
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router";
 import AccountOverviewModule from "../../components/paperTradeAccount/AccountOverviewModule";
-import PaperTradeForum from "../../components/paperTradeAccount/PaperTradeForum";
 import PaperTradeNavigator from "../../components/paperTradeAccount/PaperTradeNavigator";
-import PaperTradeRankList from "../../components/paperTradeAccount/PaperTradeRankList";
 import PositionAndOrderModule from "../../components/paperTradeAccount/PositionAndOrderModule";
 
 export interface AccountDetailType {
@@ -35,6 +33,7 @@ const IndividualAccount: React.FC = () => {
   const [currentAccount, setCurrentAccount] = useState(
     location.pathname.split("/")[location.pathname.split("/").length - 1]
   );
+  const userID = 1;
 
   const [accountDetail, setAccountDetail] = useState<AccountDetailType>({
     totalAmount: 0,
@@ -48,40 +47,22 @@ const IndividualAccount: React.FC = () => {
   });
 
   useEffect(() => {
-    if (currentAccount === "US") {
-      setAccountDetail({
-        totalAmount: 1000000,
-        todayProfit: 0,
-        todayProfitPercentage: 0,
-        marketValue: 0,
-        buyingPower: 1000000,
-        rank: 0,
-        totalProfit: 0,
-        totalProfitPercentage: 0,
+    fetch(
+      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getAccountDetail?userID=${userID}&account=${currentAccount}`
+    )
+      .then((res) => res.json())
+      .then((result) => {
+        setAccountDetail({
+          totalAmount: result[0].principal,
+          todayProfit: result[0].today_profit,
+          todayProfitPercentage: result[0].today_profit,
+          marketValue: result[0].market_value,
+          buyingPower: result[0].buying_power,
+          rank: 0,
+          totalProfit: result[0].total_profit,
+          totalProfitPercentage: result[0].total_profit,
+        });
       });
-    } else if (currentAccount === "HK") {
-      setAccountDetail({
-        totalAmount: 2000000,
-        todayProfit: 1000,
-        todayProfitPercentage: 10,
-        marketValue: 1000000,
-        buyingPower: 1000000,
-        rank: 1,
-        totalProfit: 1000000,
-        totalProfitPercentage: 100,
-      });
-    } else {
-      setAccountDetail({
-        totalAmount: 10000,
-        todayProfit: -8000,
-        todayProfitPercentage: -80,
-        marketValue: 10000,
-        buyingPower: 0,
-        rank: 9999,
-        totalProfit: -9000,
-        totalProfitPercentage: -90,
-      });
-    }
   }, [currentAccount]);
 
   return (
@@ -121,13 +102,11 @@ const IndividualAccount: React.FC = () => {
           </IonList>
 
           <AccountOverviewModule accountDetail={accountDetail} />
+
           <PaperTradeNavigator currentAccount={currentAccount} />
           <div style={{ height: "10px" }}></div>
+
           <PositionAndOrderModule currentAccount={currentAccount} />
-          {/* <div style={{ height: "10px" }}></div>
-          <PaperTradeForum />
-          <div style={{ height: "10px" }}></div>
-          <PaperTradeRankList /> */}
         </IonContent>
       </IonPage>
     </>

@@ -73,4 +73,12 @@ export class PaperTradeController {
   ) {
     return await this.paperTradeService.getPositionList(userID, account);
   }
+
+  @Get('/getAccountDetail')
+  async getAccountDetail(
+    @Query('userID') userID: string,
+    @Query('account') account: string,
+  ) {
+    return await this.paperTradeService.getAccountDetail(userID, account);
+  }
 }

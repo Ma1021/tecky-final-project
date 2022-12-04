@@ -4,6 +4,7 @@ export async function seed(knex: Knex): Promise<void> {
   // Deletes ALL existing entries
   await knex('user_positions').del();
   await knex('user_trades').del();
+  await knex('user_paper_trade_accounts').del();
 
   // Inserts seed entries
   await knex('user_positions').insert([
@@ -39,7 +40,39 @@ export async function seed(knex: Knex): Promise<void> {
     },
   ]);
 
-  await knex('users').update({ paper_trade_principal: 1000000 });
+  await knex('user_paper_trade_accounts').insert([
+    {
+      id: 1,
+      user_id: 1,
+      principal: 1000000,
+      market_value: 0,
+      buying_power: 0,
+      today_profit: 0,
+      total_profit: 0,
+      account: 'US',
+    },
+    {
+      id: 2,
+      user_id: 1,
+      principal: 1000000,
+      market_value: 0,
+      buying_power: 0,
+      today_profit: 0,
+      total_profit: 0,
+      account: 'HK',
+    },
+    {
+      id: 3,
+      user_id: 1,
+      principal: 1000000,
+      market_value: 0,
+      buying_power: 0,
+      today_profit: 0,
+      total_profit: 0,
+      account: 'crypto',
+    },
+  ]);
+
   // await knex('user_trades').insert([
   //   {
   //     id: 1,

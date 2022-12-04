@@ -170,4 +170,12 @@ export class PaperTradeService {
 
     return result;
   }
+
+  async getAccountDetail(userID: string, account: string) {
+    const result = await this.knex
+      .select('*')
+      .from('user_paper_trade_accounts')
+      .where({ user_id: userID, account: account });
+    return result;
+  }
 }

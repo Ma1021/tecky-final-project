@@ -14,6 +14,7 @@ export async function seed(knex: Knex): Promise<void> {
       cost: 60,
       current_price: 100,
       quantity: 20,
+      account: 'US',
     },
     {
       id: 2,
@@ -22,6 +23,7 @@ export async function seed(knex: Knex): Promise<void> {
       cost: 10,
       current_price: 5,
       quantity: 100,
+      account: 'US',
     },
     {
       id: 3,
@@ -30,6 +32,7 @@ export async function seed(knex: Knex): Promise<void> {
       cost: 50,
       current_price: 50,
       quantity: 50,
+      account: 'US',
     },
   ]);
 
@@ -44,6 +47,7 @@ export async function seed(knex: Knex): Promise<void> {
       order_place_time: new Date('2022-11-02'),
       order_status: 1,
       order_complete_time: new Date('2022-11-02'),
+      account: 'US',
     },
     {
       id: 2,
@@ -55,6 +59,7 @@ export async function seed(knex: Knex): Promise<void> {
       order_place_time: new Date('2022-11-03'),
       order_status: 1,
       order_complete_time: new Date('2022-11-03'),
+      account: 'US',
     },
     {
       id: 3,
@@ -66,6 +71,7 @@ export async function seed(knex: Knex): Promise<void> {
       order_place_time: new Date('2022-11-04'),
       order_status: 1,
       order_complete_time: new Date('2022-11-04'),
+      account: 'US',
     },
     {
       id: 4,
@@ -76,6 +82,7 @@ export async function seed(knex: Knex): Promise<void> {
       quantity: 20,
       order_place_time: new Date('2022-11-10'),
       order_status: 0,
+      account: 'US',
     },
     {
       id: 5,
@@ -87,6 +94,7 @@ export async function seed(knex: Knex): Promise<void> {
       order_place_time: new Date('2022-11-10'),
       order_status: 2,
       order_complete_time: new Date('2022-11-10'),
+      account: 'US',
     },
   ]);
 }

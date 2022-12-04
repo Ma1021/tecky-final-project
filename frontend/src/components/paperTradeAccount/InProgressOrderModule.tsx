@@ -13,7 +13,13 @@ export interface InProgressOrderType {
   order_status: number;
 }
 
-const InProgressOrderModule: React.FC = () => {
+interface InProgressOrderModuleProps {
+  currentAccount: string;
+}
+
+const InProgressOrderModule: React.FC<InProgressOrderModuleProps> = ({
+  currentAccount,
+}) => {
   const [inProgressOrderList, setInProgressOrderList] = useState<
     InProgressOrderType[]
   >([]);
@@ -21,13 +27,13 @@ const InProgressOrderModule: React.FC = () => {
 
   useEffect(() => {
     fetch(
-      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getInProgressOrderList?userID=${userID}`
+      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getInProgressOrderList?userID=${userID}&account=${currentAccount}`
     )
       .then((res) => res.json())
       .then((result) => {
         setInProgressOrderList(result);
       });
-  }, []);
+  }, [currentAccount]);
 
   return (
     <>

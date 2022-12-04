@@ -33,7 +33,7 @@ export class PaperTradeService {
     }
   }
 
-  async getInProgressOrderList(userID: string) {
+  async getInProgressOrderList(userID: string, account: string) {
     const result = await this.knex
       .select([
         'user_trades.id',
@@ -48,13 +48,13 @@ export class PaperTradeService {
       ])
       .from('user_trades')
       .join('stock_info', 'user_trades.stock_id', 'stock_info.id')
-      .where({ user_id: userID, order_complete_time: null })
+      .where({ user_id: userID, order_complete_time: null, account: account })
       .orderBy('order_place_time', 'desc');
 
     return result;
   }
 
-  async getFullOrderList(userID: string) {
+  async getFullOrderList(userID: string, account: string) {
     const result = await this.knex
       .select([
         'user_trades.id',
@@ -70,7 +70,7 @@ export class PaperTradeService {
       ])
       .from('user_trades')
       .join('stock_info', 'user_trades.stock_id', 'stock_info.id')
-      .where({ user_id: userID })
+      .where({ user_id: userID, account: account })
       .orderBy('order_place_time', 'desc');
 
     return result;

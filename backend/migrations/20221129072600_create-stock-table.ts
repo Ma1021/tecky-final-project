@@ -26,6 +26,7 @@ export async function up(knex: Knex): Promise<void> {
     table.timestamp('order_place_time');
     table.integer('order_status');
     table.timestamp('order_complete_time');
+    table.string('account');
   });
 
   await knex.schema.createTable('stock_news', (table) => {

@@ -15,23 +15,25 @@ interface OrderRecordsType {
 
 interface PaperTradeRecordsModuleProps {
   userID: string;
+  currentAccount: string;
 }
 
 const PaperTradeRecordsModule: React.FC<PaperTradeRecordsModuleProps> = ({
   userID,
+  currentAccount,
 }) => {
   const [orderRecords, setOrderRecords] = useState<OrderRecordsType[]>([]);
 
   useEffect(() => {
     fetch(
-      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getFullOrderList?userID=${userID}`
+      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getFullOrderList?userID=${userID}&account=${currentAccount}`
     )
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
         setOrderRecords(result);
       });
-  }, []);
+  }, [currentAccount]);
 
   return (
     <>

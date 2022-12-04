@@ -8,6 +8,7 @@ export async function up(knex: Knex): Promise<void> {
     table.decimal('cost');
     table.decimal('current_price');
     table.integer('quantity');
+    table.string('account');
   });
 }
 

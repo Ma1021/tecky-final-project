@@ -22,12 +22,18 @@ export class PaperTradeController {
   }
 
   @Get('/getInProgressOrderList')
-  async getInProgressOrderList(@Query('userID') userID: string) {
-    return await this.paperTradeService.getInProgressOrderList(userID);
+  async getInProgressOrderList(
+    @Query('userID') userID: string,
+    @Query('account') account: string,
+  ) {
+    return await this.paperTradeService.getInProgressOrderList(userID, account);
   }
 
   @Get('/getFullOrderList')
-  async getFullOrderList(@Query('userID') userID: string) {
-    return await this.paperTradeService.getFullOrderList(userID);
+  async getFullOrderList(
+    @Query('userID') userID: string,
+    @Query('account') account: string,
+  ) {
+    return await this.paperTradeService.getFullOrderList(userID, account);
   }
 }

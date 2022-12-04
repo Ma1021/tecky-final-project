@@ -123,7 +123,7 @@ const IndividualAccount: React.FC = () => {
           <AccountOverviewModule accountDetail={accountDetail} />
           <PaperTradeNavigator currentAccount={currentAccount} />
           <div style={{ height: "10px" }}></div>
-          <PositionAndOrderModule />
+          <PositionAndOrderModule currentAccount={currentAccount} />
           <div style={{ height: "10px" }}></div>
           <PaperTradeForum />
           <div style={{ height: "10px" }}></div>

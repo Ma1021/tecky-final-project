@@ -53,4 +53,8 @@ export class PaperTradeService {
 
     return result;
   }
+
+  async getCurrentPositionList(userID: string) {
+    const result = await this.knex.select('*').from('user')
+  }
 }

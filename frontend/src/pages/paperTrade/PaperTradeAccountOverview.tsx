@@ -1,8 +1,15 @@
-import { IonPage, IonHeader, IonToolbar, IonContent, IonText } from "@ionic/react";
+import {
+  IonPage,
+  IonHeader,
+  IonToolbar,
+  IonContent,
+  IonText,
+} from "@ionic/react";
 import { useEffect, useState } from "react";
 import PaperTradeAccountModule from "../../components/paperTradeAccount/PaperTradeAccountModule";
 import Title from "../../components/All/Title";
 import "./PaperTradeAccountOverview.css";
+import Menu from "../../components/All/Menu";
 
 interface UserAccountType {
   region: string;
@@ -27,36 +34,41 @@ const PaperTradeAccountOverview: React.FC = () => {
     ];
     setUserAccountList(exampleList);
   }, []);
-  
-  return (
-    <IonPage>
-      <IonHeader
-        translucent={true}
-        collapse="fade"
-        style={{ height: 50 }}
-        className="d-flex align-items-center"
-      >
-        <IonToolbar>
-          <Title title="模擬交易" />
-        </IonToolbar>
-      </IonHeader>
 
-      <IonContent>
-        <div style={{padding:'5%'}}>
-          <IonText style={{fontWeight:600, marginLeft:5}}>股票賬戶</IonText>
-          <div className="modules-container">
-            {userAccountList.map((obj) => (
-              <PaperTradeAccountModule
-                region={obj.region}
-                amount={obj.amount}
-                profit={obj.profit}
-                profitPercentage={obj.profitPercentage}
-              />
-            ))}
+  return (
+    <>
+      <Menu />
+      <IonPage>
+        <IonHeader
+          translucent={true}
+          collapse="fade"
+          style={{ height: 50 }}
+          className="d-flex align-items-center"
+        >
+          <IonToolbar>
+            <Title title="模擬交易" />
+          </IonToolbar>
+        </IonHeader>
+
+        <IonContent>
+          <div style={{ padding: "5%" }}>
+            <IonText style={{ fontWeight: 600, marginLeft: 5 }}>
+              股票賬戶
+            </IonText>
+            <div className="modules-container">
+              {userAccountList.map((obj) => (
+                <PaperTradeAccountModule
+                  region={obj.region}
+                  amount={obj.amount}
+                  profit={obj.profit}
+                  profitPercentage={obj.profitPercentage}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      </IonContent>
-    </IonPage>
+        </IonContent>
+      </IonPage>
+    </>
   );
 };
 

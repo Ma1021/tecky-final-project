@@ -1,3 +1,4 @@
+import { PaperTradeModule } from './paperTrade/paperTrade.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -23,6 +24,7 @@ const profile = require('../knexfile')[env.NODE_ENV];
     ChatroomModule,
     AnalyticsModule,
     StockModule,
+    PaperTradeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

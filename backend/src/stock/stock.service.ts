@@ -459,16 +459,6 @@ export class StockService {
 
     return result;
   }
-
-  async placeOrder(
-    userID: string,
-    symbol: string,
-    orderType: string,
-    price: string,
-    quantity: string,
-  ) {
-    return [];
-  }
 }
 
 function changeTimeFrame(

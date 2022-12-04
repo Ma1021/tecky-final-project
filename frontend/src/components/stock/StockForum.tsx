@@ -1,20 +1,22 @@
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import styled from "styled-components";
 import { loadStockQuestion } from "../../redux/questions/questionSlice";
 import QuestionCard from "../discuss/QuestionCard";
 import {IonSpinner, IonText, IonRouterLink} from "@ionic/react";
+import { Questions } from "../discuss/Allquestion";
 
 const StockForum: React.FC = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const stock_symbol = history.location.pathname.slice(21)
-
+  const { blockedUserList } = useAppSelector((state)=> state.block);
   const { stockQuestionList, loading } = useAppSelector(
     (state) => state.question
   );
+  const [filteredQuestions, setFilteredQuestions] = useState(Array<Questions>);
 
   const initStockQuestion = useCallback(async () => {
     await dispatch(loadStockQuestion(stock_symbol));
@@ -24,6 +26,14 @@ const StockForum: React.FC = () => {
     initStockQuestion();
   },[])
 
+  useEffect(()=>{
+    setFilteredQuestions(
+      stockQuestionList.filter((question)=>{
+        return !blockedUserList.includes(question.asker_id)
+      })
+    )
+  },[stockQuestionList])
+
   return (
     <QuestionContainer>
       {loading ? 
@@ -31,7 +41,7 @@ const StockForum: React.FC = () => {
         <IonSpinner name="crescent" />
         <IonText>加載中...</IonText>
       </div>
-      : <QuestionCard questions={stockQuestionList}/>
+      : <QuestionCard questions={filteredQuestions}/>
       }
       {stockQuestionList.length === 0 && 
       <div className="d-flex flex-column align-items-center" style={{marginTop:"70%"}}>

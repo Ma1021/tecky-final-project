@@ -585,6 +585,25 @@ body {
   margin-right: calc(1rem * 3);
 }
 
-ion-alert.alert {
+ion-segment {
+  color:#dedede;
+}
+
+ion-segment-button {
+  --indicator-color: var(--ion-color-primary);
+  --color-checked:#fff;
+  font-weight: 800;
+}
+
+ion-alert.alert .alert-wrapper {
+  color: #ffa930;
+  background: #222;
+}
+
+ion-alert.alert .alert-button {
+  color: #ffa930;
+}
+
+ion-alert.alert .alert-radio-button {
   color: #ffa930;
 }

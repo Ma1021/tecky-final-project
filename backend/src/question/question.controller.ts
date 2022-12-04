@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query, Response } from '@nestjs/common';
 import { QuestionService } from './question.service';
-import { Question_DTO } from './question.dto'
+import { Question_DTO, Report_DTO } from './question.dto'
 import { query } from 'express';
 
 @Controller('/question')
@@ -49,29 +49,7 @@ export class QuestionController {
 
   @Post()
   createQuestion(@Body() questions: Question_DTO, @Response() res) {    
-    const { asker_id, content, stock_id } = questions;
-    
-    if(!content) {
-      throw new HttpException('Missing content', HttpStatus.BAD_REQUEST)
-    } 
-
-    if(!asker_id) {
-      throw new HttpException('Missing asker id', HttpStatus.BAD_REQUEST)
-    } 
-
-    if(typeof asker_id !== 'number') {
-      throw new HttpException('Invalid asker id', HttpStatus.BAD_REQUEST)
-    }
-
-    if(stock_id) {
-      for(let stockId of stock_id) {
-        if(typeof stockId !== 'number') {
-          throw new HttpException('Invalid tag id', HttpStatus.BAD_REQUEST)
-        }
-      }
-    }
-
-    this.questionService.create(questions).then(async (response)=>{
+    return this.questionService.create(questions).then(async (response)=>{
       const { id } = response[0]
       if(id) {
         const question = await this.questionService.findOne(+id)      
@@ -121,13 +99,9 @@ export class QuestionController {
     })
   }
 
-  @Put('/report/:id')
-  reportQuestion(@Param('id') question_id: string) {
-    if(!question_id) {
-      throw new HttpException('Missing question id', HttpStatus.BAD_REQUEST);
-    }
-
-    return this.questionService.report(+question_id);
+  @Post('/report')
+  reportQuestion(@Body() report:Report_DTO ) {
+    return this.questionService.report(report);
   }
 
   @Delete(':id')

@@ -67,12 +67,14 @@ const QuestionDetail: React.FC = memo(() => {
   },[question])
   
   async function filterAnswer() {
-    const answer = await question.answer    
-    setAnswerFilter(
-      answer.filter((answer)=>{        
-        return !blockedUserList.includes(answer.answers.id)
-      })
-    )
+    const answer = await question.answer
+    if(answer) {
+      setAnswerFilter(
+        answer.filter((answer)=>{        
+          return !blockedUserList.includes(answer.answers.id)
+        })
+      )
+    }    
   }    
 
   const fetchFollowing = useCallback(async () => {
@@ -266,20 +268,54 @@ const QuestionDetail: React.FC = memo(() => {
     history.push(`/user/${+e.target.dataset.userid}/info`);
   };
 
-  function handleReport(url:string, status: string) {
+  function handleReport(url:string, status: string, obj:{reason: string}) {
     if(status === '舉報') {
       alertPresent({
         cssClass: "alert",
-        header: "提示",
-        message: "確定要舉報嗎？",
+        header: "確定要舉報嗎？",
+        message: "請選擇原因",
+        inputs:[
+          {
+            label: '騷擾謾罵',
+            type: 'radio',
+            value: '騷擾謾罵',
+          },
+          {
+            label: '虚假信息',
+            type: 'radio',
+            value: '虚假信息',
+          },
+          {
+            label: '色情內容',
+            type: 'radio',
+            value: '色情內容',
+          },
+          {
+            label: '仇恨言論',
+            type: 'radio',
+            value: '仇恨言論',
+          },
+          {
+            label: '暴力威脅',
+            type: 'radio',
+            value: '暴力威脅',
+          },
+          {
+            label: '其他',
+            type: 'radio',
+            value: '其他',
+          }
+        ],
         buttons: [
           "取消",
           {
             text: "確定",
-            handler: () => {
+            handler: (data: string) => {
+              obj.reason = data;
               fetch(url, {
-                method: 'PUT',
-                headers: {"Content-type":"application/json"}
+                method: 'POST',
+                headers: {"Content-type":"application/json"},
+                body:JSON.stringify(obj)
               }).then((response)=>{
                 if(response.ok) {
                   toastPresent("舉報成功，請耐心等待，管理員將24小時內處理", 1500);
@@ -295,18 +331,32 @@ const QuestionDetail: React.FC = memo(() => {
     }
   }
   
-  function handleAnswerReport(e: any) {
+  function handleAnswerReport(e: any) {    
     const answer_id = +e.target.parentNode.parentNode.parentNode.dataset.answer_id;
     const status = e.target.innerText;
-    const url = `${process.env.REACT_APP_PUBLIC_URL}/answer/report/${answer_id}`;
-    handleReport(url, status);
+    const url = `${process.env.REACT_APP_PUBLIC_URL}/answer/report`;
+    const obj = {
+      from_user_id: user_id,
+      to_user_id: +e.target.parentNode.parentNode.parentNode.dataset.user_id,
+      reason: "",
+      target_type:"answer",
+      target_id: answer_id
+    }
+    handleReport(url, status, obj);
   }
 
   function handleQuestionReport(e: any) {
     const question_id = +e.target.parentNode.parentNode.parentNode.dataset.question_id;
     const status = e.target.innerText;
-    const url = `${process.env.REACT_APP_PUBLIC_URL}/question/report/${question_id}`;
-    handleReport(url, status);
+    const url = `${process.env.REACT_APP_PUBLIC_URL}/question/report`;
+    const obj = {
+      from_user_id: user_id,
+      to_user_id: +e.target.parentNode.parentNode.parentNode.dataset.user_id,
+      reason: "",
+      target_type:"question",
+      target_id: question_id
+    }    
+    handleReport(url, status, obj);
   }
 
   return (

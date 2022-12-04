@@ -29,7 +29,7 @@ import {
 } from "ionicons/icons";
 import Notification from "../../components/All/Notification";
 import { useEffect, useState, useCallback } from "react";
-import UserArticles from "../../components/UserContent/UserArticles";
+import UserPoints from "../../components/UserContent/UserPoints";
 import UserDiscussion from "../../components/UserContent/UserDiscussion";
 import UserIntro from "../../components/UserContent/UserIntro";
 import UserBadge from "../../components/All/UserBadge";
@@ -134,6 +134,7 @@ const UserInfo: React.FC = () => {
   const toBlock = (e: any) => {
     e?.stopPropagation();
     presentAlert({
+      cssClass: "alert",
       header: "確認封鎖?",
       subHeader: "一經封鎖, 不能檢視用戶發言",
       buttons: [
@@ -290,22 +291,22 @@ const UserInfo: React.FC = () => {
         {/* user information above */}
         {/* user history below */}
         <div style={{ padding: "0.5rem 1rem" }}>
-          <IonSegment onIonChange={segmentChangeAction}>
+          <IonSegment value={userSegment} onIonChange={segmentChangeAction}>
             <IonSegmentButton value="userIntro">
               <IonLabel>自我介紹</IonLabel>
             </IonSegmentButton>
-            <IonSegmentButton value="userArticle">
-              <IonLabel>文章</IonLabel>
+            <IonSegmentButton value="userPoints">
+              <IonLabel>積分</IonLabel>
             </IonSegmentButton>
             <IonSegmentButton value="userDiscuss">
-              <IonLabel>討論</IonLabel>
+              <IonLabel>問題</IonLabel>
             </IonSegmentButton>
           </IonSegment>
         </div>
         {userSegment === "userIntro" ? (
           <UserIntro userId={+userIdUrl} />
-        ) : userSegment === "userArticle" ? (
-          <UserArticles />
+        ) : userSegment === "userPoints" ? (
+          <UserPoints />
         ) : (
           <UserDiscussion userId={+userIdUrl} />
         )}

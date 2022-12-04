@@ -3,6 +3,7 @@ import {
   IonRefresherContent,
   RefresherEventDetail,
   IonSpinner,
+  IonRouterLink
 } from "@ionic/react";
 import { memo, useEffect, useState } from "react";
 import QuestionCard from "./QuestionCard";
@@ -77,7 +78,17 @@ const MyQuestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
               }
             />
           ) : (
-            <div style={{ marginTop: 10 }}>沒有提出過問題</div>
+            <div
+            style={{
+              marginTop: 10,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            你似乎未問過問題
+            <IonRouterLink href="/discuss/createQuestion">去問問題吧~</IonRouterLink>
+          </div>
           )}
         </QuestionContainer>
       )}
@@ -90,6 +101,11 @@ const QuestionContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  ion-router-link {
+    text-decoration: underline;
+    margin-top: 1rem;
+  }
 `;
 
 const LoadingScreen = styled.div`

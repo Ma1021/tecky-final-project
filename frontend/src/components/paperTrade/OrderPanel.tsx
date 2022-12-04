@@ -18,6 +18,8 @@ const OrderPanel: React.FC = () => {
   const [orderPrice, setOrderPrice] = useState<number>(0);
   const [quantity, setQuantity] = useState<number>(0);
   const principal = 1000000;
+  const ownedTickets = 100;
+  const stockPrice = 300;
 
   return (
     <>
@@ -34,20 +36,22 @@ const OrderPanel: React.FC = () => {
 
         <IonItem>
           <IonLabel className="order-panel-label">方向</IonLabel>
-          <IonButtons>
-            <IonButton
-              className={orderDirection === "long" ? "long" : ""}
-              onClick={() => setOrderDirection("long")}
-            >
-              模擬買入
-            </IonButton>
-            <IonButton
-              className={orderDirection === "short" ? "short" : ""}
-              onClick={() => setOrderDirection("short")}
-            >
-              模擬賣出
-            </IonButton>
-          </IonButtons>
+          {/* <IonButtons> */}
+          <IonButton
+            color={orderDirection === "long" ? "success" : "undefined"}
+            // className={orderDirection === "long" ? "long" : ""}
+            onClick={() => setOrderDirection("long")}
+          >
+            模擬買入
+          </IonButton>
+          <IonButton
+            color={orderDirection === "short" ? "danger" : "undefined"}
+            // className={orderDirection === "short" ? "short" : ""}
+            onClick={() => setOrderDirection("short")}
+          >
+            模擬賣出
+          </IonButton>
+          {/* </IonButtons> */}
         </IonItem>
 
         <IonItem>
@@ -65,7 +69,15 @@ const OrderPanel: React.FC = () => {
         <IonItem>
           <IonLabel className="order-panel-label">價格</IonLabel>
           <IonInput
-            value={isNaN(orderPrice) ? "" : orderPrice <= 0 ? "" : orderPrice}
+            value={
+              orderType === "fix"
+                ? isNaN(orderPrice)
+                  ? ""
+                  : orderPrice <= 0
+                  ? ""
+                  : orderPrice
+                : stockPrice
+            }
             onIonChange={(e: any) => {
               setOrderPrice(parseFloat(e.detail.value));
             }}
@@ -115,13 +127,23 @@ const OrderPanel: React.FC = () => {
         </IonItem>
 
         <IonItem>
-          <IonLabel>{`最大可買 ${
-            orderPrice <= 0
-              ? ""
-              : isNaN(Math.floor(principal / orderPrice))
-              ? ""
-              : Math.floor(principal / orderPrice)
-          }`}</IonLabel>
+          {orderDirection === "long" ? (
+            <IonLabel>{`最大可買 ${
+              orderPrice <= 0
+                ? ""
+                : isNaN(Math.floor(principal / orderPrice))
+                ? ""
+                : Math.floor(principal / orderPrice)
+            }`}</IonLabel>
+          ) : (
+            <IonLabel>{`最大可賣 ${
+              ownedTickets <= 0
+                ? ""
+                : quantity > ownedTickets
+                ? `${ownedTickets} 超過持倉數量`
+                : ownedTickets
+            }`}</IonLabel>
+          )}
         </IonItem>
 
         <IonItem>

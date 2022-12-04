@@ -38,8 +38,8 @@ export class StockService {
         'current_price',
         'yesterday_price',
       ])
-      .from('user_stock')
-      .join('stock_info', 'user_stock.stock_id', 'stock_info.id')
+      .from('user_stocks')
+      .join('stock_info', 'user_stocks.stock_id', 'stock_info.id')
       .where({ user_id: userID });
     result.map((stockObj) => {
       stockObj['price_difference'] =

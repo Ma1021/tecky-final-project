@@ -67,7 +67,8 @@ const PaperTradeOrder: React.FC = () => {
 
           <div style={{ height: "10px" }}></div>
 
-          <OrderPanel />
+          <OrderPanel currentAccount={currentAccount} />
+
           <PositionAndOrderModule currentAccount={currentAccount} />
         </IonContent>
       </IonPage>

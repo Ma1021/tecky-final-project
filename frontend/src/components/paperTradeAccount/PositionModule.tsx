@@ -88,7 +88,7 @@ const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
               <th className="position-table-column-name">持倉占比</th>
             </tr>
             {userPosition.map((positionRecord) => (
-              <>
+              <React.Fragment key={positionRecord.id}>
                 <tr className="position-upper-row">
                   <td className="no-center">{positionRecord.chineseName}</td>
                   <td>{positionRecord.marketValue.toFixed(2)}</td>
@@ -123,7 +123,7 @@ const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
                   >{`${positionRecord.profitPercentage.toFixed(2)}%`}</td>
                   <td></td>
                 </tr>
-              </>
+              </React.Fragment>
             ))}
           </tbody>
         </table>

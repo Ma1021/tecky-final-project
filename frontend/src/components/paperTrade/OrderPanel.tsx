@@ -11,14 +11,17 @@ import {
 import { useState } from "react";
 import "./OrderPanel.css";
 
-const OrderPanel: React.FC = () => {
+interface OrderPanelProps {
+  currentAccount: string;
+}
+
+const OrderPanel: React.FC<OrderPanelProps> = ({ currentAccount }) => {
   const [currentTicker, setCurrentTicker] = useState<string>("");
   const [orderDirection, setOrderDirection] = useState("long");
   const [orderType, setOrderType] = useState("fix");
   const [orderPrice, setOrderPrice] = useState<number>(0);
   const [quantity, setQuantity] = useState<number>(0);
   const userID = 1;
-  const stockID = 1;
   const principal = 1000000;
   const ownedTickets = 100;
   const stockPrice = 300;
@@ -161,7 +164,14 @@ const OrderPanel: React.FC = () => {
         <IonButton
           className="order-confirm-button"
           onClick={() =>
-            placeOrder(userID, stockID, orderDirection, orderPrice, quantity)
+            placeOrder(
+              userID,
+              currentTicker,
+              orderDirection,
+              orderPrice,
+              quantity,
+              currentAccount
+            )
           }
         >
           {orderDirection === "long" ? "模擬買入" : "模擬賣出"}
@@ -176,24 +186,26 @@ export default OrderPanel;
 
 async function placeOrder(
   userID: number,
-  stockID: number,
+  symbol: string,
   orderDirection: string,
   price: number,
-  quantity: number
+  quantity: number,
+  account: string
 ) {
-  const formData = new FormData();
-  formData.append("userID", userID.toString());
-  formData.append("stockID", stockID.toString());
-  formData.append("orderType", orderDirection);
-  formData.append("price", price.toString());
-  formData.append("quantity", quantity.toString());
-
+  const data = {
+    userID,
+    symbol,
+    orderType: orderDirection,
+    price,
+    quantity,
+    account,
+  };
   const res = await fetch(
     `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/placeOrder`,
     {
       method: "POST",
-      headers: { "Content-Type": "multipart/form-data" },
-      body: formData,
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(data),
     }
   );
   const result = await res.json();

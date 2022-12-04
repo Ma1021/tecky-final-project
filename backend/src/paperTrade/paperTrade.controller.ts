@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { PlaceOrderDTO } from './paperTrade.dto';
 import { PaperTradeService } from './paperTrade.service';
 
@@ -8,17 +16,21 @@ export class PaperTradeController {
 
   @Post('/placeOrder')
   async placeOrder(@Body() order: PlaceOrderDTO) {
-    console.log('controller body:', order);
-
-    const { userID, stockID, orderType, price, quantity } = order;
+    const { userID, symbol, orderType, price, quantity, account } = order;
 
     return await this.paperTradeService.placeOrder(
       userID,
-      stockID,
+      symbol,
       orderType,
       price,
       quantity,
+      account,
     );
+  }
+
+  @Delete('/deleteOrder/:id')
+  async deleteOrder(@Param('id') id: string) {
+    return await this.paperTradeService.deleteOrder(id);
   }
 
   @Get('/getInProgressOrderList')

@@ -76,7 +76,21 @@ export class PaperTradeService {
     return result;
   }
 
-  //   async getCurrentPositionList(userID: string) {
-  //     const result = await this.knex.select('*').from('user')
-  //   }
+  async getPositionList(userID: string, account: string) {
+    const result = await this.knex
+      .select([
+        'user_positions.id',
+        'symbol',
+        'name',
+        'chinese_name',
+        'cost',
+        'user_positions.current_price',
+        'quantity',
+      ])
+      .from('user_positions')
+      .join('stock_info', 'user_positions.stock_id', 'stock_info.id')
+      .where({ user_id: userID, account: account });
+
+    return result;
+  }
 }

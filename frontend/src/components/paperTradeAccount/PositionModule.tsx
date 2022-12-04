@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import "./PositionModule.css";
 
 interface PositionRow {
+  id: number;
   name: string;
+  chineseName: string;
   marketValue: number;
   currentPrice: number;
   profit: number;
@@ -13,35 +15,65 @@ interface PositionRow {
   profitPercentage: number;
 }
 
-const PositionModule: React.FC = () => {
+interface PositionModuleProps {
+  currentAccount: string;
+}
+
+interface PositionFromDB {
+  id: number;
+  symbol: string;
+  name: string;
+  chinese_name: string;
+  cost: string;
+  current_price: string;
+  quantity: number;
+}
+
+const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
   const [userPosition, setUserPosition] = useState<PositionRow[]>([]);
+  const userID = 1;
 
   useEffect(() => {
-    setUserPosition([
-      {
-        name: "Palantir",
-        marketValue: 39840,
-        currentPrice: 7.5,
-        profit: -98133.89,
-        ratio: 21.15,
-        quantity: 5312,
-        symbol: "PLTR",
-        cost: 25.974,
-        profitPercentage: -71.12,
-      },
-      {
-        name: "特斯拉",
-        marketValue: 194.7,
-        currentPrice: 194.7,
-        profit: 13.94,
-        ratio: 0.1,
-        quantity: 1,
-        symbol: "TSLA",
-        cost: 180.76,
-        profitPercentage: (13.94 / 180.76) * 100,
-      },
-    ]);
-  }, []);
+    fetch(
+      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getPositionList?userID=${userID}&account=${currentAccount}`
+    )
+      .then((res) => res.json())
+      .then((result: PositionFromDB[]) => {
+        const resultArray: PositionRow[] = [];
+        let totalMarketValue = 0;
+        result.forEach(
+          (obj) =>
+            (totalMarketValue =
+              totalMarketValue + obj.quantity * parseFloat(obj.current_price))
+        );
+
+        result.map((obj) => {
+          const marketValue = obj.quantity * parseFloat(obj.current_price);
+          const profit =
+            (parseFloat(obj.current_price) - parseFloat(obj.cost)) *
+            obj.quantity;
+          const profitPercentage =
+            (profit / parseFloat(obj.cost) / obj.quantity) * 100;
+          const ratio = (marketValue / totalMarketValue) * 100;
+
+          resultArray.push({
+            id: obj.id,
+            symbol: obj.symbol,
+            name: obj.name,
+            chineseName: obj.chinese_name,
+            cost: parseFloat(obj.cost),
+            marketValue: marketValue,
+            currentPrice: parseFloat(obj.current_price),
+            quantity: obj.quantity,
+            profit: profit,
+            profitPercentage: profitPercentage,
+            ratio: ratio,
+          });
+        });
+
+        setUserPosition(resultArray);
+      });
+  }, [currentAccount]);
 
   return (
     <>
@@ -58,12 +90,16 @@ const PositionModule: React.FC = () => {
             {userPosition.map((positionRecord) => (
               <>
                 <tr className="position-upper-row">
-                  <td className="no-center">{positionRecord.name}</td>
+                  <td className="no-center">{positionRecord.chineseName}</td>
                   <td>{positionRecord.marketValue.toFixed(2)}</td>
                   <td>{positionRecord.currentPrice.toFixed(2)}</td>
                   <td
                     className={
-                      positionRecord.profit > 0 ? "positive" : "negative"
+                      positionRecord.profit === 0
+                        ? ""
+                        : positionRecord.profit > 0
+                        ? "positive"
+                        : "negative"
                     }
                   >
                     {positionRecord.profit > 0
@@ -78,7 +114,9 @@ const PositionModule: React.FC = () => {
                   <td>{positionRecord.cost.toFixed(3)}</td>
                   <td
                     className={
-                      positionRecord.profitPercentage > 0
+                      positionRecord.profitPercentage === 0
+                        ? ""
+                        : positionRecord.profitPercentage > 0
                         ? "positive"
                         : "negative"
                     }

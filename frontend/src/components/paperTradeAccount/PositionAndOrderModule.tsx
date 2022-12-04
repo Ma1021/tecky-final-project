@@ -27,7 +27,7 @@ const PositionAndOrderModule: React.FC<PositionAndOrderModuleProps> = ({
         </IonSegment>
 
         {currentSegment === "position" ? (
-          <PositionModule />
+          <PositionModule currentAccount={currentAccount} />
         ) : (
           <InProgressOrderModule currentAccount={currentAccount} />
         )}

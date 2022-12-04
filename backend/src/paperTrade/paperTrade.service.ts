@@ -54,7 +54,29 @@ export class PaperTradeService {
     return result;
   }
 
-  async getCurrentPositionList(userID: string) {
-    const result = await this.knex.select('*').from('user')
+  async getFullOrderList(userID: string) {
+    const result = await this.knex
+      .select([
+        'user_trades.id',
+        'symbol',
+        'name',
+        'chinese_name',
+        'long',
+        'order_price',
+        'quantity',
+        'order_place_time',
+        'order_status',
+        'order_complete_time',
+      ])
+      .from('user_trades')
+      .join('stock_info', 'user_trades.stock_id', 'stock_info.id')
+      .where({ user_id: userID })
+      .orderBy('order_place_time', 'desc');
+
+    return result;
   }
+
+  //   async getCurrentPositionList(userID: string) {
+  //     const result = await this.knex.select('*').from('user')
+  //   }
 }

@@ -56,7 +56,7 @@ const PaperTradeRecords: React.FC = () => {
             </IonItem>
           </IonList>
 
-          <PaperTradeRecordsModule />
+          <PaperTradeRecordsModule userID={userID} />
         </IonContent>
       </IonPage>
     </>

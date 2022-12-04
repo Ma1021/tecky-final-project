@@ -25,4 +25,9 @@ export class PaperTradeController {
   async getInProgressOrderList(@Query('userID') userID: string) {
     return await this.paperTradeService.getInProgressOrderList(userID);
   }
+
+  @Get('/getFullOrderList')
+  async getFullOrderList(@Query('userID') userID: string) {
+    return await this.paperTradeService.getFullOrderList(userID);
+  }
 }

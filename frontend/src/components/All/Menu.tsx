@@ -114,6 +114,17 @@ const Menu: React.FC<MenuProps> = () => {
     // router.push("/home", "forward", "push");
   };
 
+  const servicePending = () => {
+    presentAlert({
+      cssClass: "alert",
+      header: "提示",
+      message: "功能開發中敬請期待",
+      buttons: [
+        "確定",
+      ],
+    });
+  }
+
   const toEdit = (e: any) => {
     e?.stopPropagation();
     console.log("toEdit");
@@ -203,22 +214,22 @@ const Menu: React.FC<MenuProps> = () => {
                     <IonIcon icon={logoWhatsapp}></IonIcon> 客戶服務
                   </IonLabel>
                 </IonItem>
-                <div className="ion-padding" slot="content">
+                <div className="ion-padding" slot="content" onClick={servicePending}>
                   <IonMenuToggle>
-                    <div className="w100">申請成為KOL</div>
+                    <div className="w100" >申請成為KOL</div>
                   </IonMenuToggle>
                 </div>
-                <div className="ion-padding" slot="content">
+                <div className="ion-padding" slot="content" onClick={servicePending}>
                   <IonMenuToggle>
-                    <div className="w100">其他查詢</div>
+                    <div className="w100" >其他查詢</div>
                   </IonMenuToggle>
                 </div>
               </IonAccordion>
             </IonAccordionGroup>
             <IonMenuToggle>
-              <IonItem className="menu" lines="none">
+              <IonItem className="menu" lines="none" onClick={servicePending}>
                 <IonLabel>
-                  <IonIcon icon={settingsOutline}></IonIcon> 系統設定
+                  <IonIcon icon={settingsOutline} ></IonIcon> 系統設定
                 </IonLabel>
               </IonItem>
               {selector?.user_type === "kol" && (

@@ -7,6 +7,7 @@ import {
   IonList,
   IonItem,
   IonInput,
+  IonLabel,
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 
@@ -15,29 +16,23 @@ const SearchPage: React.FC = () => {
   const [searchResultArray, setSearchResultArray] = useState<Object[]>([]);
 
   useEffect(() => {
-    const resultArr = [];
-    const resultObject = {
-      SGOO: "Snoogoo Corp.",
-      GOOGL: "Alphabet Inc.",
-      GOOD: "Gladstone Commercial Corporation",
-      GOODO: "Gladstone Commercial Corporation",
-      GOOS: "Canada Goose Holdings Inc.",
-      GOOG: "Alphabet Inc.",
-    };
-    for (let key in resultObject) {
-      resultArr.push({ key: resultObject[key as keyof typeof resultObject] });
-    }
-    setSearchResultArray(resultArr);
-    // fetch(`http://35.213.167.63/redis/${searchWord.toUpperCase()}`)
-    //   .then((res) => res.json())
-    //   .then((result) => {
-    //     console.log(result);
-    //     const resultArray = [];
-    //     for (let key in result) {
-    //       resultArray.push({ key: result[key] });
-    //     }
-    //     setSearchResultArray(resultArray);
-    //   });
+    fetch(
+      `${
+        process.env.REACT_APP_PUBLIC_URL
+      }/search?keyword=${searchWord.toUpperCase()}`
+    )
+      .then((res) => res.json())
+      .then((result) => {
+        const resultArray = [];
+        for (let i = 0; i < 10; i++) {
+          const objKeyArr = Object.keys(result);
+          if (objKeyArr[i] === undefined) {
+            return;
+          }
+          resultArray.push({ [objKeyArr[i]]: result[objKeyArr[i]] });
+        }
+        setSearchResultArray(resultArray);
+      });
   }, [searchWord]);
 
   return (
@@ -59,7 +54,10 @@ const SearchPage: React.FC = () => {
           <IonList>
             {searchResultArray.length > 0
               ? searchResultArray.map((searchResult) => (
-                  <IonItem>{Object.keys(searchResult)}</IonItem>
+                  <IonItem>
+                    <IonLabel>{Object.keys(searchResult)}</IonLabel>
+                    <IonLabel>{Object.entries(searchResult)[0][1]}</IonLabel>
+                  </IonItem>
                 ))
               : null}
           </IonList>

@@ -54,11 +54,26 @@ const QuestionDetail: React.FC = memo(() => {
     localStorage.getItem("auth_stockoverflow") as string
   );
   const user_id = +user.id;
+  const { blockedUserList } = useAppSelector((state)=> state.block);
+  const [answerFilter, setAnswerFilter] = useState([] as any)
 
   useEffect(() => {
     if (!question_id) return;
     dispatch(loadQuestion(+question_id));
   }, []);
+
+  useEffect(()=>{
+    filterAnswer();
+  },[question])
+  
+  async function filterAnswer() {
+    const answer = await question.answer    
+    setAnswerFilter(
+      answer.filter((answer)=>{        
+        return !blockedUserList.includes(answer.answers.id)
+      })
+    )
+  }    
 
   const fetchFollowing = useCallback(async () => {
     const id_array: Array<number> = [];
@@ -197,6 +212,7 @@ const QuestionDetail: React.FC = memo(() => {
           (id) => id !== +e.target.parentNode.parentNode.dataset.user_id
         )
       );
+      
       await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
@@ -248,7 +264,50 @@ const QuestionDetail: React.FC = memo(() => {
 
   const getProfile = (e: any) => {          
     history.push(`/user/${+e.target.dataset.userid}/info`);
-  };  
+  };
+
+  function handleReport(url:string, status: string) {
+    if(status === '舉報') {
+      alertPresent({
+        cssClass: "alert",
+        header: "提示",
+        message: "確定要舉報嗎？",
+        buttons: [
+          "取消",
+          {
+            text: "確定",
+            handler: () => {
+              fetch(url, {
+                method: 'PUT',
+                headers: {"Content-type":"application/json"}
+              }).then((response)=>{
+                if(response.ok) {
+                  toastPresent("舉報成功，請耐心等待，管理員將24小時內處理", 1500);
+                } else {
+                  toastPresent("舉報失敗", 1500);
+                }
+              })
+            }
+          },
+        ],
+    })} else if(status === "已舉報"){
+      toastPresent("已舉報，請耐心等待，管理員將24小時內處理", 1500);
+    }
+  }
+  
+  function handleAnswerReport(e: any) {
+    const answer_id = +e.target.parentNode.parentNode.parentNode.dataset.answer_id;
+    const status = e.target.innerText;
+    const url = `${process.env.REACT_APP_PUBLIC_URL}/answer/report/${answer_id}`;
+    handleReport(url, status);
+  }
+
+  function handleQuestionReport(e: any) {
+    const question_id = +e.target.parentNode.parentNode.parentNode.dataset.question_id;
+    const status = e.target.innerText;
+    const url = `${process.env.REACT_APP_PUBLIC_URL}/question/report/${question_id}`;
+    handleReport(url, status);
+  }
 
   return (
     <IonPage id="main-content">
@@ -273,7 +332,7 @@ const QuestionDetail: React.FC = memo(() => {
       }
       <IonContent>
         {question.id && <>
-        <AskerContainer lines="full" data-user_id={question.asker_id}>
+        <AskerContainer lines="full" data-user_id={question.asker_id} data-question_id={question.id}>
           <IonImg
             onClick={getProfile}
             data-userId={question.asker_id}
@@ -284,9 +343,16 @@ const QuestionDetail: React.FC = memo(() => {
               <IonText>{question.asker_username}</IonText>
               <UserBadge isKOL={question.user_type === "kol"} />
             </div>
-            <IonText style={{ fontSize: 10 }}>
-              {formatDate(question.created_at)}
-            </IonText>
+            <div>
+              <IonText style={{ fontSize: 10, color:"#999" }}>
+                {formatDate(question.created_at)}
+              </IonText>
+              {question.asker_id !== user_id ? !question.is_reported ? 
+                <IonText style={{ fontSize: 10, color:"#999", marginLeft:10}} onClick={handleQuestionReport}>舉報</IonText>  
+                :
+                <IonText style={{ fontSize: 10, color:"#999", marginLeft:10}} onClick={handleQuestionReport}>已舉報</IonText> : <></>
+              } 
+            </div>
           </div>
           {question.asker_id !== user_id && (
             <IonButton className="subscribeBtn">
@@ -327,10 +393,10 @@ const QuestionDetail: React.FC = memo(() => {
           </div>
         </ContentContainer>
         </>}
-        {question.answer && (
+        {answerFilter.length > 0 && (
           <AnswerContainer>
             <IonText>回答</IonText>
-            {question.answer.map((answer: any, index: number) => {
+            {answerFilter.map((answer: any, index: number) => {
               return (
                 <div
                   className="answerCard"
@@ -369,9 +435,11 @@ const QuestionDetail: React.FC = memo(() => {
                           timeStyle: "short",
                         })}
                       </IonText>
-                      {answer.answers.id !== user_id && (
-                        <IonText style={{ fontWeight: 600 }}>檢舉</IonText>
-                      )}
+                      {answer.answers.id !== user_id ? answer.is_reported ? (
+                        <IonText style={{ fontWeight: 600 }} onClick={handleAnswerReport}>已舉報</IonText>
+                      ) :
+                        <IonText style={{ fontWeight: 600 }} onClick={handleAnswerReport}>舉報</IonText> : <></>
+                      }
                       {answer.answers.id === user_id && (
                         <IonText
                           style={{ fontWeight: 600 }}
@@ -380,6 +448,7 @@ const QuestionDetail: React.FC = memo(() => {
                           刪除
                         </IonText>
                       )}
+                      
                     </div>
                     <div className="answerLikes">
                       {answer.likes_user_id.includes(user_id) ? (

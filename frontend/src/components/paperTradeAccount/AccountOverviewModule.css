@@ -1,12 +1,12 @@
 .account-overview-module-container {
-  background: rgba(80, 80, 80, 0.7);
+  background: #222;
   box-sizing: border-box;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   padding: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 1.2rem;
+  font-size: 14px;
   font-weight: bold;
   margin: 0.5rem;
 }

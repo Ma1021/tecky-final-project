@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Response, HttpException, HttpStatus, Param, Delete } from "@nestjs/common";
+import { Body, Controller, Post, Response, HttpException, HttpStatus, Param, Delete, Put } from "@nestjs/common";
 import { Answer_DTO, Answer_Like_DTO } from "./answer.dto";
 import { AnswerService } from "./answer.service";
 
@@ -26,7 +26,12 @@ export class AnswerController {
     }
 
     @Post('/like')
-    async likeAnswer(@Body() like:Answer_Like_DTO) {
+    likeAnswer(@Body() like:Answer_Like_DTO) {
         return this.answerService.createLike(like);
+    }
+
+    @Put('/report/:id')
+    reportAnswer(@Param('id') answer_id: string) {
+        return this.answerService.report(+answer_id)
     }
 }

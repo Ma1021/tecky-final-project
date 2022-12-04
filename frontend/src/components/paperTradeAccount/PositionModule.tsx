@@ -57,7 +57,7 @@ const PositionModule: React.FC = () => {
             </tr>
             {userPosition.map((positionRecord) => (
               <>
-                <tr>
+                <tr className="position-upper-row">
                   <td className="no-center">{positionRecord.name}</td>
                   <td>{positionRecord.marketValue.toFixed(2)}</td>
                   <td>{positionRecord.currentPrice.toFixed(2)}</td>

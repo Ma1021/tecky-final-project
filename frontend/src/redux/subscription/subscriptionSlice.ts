@@ -122,7 +122,7 @@ export const unFollowUser = createAsyncThunk<
           following_id: +data.following_id,
         }),
       }
-    );
+    );    
 
     thunkAPI.dispatch(loadFollowers(+data.user_id));
     thunkAPI.dispatch(loadFollowings(+data.user_id));
@@ -130,9 +130,9 @@ export const unFollowUser = createAsyncThunk<
 
     const subscription_json = await subscriptionRes.json();
     const subscription_id = await subscription_json[0].id;
-
+    
     // delete notification
-    await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification`, {
+    fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ target_id: subscription_id, target_type_id: 3 }),

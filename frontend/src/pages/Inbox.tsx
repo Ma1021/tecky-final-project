@@ -14,11 +14,13 @@ import {
   IonList,
   IonButton,
   IonItem,
+  IonImg,
 } from "@ionic/react";
 import MessageCard from "../components/Inbox/MessageCard";
 import styled from "styled-components";
 import { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router";
+import Mailbox from '../img/mailbox.png'
 
 interface Notification {
   id: number;
@@ -91,6 +93,17 @@ const Inbox: React.FC = () => {
     },
     [notificationList]
   );
+
+  function handleReadAll() {
+    fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/readAll/${user_id}`, {
+      method:'PUT',
+      headers:{"Content-Type":"application/json"}
+    }).then((response)=>{
+      if(response.ok) {
+        fetchData();
+      }
+    })
+  }
 
   function handleDeleteAll() {
     setNotificationList([]);
@@ -170,7 +183,7 @@ const Inbox: React.FC = () => {
             >
               <IonContent className="ion-padding-top">
                 <div className="ion-margin-top">
-                  <ModalItem lines="full">
+                  <ModalItem lines="full" onClick={handleReadAll}>
                     <svg
                       width="18"
                       height="18"
@@ -256,21 +269,6 @@ const Inbox: React.FC = () => {
                 </div>
               </IonContent>
             </IonModal>
-            {/* <IonFab horizontal="end"> 
-                            <IonFabButton size="small">
-                                <IonIcon icon={ellipsisHorizontal}></IonIcon>
-                            </IonFabButton>
-                            <IonFabList side="start">
-                                <IonFabButton color="primary">
-                                    <svg width="18" height="18" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M44 24C44 35.0457 35.0457 44 24 44C18.0265 44 4 44 4 44C4 44 4 29.0722 4 24C4 12.9543 12.9543 4 24 4C35.0457 4 44 12.9543 44 24Z" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.9999 26L20 32L33 19" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                    <IonText>標記全部已讀</IonText>
-                                </IonFabButton>
-                                <IonFabButton color="primary" onClick={handleDeleteAll} >
-                                    <svg width="18" height="18" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M20 5.91406H28V13.9141H43V21.9141H5V13.9141H20V5.91406Z" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 40H40V22H8V40Z" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round"/><path d="M16 39.8976V33.9141" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 39.8977V33.8977" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 39.8976V33.9141" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 40H36" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                    <IonText>清除全部訊息</IonText>
-                                </IonFabButton>
-                            </IonFabList>
-                        </IonFab>  */}
           </div>
           <InboxMessageContainer>
             {notificationList.length > 0 ? (
@@ -286,7 +284,10 @@ const Inbox: React.FC = () => {
                 ))}
               </IonList>
             ) : (
-              <div>沒有訊息</div>
+              <div style={{height:'40vh'}} className="d-flex flex-column align-items-center justify-content-center">
+                <IonImg style={{width:150, height: 150}} src={Mailbox}></IonImg>
+                <IonText>沒有訊息</IonText>
+              </div>
             )}
           </InboxMessageContainer>
         </MessageContainer>

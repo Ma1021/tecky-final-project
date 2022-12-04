@@ -6,6 +6,7 @@ import {
   Request,
   HttpException,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { AuthService } from './auth/auth.service';
@@ -22,6 +23,11 @@ export class AppController {
   @Get()
   getHello(): string {
     return this.appService.getHello();
+  }
+
+  @Get('/search')
+  async searchFromRedis(@Query('keyword') keyword: string) {
+    return await this.appService.searchFromRedis(keyword);
   }
 
   @UseGuards(LocalAuthGuard)

@@ -1,25 +1,27 @@
 table.position-table {
   margin: 0.5rem;
   text-align: center;
-  background: rgba(80, 80, 80, 0.7);
-  border-radius: 1rem;
+  background: #222;
+  border-radius: 0.5rem;
 }
+
+
 
 th.position-table-column-name {
   width: 20vw;
+  color: #999;
+  font-weight: 500;
+  font-size: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 tr > th {
   padding: 0.5rem 0;
 }
 
-tr.position-bottom-row > td {
-  padding: 0 0 1rem 0.5rem;
-}
-
 .no-center {
   text-align: left;
-  font-size: 1.2rem;
+  font-size: 14px;
   padding-left: 0.5rem;
 }
 
@@ -30,3 +32,26 @@ tr.position-bottom-row > td {
 .negative {
   color: red;
 }
+
+.position-upper-row td {
+  text-align: end;
+  padding: 0.5rem 0.4rem 0rem 0.4rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.position-bottom-row td {
+  text-align: end;
+  font-size: 12px;
+  padding: 0.5rem 0.4rem 0.5rem 0.4rem;
+}
+
+.position-upper-row td:nth-child(1) {
+  text-align: start;
+  font-weight: 600;
+}
+
+.position-bottom-row td:nth-child(1) {
+  text-align: start;
+  color: #999;
+}
+

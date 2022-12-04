@@ -120,6 +120,14 @@ export class NotificationController {
         }
     }
 
+    @Put('/readAll/:id')
+    readAllNotification(@Param('id') user_id: string) {
+        if(!user_id) {
+            throw new HttpException('Missing user id', HttpStatus.BAD_REQUEST);
+        }
+        return this.notificationService.updateAllRead(+user_id);
+    }
+
     // delete one notification
     @Delete()
     async deleteOne (@Body() notification: Notification_Delete_DTO) {

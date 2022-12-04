@@ -10,7 +10,7 @@ export class QuestionService {
   async findAll() {
     const questions = await this.knex
     .raw(`
-    SELECT questions.id, questions.content, questions.created_at,
+    SELECT questions.id, questions.content, questions.created_at, questions.is_reported,
     users.id as asker_id, users.username as asker_username, users.avatar as asker_avatar, users.user_type, tags.tag_id,
     coalesce(jsonb_agg(DISTINCT jsonb_build_object(
       'id', stocks.id,
@@ -19,6 +19,7 @@ export class QuestionService {
     )) filter (where stocks.* is not null), '[]') as stock,
     coalesce(jsonb_agg(DISTINCT jsonb_build_object(
         'id', answers.id,
+        'is_reported', answers.is_reported,
         'content', answers.content,
         'created_at', answers.created_at,
         'answers', (SELECT json_build_object(
@@ -36,6 +37,7 @@ export class QuestionService {
     full outer join stocks on tags.stock_id = stocks.id
     inner join users on users.id = questions.asker_id
     full outer join answers on questions.id = answers.question_id
+    where questions.is_ban = false
     group by questions.id, users.id, tags.tag_id
     order by questions.created_at desc;
     `);
@@ -46,7 +48,7 @@ export class QuestionService {
   // get one question by question id
   async findOne(question_id: number) {
     const question = await this.knex.raw(`
-      SELECT questions.id, questions.content, questions.created_at,
+      SELECT questions.id, questions.content, questions.created_at, questions.is_reported,
       users.id as asker_id, users.username as asker_username, users.avatar as asker_avatar, users.user_type, tags.tag_id,
       coalesce(jsonb_agg(DISTINCT jsonb_build_object(
         'id', stocks.id,
@@ -55,6 +57,7 @@ export class QuestionService {
       )) filter (where stocks.* is not null), '[]') as stock,
       coalesce(jsonb_agg(DISTINCT jsonb_build_object(
           'id', answers.id,
+          'is_reported', answers.is_reported,
           'content', answers.content,
           'created_at', answers.created_at,
           'answers', (SELECT json_build_object(
@@ -71,7 +74,7 @@ export class QuestionService {
       full outer join stocks on tags.stock_id = stocks.id
       inner join users on users.id = questions.asker_id
       full outer join answers on questions.id = answers.question_id
-      where questions.id = ?
+      where questions.id = ? and questions.is_ban = false
       group by questions.id, users.id, tags.tag_id
       order by questions.created_at desc;
       `,
@@ -84,7 +87,7 @@ export class QuestionService {
   // get one or all questions by asker id
   async findAskerQuestions(asker_id: number) {
     const questions = await this.knex.raw(`
-      SELECT questions.id, questions.content, questions.created_at,
+      SELECT questions.id, questions.content, questions.created_at, questions.is_reported,
       users.id as asker_id, users.username as asker_username, users.avatar as asker_avatar, users.user_type, tags.tag_id,
       coalesce(jsonb_agg(DISTINCT jsonb_build_object(
         'id', stocks.id,
@@ -93,6 +96,7 @@ export class QuestionService {
       )) filter (where stocks.* is not null), '[]') as stock,
       coalesce(jsonb_agg(DISTINCT jsonb_build_object(
           'id', answers.id,
+          'is_reported', answers.is_reported,
           'content', answers.content,
           'created_at', answers.created_at,
           'answers', (SELECT json_build_object(
@@ -109,7 +113,7 @@ export class QuestionService {
       full outer join stocks on tags.stock_id = stocks.id
       inner join users on users.id = questions.asker_id
       full outer join answers on questions.id = answers.question_id
-      where questions.asker_id = ?
+      where questions.asker_id = ? and questions.is_ban = false
       group by questions.id, users.id, tags.tag_id
       order by questions.created_at desc;
     `,
@@ -121,7 +125,7 @@ export class QuestionService {
   // get one or all questions by answerer id
   async findAnswererQuestions(answerer_id: number) {
     const questions = await this.knex.raw(`
-    SELECT questions.id, questions.content, questions.created_at,
+    SELECT questions.id, questions.content, questions.created_at, questions.is_reported,
     users.id as asker_id, users.username as asker_username, users.avatar as asker_avatar, users.user_type ,tags.tag_id,
     coalesce(jsonb_agg(DISTINCT jsonb_build_object(
       'id', stocks.id,
@@ -130,6 +134,7 @@ export class QuestionService {
     )) filter (where stocks.* is not null), '[]') as stock,
     coalesce(jsonb_agg(DISTINCT jsonb_build_object(
       'id', answers.id,
+      'is_reported', answers.is_reported,
       'content', answers.content,
       'created_at', answers.created_at,
       'answers', (SELECT json_build_object(
@@ -146,7 +151,7 @@ export class QuestionService {
     full outer join stocks on tags.stock_id = stocks.id
     inner join users on users.id = questions.asker_id
     full outer join answers on questions.id = answers.question_id
-    where answers.answerer_id = ?
+    where answers.answerer_id = ? and questions.is_ban = false
     group by questions.id, users.id, tags.tag_id
     order by questions.created_at desc;
   `,
@@ -159,7 +164,7 @@ export class QuestionService {
   async findQuestionBySymbol(symbol: string) {    
     const questions = await this.knex
     .raw(`
-      SELECT questions.id, questions.content, questions.created_at,
+      SELECT questions.id, questions.content, questions.created_at, questions.is_reported,
       users.id as asker_id, users.username as asker_username, users.avatar as asker_avatar, users.user_type, tags.tag_id,
       coalesce(jsonb_agg(DISTINCT jsonb_build_object(
         'id', stocks.id,
@@ -168,6 +173,7 @@ export class QuestionService {
       )) filter (where stocks.* is not null), '[]') as stock,
       coalesce(jsonb_agg(DISTINCT jsonb_build_object(
           'id', answers.id,
+          'is_reported', answers.is_reported,
           'content', answers.content,
           'created_at', answers.created_at,
           'answers', (SELECT json_build_object(
@@ -185,7 +191,7 @@ export class QuestionService {
       full outer join stocks on tags.stock_id = stocks.id
       inner join users on users.id = questions.asker_id
       full outer join answers on questions.id = answers.question_id
-      where stocks.symbol = ?
+      where stocks.symbol = ? and questions.is_ban = false
       group by questions.id, users.id, tags.tag_id
       order by questions.created_at desc;
     `, [symbol]);
@@ -194,9 +200,9 @@ export class QuestionService {
   }
 
   async create(questions: Question_DTO) {
-    try {
+    try {      
       const { asker_id, content, stock_id } = questions;
-      
+            
       const tag_number = await this.knex('tags').count('tag_id').first();
 
       if (tag_number.count == 0) {
@@ -233,9 +239,7 @@ export class QuestionService {
           });
         }
         // insert question to question table
-        return await this.knex('questions')
-          .insert({ asker_id, content, tag_id: tag_id + 1 })
-          .returning('id');
+        return await this.knex('questions').insert({ asker_id, content, tag_id: tag_id + 1 }).returning('id');
       }
     } catch (err) {
       console.log('error:', err);
@@ -278,6 +282,10 @@ export class QuestionService {
 
   async delete(question_id: number) {
     await this.knex('answers').where('question_id', question_id).del();
-    return await this.knex('questions').where('id', question_id).del()
+    return await this.knex('questions').where('id', question_id).del();
+  }
+
+  report(question_id: number) {
+    return this.knex('questions').update('is_reported', true).where('id', question_id);
   }
 }

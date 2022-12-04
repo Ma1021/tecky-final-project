@@ -7,6 +7,7 @@ interface PaperTradeAccountModuleProps {
   amount: number;
   profit: number;
   profitPercentage: number;
+
 }
 
 const PaperTradeAccountModule: React.FC<PaperTradeAccountModuleProps> = ({

@@ -73,8 +73,13 @@ export class QuestionController {
 
     this.questionService.create(questions).then(async (response)=>{
       const { id } = response[0]
-      const question = await this.questionService.findOne(id)
-      res.status(HttpStatus.CREATED).json(question)
+      if(id) {
+        const question = await this.questionService.findOne(+id)      
+        if(question.length === 0) {
+          throw new HttpException('error', HttpStatus.BAD_REQUEST)
+        }
+        res.status(HttpStatus.CREATED).json(question)
+      }
     })
   }
 
@@ -114,6 +119,15 @@ export class QuestionController {
     this.questionService.update(+question_id, questions).then((response)=>{
       res.status(HttpStatus.ACCEPTED).json({message: 'Update question successfully'})
     })
+  }
+
+  @Put('/report/:id')
+  reportQuestion(@Param('id') question_id: string) {
+    if(!question_id) {
+      throw new HttpException('Missing question id', HttpStatus.BAD_REQUEST);
+    }
+
+    return this.questionService.report(+question_id);
   }
 
   @Delete(':id')

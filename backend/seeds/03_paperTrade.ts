@@ -39,6 +39,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
   ]);
 
+  await knex('users').update({ paper_trade_principal: 1000000 });
   // await knex('user_trades').insert([
   //   {
   //     id: 1,

@@ -25,7 +25,7 @@ const InProgressOrderModule: React.FC<InProgressOrderModuleProps> = ({
     InProgressOrderType[]
   >([]);
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
-  const [alert] = useIonAlert();
+  const [ionAlert] = useIonAlert();
   const userID = 1;
 
   useEffect(() => {
@@ -64,7 +64,7 @@ const InProgressOrderModule: React.FC<InProgressOrderModuleProps> = ({
                 <tr
                   className="order-upper-row"
                   onClick={() => {
-                    alert({
+                    ionAlert({
                       header: "取消訂單?",
                       buttons: [
                         { text: "取消", role: "dismiss" },
@@ -92,7 +92,7 @@ const InProgressOrderModule: React.FC<InProgressOrderModuleProps> = ({
                 <tr
                   className="order-bottom-row"
                   onClick={() => {
-                    alert({
+                    ionAlert({
                       header: "取消訂單?",
                       buttons: [
                         { text: "取消", role: "dismiss" },

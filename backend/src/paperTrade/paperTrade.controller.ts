@@ -8,21 +8,37 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { PlaceOrderDTO } from './paperTrade.dto';
+import { CloseOrderDTO, PlaceOrderDTO } from './paperTrade.dto';
 import { PaperTradeService } from './paperTrade.service';
 
 @Controller('/paperTrade')
 export class PaperTradeController {
   constructor(private readonly paperTradeService: PaperTradeService) {}
 
-  @Post('/placeOrder')
-  async placeOrder(@Body() order: PlaceOrderDTO) {
+  @Post('/placeNewOrder')
+  async placeNewOrder(@Body() order: PlaceOrderDTO) {
     const { userID, symbol, orderType, price, quantity, account } = order;
 
-    return await this.paperTradeService.placeOrder(
+    return await this.paperTradeService.placeNewOrder(
       userID,
       symbol,
       orderType,
+      price,
+      quantity,
+      account,
+    );
+  }
+
+  @Post('/closePosition')
+  async closePosition(@Body() order: CloseOrderDTO) {
+    console.log(order);
+
+    const { id, userID, symbol, isLong, price, quantity, account } = order;
+    return await this.paperTradeService.closePosition(
+      id,
+      userID,
+      symbol,
+      isLong,
       price,
       quantity,
       account,

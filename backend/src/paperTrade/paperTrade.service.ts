@@ -6,7 +6,7 @@ import { Knex } from 'knex';
 export class PaperTradeService {
   constructor(@InjectModel() private readonly knex: Knex) {}
 
-  async placeOrder(
+  async placeNewOrder(
     userID: string,
     symbol: string,
     orderType: string,
@@ -29,9 +29,71 @@ export class PaperTradeService {
           account: account,
         })
         .into('user_trades');
+
+      const result = await this.knex
+        .select('*')
+        .from('user_positions')
+        .where({ symbol: symbol });
+
+      if (result.length === 0) {
+        await this.knex
+          .insert({
+            user_id: userID,
+            symbol: symbol,
+            long: orderTypeLong,
+            cost: price,
+            quantity: quantity,
+            account: account,
+          })
+          .into('user_positions');
+      } else {
+        let newQuantity = 0;
+        let newCost = 0;
+        newQuantity = result[0].quantity + parseInt(quantity);
+        newCost =
+          (parseFloat(result[0].cost) * result[0].quantity +
+            parseFloat(price) * parseInt(quantity)) /
+          newQuantity;
+
+        await this.knex
+          .update({ cost: newCost, quantity: newQuantity })
+          .from('user_positions')
+          .where({ symbol: symbol });
+      }
+
       return { message: 'Place order succeed.' };
     } catch (error) {
       throw new Error('Place order failed.');
+    }
+  }
+
+  async closePosition(
+    id: number,
+    userID: number,
+    symbol: string,
+    isLong: boolean,
+    price: number,
+    quantity: number,
+    account: string,
+  ) {
+    try {
+      await this.knex
+        .insert({
+          user_id: userID,
+          symbol: symbol,
+          long: isLong,
+          order_price: price,
+          quantity: quantity,
+          order_place_time: new Date(),
+          order_status: 0,
+          account: account,
+        })
+        .into('user_trades');
+
+      await this.knex.delete('*').from('user_positions').where({ id: id });
+      return { message: 'Position closed.' };
+    } catch (error) {
+      throw new Error(error);
     }
   }
 
@@ -94,7 +156,8 @@ export class PaperTradeService {
     const result = await this.knex
       .select([
         'user_positions.id',
-        'symbol',
+        'user_positions.symbol',
+        'long',
         'name',
         'chinese_name',
         'cost',
@@ -102,7 +165,7 @@ export class PaperTradeService {
         'quantity',
       ])
       .from('user_positions')
-      .join('stock_info', 'user_positions.stock_id', 'stock_info.id')
+      .join('stock_info', 'user_positions.symbol', 'stock_info.symbol')
       .where({ user_id: userID, account: account });
 
     return result;

@@ -1,9 +1,11 @@
+import { useIonAlert } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import "./PositionModule.css";
 
 interface PositionRow {
   id: number;
   name: string;
+  long: boolean;
   chineseName: string;
   marketValue: number;
   currentPrice: number;
@@ -22,6 +24,7 @@ interface PositionModuleProps {
 interface PositionFromDB {
   id: number;
   symbol: string;
+  long: boolean;
   name: string;
   chinese_name: string;
   cost: string;
@@ -31,6 +34,8 @@ interface PositionFromDB {
 
 const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
   const [userPosition, setUserPosition] = useState<PositionRow[]>([]);
+  const [isUpdate, setIsUpdate] = useState<boolean>(false);
+  const [ionAlert] = useIonAlert();
   const userID = 1;
 
   useEffect(() => {
@@ -59,6 +64,7 @@ const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
           resultArray.push({
             id: obj.id,
             symbol: obj.symbol,
+            long: obj.long,
             name: obj.name,
             chineseName: obj.chinese_name,
             cost: parseFloat(obj.cost),
@@ -73,7 +79,30 @@ const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
 
         setUserPosition(resultArray);
       });
-  }, [currentAccount]);
+  }, [currentAccount, isUpdate]);
+
+  async function closePosition(
+    id: number,
+    useID: number,
+    symbol: string,
+    isLong: boolean,
+    price: number,
+    quantity: number,
+    account: string
+  ) {
+    const data = { id, userID, symbol, isLong, price, quantity, account };
+    const res = await fetch(
+      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/closePosition`,
+      {
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify(data),
+      }
+    );
+    const result = await res.json();
+    console.log(result);
+    setIsUpdate(!isUpdate);
+  }
 
   return (
     <>
@@ -89,7 +118,31 @@ const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
             </tr>
             {userPosition.map((positionRecord) => (
               <React.Fragment key={positionRecord.id}>
-                <tr className="position-upper-row">
+                <tr
+                  className="position-upper-row"
+                  onClick={() => {
+                    ionAlert({
+                      header: "平倉離場?",
+                      buttons: [
+                        { text: "取消", role: "dismiss" },
+                        {
+                          text: "確認",
+                          role: "confirm",
+                          handler: () =>
+                            closePosition(
+                              positionRecord.id,
+                              userID,
+                              positionRecord.symbol,
+                              positionRecord.long,
+                              positionRecord.currentPrice,
+                              positionRecord.quantity,
+                              currentAccount
+                            ),
+                        },
+                      ],
+                    });
+                  }}
+                >
                   <td className="no-center">{positionRecord.chineseName}</td>
                   <td>{positionRecord.marketValue.toFixed(2)}</td>
                   <td>{positionRecord.currentPrice.toFixed(2)}</td>
@@ -108,7 +161,31 @@ const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
                   </td>
                   <td>{`${positionRecord.ratio.toFixed(2)}%`}</td>
                 </tr>
-                <tr className="position-bottom-row">
+                <tr
+                  className="position-bottom-row"
+                  onClick={() => {
+                    ionAlert({
+                      header: "平倉離場?",
+                      buttons: [
+                        { text: "取消", role: "dismiss" },
+                        {
+                          text: "確認",
+                          role: "confirm",
+                          handler: () =>
+                            closePosition(
+                              positionRecord.id,
+                              userID,
+                              positionRecord.symbol,
+                              positionRecord.long,
+                              positionRecord.currentPrice,
+                              positionRecord.quantity,
+                              currentAccount
+                            ),
+                        },
+                      ],
+                    });
+                  }}
+                >
                   <td className="no-center">{positionRecord.symbol}</td>
                   <td>{positionRecord.quantity}</td>
                   <td>{positionRecord.cost.toFixed(3)}</td>

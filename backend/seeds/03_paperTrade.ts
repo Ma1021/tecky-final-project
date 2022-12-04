@@ -10,7 +10,8 @@ export async function seed(knex: Knex): Promise<void> {
     {
       id: 1,
       user_id: 1,
-      stock_id: 1,
+      symbol: 'TSLA',
+      long: true,
       cost: 60,
       current_price: 100,
       quantity: 20,
@@ -19,7 +20,8 @@ export async function seed(knex: Knex): Promise<void> {
     {
       id: 2,
       user_id: 1,
-      stock_id: 2,
+      symbol: 'GME',
+      long: true,
       cost: 10,
       current_price: 5,
       quantity: 100,
@@ -28,7 +30,8 @@ export async function seed(knex: Knex): Promise<void> {
     {
       id: 3,
       user_id: 1,
-      stock_id: 3,
+      symbol: 'GOOG',
+      long: true,
       cost: 50,
       current_price: 50,
       quantity: 50,

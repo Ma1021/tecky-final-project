@@ -44,28 +44,22 @@ export async function seed(knex: Knex): Promise<void> {
     {
       id: 1,
       user_id: 1,
-      principal: 1000000,
       market_value: 0,
       buying_power: 1000000,
-      total_profit: 0,
       account: 'US',
     },
     {
       id: 2,
       user_id: 1,
-      principal: 1000000,
       market_value: 500000,
       buying_power: 0,
-      total_profit: -500000,
       account: 'HK',
     },
     {
       id: 3,
       user_id: 1,
-      principal: 1000000,
       market_value: 1000000,
       buying_power: 1000000,
-      total_profit: 1000000,
       account: 'crypto',
     },
   ]);

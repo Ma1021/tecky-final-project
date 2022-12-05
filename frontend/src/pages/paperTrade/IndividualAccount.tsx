@@ -18,11 +18,8 @@ import PaperTradeNavigator from "../../components/paperTradeAccount/PaperTradeNa
 import PositionAndOrderModule from "../../components/paperTradeAccount/PositionAndOrderModule";
 
 export interface AccountDetailType {
-  totalAmount: number;
-  todayProfit: number;
-  todayProfitPercentage: number;
+  principal: number;
   marketValue: number;
-  rank: number;
   buyingPower: number;
   totalProfit: number;
   totalProfitPercentage: number;
@@ -36,12 +33,9 @@ const IndividualAccount: React.FC = () => {
   const userID = 1;
 
   const [accountDetail, setAccountDetail] = useState<AccountDetailType>({
-    totalAmount: 0,
-    todayProfit: 0,
-    todayProfitPercentage: 0,
+    principal: 0,
     marketValue: 0,
     buyingPower: 0,
-    rank: 0,
     totalProfit: 0,
     totalProfitPercentage: 0,
   });
@@ -52,17 +46,16 @@ const IndividualAccount: React.FC = () => {
     )
       .then((res) => res.json())
       .then((result) => {
+        const principal = result[0].market_value + result[0].buying_power;
+        const totalProfit = principal - 1000000;
+        const totalProfitPercentage = (totalProfit / 1000000) * 100;
+
         setAccountDetail({
-          totalAmount: result[0].principal,
-          todayProfit: result[0].today_profit,
-          todayProfitPercentage: result[0].today_profit,
+          principal: principal,
           marketValue: result[0].market_value,
           buyingPower: result[0].buying_power,
-          rank: 0,
-          totalProfit: result[0].total_profit,
-          totalProfitPercentage: parseFloat(
-            ((result[0].total_profit / 1000000) * 100).toFixed(2)
-          ),
+          totalProfit: totalProfit,
+          totalProfitPercentage: totalProfitPercentage,
         });
       });
   }, [currentAccount]);

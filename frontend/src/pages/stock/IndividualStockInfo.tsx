@@ -40,7 +40,11 @@ const IndividualStockInfo: React.FC = () => {
           </IonToolbar>
         </IonHeader>
 
-        <SegmentTab value={segment} onIonChange={onSegmentChange}>
+        <SegmentTab
+          className="segment-tab"
+          value={segment}
+          onIonChange={onSegmentChange}
+        >
           <SegmentButton value="stockInfo">
             <IonLabel>股票資訊</IonLabel>
           </SegmentButton>

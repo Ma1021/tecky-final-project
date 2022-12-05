@@ -111,10 +111,18 @@
   .stock-info-section {
     display: block;
   }
+
+  .segment-tab {
+    display: flex;
+  }
 }
 
 @media screen and (orientation: landscape) {
   .stock-info-section {
+    display: none;
+  }
+
+  .segment-tab {
     display: none;
   }
 }

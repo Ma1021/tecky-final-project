@@ -81,6 +81,9 @@ const ChatroomPage: React.FC = () => {
   const userId = useAppSelector((state) => {
     return state?.auth?.user?.id;
   });
+  const userName = useAppSelector((state) => {
+    return state?.auth?.user?.username;
+  });
 
   // 拎 url 嘅 param
   let url = useRouteMatch<{ id: string }>();
@@ -164,6 +167,7 @@ const ChatroomPage: React.FC = () => {
             return;
           }
           console.log("socket times", count++);
+          pushChatroom();
           setMessageList((msg) => {
             console.log("newMessage", newMessage);
             console.log("message list", msg);
@@ -270,40 +274,28 @@ const ChatroomPage: React.FC = () => {
     const chatroomMemberJson = await chatroomMember.json();
     const notifier_token = [];
 
-    if (chatroomMemberJson.length > 0) {
-      // for (let member of chatroomMemberJson) {
-      //   const notification = {
-      //     notification_type_id: 4,
-      //     notification_target_id: json[0].id,
-      //     actor_id: data.asker_id,
-      //     notifiers: member.user_id,
-      //   };
-      //   await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/`, {
-      //     method: "POST",
-      //     headers: { "Content-Type": "application/json" },
-      //     body: JSON.stringify(notification),
-      //   });
-      //   if (member.push_notification_token) {
-      //     notifier_token.push(member.push_notification_token);
-      //   }
-      // }
-      // // push notification
-      // if (notifier_token.length > 0) {
-      //   await fetch(
-      //     `${process.env.REACT_APP_PUBLIC_URL}/notification/push_notification`,
-      //     {
-      //       method: "POST",
-      //       headers: { "Content-Type": "application/json" },
-      //       body: JSON.stringify({
-      //         notification_type_id: 1,
-      //         actor_id: data.asker_id,
-      //         actor_username: data.asker_username,
-      //         notifiers: notifier_token,
-      //         content: json[0].content,
-      //       }),
-      //     }
-      //   );
-      // }
+    for (let member of chatroomMemberJson) {
+      if (member.push_notification_token) {
+        notifier_token.push(member.push_notification_token);
+      }
+    }
+
+    // push notification
+    if (notifier_token.length > 0) {
+      await fetch(
+        `${process.env.REACT_APP_PUBLIC_URL}/notification/push_notification`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            notification_type_id: 4,
+            actor_id: userId,
+            actor_username: userName,
+            notifiers: notifier_token,
+            content: `${chatroomName}: ${messageList[messageList.length - 1]}`,
+          }),
+        }
+      );
     }
   };
 

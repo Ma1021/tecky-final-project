@@ -10,7 +10,7 @@ export class PaperTradeController {
   async placeOrder(@Body() order: PlaceOrderDTO) {
     const { userID, symbol, orderType, price, quantity, account } = order;
 
-    return await this.paperTradeService.placeOrder(
+    return await this.paperTradeService.placeOrder2(
       userID,
       symbol,
       orderType,
@@ -90,5 +90,10 @@ export class PaperTradeController {
   @Get('/getAccountList')
   async getAccountList(@Query('userID') userID: number) {
     return this.paperTradeService.getAccountList(userID);
+  }
+
+  @Get('/getCurrentPrice')
+  async getCurrentPrice(@Query('symbol') symbol: string) {
+    return this.paperTradeService.getCurrentPrice(symbol);
   }
 }

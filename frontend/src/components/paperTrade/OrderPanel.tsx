@@ -9,6 +9,8 @@ import {
   IonSelectOption,
 } from "@ionic/react";
 import { useState } from "react";
+import { paperTradeUpdate } from "../../redux/paperTrade/paperTrade.action";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import "./OrderPanel.css";
 
 interface OrderPanelProps {
@@ -21,6 +23,8 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ currentAccount }) => {
   const [orderType, setOrderType] = useState("fix");
   const [orderPrice, setOrderPrice] = useState<number>(0);
   const [quantity, setQuantity] = useState<number>(0);
+  const isUpdate = useAppSelector((state) => state.paperTrade.isUpdate);
+  const dispatch = useAppDispatch();
   const userID = 1;
   const principal = 1000000;
   const ownedTickets = 100;
@@ -163,16 +167,17 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ currentAccount }) => {
 
         <IonButton
           className="order-confirm-button"
-          onClick={() =>
+          onClick={() => {
+            dispatch(paperTradeUpdate(isUpdate));
             placeOrder(
               userID,
-              currentTicker,
+              currentTicker.toUpperCase(),
               orderDirection,
               orderPrice,
               quantity,
               currentAccount
-            )
-          }
+            );
+          }}
         >
           {orderDirection === "long" ? "模擬買入" : "模擬賣出"}
         </IonButton>

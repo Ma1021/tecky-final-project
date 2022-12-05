@@ -1,21 +1,66 @@
 import { IonImg, IonItem, IonText } from "@ionic/react";
 import styled from "styled-components";
 import missionIcon from '../../img/mission.png';
-import { useState } from "react";
+import { useEffect, useState, memo } from "react";
 
-const UserPoints: React.FC = () => {
-  const [style, setStyle] = useState({});
-  const done = 70
-  const point = 700
-  
-  setTimeout(() => {
-		const newStyle = {
-			opacity: 1,
-			width: `${done}%`
+interface RecordListData {
+  totalPoints: number,
+  records: [
+    {
+			id: number,
+			user_id: number,
+			event: string,
+			event_id: number,
+			point: number,
+			created_at: string,
 		}
-		
-		setStyle(newStyle);
-	}, 50);
+  ]
+}
+
+const UserPoints: React.FC = memo(() => {
+  const [style, setStyle] = useState({});
+  const [recordList, setRecordList] = useState({
+    totalPoints: 0,
+    records:[{}]
+  } as RecordListData);
+  let user_id: number;
+  if (localStorage.getItem("auth_stockoverflow") !== null) {
+    const user = JSON.parse(localStorage.getItem("auth_stockoverflow") as string).user || undefined;
+    user_id = +user.id;
+  }
+  
+  useEffect(()=>{
+    fetch(`${process.env.REACT_APP_PUBLIC_URL}/points/${user_id}`)
+    .then(response => response.json())
+    .then((json) => {
+      setRecordList(json)
+    });
+  },[])
+
+  const done = (recordList.totalPoints/1000)*100
+  const point = recordList.totalPoints
+
+  useEffect(()=>{    
+    setTimeout(() => {
+      const newStyle = {
+        opacity: 1,
+        width: `${done}%`
+      }
+      
+      setStyle(newStyle);
+    }, 50);
+  },[recordList])
+
+  function formatDate(date: string) {
+    const time = new Date(date).toLocaleString([], {
+      hour12: false,
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
+    return time;
+  }
+
+  const { records } = recordList;
 
   return (
     <Container>
@@ -31,7 +76,7 @@ const UserPoints: React.FC = () => {
           <IonText>需要獲取1,000積分</IonText>
           <div className="progress">
             <div className="progress-done" style={style}>
-              {done}%
+              <div style={{marginLeft: done <= 10 ? done + 50 : done}}>{done > 0 && done+'%'}</div>
             </div>
           </div>
         </div>
@@ -39,37 +84,26 @@ const UserPoints: React.FC = () => {
 
       <IonText style={{alignSelf:'flex-start', marginLeft:'4%', fontSize:15}}>積分記錄</IonText>
       <div className="pointRecord">
-        <IonItem lines="full">
-          <div style={{width:'96%', margin:'0.5rem 0'}} className="d-flex align-items-center justify-content-between">
-            <div className="d-flex flex-column description">
-              <IonText>提出問題</IonText>
-              <IonText>2022/12/04 10:36</IonText>
-            </div>
-            <IonText className="point">+10</IonText>
-          </div>
-        </IonItem>
-        <IonItem lines="full">
-          <div style={{width:'96%', margin:'0.5rem 0'}} className="d-flex align-items-center justify-content-between">
-            <div className="d-flex flex-column description">
-              <IonText>提出問題</IonText>
-              <IonText>2022/12/04 10:36</IonText>
-            </div>
-            <IonText className="point">+10</IonText>
-          </div>
-        </IonItem>
-        <IonItem lines="full">
-          <div style={{width:'96%', margin:'0.5rem 0'}} className="d-flex align-items-center justify-content-between">
-            <div className="d-flex flex-column description">
-              <IonText>提出問題</IonText>
-              <IonText>2022/12/04 10:36</IonText>
-            </div>
-            <IonText className="point">+10</IonText>
-          </div>
-        </IonItem>
+        {records.length > 0 ? records.map((record)=>{
+          return <IonItem lines="full">
+                    <div style={{width:'96%', margin:'0.5rem 0'}} className="d-flex align-items-center justify-content-between">
+                      <div className="d-flex flex-column description">
+                        <IonText>{record.event}</IonText>
+                        <IonText>{formatDate(record.created_at)}</IonText>
+                      </div>
+                      <IonText className="point">{record.point > 0 ? '+'+record.point : '-'+record.point}</IonText>
+                    </div>
+                  </IonItem>
+        }):
+        <div className="d-flex flex-column justify-content-center align-items-center">
+          <IonText>未有記錄</IonText>
+          <IonText style={{fontSize:14, color:'#999'}}>去獲取積分吧</IonText>
+        </div>
+        }
       </div>
     </Container>
   )
-};
+});
 
 export default UserPoints;
 
@@ -136,9 +170,11 @@ const Container = styled.div`
 
   .pointRecord {
     width: 95%;
+    height: 35vh;
     background-color: #222;
     border-radius: 0.5rem;
     padding-top: 0.5rem;
+    overflow-y: scroll;
     
     ion-item {
       font-size: 14px;

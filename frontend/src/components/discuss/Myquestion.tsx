@@ -84,6 +84,7 @@ const MyQuestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              fontSize:16
             }}
           >
             你似乎未問過問題

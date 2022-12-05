@@ -7,7 +7,6 @@ export async function up(knex: Knex): Promise<void> {
     table.float('principal');
     table.float('market_value');
     table.float('buying_power');
-    table.float('today_profit');
     table.float('total_profit');
     table.string('account');
   });

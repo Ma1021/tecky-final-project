@@ -201,7 +201,7 @@ async function placeOrder(
     account,
   };
   const res = await fetch(
-    `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/placeNewOrder`,
+    `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/placeOrder`,
     {
       method: "POST",
       headers: { "Content-type": "application/json" },

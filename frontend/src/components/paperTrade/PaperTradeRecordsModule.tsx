@@ -30,7 +30,6 @@ const PaperTradeRecordsModule: React.FC<PaperTradeRecordsModuleProps> = ({
     )
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
         setOrderRecords(result);
       });
   }, [currentAccount]);

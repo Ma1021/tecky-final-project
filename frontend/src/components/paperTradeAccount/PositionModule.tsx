@@ -21,17 +21,6 @@ interface PositionModuleProps {
   currentAccount: string;
 }
 
-interface PositionFromDB {
-  id: number;
-  symbol: string;
-  long: boolean;
-  name: string;
-  chinese_name: string;
-  cost: string;
-  current_price: string;
-  quantity: number;
-}
-
 const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
   const [userPosition, setUserPosition] = useState<PositionRow[]>([]);
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
@@ -43,41 +32,8 @@ const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
       `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getPositionList?userID=${userID}&account=${currentAccount}`
     )
       .then((res) => res.json())
-      .then((result: PositionFromDB[]) => {
-        const resultArray: PositionRow[] = [];
-        let totalMarketValue = 0;
-        result.forEach(
-          (obj) =>
-            (totalMarketValue =
-              totalMarketValue + obj.quantity * parseFloat(obj.current_price))
-        );
-
-        result.map((obj) => {
-          const marketValue = obj.quantity * parseFloat(obj.current_price);
-          const profit =
-            (parseFloat(obj.current_price) - parseFloat(obj.cost)) *
-            obj.quantity;
-          const profitPercentage =
-            (profit / parseFloat(obj.cost) / obj.quantity) * 100;
-          const ratio = (marketValue / totalMarketValue) * 100;
-
-          resultArray.push({
-            id: obj.id,
-            symbol: obj.symbol,
-            long: obj.long,
-            name: obj.name,
-            chineseName: obj.chinese_name,
-            cost: parseFloat(obj.cost),
-            marketValue: marketValue,
-            currentPrice: parseFloat(obj.current_price),
-            quantity: obj.quantity,
-            profit: profit,
-            profitPercentage: profitPercentage,
-            ratio: ratio,
-          });
-        });
-
-        setUserPosition(resultArray);
+      .then((result) => {
+        setUserPosition(result);
       });
   }, [currentAccount, isUpdate]);
 

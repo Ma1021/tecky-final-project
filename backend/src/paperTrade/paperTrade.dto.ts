@@ -2,7 +2,7 @@ import { IsNotEmpty } from 'class-validator';
 
 export class PlaceOrderDTO {
   @IsNotEmpty()
-  userID: string;
+  userID: number;
 
   @IsNotEmpty()
   symbol: string;
@@ -11,10 +11,10 @@ export class PlaceOrderDTO {
   orderType: string;
 
   @IsNotEmpty()
-  price: string;
+  price: number;
 
   @IsNotEmpty()
-  quantity: string;
+  quantity: number;
 
   @IsNotEmpty()
   account: string;

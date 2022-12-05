@@ -8,31 +8,28 @@ import {
 import { useEffect, useState } from "react";
 import PaperTradeAccountModule from "../../components/paperTradeAccount/PaperTradeAccountModule";
 import Title from "../../components/All/Title";
-import "./PaperTradeAccountOverview.css";
 import Menu from "../../components/All/Menu";
+import "./PaperTradeAccountOverview.css";
 
 interface UserAccountType {
-  region: string;
-  amount: number;
-  profit: number;
-  profitPercentage: number;
+  account: string;
+  principal: number;
+  total_profit: number;
+  total_profit_percentage: number;
 }
 
 const PaperTradeAccountOverview: React.FC = () => {
   const [userAccountList, setUserAccountList] = useState<UserAccountType[]>([]);
+  const userID = 1;
 
   useEffect(() => {
-    const exampleList = [
-      { region: "US", amount: 185307.25, profit: 0, profitPercentage: 0 },
-      { region: "HK", amount: 100100, profit: 100, profitPercentage: 0.1 },
-      {
-        region: "crypto",
-        amount: 1110000,
-        profit: 10000,
-        profitPercentage: 100,
-      },
-    ];
-    setUserAccountList(exampleList);
+    fetch(
+      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getAccountList?userID=${userID}`
+    )
+      .then((res) => res.json())
+      .then((result) => {
+        setUserAccountList(result);
+      });
   }, []);
 
   return (
@@ -58,10 +55,10 @@ const PaperTradeAccountOverview: React.FC = () => {
             <div className="modules-container">
               {userAccountList.map((obj) => (
                 <PaperTradeAccountModule
-                  region={obj.region}
-                  amount={obj.amount}
-                  profit={obj.profit}
-                  profitPercentage={obj.profitPercentage}
+                  account={obj.account}
+                  principal={obj.principal}
+                  totalProfit={obj.total_profit}
+                  totalProfitPercentage={obj.total_profit_percentage}
                 />
               ))}
             </div>

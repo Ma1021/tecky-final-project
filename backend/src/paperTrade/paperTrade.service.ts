@@ -6,12 +6,12 @@ import { Knex } from 'knex';
 export class PaperTradeService {
   constructor(@InjectModel() private readonly knex: Knex) {}
 
-  async placeNewOrder(
-    userID: string,
+  async placeOrder(
+    userID: number,
     symbol: string,
     orderType: string,
-    price: string,
-    quantity: string,
+    price: number,
+    quantity: number,
     account: string,
   ) {
     let orderTypeLong = undefined;
@@ -30,12 +30,12 @@ export class PaperTradeService {
         })
         .into('user_trades');
 
-      const result = await this.knex
+      const positionResult = await this.knex
         .select('*')
         .from('user_positions')
         .where({ symbol: symbol });
 
-      if (result.length === 0) {
+      if (positionResult.length === 0) {
         await this.knex
           .insert({
             user_id: userID,
@@ -49,10 +49,10 @@ export class PaperTradeService {
       } else {
         let newQuantity = 0;
         let newCost = 0;
-        newQuantity = result[0].quantity + parseInt(quantity);
+        newQuantity = positionResult[0].quantity + quantity;
         newCost =
-          (parseFloat(result[0].cost) * result[0].quantity +
-            parseFloat(price) * parseInt(quantity)) /
+          (parseFloat(positionResult[0].cost) * positionResult[0].quantity +
+            price * quantity) /
           newQuantity;
 
         await this.knex
@@ -60,6 +60,46 @@ export class PaperTradeService {
           .from('user_positions')
           .where({ symbol: symbol });
       }
+
+      const {
+        principal,
+        market_value,
+        buying_power,
+        today_profit,
+        total_profit,
+      } = (
+        await this.knex
+          .select([
+            'principal',
+            'market_value',
+            'buying_power',
+            'today_profit',
+            'total_profit',
+          ])
+          .from('user_paper_trade_accounts')
+          .where({ user_id: userID, account: account })
+      )[0];
+      let newPrincipal = 0,
+        newMarketValue = 0,
+        newBuyingPower = 0,
+        newTodayProfit = 0,
+        newTotalProfit = 0;
+
+      newMarketValue = market_value + quantity * price;
+      newBuyingPower = buying_power - quantity * price;
+      newPrincipal = newMarketValue + newBuyingPower;
+      newTotalProfit = newPrincipal - 1000000;
+
+      await this.knex
+        .update({
+          principal: newPrincipal,
+          market_value: newMarketValue,
+          buying_power: newBuyingPower,
+          today_profit: newTodayProfit,
+          total_profit: newTotalProfit,
+        })
+        .from('user_paper_trade_accounts')
+        .where({ user_id: userID, account: account });
 
       return { message: 'Place order succeed.' };
     } catch (error) {
@@ -168,14 +208,85 @@ export class PaperTradeService {
       .join('stock_info', 'user_positions.symbol', 'stock_info.symbol')
       .where({ user_id: userID, account: account });
 
-    return result;
+    const resultArray = [];
+    let totalMarketValue = 0;
+    result.forEach(
+      (obj) =>
+        (totalMarketValue =
+          totalMarketValue + obj.quantity * parseFloat(obj.current_price)),
+    );
+
+    result.map((obj) => {
+      const marketValue = obj.quantity * parseFloat(obj.current_price);
+      const profit =
+        (parseFloat(obj.current_price) - parseFloat(obj.cost)) * obj.quantity;
+      const profitPercentage =
+        (profit / parseFloat(obj.cost) / obj.quantity) * 100;
+      const ratio = (marketValue / totalMarketValue) * 100;
+
+      resultArray.push({
+        id: obj.id,
+        symbol: obj.symbol,
+        long: obj.long,
+        name: obj.name,
+        chineseName: obj.chinese_name,
+        cost: parseFloat(obj.cost),
+        marketValue: marketValue,
+        currentPrice: parseFloat(obj.current_price),
+        quantity: obj.quantity,
+        profit: profit,
+        profitPercentage: profitPercentage,
+        ratio: ratio,
+      });
+    });
+    return resultArray;
   }
 
-  async getAccountDetail(userID: string, account: string) {
+  async getIndividualAccountDetail(userID: string, account: string) {
     const result = await this.knex
       .select('*')
       .from('user_paper_trade_accounts')
       .where({ user_id: userID, account: account });
     return result;
+  }
+
+  async getAccountList(userID: string) {
+    const result = await this.knex
+      .select(['principal', 'total_profit', 'account'])
+      .from('user_paper_trade_accounts')
+      .where({ user_id: userID });
+
+    const newResult = [];
+
+    result.map((obj) => {
+      const total_profit_percentage = (obj.total_profit / 1000000) * 100;
+
+      const newObj = {
+        account: obj.account,
+        principal: obj.principal,
+        total_profit: obj.total_profit,
+        total_profit_percentage: total_profit_percentage,
+      };
+      newResult.push(newObj);
+    });
+
+    return newResult;
+  }
+
+  async updateAccountDetail(
+    userID: string,
+    marketValue: number,
+    buyingPower: number,
+    todayProfit: number,
+    account: string,
+  ) {
+    await this.knex
+      .update({
+        market_value: marketValue,
+        buying_power: buyingPower,
+        today_profit: todayProfit,
+      })
+      .from('user_paper_trade_accounts')
+      .where({ user_id: userID, account: account });
   }
 }

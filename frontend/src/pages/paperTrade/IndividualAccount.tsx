@@ -48,7 +48,7 @@ const IndividualAccount: React.FC = () => {
 
   useEffect(() => {
     fetch(
-      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getAccountDetail?userID=${userID}&account=${currentAccount}`
+      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getIndividualAccountDetail?userID=${userID}&account=${currentAccount}`
     )
       .then((res) => res.json())
       .then((result) => {
@@ -60,7 +60,9 @@ const IndividualAccount: React.FC = () => {
           buyingPower: result[0].buying_power,
           rank: 0,
           totalProfit: result[0].total_profit,
-          totalProfitPercentage: result[0].total_profit,
+          totalProfitPercentage: parseFloat(
+            ((result[0].total_profit / 1000000) * 100).toFixed(2)
+          ),
         });
       });
   }, [currentAccount]);

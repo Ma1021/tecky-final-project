@@ -14,10 +14,11 @@
 .first-row,
 .second-row {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin: 0.5rem;
   width: 100%;
+  font-size: 1.2rem;
 }
 
 .third-row,

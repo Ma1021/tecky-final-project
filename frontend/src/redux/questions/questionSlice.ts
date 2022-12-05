@@ -104,46 +104,56 @@ export const createQuestion = createAsyncThunk<Question, {content: string, stock
         const json = await res.json();    
                         
         // insert notification 
-            const followerRes = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/followers/${data.asker_id}`)
-            const followerJson = await followerRes.json();
-            const notifier_token = []
-            
-            if(followerJson.length > 0) {
-                for(let follower of followerJson) {
-                    const notification = {
-                        notification_type_id:1,
-                        notification_target_id: json[0].id,
-                        actor_id: data.asker_id,
-                        notifiers: follower.user_id,
-                    }
-                    
-                    await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/`, {
-                        method:'POST',
-                        headers:{'Content-Type': 'application/json'},
-                        body: JSON.stringify(notification)
-                    })
-
-                    if(follower.push_notification_token) {
-                        notifier_token.push(follower.push_notification_token);
-                    }
+        const followerRes = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/followers/${data.asker_id}`)
+        const followerJson = await followerRes.json();
+        const notifier_token = []
+        
+        if(followerJson.length > 0) {
+            for(let follower of followerJson) {
+                const notification = {
+                    notification_type_id:1,
+                    notification_target_id: json[0].id,
+                    actor_id: data.asker_id,
+                    notifiers: follower.user_id,
                 }
                 
-                // push notification
-                if(notifier_token.length > 0) {
-                    await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/push_notification`, {
-                        method:"POST",
-                        headers:{'Content-Type': 'application/json'},
-                        body:JSON.stringify({
-                            notification_type_id:1,
-                            actor_id: data.asker_id,
-                            actor_username: data.asker_username,
-                            notifiers: notifier_token,
-                            content: json[0].content
-                        })
-                    })
+                await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/`, {
+                    method:'POST',
+                    headers:{'Content-Type': 'application/json'},
+                    body: JSON.stringify(notification)
+                })
+
+                if(follower.push_notification_token) {
+                    notifier_token.push(follower.push_notification_token);
                 }
             }
-        
+            
+            // push notification
+            if(notifier_token.length > 0) {
+                await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/push_notification`, {
+                    method:"POST",
+                    headers:{'Content-Type': 'application/json'},
+                    body:JSON.stringify({
+                        notification_type_id:1,
+                        actor_id: data.asker_id,
+                        actor_username: data.asker_username,
+                        notifiers: notifier_token,
+                        content: json[0].content
+                    })
+                })
+            }
+        }
+
+        // insert point record
+        fetch(`${process.env.REACT_APP_PUBLIC_URL}/points`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                user_id: data.asker_id,
+                event:'提出問題',
+                event_id: json[0].id
+            })
+        })
 
         thunkAPI.dispatch(loadQuestions());
 
@@ -215,6 +225,17 @@ export const createAnswer = createAsyncThunk<Question, {answerer_id: number, ask
                     })
                 })
             }
+
+            // insert point record
+            fetch(`${process.env.REACT_APP_PUBLIC_URL}/points`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    user_id: data.answerer_id,
+                    event:'回答問題',
+                    event_id: json.answer_id
+                })
+            })
 
             thunkAPI.dispatch(loadQuestion(data.question_id));
             thunkAPI.dispatch(loadQuestions());

@@ -318,9 +318,10 @@ const UserInfo: React.FC = () => {
             <IonSegmentButton value="userIntro">
               <IonLabel>自我介紹</IonLabel>
             </IonSegmentButton>
+            {+userIdUrl === user_id &&
             <IonSegmentButton value="userPoints">
               <IonLabel>積分</IonLabel>
-            </IonSegmentButton>
+            </IonSegmentButton>}
             <IonSegmentButton value="userDiscuss">
               <IonLabel>問題</IonLabel>
             </IonSegmentButton>

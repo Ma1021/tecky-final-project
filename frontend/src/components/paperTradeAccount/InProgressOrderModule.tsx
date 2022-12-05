@@ -38,10 +38,15 @@ const InProgressOrderModule: React.FC<InProgressOrderModuleProps> = ({
       });
   }, [currentAccount, isUpdate]);
 
-  async function cancelOrder(id: number) {
+  async function cancelOrder(orderID: number, userID: number, account: string) {
+    const data = { orderID, userID, account };
     const res = await fetch(
-      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/cancelOrder/${id}`,
-      { method: "PATCH" }
+      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/cancelOrder`,
+      {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(data),
+      }
     );
     const result = await res.json();
     console.log(result);
@@ -71,7 +76,12 @@ const InProgressOrderModule: React.FC<InProgressOrderModuleProps> = ({
                         {
                           text: "確認",
                           role: "confirm",
-                          handler: () => cancelOrder(inProgressOrder.id),
+                          handler: () =>
+                            cancelOrder(
+                              inProgressOrder.id,
+                              userID,
+                              currentAccount
+                            ),
                         },
                       ],
                     });
@@ -99,7 +109,12 @@ const InProgressOrderModule: React.FC<InProgressOrderModuleProps> = ({
                         {
                           text: "確認",
                           role: "confirm",
-                          handler: () => cancelOrder(inProgressOrder.id),
+                          handler: () =>
+                            cancelOrder(
+                              inProgressOrder.id,
+                              userID,
+                              currentAccount
+                            ),
                         },
                       ],
                     });

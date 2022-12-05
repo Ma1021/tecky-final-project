@@ -44,9 +44,12 @@ export class PaperTradeController {
     );
   }
 
-  @Patch('/cancelOrder/:id')
-  async cancelOrder(@Param('id') id: string) {
-    return await this.paperTradeService.cancelOrder(id);
+  @Patch('/cancelOrder/')
+  async cancelOrder(
+    @Body() order: { orderID: number; userID: number; account: string },
+  ) {
+    const { orderID, userID, account } = order;
+    return await this.paperTradeService.cancelOrder(orderID, userID, account);
   }
 
   @Get('/getInProgressOrderList')

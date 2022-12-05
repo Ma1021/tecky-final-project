@@ -14,95 +14,47 @@ export class PaperTradeService {
     quantity: number,
     account: string,
   ) {
-    let orderTypeLong = undefined;
-    orderType === 'long' ? (orderTypeLong = true) : (orderTypeLong = false);
+    let isLong = undefined;
+    orderType === 'long' ? (isLong = true) : (isLong = false);
     try {
-      await this.knex
-        .insert({
-          user_id: userID,
-          symbol: symbol,
-          long: orderTypeLong,
-          order_price: price,
-          quantity: quantity,
-          order_place_time: new Date(),
-          order_status: 0,
-          account: account,
-        })
-        .into('user_trades');
+      await this.insertUserTradeRecord(
+        userID,
+        symbol,
+        isLong,
+        price,
+        quantity,
+        account,
+      );
 
-      const positionResult = await this.knex
-        .select('*')
-        .from('user_positions')
-        .where({ symbol: symbol });
+      const selectResult = await this.getIndividualAccountDetail(
+        userID.toString(),
+        account,
+      );
 
-      if (positionResult.length === 0) {
-        await this.knex
-          .insert({
-            user_id: userID,
-            symbol: symbol,
-            long: orderTypeLong,
-            cost: price,
-            quantity: quantity,
-            account: account,
-          })
-          .into('user_positions');
+      const marketValue = selectResult[0].market_value,
+        buyingPower = selectResult[0].buying_power,
+        totalProfit = selectResult[0].total_profit;
+
+      const currentTransaction = quantity * price;
+      let newBuyingPower = 0;
+      if (isLong) {
+        newBuyingPower = buyingPower - currentTransaction;
       } else {
-        let newQuantity = 0;
-        let newCost = 0;
-        newQuantity = positionResult[0].quantity + quantity;
-        newCost =
-          (parseFloat(positionResult[0].cost) * positionResult[0].quantity +
-            price * quantity) /
-          newQuantity;
-
-        await this.knex
-          .update({ cost: newCost, quantity: newQuantity })
-          .from('user_positions')
-          .where({ symbol: symbol });
+        newBuyingPower = buyingPower + currentTransaction;
       }
 
-      const {
-        principal,
-        market_value,
-        buying_power,
-        today_profit,
-        total_profit,
-      } = (
-        await this.knex
-          .select([
-            'principal',
-            'market_value',
-            'buying_power',
-            'today_profit',
-            'total_profit',
-          ])
-          .from('user_paper_trade_accounts')
-          .where({ user_id: userID, account: account })
-      )[0];
-      let newPrincipal = 0,
-        newMarketValue = 0,
-        newBuyingPower = 0,
-        newTodayProfit = 0,
-        newTotalProfit = 0;
-
-      newMarketValue = market_value + quantity * price;
-      newBuyingPower = buying_power - quantity * price;
-      newPrincipal = newMarketValue + newBuyingPower;
-      newTotalProfit = newPrincipal - 1000000;
-
-      await this.knex
-        .update({
-          principal: newPrincipal,
-          market_value: newMarketValue,
-          buying_power: newBuyingPower,
-          today_profit: newTodayProfit,
-          total_profit: newTotalProfit,
-        })
-        .from('user_paper_trade_accounts')
-        .where({ user_id: userID, account: account });
+      await this.updateAccountDetail(
+        userID,
+        marketValue,
+        newBuyingPower,
+        totalProfit,
+        account,
+      );
 
       return { message: 'Place order succeed.' };
     } catch (error) {
+      console.log(error);
+
       throw new Error('Place order failed.');
     }
   }
@@ -137,12 +89,43 @@ export class PaperTradeService {
     }
   }
 
-  async cancelOrder(id: string) {
+  async cancelOrder(orderID: number, userID: number, account: string) {
     try {
-      await this.knex
-        .update({ order_status: 2, order_complete_time: new Date() })
-        .from('user_trades')
-        .where({ id: id });
+      const { order_price, quantity } = (
+        await this.knex
+          .update({ order_status: 2, order_complete_time: new Date() })
+          .from('user_trades')
+          .where({ id: orderID })
+          .returning(['order_price', 'quantity'])
+      )[0];
+
+      console.log(order_price, quantity);
+
+      const selectResult = await this.getIndividualAccountDetail(
+        userID.toString(),
+        account,
+      );
+
+      const marketValue = selectResult[0].market_value,
+        buyingPower = selectResult[0].buying_power,
+        totalProfit = selectResult[0].total_profit;
+
+      console.log('quantity', quantity);
+      console.log('order_price', order_price);
+
+      const currentTransaction = quantity * order_price;
+
+      const newBuyingPower = buyingPower + currentTransaction;
+      console.log('newBuyingPower', newBuyingPower);
+
+      await this.updateAccountDetail(
+        userID,
+        marketValue,
+        newBuyingPower,
+        totalProfit,
+        account,
+      );
+
       return { message: 'Order cancelled.' };
     } catch (error) {
       throw new Error(error);
@@ -247,6 +230,7 @@ export class PaperTradeService {
       .select('*')
       .from('user_paper_trade_accounts')
       .where({ user_id: userID, account: account });
+
     return result;
   }
 
@@ -254,7 +238,8 @@ export class PaperTradeService {
     const result = await this.knex
       .select(['principal', 'total_profit', 'account'])
       .from('user_paper_trade_accounts')
-      .where({ user_id: userID });
+      .where({ user_id: userID })
+      .orderBy('id', 'asc');
 
     const newResult = [];
 
@@ -273,18 +258,83 @@ export class PaperTradeService {
     return newResult;
   }
 
-  async updateAccountDetail(
-    userID: string,
-    marketValue: number,
-    buyingPower: number,
-    todayProfit: number,
+  async insertUserTradeRecord(
+    userID: number,
+    symbol: string,
+    isLong: boolean,
+    price: number,
+    quantity: number,
     account: string,
   ) {
     await this.knex
+      .insert({
+        user_id: userID,
+        symbol: symbol,
+        long: isLong,
+        order_price: price,
+        quantity: quantity,
+        order_place_time: new Date(),
+        order_status: 0,
+        account: account,
+      })
+      .into('user_trades');
+  }
+
+  async insertOrUpdateUserPosition(
+    userID: number,
+    symbol: string,
+    isLong: boolean,
+    price: number,
+    quantity: number,
+    account: string,
+  ) {
+    const positionResult = await this.knex
+      .select('*')
+      .from('user_positions')
+      .where({ symbol: symbol, account: account });
+
+    if (positionResult.length === 0) {
+      await this.knex
+        .insert({
+          user_id: userID,
+          symbol: symbol,
+          long: isLong,
+          cost: price,
+          current_price: 50,
+          quantity: quantity,
+          account: account,
+        })
+        .into('user_positions');
+    } else {
+      let newQuantity = 0;
+      let newCost = 0;
+      newQuantity = positionResult[0].quantity + quantity;
+      newCost =
+        (parseFloat(positionResult[0].cost) * positionResult[0].quantity +
+          price * quantity) /
+        newQuantity;
+
+      await this.knex
+        .update({ cost: newCost, quantity: newQuantity })
+        .from('user_positions')
+        .where({ symbol: symbol });
+    }
+  }
+
+  async updateAccountDetail(
+    userID: number,
+    newMarketValue: number,
+    newBuyingPower: number,
+    newTotalProfit: number,
+    account: string,
+  ) {
+    const newPrincipal = newMarketValue + newBuyingPower;
+    await this.knex
       .update({
-        market_value: marketValue,
-        buying_power: buyingPower,
-        today_profit: todayProfit,
+        principal: newPrincipal,
+        market_value: newMarketValue,
+        buying_power: newBuyingPower,
+        total_profit: newTotalProfit,
       })
       .from('user_paper_trade_accounts')
       .where({ user_id: userID, account: account });

@@ -95,7 +95,7 @@ const UserPoints: React.FC = memo(() => {
                     </div>
                   </IonItem>
         }):
-        <div className="d-flex flex-column justify-content-center align-items-center">
+        <div className="d-flex flex-column justify-content-center align-items-center mt-4">
           <IonText>未有記錄</IonText>
           <IonText style={{fontSize:14, color:'#999'}}>去獲取積分吧</IonText>
         </div>

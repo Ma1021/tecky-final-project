@@ -9,7 +9,7 @@ export class PointsService {
 
     find(user_id: number) {
         try {
-            return this.knex('user_points').select('*').where('user_id', user_id);
+            return this.knex('user_points').select('*').where('user_id', user_id).orderBy('created_at', 'desc');
         } catch(err) {
             console.log('find point record:', err);
         }

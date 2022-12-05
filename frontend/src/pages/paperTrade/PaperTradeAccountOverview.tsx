@@ -12,6 +12,7 @@ import Menu from "../../components/All/Menu";
 import "./PaperTradeAccountOverview.css";
 
 interface UserAccountType {
+  id: number;
   account: string;
   principal: number;
   total_profit: number;
@@ -55,6 +56,7 @@ const PaperTradeAccountOverview: React.FC = () => {
             <div className="modules-container">
               {userAccountList.map((obj) => (
                 <PaperTradeAccountModule
+                  key={obj.id}
                   account={obj.account}
                   principal={obj.principal}
                   totalProfit={obj.total_profit}

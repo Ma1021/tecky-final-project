@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { StockService } from './stock.service';
 // import {
 //   ClientKafka,
@@ -60,6 +60,20 @@ export class StockController {
   @Get('/getUserTradeRecords')
   async getUserTradeRecordsFromPostgres(@Query('userID') userID: string) {
     return await this.stockService.getUserTradeRecordsFromPostgres(userID);
+  }
+
+  @Post('/subscribeStock')
+  async subscribeStock(@Body() order: { userID: number; symbol: string }) {
+    const { userID, symbol } = order;
+    return await this.stockService.subscribeStock(userID, symbol);
+  }
+
+  @Get('/checkSubscription')
+  async checkSubscription(
+    @Query('userID') userID: number,
+    @Query('symbol') symbol: string,
+  ) {
+    return await this.stockService.checkUserStockSubscription(userID, symbol);
   }
 
   // @Get('kafka-test')

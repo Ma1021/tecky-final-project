@@ -14,39 +14,12 @@ const AccountOverviewModule: React.FC<AccountOverviewModuleProps> = ({
       <div className="account-overview-module-container">
         <div className="first-row">
           <span className="gray">資產凈值</span>
-          <span className="gray">今日盈虧</span>
         </div>
 
         <div className="second-row">
           <span className="total-amount">
             {accountDetail.totalAmount.toFixed(2)}
           </span>
-          <div className="today-profit-container">
-            <div
-              className={
-                "today-profit " +
-                (accountDetail.todayProfit === 0
-                  ? "gray"
-                  : accountDetail.todayProfit > 0
-                  ? "positive"
-                  : "negative")
-              }
-            >
-              {accountDetail.todayProfit.toFixed(2)}
-            </div>
-            <div
-              className={
-                "today-profit-percentage " +
-                (accountDetail.todayProfitPercentage === 0
-                  ? "gray"
-                  : accountDetail.todayProfitPercentage > 0
-                  ? "positive"
-                  : "negative")
-              }
-            >
-              {accountDetail.todayProfitPercentage.toFixed(2)}%
-            </div>
-          </div>
         </div>
 
         <div className="third-row">
@@ -57,12 +30,6 @@ const AccountOverviewModule: React.FC<AccountOverviewModuleProps> = ({
           <div className="buying-power-container">
             <span className="gray">可用資金</span>
             <span>{accountDetail.buyingPower.toFixed(2)}</span>
-          </div>
-          <div className="rank-container">
-            <span className="gray">排行</span>
-            <span className={accountDetail.rank === 0 ? "" : "rank"}>
-              {accountDetail.rank === 0 ? "--" : accountDetail.rank}
-            </span>
           </div>
         </div>
 
@@ -95,7 +62,6 @@ const AccountOverviewModule: React.FC<AccountOverviewModuleProps> = ({
               {accountDetail.totalProfit.toFixed(2)}
             </span>
           </div>
-          <div className="empty-container"></div>
         </div>
       </div>
     </>

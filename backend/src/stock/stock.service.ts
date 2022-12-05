@@ -7,17 +7,6 @@ import {
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nest-knexjs';
 import { Knex } from 'knex';
-// import { MongoClient } from 'mongodb';
-
-// async function connectMongoDB() {
-//   const url =
-//     'mongodb://03b083fd0aadc8883198881ba88111ab:f9023000f29773649f3850298becb9544b5fd6a9@35.213.167.63/?authMechanism=DEFAULT';
-//   const mongoClient = new MongoClient(url);
-//   await mongoClient.connect();
-//   console.log('MongoDB connected...........');
-
-//   return mongoClient;
-// }
 
 @Injectable()
 export class StockService {
@@ -31,15 +20,15 @@ export class StockService {
 
     const result = await this.knex
       .select([
-        'stock_id',
-        'symbol',
+        'stock_info.id',
+        'user_stocks.symbol',
         'name',
         'chinese_name',
         'current_price',
         'yesterday_price',
       ])
       .from('user_stocks')
-      .join('stock_info', 'user_stocks.stock_id', 'stock_info.id')
+      .join('stock_info', 'user_stocks.symbol', 'stock_info.symbol')
       .where({ user_id: userID });
     result.map((stockObj) => {
       stockObj['price_difference'] =
@@ -458,6 +447,45 @@ export class StockService {
       .where({ user_id: userID });
 
     return result;
+  }
+
+  async subscribeStock(userID: number, symbol: string) {
+    try {
+      const isSubscribed = await this.checkUserStockSubscription(
+        userID,
+        symbol,
+      );
+
+      if (isSubscribed) {
+        await this.knex
+          .delete('*')
+          .from('user_stocks')
+          .where({ user_id: userID, symbol: symbol });
+
+        return { message: 'Stock unsubscribed.' };
+      } else {
+        await this.knex
+          .insert({ user_id: userID, symbol: symbol })
+          .into('user_stocks');
+
+        return { message: 'Stock subscribed.' };
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async checkUserStockSubscription(userID: number, symbol: string) {
+    try {
+      const selectResult = await this.knex
+        .select('*')
+        .from('user_stocks')
+        .where({ user_id: userID, symbol: symbol });
+
+      return { subscribed: selectResult.length > 0 };
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }
 

@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
   Patch,
@@ -15,11 +14,11 @@ import { PaperTradeService } from './paperTrade.service';
 export class PaperTradeController {
   constructor(private readonly paperTradeService: PaperTradeService) {}
 
-  @Post('/placeNewOrder')
-  async placeNewOrder(@Body() order: PlaceOrderDTO) {
+  @Post('/placeOrder')
+  async placeOrder(@Body() order: PlaceOrderDTO) {
     const { userID, symbol, orderType, price, quantity, account } = order;
 
-    return await this.paperTradeService.placeNewOrder(
+    return await this.paperTradeService.placeOrder(
       userID,
       symbol,
       orderType,
@@ -72,5 +71,21 @@ export class PaperTradeController {
     @Query('account') account: string,
   ) {
     return await this.paperTradeService.getPositionList(userID, account);
+  }
+
+  @Get('/getIndividualAccountDetail')
+  async getIndividualAccountDetail(
+    @Query('userID') userID: string,
+    @Query('account') account: string,
+  ) {
+    return await this.paperTradeService.getIndividualAccountDetail(
+      userID,
+      account,
+    );
+  }
+
+  @Get('/getAccountList')
+  async getAccountList(@Query('userID') userID: string) {
+    return this.paperTradeService.getAccountList(userID);
   }
 }

@@ -74,7 +74,19 @@ const StockInfo: React.FC<StockInfoProps> = ({ symbol }) => {
     shsFloat: 0,
     minTradingUnit: 0,
   });
+  const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
   const isChinese = useAppSelector((state) => state.theme.isChinese);
+  const userID = 1;
+
+  useEffect(() => {
+    fetch(
+      `${process.env.REACT_APP_PUBLIC_URL}/stock/checkSubscription?userID=${userID}&symbol=${symbol}`
+    )
+      .then((res) => res.json())
+      .then((result) => {
+        setIsSubscribed(result);
+      });
+  }, []);
 
   useEffect(() => {
     // get stock data from database
@@ -148,7 +160,17 @@ const StockInfo: React.FC<StockInfoProps> = ({ symbol }) => {
             </div>
             <div className="status">{stockInfo.status}</div>
           </div>
-          <div className="icons-container">{stockInfo.icons}</div>
+          <div className="subscribe-button-container">
+            <button
+              className="subscribe-button"
+              onClickCapture={() => {
+                subscribe(userID, symbol);
+                setIsSubscribed(!isSubscribed);
+              }}
+            >
+              {isSubscribed ? "Unsubscribe" : "Subscribe"}
+            </button>
+          </div>
         </div>
         <div
           className={"row-2 " + (extendStockInfo ? "extended" : "collapsed")}
@@ -478,3 +500,17 @@ const StockInfo: React.FC<StockInfoProps> = ({ symbol }) => {
 };
 
 export default StockInfo;
+
+async function subscribe(userID: number, symbol: string) {
+  const data = { userID, symbol };
+  const res = await fetch(
+    `${process.env.REACT_APP_PUBLIC_URL}/stock/subscribeStock`,
+    {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(data),
+    }
+  );
+  const result = res.json();
+  console.log(result);
+}

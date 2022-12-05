@@ -16,8 +16,8 @@ import StockForum from "../../components/stock/StockForum";
 import StockNews from "../../components/stock/StockNews";
 import StockAnalysis from "../../components/stock/StockAnalysis";
 import styled from "styled-components";
-import "./IndividualStockInfo.css";
 import StockInfo from "../../components/stock/StockInfo";
+import "./IndividualStockInfo.css";
 
 const IndividualStockInfo: React.FC = () => {
   const location = useLocation();
@@ -58,7 +58,9 @@ const IndividualStockInfo: React.FC = () => {
         <IonContent>
           {segment === "stockInfo" && (
             <>
-              <StockInfo symbol={symbol!} />
+              <div className="stock-info-section">
+                <StockInfo symbol={symbol!} />
+              </div>
               <div className="chart-section">
                 <MainChart symbol={symbol!} />
               </div>{" "}

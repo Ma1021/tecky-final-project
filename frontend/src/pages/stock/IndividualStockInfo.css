@@ -106,3 +106,15 @@
 .detail-info-column {
   font-size: 14px;
 }
+
+@media screen and (orientation: portrait) {
+  .stock-info-section {
+    display: block;
+  }
+}
+
+@media screen and (orientation: landscape) {
+  .stock-info-section {
+    display: none;
+  }
+}

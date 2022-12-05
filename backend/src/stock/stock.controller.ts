@@ -44,7 +44,7 @@ export class StockController {
   //   return await this.appService.getDayDataFromMongoDB(symbol, timeFrame);
   // }
 
-  @Get('/getDayDataFromMongoDB')
+  @Get('/getDayDataFromMongoAPI')
   async getDayDataFromMongoAPI(
     @Query('symbol') symbol: string,
     @Query('timeFrame') timeFrame: string,

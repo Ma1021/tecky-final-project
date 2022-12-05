@@ -20,7 +20,7 @@ import MessageCard from "../components/Inbox/MessageCard";
 import styled from "styled-components";
 import { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router";
-import Mailbox from '../img/mailbox.png'
+import Mailbox from "../img/mailbox.png";
 
 interface Notification {
   id: number;
@@ -53,7 +53,7 @@ const Inbox: React.FC = () => {
   const history = useHistory();
   const [toastPresent] = useIonToast();
 
-  function fetchData() {    
+  function fetchData() {
     fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/${user_id}`)
       .then((response) => response.json())
       .then((data) => setNotificationList(data));
@@ -95,56 +95,54 @@ const Inbox: React.FC = () => {
   );
 
   function handleReadAll() {
-    fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/readAll/${user_id}`, {
-      method:'PUT',
-      headers:{"Content-Type":"application/json"}
-    }).then((response)=>{
-      if(response.ok) {
+    fetch(
+      `${process.env.REACT_APP_PUBLIC_URL}/notification/readAll/${user_id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+      }
+    ).then((response) => {
+      if (response.ok) {
         fetchData();
       }
-    })
+    });
   }
 
   function handleDeleteAll() {
     setNotificationList([]);
-    fetch(
-      `${process.env.REACT_APP_PUBLIC_URL}/notification/user/${user_id}`,
-      {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-      }
-    ).then((response)=>{
+    fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/user/${user_id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    }).then((response) => {
       if (response.status === 409) {
         toastPresent({
           message: "沒有訊息可刪除",
           duration: 1500,
           position: "bottom",
         });
-        return
+        return;
       }
       toastPresent({
         message: "刪除訊息成功",
         duration: 1500,
         position: "bottom",
       });
-    })
+    });
   }
 
-  function handleDeleteOne(target_type_id: number, target_id: number) {    
-    fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification`,
-      {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ target_type_id, target_id }),
-      }
-    ).then(response => {      
+  function handleDeleteOne(target_type_id: number, target_id: number) {
+    fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ target_type_id, target_id }),
+    }).then((response) => {
       if (response.status === 404) {
         toastPresent({
           message: "沒有訊息可刪除",
           duration: 1500,
           position: "bottom",
         });
-        return
+        return;
       }
       toastPresent({
         message: "刪除訊息成功",
@@ -152,15 +150,15 @@ const Inbox: React.FC = () => {
         position: "bottom",
       });
       fetchData();
-    });    
-  }  
-  
+    });
+  }
+
   return (
     <IonPage id="main-content">
       <IonHeader translucent={true} collapse="fade">
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref="/discuss" text="返回"/>
+            <IonBackButton defaultHref="/discuss" text="返回" />
           </IonButtons>
           <IonTitle>訊息</IonTitle>
         </IonToolbar>
@@ -209,9 +207,12 @@ const Inbox: React.FC = () => {
                     </svg>
                     <IonText style={{ marginLeft: 10 }}>標記全部已讀</IonText>
                   </ModalItem>
-                  <ModalItem lines="full" onClick={()=>{
+                  <ModalItem
+                    lines="full"
+                    onClick={() => {
                       handleDeleteAll();
-                  }}>
+                    }}
+                  >
                     <svg
                       width="18"
                       height="18"
@@ -284,8 +285,14 @@ const Inbox: React.FC = () => {
                 ))}
               </IonList>
             ) : (
-              <div style={{height:'40vh'}} className="d-flex flex-column align-items-center justify-content-center">
-                <IonImg style={{width:150, height: 150}} src={Mailbox}></IonImg>
+              <div
+                style={{ height: "40vh" }}
+                className="d-flex flex-column align-items-center justify-content-center"
+              >
+                <IonImg
+                  style={{ width: 150, height: 150 }}
+                  src={Mailbox}
+                ></IonImg>
                 <IonText>沒有訊息</IonText>
               </div>
             )}
@@ -310,7 +317,7 @@ const InboxMessageContainer = styled.div`
   }
 `;
 
-const ModalItem = styled(IonItem)`
+export const ModalItem = styled(IonItem)`
   margin: 0.5rem 1rem;
   --ion-item-background: #333;
   border-radius: 0.6rem;

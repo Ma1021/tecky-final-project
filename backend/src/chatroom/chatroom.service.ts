@@ -28,7 +28,7 @@ export class ChatroomService {
       [data.userId, data.chatroomId],
     );
     if (result.rows.length > 0) {
-      // console.log(result.rows[0]);
+      console.log(result.rows[0]);
       return result.rows[0];
     }
     result = await this.knex.raw(
@@ -200,115 +200,294 @@ export class ChatroomService {
   }
 
   async findEntered(enteringChatroomDto: EnteringChatroomDto) {
-    let result = await this.knex.raw(
-      /*sql*/
-      `
-        with sort (maxdate, chatid) as 
-        (select max(created_at) as maxdate, member.chatroom as chatid from chatroom_record 
-        full outer join 
-        (select chatroom from chatroom_user where member = ? and status='approved') as member 
-        on member.chatroom = chatroom_record.chatroom group by member.chatroom),
-
-        countmax (count_chatroomid, member_count) as (select chatrooms.id as count_chatroomid,
-        count(chatroom_user.member) as member_count
-        from chatrooms
-        join users on users.id = chatrooms.host
-        full join chatroom_user on chatrooms.id = chatroom_user.chatroom
-        group by chatrooms.id)
-
-        select sort.chatid as chatroomid, 
-        chat.record,chatrooms.name as chatroomname, 
-        chat.id as recordid, 
-        users.id as userid, 
-        users.username, 
-        users.avatar, 
-        chatrooms.icon as chatroomicon,
-            countmax.member_count,
-        sort.maxdate as record_created_at
-        from sort 
-        left join chatroom_record as chat on chat.chatroom = sort.chatid and created_at = maxdate
-        join chatrooms on chatrooms.id = sort.chatid
-        left join users on users.id = chat.user
-            join countmax on countmax.count_chatroomid = sort.chatid
-        order by sort.maxdate desc, sort.chatid asc;
-        `,
-      [+enteringChatroomDto.user],
-    );
-    result = result.rows;
-    // console.log('chatroom service findEntered result', result);
-    return result;
+    try {
+      let result = await this.knex.raw(
+        /*sql*/
+        `
+          with sort (maxdate, chatid) as 
+          (select max(created_at) as maxdate, member.chatroom as chatid from chatroom_record 
+          full outer join 
+          (select chatroom from chatroom_user where member = ? and status='approved') as member 
+          on member.chatroom = chatroom_record.chatroom group by member.chatroom),
+  
+          countmax (count_chatroomid, member_count) as (select chatrooms.id as count_chatroomid,
+          count(chatroom_user.member) as member_count
+          from chatrooms
+          join users on users.id = chatrooms.host
+          full join chatroom_user on chatrooms.id = chatroom_user.chatroom
+          group by chatrooms.id)
+  
+          select sort.chatid as chatroomid, 
+          chat.record,chatrooms.name as chatroomname, 
+          chat.id as recordid, 
+          users.id as userid, 
+          users.username, 
+          users.avatar, 
+          chatrooms.icon as chatroomicon,
+              countmax.member_count,
+          sort.maxdate as record_created_at
+          from sort 
+          left join chatroom_record as chat on chat.chatroom = sort.chatid and created_at = maxdate
+          join chatrooms on chatrooms.id = sort.chatid
+          left join users on users.id = chat.user
+              join countmax on countmax.count_chatroomid = sort.chatid
+          order by sort.maxdate desc, sort.chatid asc;
+          `,
+        [+enteringChatroomDto.user],
+      );
+      result = result.rows;
+      // console.log('chatroom service findEntered result', result);
+      return result;
+    } catch (error) {
+      console.log(error.message);
+      throw new HttpException(
+        'Error when finding entered chatroom',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   async findOne(data: { chatroomId: number; user: number }) {
-    let result = await this.knex.raw(
-      /*sql*/
-      `
-      select chatroom_record.id as recordId 
-      ,chatroom_record.record as record
-      , users.id as userId
-      , userName as username
-      , users.avatar as userAvatar
-      , chatroom_record.created_at as created_at 
-      , chatroom_record.chatroom as chatroomId
-      , chatrooms.name as chatroomName
-      from chatroom_record 
-      join users on chatroom_record.user = users.id 
-      join chatrooms on chatroom_record.chatroom = chatrooms.id
-      where chatroom_record.chatroom = ?
-      order by created_at
-      `,
-      [+data.chatroomId],
-    );
-    result = result.rows;
-    // console.log('chatroom service findOne result', result);
-    return result;
+    try {
+      let result = await this.knex.raw(
+        /*sql*/
+        `
+        select chatroom_record.id as recordId 
+        ,chatroom_record.record as record
+        , users.id as userId
+        , userName as username
+        , users.avatar as userAvatar
+        , chatroom_record.created_at as created_at 
+        , chatroom_record.chatroom as chatroomId
+        , chatrooms.name as chatroomName
+        from chatroom_record 
+        join users on chatroom_record.user = users.idjoin chatrooms on chatroom_record.chatroom = chatrooms.id
+        where chatroom_record.chatroom = ?
+        order by created_at
+        `,
+        [+data.chatroomId],
+      );
+      result = result.rows;
+      // console.log('chatroom service findOne result', result);
+      return result;
+    } catch (error) {
+      console.log(error.message);
+      throw new HttpException(
+        'Error when finding the chatroom',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async findChatroomName(id: number) {
+    try {
+      let result = await this.knex.raw(
+        `
+        select chatroom.name from chatrooms where id = ?
+        `,
+        [id],
+      );
+      return result.rows[0];
+    } catch (error) {
+      console.log(error.message);
+      throw new HttpException(
+        'Error when finding the chatroom',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   async sendMessage(messageChatroomDto: MessageChatroomDto) {
     // console.log('entering message service');
 
-    let result = await this.knex.raw(
-      /*sql*/
-      `
-    insert into chatroom_record 
-    (record, chatroom, "user")
-    values (?,?,?)
-    returning id;
-    `,
-      // insert into chatroom_record
-      // (record, "user", chatroom)
-      // values ('yo man', 2, 1)
-      // returning id;
-      [
-        messageChatroomDto.message,
-        messageChatroomDto.chatroomId,
-        messageChatroomDto.userId,
-      ],
-    );
-    let recordId = result.rows[0].id;
-    // console.log(recordId);
-
-    result = await this.knex.raw(
-      /*sql*/
-      `
-      select chatroom_record.id as recordId 
-      ,chatroom_record.record as record
-      , users.id as userId
-      , userName as username
-      , users.avatar as userAvatar
-      , chatroom_record.created_at as created_at 
-      , chatroom_record.chatroom as chatroomId
-      , chatrooms.name as chatroomName
-      from chatroom_record 
-      join users on chatroom_record.user = users.id 
-      join chatrooms on chatroom_record.chatroom = chatrooms.id
-      where chatroom_record.id = ?
+    try {
+      let result = await this.knex.raw(
+        /*sql*/
+        `
+      insert into chatroom_record 
+      (record, chatroom, "user")
+      values (?,?,?)
+      returning id;
       `,
-      [recordId],
-    );
-    result = result.rows[0];
-    // console.log('chatroom service sendMessage', result);
-    return result;
+        // insert into chatroom_record
+        // (record, "user", chatroom)
+        // values ('yo man', 2, 1)
+        // returning id;
+        [
+          messageChatroomDto.message,
+          messageChatroomDto.chatroomId,
+          messageChatroomDto.userId,
+        ],
+      );
+      let recordId = result.rows[0].id;
+      // console.log(recordId);
+
+      result = await this.knex.raw(
+        /*sql*/
+        `
+        select chatroom_record.id as recordId 
+        ,chatroom_record.record as record
+        , users.id as userId
+        , userName as username
+        , users.avatar as userAvatar
+        , chatroom_record.created_at as created_at 
+        , chatroom_record.chatroom as chatroomId
+        , chatrooms.name as chatroomName
+        from chatroom_record 
+        join users on chatroom_record.user = users.id 
+        join chatrooms on chatroom_record.chatroom = chatrooms.id
+        where chatroom_record.id = ?
+        `,
+        [recordId],
+      );
+      result = result.rows[0];
+      // console.log('chatroom service sendMessage', result);
+      return result;
+    } catch (error) {
+      console.log(error.message);
+      throw new HttpException(
+        'Error when sending message',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async findNameList(info: { userId: number; roomId: number }) {
+    try {
+      let result = await this.knex.raw(
+        /*sql*/
+        `
+        With host(host_id, host_username,  host_avatar, host_chatroom, host_introduction) as 
+        (select users.id as host_id, username as host_username, avatar as host_avatar, chatrooms.id as host_id, users.introduction as host_introduction from users 
+        join chatrooms on chatrooms.host = users.id  where chatrooms.id = ?)
+        select "users"."id", "users"."username", "users"."avatar" 
+        , host_username, host_id, host_avatar, host_introduction
+        , users.introduction
+        from "chatroom_user" 
+        inner join "users" on "users"."id" = "chatroom_user"."member" 
+        inner join "chatrooms" on "chatrooms"."id" = "chatroom_user"."chatroom" 
+        inner join host on chatroom_user.chatroom = host.host_chatroom
+        where "chatroom" = ?; 
+  `,
+        [info.roomId, info.roomId],
+      );
+      return result.rows;
+    } catch (error) {
+      console.log(error.message);
+      throw new HttpException(
+        'Error when sending message',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async findNameListPush(info: { userId: number; roomId: number }) {
+    try {
+      let result = await this.knex.raw(
+        /*sql*/
+        `
+        select users.*
+        from "chatroom_user" 
+        inner join "users" on "users"."id" = "chatroom_user"."member" 
+        inner join "chatrooms" on "chatrooms"."id" = "chatroom_user"."chatroom" 
+        where "chatroom" = ?; 
+  `,
+        [info.roomId],
+      );
+
+      let resultHost = await this.knex.raw(
+        /*sql*/
+        `
+      select users.* from "users" 
+      join chatrooms on chatrooms.host = users.id
+      where chatrooms.id = ?
+      `,
+        [info.roomId],
+      );
+      result = [...result.rows, resultHost.rows[0]];
+      console.log('chatroom service find all members', result);
+      return result;
+    } catch (error) {
+      console.log(error.message);
+      throw new HttpException(
+        'Error when sending message',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  // async findHostPush(roomId: number) {
+  //   try {
+  //     let result = await this.knex.raw(
+  //       /*sql*/
+  //       `
+  //     select users.* from "users"
+  //     join chatrooms on chatrooms.host = users.id
+  //     where chatrooms.id = ?
+  //     `,
+  //       [roomId],
+  //     );
+  //     return result.rows;
+  //   } catch (error) {
+  //     console.log(error.message);
+  //     throw new HttpException(
+  //       'Error when sending message',
+  //       HttpStatus.BAD_REQUEST,
+  //     );
+  //   }
+  // }
+
+  async removeMember(info: { userId: number; roomId: number }) {
+    try {
+      let result = await this.knex.raw(
+        /*sql*/
+        `
+      delete from chatroom_user where member = ? and chatroom = ? returning id;
+      `,
+        [info.userId, info.roomId],
+      );
+
+      result = result.rows[0];
+      return result;
+    } catch (error) {
+      console.log(error.message);
+      throw new HttpException(
+        'Error when sending message',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async quit(info: { userId: number; roomId: number }) {
+    try {
+      // if host, refuse
+      let result = await this.knex.raw(
+        /*sql*/
+        `
+        select chatrooms.id from chatrooms where host = ? and id = ?;
+        `,
+        [info.userId, info.roomId],
+      );
+      if (result.rows.length > 0) {
+        throw new HttpException('聊天室主持不能退出', HttpStatus.FORBIDDEN);
+      }
+      result = await this.knex.raw(
+        /*sql*/
+        `
+      delete from chatroom_user where member = ? and chatroom = ? returning id;
+      `,
+        [info.userId, info.roomId],
+      );
+
+      result = result.rows[0];
+      return result;
+    } catch (error) {
+      console.log(error.message);
+      throw new HttpException(
+        'Error when sending message',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   async createRecord() {}

@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, Query } from '@nestjs/common';
 import { CloseOrderDTO, PlaceOrderDTO } from './paperTrade.dto';
 import { PaperTradeService } from './paperTrade.service';
 
@@ -44,22 +36,33 @@ export class PaperTradeController {
     );
   }
 
-  @Patch('/cancelOrder/:id')
-  async cancelOrder(@Param('id') id: string) {
-    return await this.paperTradeService.cancelOrder(id);
+  @Patch('/cancelOrder/')
+  async cancelOrder(
+    @Body() order: { orderID: number; userID: number; account: string },
+  ) {
+    const { orderID, userID, account } = order;
+    return await this.paperTradeService.cancelOrder(orderID, userID, account);
   }
 
-  @Get('/getInProgressOrderList')
-  async getInProgressOrderList(
-    @Query('userID') userID: string,
+  // @Get('/getInProgressOrderList')
+  // async getInProgressOrderList(
+  //   @Query('userID') userID: number,
+  //   @Query('account') account: string,
+  // ) {
+  //   return await this.paperTradeService.getInProgressOrderList(userID, account);
+  // }
+
+  @Get('/getRecentOrderList')
+  async getRecentOrderList(
+    @Query('userID') userID: number,
     @Query('account') account: string,
   ) {
-    return await this.paperTradeService.getInProgressOrderList(userID, account);
+    return await this.paperTradeService.getRecentOrderList(userID, account);
   }
 
   @Get('/getFullOrderList')
   async getFullOrderList(
-    @Query('userID') userID: string,
+    @Query('userID') userID: number,
     @Query('account') account: string,
   ) {
     return await this.paperTradeService.getFullOrderList(userID, account);
@@ -67,7 +70,7 @@ export class PaperTradeController {
 
   @Get('/getPositionList')
   async getPositionList(
-    @Query('userID') userID: string,
+    @Query('userID') userID: number,
     @Query('account') account: string,
   ) {
     return await this.paperTradeService.getPositionList(userID, account);
@@ -75,7 +78,7 @@ export class PaperTradeController {
 
   @Get('/getIndividualAccountDetail')
   async getIndividualAccountDetail(
-    @Query('userID') userID: string,
+    @Query('userID') userID: number,
     @Query('account') account: string,
   ) {
     return await this.paperTradeService.getIndividualAccountDetail(
@@ -85,7 +88,7 @@ export class PaperTradeController {
   }
 
   @Get('/getAccountList')
-  async getAccountList(@Query('userID') userID: string) {
+  async getAccountList(@Query('userID') userID: number) {
     return this.paperTradeService.getAccountList(userID);
   }
 }

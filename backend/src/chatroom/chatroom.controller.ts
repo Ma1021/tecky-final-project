@@ -55,6 +55,18 @@ export class ChatroomController {
     });
   }
 
+  // tell chatroom to leave socket.io
+  teardownIO(io: Server) {
+    console.log('enter setupIO');
+    io.on('disconnection', (socket) => {
+      console.log('socket disconnected:', socket.id);
+      socket.on('leave-room', (roomId) => {
+        socket.leave('room:' + roomId);
+        console.log('join room', { id: socket.id, roomId });
+      });
+    });
+  }
+
   @Post()
   @UseInterceptors(FileInterceptor('icon'))
   async create(
@@ -131,7 +143,7 @@ export class ChatroomController {
       let result = await this.chatroomService.findRecommend(
         enteringChatroomDto,
       );
-      console.log('enter chatroom controller find recommend', result);
+      // console.log('enter chatroom controller find recommend', result);
       return result;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
@@ -142,7 +154,7 @@ export class ChatroomController {
   async findHosted(@Body() enteringChatroomDto: EnteringChatroomDto) {
     try {
       let result = await this.chatroomService.findHosted(enteringChatroomDto);
-      console.log('enter chatroom controller find host', result);
+      // console.log('enter chatroom controller find host', result);
       return result;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
@@ -180,6 +192,23 @@ export class ChatroomController {
     }
   }
 
+  // entering chatroom
+  @UseGuards(ChatroomAuthGuard)
+  @Post(':id/name')
+  async findChatroomName(
+    @Param('id') id: number,
+    @Body() joinChatroomDto: JoinChatroomDto,
+  ) {
+    console.log(joinChatroomDto);
+    try {
+      let result = await this.chatroomService.findChatroomName(id);
+      // console.log('enter chatroom controller find one', result);
+      return result;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
   // handling messaging
   @UseGuards(ChatroomAuthGuard)
   @Post(':id/message')
@@ -190,16 +219,78 @@ export class ChatroomController {
   ) {
     // console.log('entering message controller');
     let result = await this.chatroomService.sendMessage(messageChatDto);
-
     // use the message to do socket
     io.to(`room:${roomId}`).emit('new-message', result);
     return result;
   }
 
-  @Get('/created')
-  findCreated() {
-    return this.chatroomService.findCreated();
+  // --------------------------------------------------------------------------------------------------------------------------------------------
+  @UseGuards(ChatroomAuthGuard)
+  @Post(':id/namelist')
+  async findNamelist(
+    @Param('id') roomId: number,
+    @Body() enteringChatroomDto: JoinChatroomDto,
+  ) {
+    // console.log('entering chatroom findname list controller');
+    let result = await this.chatroomService.findNameList({
+      userId: enteringChatroomDto.userId,
+      roomId,
+    });
+    // console.log('chatroom controller, findNamelist', result);
+    return result;
   }
+
+  @UseGuards(ChatroomAuthGuard)
+  @Post(':id/namelist/remove')
+  async removeMember(
+    @Param('id') roomId: number,
+    @Body() enteringChatroomDto: JoinChatroomDto,
+  ) {
+    // console.log('entering chatroom findname list controller');
+    let result = await this.chatroomService.removeMember({
+      userId: enteringChatroomDto.userId,
+      roomId,
+    });
+    // console.log('chatroom controller, findNamelist', result);
+    return result;
+  }
+
+  @UseGuards(ChatroomAuthGuard)
+  @Post(':id/quit')
+  async quit(
+    @Param('id') roomId: number,
+    @Body() enteringChatroomDto: JoinChatroomDto,
+  ) {
+    // console.log('entering chatroom findname list controller');
+    let result = await this.chatroomService.quit({
+      userId: enteringChatroomDto.userId,
+      roomId,
+    });
+    // console.log('chatroom controller, findNamelist', result);
+    return result;
+  }
+
+  //=================================================================================================
+  // push notifications below
+  //=================================================================================================
+  @UseGuards(ChatroomAuthGuard)
+  @Post(':id/namelist/push')
+  async findNamelistPush(
+    @Param('id') roomId: number,
+    @Body() enteringChatroomDto: JoinChatroomDto,
+  ) {
+    // console.log('entering chatroom findname list controller');
+    let result = await this.chatroomService.findNameListPush({
+      userId: enteringChatroomDto.userId,
+      roomId,
+    });
+    // console.log('chatroom controller, findNamelist', result);
+    return result;
+  }
+
+  //=================================================================================================
+  // push notifications above
+  //=================================================================================================
 
   @Patch(':id')
   update(

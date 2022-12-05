@@ -7,65 +7,59 @@ export async function seed(knex: Knex): Promise<void> {
   await knex('user_paper_trade_accounts').del();
 
   // Inserts seed entries
-  await knex('user_positions').insert([
-    {
-      id: 1,
-      user_id: 1,
-      symbol: 'TSLA',
-      long: true,
-      cost: 60,
-      current_price: 100,
-      quantity: 20,
-      account: 'US',
-    },
-    {
-      id: 2,
-      user_id: 1,
-      symbol: 'GME',
-      long: true,
-      cost: 10,
-      current_price: 5,
-      quantity: 100,
-      account: 'US',
-    },
-    {
-      id: 3,
-      user_id: 1,
-      symbol: 'GOOG',
-      long: true,
-      cost: 50,
-      current_price: 50,
-      quantity: 50,
-      account: 'US',
-    },
-  ]);
+  // await knex('user_positions').insert([
+  //   {
+  //     id: 1,
+  //     user_id: 1,
+  //     symbol: 'TSLA',
+  //     long: true,
+  //     cost: 60,
+  //     current_price: 100,
+  //     quantity: 20,
+  //     account: 'US',
+  //   },
+  //   {
+  //     id: 2,
+  //     user_id: 1,
+  //     symbol: 'GME',
+  //     long: true,
+  //     cost: 10,
+  //     current_price: 5,
+  //     quantity: 100,
+  //     account: 'US',
+  //   },
+  //   {
+  //     id: 3,
+  //     user_id: 1,
+  //     symbol: 'GOOG',
+  //     long: true,
+  //     cost: 50,
+  //     current_price: 50,
+  //     quantity: 50,
+  //     account: 'US',
+  //   },
+  // ]);
 
   await knex('user_paper_trade_accounts').insert([
     {
       id: 1,
       user_id: 1,
-      principal: 1000000,
       market_value: 0,
       buying_power: 1000000,
-      total_profit: 0,
       account: 'US',
     },
     {
       id: 2,
       user_id: 1,
-      principal: 1000000,
       market_value: 500000,
       buying_power: 0,
-      total_profit: -500000,
       account: 'HK',
     },
     {
       id: 3,
       user_id: 1,
-      principal: 1000000,
       market_value: 1000000,
       buying_power: 1000000,
-      total_profit: 1000000,
       account: 'crypto',
     },
   ]);

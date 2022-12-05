@@ -18,7 +18,7 @@ const AccountOverviewModule: React.FC<AccountOverviewModuleProps> = ({
 
         <div className="second-row">
           <span className="total-amount">
-            {accountDetail.totalAmount.toFixed(2)}
+            {accountDetail.principal.toFixed(2)}
           </span>
         </div>
 

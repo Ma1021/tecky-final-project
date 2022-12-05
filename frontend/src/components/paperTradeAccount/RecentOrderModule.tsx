@@ -1,8 +1,7 @@
-import { useIonAlert } from "@ionic/react";
 import React, { useEffect, useState } from "react";
-import "./InProgressOrderModule.css";
+import "./RecentOrderModule.css";
 
-export interface InProgressOrderType {
+export interface RecentOrderType {
   id: number;
   symbol: string;
   name: string;
@@ -14,44 +13,27 @@ export interface InProgressOrderType {
   order_status: number;
 }
 
-interface InProgressOrderModuleProps {
+interface RecentOrderModuleProps {
   currentAccount: string;
 }
 
-const InProgressOrderModule: React.FC<InProgressOrderModuleProps> = ({
+const RecentOrderModule: React.FC<RecentOrderModuleProps> = ({
   currentAccount,
 }) => {
   const [inProgressOrderList, setInProgressOrderList] = useState<
-    InProgressOrderType[]
+    RecentOrderType[]
   >([]);
-  const [isUpdate, setIsUpdate] = useState<boolean>(false);
-  const [ionAlert] = useIonAlert();
   const userID = 1;
 
   useEffect(() => {
     fetch(
-      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getInProgressOrderList?userID=${userID}&account=${currentAccount}`
+      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getRecentOrderList?userID=${userID}&account=${currentAccount}`
     )
       .then((res) => res.json())
       .then((result) => {
         setInProgressOrderList(result);
       });
-  }, [currentAccount, isUpdate]);
-
-  async function cancelOrder(orderID: number, userID: number, account: string) {
-    const data = { orderID, userID, account };
-    const res = await fetch(
-      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/cancelOrder`,
-      {
-        method: "PATCH",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(data),
-      }
-    );
-    const result = await res.json();
-    console.log(result);
-    setIsUpdate(!isUpdate);
-  }
+  }, [currentAccount]);
 
   return (
     <>
@@ -66,27 +48,7 @@ const InProgressOrderModule: React.FC<InProgressOrderModuleProps> = ({
             </tr>
             {inProgressOrderList.map((inProgressOrder) => (
               <React.Fragment key={inProgressOrder.id}>
-                <tr
-                  className="order-upper-row"
-                  onClick={() => {
-                    ionAlert({
-                      header: "取消訂單?",
-                      buttons: [
-                        { text: "取消", role: "dismiss" },
-                        {
-                          text: "確認",
-                          role: "confirm",
-                          handler: () =>
-                            cancelOrder(
-                              inProgressOrder.id,
-                              userID,
-                              currentAccount
-                            ),
-                        },
-                      ],
-                    });
-                  }}
-                >
+                <tr className="order-upper-row">
                   <td
                     className={
                       "order-order-type " +
@@ -99,27 +61,7 @@ const InProgressOrderModule: React.FC<InProgressOrderModuleProps> = ({
                   <td>{inProgressOrder.quantity}</td>
                   <td>{inProgressOrder.order_place_time.split("T")[0]}</td>
                 </tr>
-                <tr
-                  className="order-bottom-row"
-                  onClick={() => {
-                    ionAlert({
-                      header: "取消訂單?",
-                      buttons: [
-                        { text: "取消", role: "dismiss" },
-                        {
-                          text: "確認",
-                          role: "confirm",
-                          handler: () =>
-                            cancelOrder(
-                              inProgressOrder.id,
-                              userID,
-                              currentAccount
-                            ),
-                        },
-                      ],
-                    });
-                  }}
-                >
+                <tr className="order-bottom-row">
                   <td
                     className={
                       "order-stock-symbol " +
@@ -151,4 +93,4 @@ const InProgressOrderModule: React.FC<InProgressOrderModuleProps> = ({
   );
 };
 
-export default InProgressOrderModule;
+export default RecentOrderModule;

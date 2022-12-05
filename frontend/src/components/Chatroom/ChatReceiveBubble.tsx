@@ -24,11 +24,7 @@ const ChatReceiveBubble: React.FC<ChatBubbleProps> = (props) => {
 
   return (
     <>
-      <div
-        ref={createRef}
-        className="d-flex"
-        data-message={props.props.recordid}
-      >
+      <div className="d-flex" data-message={props.props.recordid}>
         <div className="d-flex flex-row ion-margin mr-0">
           <IonAvatar
             style={{

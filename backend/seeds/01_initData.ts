@@ -182,6 +182,8 @@ export async function seed(knex: Knex): Promise<void> {
     { action_type: 'create question', action_desc: '提出問題：' },
     { action_type: 'create answer', action_desc: '回覆了你：' },
     { action_type: 'follow user', action_desc: '追隨了你' },
+    // chatroom action
+    { action_type: 'chatroom chat', action_desc: '你有訊息' },
   ]);
 
   // Maggie's part -----------------------------

@@ -56,6 +56,8 @@ const UserInfo: React.FC = () => {
   let [userSegment, setUserSegment] = useState("userIntro");
   const [presentAlert] = useIonAlert();
   const blockList = useAppSelector((state) => state.block.blockedUserList);
+  const [present] = useIonToast();
+  const [userData, setUserData] = useState<UserPort | null>(null);
 
   const segmentChangeAction = (event: IonSegmentCustomEvent) => {
     setUserSegment(event.detail.value || "userIntro");
@@ -63,8 +65,6 @@ const UserInfo: React.FC = () => {
 
   // user id should be gained from params
   const history = useHistory();
-  const [present] = useIonToast();
-  const [userData, setUserData] = useState<UserPort | null>(null);
   const userIdUrl = history.location.pathname
     .replace("/user/", "")
     .replace("/info", "");
@@ -188,7 +188,10 @@ const UserInfo: React.FC = () => {
           <IonTitle className="p-0">
             <div className=" d-flex justify-content-round align-items-center w100 h100">
               <IonButtons>
-                <IonBackButton defaultHref="/discuss" text="返回"></IonBackButton>
+                <IonBackButton
+                  defaultHref="/discuss"
+                  text="返回"
+                ></IonBackButton>
               </IonButtons>
               <IonSearchbar className="pt-0 pb-0 ion-margin"></IonSearchbar>
               {+userIdUrl === (user_id as number) ? (

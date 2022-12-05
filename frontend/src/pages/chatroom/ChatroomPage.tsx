@@ -13,22 +13,26 @@ import {
   IonHeader,
   IonIcon,
   IonInput,
+  IonItem,
+  IonModal,
   IonPage,
   IonSpinner,
   IonText,
   IonTitle,
   IonToolbar,
+  useIonAlert,
   useIonToast,
 } from "@ionic/react";
-import { searchOutline as ellipsisVertical, send } from "ionicons/icons";
+import { ellipsisVertical, send } from "ionicons/icons";
 import {
   useCallback,
   useEffect,
   useLayoutEffect,
   useState,
   createRef,
+  useRef,
 } from "react";
-import { useRouteMatch } from "react-router";
+import { useHistory, useRouteMatch } from "react-router";
 import { Socket } from "socket.io-client";
 import styled from "styled-components";
 import ChatReceiveBubble from "../../components/Chatroom/ChatReceiveBubble";
@@ -38,40 +42,45 @@ import {
   QuestionContainer,
 } from "../../components/discuss/Allquestion";
 import { useSocket } from "../../helper/use-socket";
-import img from "../../img/animal_stand_ookami.png";
 import {
   fetchChatroomsRecord,
   loadChatroomsRecord,
   loadChatroomsRecordStart,
 } from "../../redux/chatroomRecord/actions";
+import { alertCircleOutline, exitOutline, readerOutline } from "ionicons/icons";
 import { ChatroomRecord } from "../../redux/chatroomRecord/state";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { ModalItem } from "../Inbox";
+import { useCounter } from "../../hooks/use-counter";
 
 const ChatroomPage: React.FC = () => {
+  useCounter();
+
   // get the new message
   const [message, setMessage] = useState("");
+  const [chatroomName, setChatroomName] = useState("");
   const [messageList, setMessageList] = useState<ChatroomRecord[]>([]);
-  const [newMessageId, setNewMessageId] = useState<null | number>(null);
   // const dispatch = useAppDispatch();
-  const [present] = useIonToast();
+  const [presentToast] = useIonToast();
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
+  const [presentAlert] = useIonAlert();
+  const history = useHistory();
+  const [isOpen, setIsOpen] = useState(false);
 
-  // for scroll
   const contentRef = createRef<HTMLIonContentElement>();
 
+  // for scroll
+  const bottomRef = useRef<HTMLDivElement>(null);
   function scrollToBottom() {
-    // Passing a duration to the method makes it so the scroll slowly
-    // goes to the bottom instead of instantly
-    contentRef.current?.scrollIntoView();
+    setTimeout(() => {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 500);
   }
 
   const userId = useAppSelector((state) => {
     return state?.auth?.user?.id;
   });
-  // const { chatRecord, loading, error } = useAppSelector(
-  //   (state) => state.chatroomRecord
-  // );
 
   // 拎 url 嘅 param
   let url = useRouteMatch<{ id: string }>();
@@ -81,13 +90,35 @@ const ChatroomPage: React.FC = () => {
   useEffect(() => {
     // console.log("do use effect");
     if (!userId) {
-      present({
+      presentToast({
         message: "請登入",
         duration: 1000,
         position: "bottom",
       });
     }
-    // console.log("json stringify");
+
+    // take chatroom name
+    fetch(`${process.env.REACT_APP_PUBLIC_URL}/chatroom/${+roomId}/name`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ userId, chatroomId: roomId }),
+    })
+      .then((res) => {
+        res.json().then((json) => {
+          setChatroomName(json.name);
+        });
+      })
+      .catch((error) => {
+        console.log(`failed to load chatroom name, ${error}`);
+        presentToast({
+          message: String(error),
+          duration: 15000,
+          color: "danger",
+          position: "bottom",
+        });
+      });
+
+    // take chatroom record
     fetch(`${process.env.REACT_APP_PUBLIC_URL}/chatroom/${+roomId}`, {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -101,15 +132,14 @@ const ChatroomPage: React.FC = () => {
       })
       .catch((error) => {
         console.log(`failed to load, ${error}`);
-        present({
+        presentToast({
           message: String(error),
           duration: 15000,
           color: "danger",
+          position: "bottom",
         });
       });
-
-    scrollToBottom();
-  }, [setMessageList, setLoading, roomId, userId, newMessageId, present]);
+  }, [setMessageList, setLoading, roomId, userId]);
 
   // 開新socket
   let count = 0;
@@ -120,8 +150,7 @@ const ChatroomPage: React.FC = () => {
         // join the room
         socket.emit("join-room", roomId);
         // event listener listening on the socket
-        socket.on("new-message", (bubble) => {
-          let newMessage: ChatroomRecord = bubble;
+        const onNewMessage = (newMessage: ChatroomRecord) => {
           if (!!newMessage) {
             if (newMessage.chatroomid !== +roomId) {
               return;
@@ -137,13 +166,15 @@ const ChatroomPage: React.FC = () => {
           console.log("socket times", count++);
           setMessageList((msg) => {
             console.log("newMessage", newMessage);
-            return [newMessage];
+            console.log("message list", msg);
+            return [...msg, newMessage];
           });
-          setNewMessageId(newMessage.recordid);
+          scrollToBottom();
           return;
-        });
+        };
+        socket.on("new-message", onNewMessage);
         return () => {
-          count = 0;
+          socket.off("new-message", onNewMessage);
           console.log("leave room:", roomId);
           socket.emit("leave-room", roomId);
         };
@@ -152,7 +183,7 @@ const ChatroomPage: React.FC = () => {
     )
   );
 
-  const sendMessage = async (e: any) => {
+  const sendMessage = async () => {
     let res = await fetch(
       `${process.env.REACT_APP_PUBLIC_URL}/chatroom/${roomId}/message`,
       {
@@ -167,11 +198,12 @@ const ChatroomPage: React.FC = () => {
     );
     if (!res.ok) {
       console.log(await res.json());
-      present({
+      presentToast({
         message: "發送失敗",
         duration: 1000,
         position: "bottom",
       });
+      return;
     }
     setMessage((latestMsg) => {
       if (latestMsg == message) {
@@ -181,26 +213,99 @@ const ChatroomPage: React.FC = () => {
     });
   };
 
-  // useLayoutEffect(() => {
-  //   if (!newMessageId) return;
-
-  //   console.log({ newMessageId, ionCard });
-  //   if (ionCard) {
-  //     ionCard.scrollIntoView({ behavior: "smooth", block: "end" });
-  //   }
-  // }, [newMessageId]);
-
-  // check if host is speaker
-  // if user is host
-
-  // take now typing record
   const handleMessage = (e: any) => {
     let msg = e.target.value;
     setMessage(msg);
   };
 
-  // popUpOptions
-  const popUpOptions = () => {};
+  // report
+  const report = () => {
+    setIsOpen(false);
+    presentAlert({
+      header: "舉報",
+      subHeader: "已接收舉報, 會在24小時內檢視此聊天室並處理",
+      buttons: ["了解"],
+    });
+  };
+
+  // find name list
+  const findNameList = () => {
+    setIsOpen(false);
+    history.push(`/chatroom/${roomId}/namelist`);
+  };
+
+  // quit chatroom
+  const quit = () => {
+    fetch(`${process.env.REACT_APP_PUBLIC_URL}/chatroom/${roomId}/quit`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ userId: userId, chatroomId: roomId }),
+    }).then((res) => {
+      if (res.ok) {
+        setIsOpen(false);
+        presentToast({
+          message: "已退出聊天室",
+          duration: 1000,
+          position: "bottom",
+          color: "success",
+        });
+        history.replace("/chatroomList");
+        return;
+      }
+      presentToast({
+        message: "未能退出聊天室﹐請重試",
+        duration: 1000,
+        position: "bottom",
+        color: "danger",
+      });
+      return;
+    });
+  };
+
+  // push notifications function
+  const pushChatroom = async () => {
+    const chatroomMember = await fetch(
+      `${process.env.REACT_APP_PUBLIC_URL}/chatroom/${roomId}/namelist/push`
+    );
+    const chatroomMemberJson = await chatroomMember.json();
+    const notifier_token = [];
+
+    if (chatroomMemberJson.length > 0) {
+      // for (let member of chatroomMemberJson) {
+      //   const notification = {
+      //     notification_type_id: 4,
+      //     notification_target_id: json[0].id,
+      //     actor_id: data.asker_id,
+      //     notifiers: member.user_id,
+      //   };
+      //   await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notification/`, {
+      //     method: "POST",
+      //     headers: { "Content-Type": "application/json" },
+      //     body: JSON.stringify(notification),
+      //   });
+      //   if (member.push_notification_token) {
+      //     notifier_token.push(member.push_notification_token);
+      //   }
+      // }
+      // // push notification
+      // if (notifier_token.length > 0) {
+      //   await fetch(
+      //     `${process.env.REACT_APP_PUBLIC_URL}/notification/push_notification`,
+      //     {
+      //       method: "POST",
+      //       headers: { "Content-Type": "application/json" },
+      //       body: JSON.stringify({
+      //         notification_type_id: 1,
+      //         actor_id: data.asker_id,
+      //         actor_username: data.asker_username,
+      //         notifiers: notifier_token,
+      //         content: json[0].content,
+      //       }),
+      //     }
+      //   );
+      // }
+    }
+  };
 
   return (
     <IonPage>
@@ -214,16 +319,44 @@ const ChatroomPage: React.FC = () => {
                   text="返回"
                 ></IonBackButton>
               </IonButtons>
-              <span>
-                {(messageList as ChatroomRecord[])[0]
-                  ? (messageList as ChatroomRecord[])[0].chatroomname
-                  : null}
-              </span>
-              <IonIcon
-                className="pr-2"
-                icon={ellipsisVertical}
-                onClick={popUpOptions}
-              ></IonIcon>
+              <span>{chatroomName}</span>
+              <IconContainer>
+                <IonButton
+                  // id="open-chat-modal"
+                  onClick={() => {
+                    setIsOpen(true);
+                  }}
+                >
+                  <IonText>...</IonText>
+                </IonButton>
+              </IconContainer>
+              {/* // modal */}
+              <IonModal
+                // trigger="open-chat-modal"
+                initialBreakpoint={0.3}
+                breakpoints={[0, 0.25, 0.5, 0.75]}
+                handleBehavior="cycle"
+                isOpen={isOpen}
+              >
+                <IonContent ref={contentRef} className="ion-padding-top">
+                  <div className="ion-margin-top">
+                    <ModalItem lines="full" onClick={findNameList}>
+                      <IonIcon icon={readerOutline}></IonIcon>
+                      <IonText style={{ marginLeft: 10 }}>
+                        檢視聊天室名單
+                      </IonText>
+                    </ModalItem>
+                    <ModalItem lines="full" onClick={quit}>
+                      <IonIcon icon={exitOutline}></IonIcon>
+                      <IonText style={{ marginLeft: 10 }}>退出聊天室</IonText>
+                    </ModalItem>
+                    <ModalItem lines="full" onClick={report}>
+                      <IonIcon icon={alertCircleOutline}></IonIcon>
+                      <IonText style={{ marginLeft: 10 }}>舉報此聊天室</IonText>
+                    </ModalItem>
+                  </div>
+                </IonContent>
+              </IonModal>
             </div>
           </IonTitle>
         </IonToolbar>
@@ -266,30 +399,35 @@ const ChatroomPage: React.FC = () => {
             </QuestionContainer>
           )
         }
-        <div className="contentBottom"></div>
+        <div
+          id="contentBottom"
+          style={{ height: "1px", display: "inline-block" }}
+          ref={bottomRef}
+        ></div>
       </IonContent>
-      {err !== "" ? null : (
-        <IonFooter>
-          <ChatReplyContainer>
-            <IonInput
-              value={message}
-              placeholder="發表回應"
-              maxlength={255}
-              onIonChange={handleMessage}
-            ></IonInput>
-            <IonButton onClick={sendMessage}>
-              <IonIcon icon={send}></IonIcon>
-            </IonButton>
-          </ChatReplyContainer>
-        </IonFooter>
-      )}
+      <IonFooter style={{ minHeight: "1.5rem" }}>
+        {/* {err !== "" ? null : ( */}
+        <ChatReplyContainer>
+          <IonInput
+            value={message}
+            placeholder="發表回應"
+            maxlength={255}
+            onIonChange={handleMessage}
+            onKeyDown={(e) => e.key == "Enter" && sendMessage()}
+          ></IonInput>
+          <IonButton onClick={sendMessage}>
+            <IonIcon icon={send}></IonIcon>
+          </IonButton>
+        </ChatReplyContainer>
+        {/* )} */}
+      </IonFooter>
     </IonPage>
   );
 };
 
 export default ChatroomPage;
 
-const ChatReplyContainer = styled.div`
+const ChatReplyContainer = styled.div/* css */ `
   width: 100%;
   height: 3.5rem;
   background-color: #222;
@@ -326,18 +464,20 @@ const ChatReplyContainer = styled.div`
   }
 `;
 
-const SearchBtn = styled.div`
-  ion-button {
-    --border-radius: 50%;
-    width: 2.2rem;
-    height: 2.2rem;
-    color: #ddd;
-    font-weight: 600;
-    --padding: 0;
-    position: relative;
-  }
+const IconContainer = styled.div/* css */ `
+padding-right: 0.5rem;
 
-  ion-icon {
-    font-size: 2rem;
+ion-button {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  overflow: hidden;
+
+  ion-text {
+    width: 2rem;
+    height: 2rem;
+    font-size: 20px;
+    font-weight: 800;
+    color: white;
   }
 `;

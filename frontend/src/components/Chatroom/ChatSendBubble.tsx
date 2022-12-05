@@ -13,7 +13,6 @@ const ChatSendBubble: React.FC<ChatBubbleProps> = (props) => {
       <div
         className="d-flex flex-row-reverse"
         data-message={props.props.recordid}
-        ref={createRef}
       >
         <div className="d-flex flex-row ion-margin ml-0">
           <IonAvatar

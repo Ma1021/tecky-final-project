@@ -36,7 +36,6 @@ import UserEdit from "../pages/user/UserEdit";
 import Subscription from "../pages/user/Subscription";
 
 //common pages
-import Menu from "./All/Menu";
 import Home from "../pages/Home";
 import Inbox from "../pages/Inbox";
 import IndividualStockInfo from "../pages/stock/IndividualStockInfo";
@@ -46,6 +45,7 @@ import StockList from "../pages/stock/StockList";
 import ChatroomForm from "../pages/chatroom/ChatroomForm";
 import ChatroomPage from "../pages/chatroom/ChatroomPage";
 import ChatroomList from "../pages/chatroom/ChatroomList";
+import ChatroomNamelist from "../pages/chatroom/ChatroomNamelist";
 
 //KOL ranking pages
 import KOL from "../pages/ranking/Ranking";
@@ -77,6 +77,11 @@ const Navigation: React.FC = () => {
         <Route exact path="/inbox/:id" component={Inbox}></Route>
         <Route exact path="/chatroom/:id" component={ChatroomPage}></Route>
         <Route exact path="/analysis/:id" component={Analytics}></Route>
+        <Route
+          exact
+          path="/chatroom/:id/namelist"
+          component={ChatroomNamelist}
+        ></Route>
         <Route
           exact
           path="/user/subscription/:id"

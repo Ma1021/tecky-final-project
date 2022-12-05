@@ -122,6 +122,8 @@ export async function seed(knex: Knex): Promise<void> {
     '現階段保本為主要目標',
     '唔好買住，市況未穩',
     '長線既話可以入，短線唔好入住',
+    '超長遠投資可入，短炒不了',
+    '個市調整中，不需要急入貨',
   ];
 
   // get all user id without kol and admin
@@ -177,7 +179,7 @@ export async function seed(knex: Knex): Promise<void> {
     }
   }
   //Insert questions end
-
+  
   await knex('notification_type').insert([
     { action_type: 'create question', action_desc: '提出問題：' },
     { action_type: 'create answer', action_desc: '回覆了你：' },

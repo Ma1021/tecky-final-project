@@ -124,7 +124,7 @@ const Navigation: React.FC = () => {
             ></Route>
             <Route
               exact
-              path="/individualAccount/:category"
+              path="/individualAccount/:account"
               component={IndividualAccount}
             ></Route>
             <Route exact path="/stockList" component={StockList}></Route>

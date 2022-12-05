@@ -49,8 +49,14 @@
   font-weight: bold;
 }
 
+.profit-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
 .gray {
-  color:#999;
+  color: #999;
 }
 
 .profit {
@@ -60,5 +66,3 @@
 .profit-percentage {
   font-size: 12px;
 }
-
-

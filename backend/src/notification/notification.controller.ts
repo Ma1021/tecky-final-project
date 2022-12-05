@@ -39,6 +39,11 @@ export class NotificationController {
             return
         }
         
+        //push notification type
+        // 1 = question
+        // 2 = answer
+        // 3 = follow
+
         // push notification for create question
         if(push_notification.notification_type_id === 1) {
             fetch(`https://fcm.googleapis.com/fcm/send`, {
@@ -69,7 +74,8 @@ export class NotificationController {
                         priority:"high",
                         notification : {
                             title: push_notification.actor_username + " 回答了你的問題",
-                            body : push_notification.content
+                            body : push_notification.content,
+                            sound: "default"
                         }
                     })
                 })
@@ -90,7 +96,8 @@ export class NotificationController {
                         content_available : true,
                         priority:"high",
                         notification : {
-                            title: push_notification.actor_username + " 關注了你"
+                            title: push_notification.actor_username + " 關注了你",
+                            sound: "default"
                         }
                     })
                 })

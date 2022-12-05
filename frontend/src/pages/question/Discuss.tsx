@@ -187,14 +187,7 @@ export const SegmentTab = styled(IonSegment)`
 `;
 
 export const SegmentButton = styled(IonSegmentButton)`
-  --indicator-color: linear-gradient(
-    to right bottom,
-    #ffa930,
-    #ff9d3f,
-    #ff924d,
-    #ff885b,
-    #ff7f67
-  );
+  --indicator-color: var(--ion-color-primary);
   --color-checked: #fff;
   font-weight: 800;
 `;

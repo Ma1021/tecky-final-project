@@ -1,9 +1,15 @@
-import { IonContent, IonSegment, IonSegmentButton } from "@ionic/react";
+import { IonSegment, IonSegmentButton } from "@ionic/react";
 import { useState } from "react";
 import InProgressOrderModule from "./InProgressOrderModule";
 import PositionModule from "./PositionModule";
 
-const PositionAndOrderModule: React.FC = () => {
+interface PositionAndOrderModuleProps {
+  currentAccount: string;
+}
+
+const PositionAndOrderModule: React.FC<PositionAndOrderModuleProps> = ({
+  currentAccount,
+}) => {
   const [currentSegment, setCurrentSegment] = useState("position");
 
   function onSegmentChange(e: any) {
@@ -21,9 +27,9 @@ const PositionAndOrderModule: React.FC = () => {
         </IonSegment>
 
         {currentSegment === "position" ? (
-          <PositionModule />
+          <PositionModule currentAccount={currentAccount} />
         ) : (
-          <InProgressOrderModule />
+          <InProgressOrderModule currentAccount={currentAccount} />
         )}
       </div>
     </>

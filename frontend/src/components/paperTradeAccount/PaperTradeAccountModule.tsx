@@ -3,18 +3,17 @@ import { useHistory } from "react-router";
 import "./PaperTradeAccountModule.css";
 
 interface PaperTradeAccountModuleProps {
-  region: string;
-  amount: number;
-  profit: number;
-  profitPercentage: number;
-
+  account: string;
+  principal: number;
+  totalProfit: number;
+  totalProfitPercentage: number;
 }
 
 const PaperTradeAccountModule: React.FC<PaperTradeAccountModuleProps> = ({
-  region,
-  amount,
-  profit,
-  profitPercentage,
+  account,
+  principal,
+  totalProfit,
+  totalProfitPercentage,
 }) => {
   const history = useHistory();
 
@@ -23,25 +22,45 @@ const PaperTradeAccountModule: React.FC<PaperTradeAccountModuleProps> = ({
       <div className="modules-container">
         <div
           className="module"
-          onClick={() => history.push(`/individualAccount/${region}`)}
+          onClick={() => history.push(`/individualAccount/${account}`)}
         >
           <div className="top-row">
             <div className="title-icon-container">
               <div className="icon-container">Icon</div>
               <div className="title-container">
-                {region === "US" && "美股模擬賬戶"}
-                {region === "HK" && "港股模擬賬戶"}
-                {region === "crypto" && "加密貨幣模擬賬戶"}
+                {account === "US" && "美股模擬賬戶"}
+                {account === "HK" && "港股模擬賬戶"}
+                {account === "crypto" && "加密貨幣模擬賬戶"}
               </div>
             </div>
-            <div className="gray">今日盈虧</div>
+            <div className="gray">盈虧</div>
           </div>
           <div className="bottom-row">
-            <div className="account-amount">{amount.toFixed(2)}</div>
-            <div className="today-profit-container">
-              <div className="profit gray">{profit.toFixed(2)}</div>
-              <div className="profit-percentage gray">
-                {profitPercentage.toFixed(2)}%
+            <div className="account-amount">{principal.toFixed(2)}</div>
+            <div className="profit-container">
+              <div
+                className={
+                  "profit " +
+                  (totalProfit === 0
+                    ? "gray"
+                    : totalProfit > 0
+                    ? "positive"
+                    : "negative")
+                }
+              >
+                {totalProfit.toFixed(2)}
+              </div>
+              <div
+                className={
+                  "profit-percentage " +
+                  (totalProfit === 0
+                    ? "gray"
+                    : totalProfit > 0
+                    ? "positive"
+                    : "negative")
+                }
+              >
+                {totalProfitPercentage.toFixed(2)}%
               </div>
             </div>
           </div>

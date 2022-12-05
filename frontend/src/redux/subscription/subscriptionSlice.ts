@@ -53,7 +53,7 @@ export const loadFollowingsId = createAsyncThunk<number[], number>(
 );
 
 //action that follow a user
-export const followUser = createAsyncThunk<number,{ following_id: number; user_id: number; username: string }>("subscription/followUser", async (data, thunkAPI) => {
+export const followUser = createAsyncThunk<number,{ following_id: number; user_id: number; username: string; page?:string }>("subscription/followUser", async (data, thunkAPI) => {
   try {
     const subscriptionRes: Response = await fetch(
       `${process.env.REACT_APP_PUBLIC_URL}/user/subscriptions`,
@@ -96,9 +96,15 @@ export const followUser = createAsyncThunk<number,{ following_id: number; user_i
       })
     })
   
-    thunkAPI.dispatch(loadFollowers(+data.user_id));
-    thunkAPI.dispatch(loadFollowings(+data.user_id));
-    thunkAPI.dispatch(loadFollowingsId(+data.user_id));
+    if(data.page === 'userInfo') {
+      thunkAPI.dispatch(loadFollowers(+data.following_id));
+      thunkAPI.dispatch(loadFollowings(+data.following_id));
+      thunkAPI.dispatch(loadFollowingsId(+data.user_id));
+    } else {
+      thunkAPI.dispatch(loadFollowers(+data.user_id));
+      thunkAPI.dispatch(loadFollowings(+data.user_id));
+      thunkAPI.dispatch(loadFollowingsId(+data.user_id));
+    }
 
     return subscription_json[0].following_id;
   } catch (err) {
@@ -109,7 +115,7 @@ export const followUser = createAsyncThunk<number,{ following_id: number; user_i
 //action that UNfollow a user
 export const unFollowUser = createAsyncThunk<
   number,
-  { following_id: number; user_id: number }
+  { following_id: number; user_id: number; page?:string }
 >("subscription/unFollowUser", async (data, thunkAPI) => {
   try {
     const subscriptionRes: Response = await fetch(
@@ -124,9 +130,15 @@ export const unFollowUser = createAsyncThunk<
       }
     );    
 
-    thunkAPI.dispatch(loadFollowers(+data.user_id));
-    thunkAPI.dispatch(loadFollowings(+data.user_id));
-    thunkAPI.dispatch(loadFollowingsId(+data.user_id));
+    if(data.page === 'userInfo') {
+      thunkAPI.dispatch(loadFollowers(+data.following_id));
+      thunkAPI.dispatch(loadFollowings(+data.following_id));
+      thunkAPI.dispatch(loadFollowingsId(+data.user_id));
+    } else {
+      thunkAPI.dispatch(loadFollowers(+data.user_id));
+      thunkAPI.dispatch(loadFollowings(+data.user_id));
+      thunkAPI.dispatch(loadFollowingsId(+data.user_id));
+    }
 
     const subscription_json = await subscriptionRes.json();
     const subscription_id = await subscription_json[0].id;

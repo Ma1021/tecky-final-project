@@ -1,3 +1,4 @@
+import { PaperTradeModule } from './paperTrade/paperTrade.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -10,6 +11,7 @@ import { NotificationModule } from './notification/notification.module';
 import { ChatroomModule } from './chatroom/chatroom.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { StockModule } from './stock/stock.module';
+import { PointsModule } from './points/points.module';
 
 const profile = require('../knexfile')[env.NODE_ENV];
 
@@ -23,6 +25,8 @@ const profile = require('../knexfile')[env.NODE_ENV];
     ChatroomModule,
     AnalyticsModule,
     StockModule,
+    PaperTradeModule,
+    PointsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

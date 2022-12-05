@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Response, HttpException, HttpStatus, Param, Delete, Put } from "@nestjs/common";
-import { Answer_DTO, Answer_Like_DTO } from "./answer.dto";
+import { Answer_DTO, Answer_Like_DTO, Report_DTO } from "./answer.dto";
 import { AnswerService } from "./answer.service";
 
 @Controller('/answer')
@@ -30,8 +30,8 @@ export class AnswerController {
         return this.answerService.createLike(like);
     }
 
-    @Put('/report/:id')
-    reportAnswer(@Param('id') answer_id: string) {
-        return this.answerService.report(+answer_id)
+    @Post('/report')
+    reportAnswer(@Body() report:Report_DTO ) {
+        return this.answerService.report(report);
     }
 }

@@ -2,7 +2,7 @@ import { Knex } from 'knex';
 
 export async function seed(knex: Knex): Promise<void> {
   // Deletes ALL existing entries
-  await knex('user_stock').del();
+  await knex('user_stocks').del();
   await knex('user_trades').del();
   await knex('stock_news').del();
   await knex('stock_info').del();
@@ -51,21 +51,21 @@ export async function seed(knex: Knex): Promise<void> {
     },
   ]);
 
-  await knex('user_stock').insert([
-    { id: 1, user_id: 1, stock_id: 1 },
-    { id: 2, user_id: 1, stock_id: 2 },
-    { id: 3, user_id: 1, stock_id: 3 },
-    { id: 4, user_id: 1, stock_id: 4 },
-    { id: 5, user_id: 1, stock_id: 5 },
-    { id: 6, user_id: 2, stock_id: 1 },
-    { id: 7, user_id: 2, stock_id: 3 },
+  await knex('user_stocks').insert([
+    { id: 1, user_id: 1, symbol: 'TSLA' },
+    { id: 2, user_id: 1, symbol: 'GOOG' },
+    { id: 3, user_id: 1, symbol: 'GME' },
+    { id: 4, user_id: 1, symbol: 'MSFT' },
+    { id: 5, user_id: 1, symbol: 'AAPL' },
+    { id: 6, user_id: 2, symbol: 'TSLA' },
+    { id: 7, user_id: 2, symbol: 'AAPL' },
   ]);
 
   await knex('user_trades').insert([
     {
       id: 1,
       user_id: 1,
-      stock_id: 1,
+      symbol: 'TSLA',
       long: true,
       order_price: 120,
       quantity: 2,
@@ -76,7 +76,7 @@ export async function seed(knex: Knex): Promise<void> {
     {
       id: 2,
       user_id: 1,
-      stock_id: 2,
+      symbol: 'GOOG',
       long: false,
       order_price: 10,
       quantity: 10,

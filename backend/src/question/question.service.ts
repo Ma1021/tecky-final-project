@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Knex } from 'knex';
 import { InjectModel } from 'nest-knexjs';
-import { Question_DTO } from './question.dto';
+import { Question_DTO, Report_DTO } from './question.dto';
 
 @Injectable()
 export class QuestionService {
@@ -285,7 +285,17 @@ export class QuestionService {
     return await this.knex('questions').where('id', question_id).del();
   }
 
-  report(question_id: number) {
-    return this.knex('questions').update('is_reported', true).where('id', question_id);
+  report(report: Report_DTO) {
+    try {
+    //mark question as reported status
+    this.knex('questions').update('is_reported', true).where('id', report.target_id).then((response)=>{
+      // insert report record to reports table
+      if(response === 1) {
+        return this.knex('reports').insert(report);
+      }
+    })  
+    } catch(err) {
+      console.log('report question:', err);
+    }
   }
 }

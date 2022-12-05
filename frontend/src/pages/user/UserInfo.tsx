@@ -23,20 +23,23 @@ import {
 import "./UserInfo.css";
 import {
   personOutline,
-  paperPlaneOutline,
   alertCircleOutline,
   lockOpenOutline,
+  heartCircle
 } from "ionicons/icons";
 import Notification from "../../components/All/Notification";
 import { useEffect, useState, useCallback } from "react";
-import UserArticles from "../../components/UserContent/UserArticles";
+import UserPoints from "../../components/UserContent/UserPoints";
 import UserDiscussion from "../../components/UserContent/UserDiscussion";
 import UserIntro from "../../components/UserContent/UserIntro";
 import UserBadge from "../../components/All/UserBadge";
 import { RootState, useAppSelector, useAppDispatch } from "../../redux/store";
 import {
-  loadFollowings,
+  loadFollowingsId,
   loadFollowers,
+  followUser,
+  unFollowUser,
+  loadFollowings
 } from "../../redux/subscription/subscriptionSlice";
 import { loadUserQuestions } from "../../redux/questions/questionSlice";
 import { useHistory } from "react-router";
@@ -79,21 +82,26 @@ const UserInfo: React.FC = () => {
   const user_id = useAppSelector((state) => {
     return state.auth?.user?.id;
   });
+  const user_username = useAppSelector((state)=>{
+    return state.auth.user?.username
+  })
 
   const dispatch = useAppDispatch();
 
   // get user followers and following
-  const initFollowings = useCallback(async () => {
-    await dispatch(loadFollowings(+userIdUrl));
-  }, [dispatch]);
-
-  const initFollowers = useCallback(async () => {
+  const initFollows = useCallback(async () => {
+    await dispatch(loadFollowingsId(+userIdUrl));
+    await dispatch(loadFollowings(+userIdUrl))
     await dispatch(loadFollowers(+userIdUrl));
   }, [dispatch]);
 
   const initQuestion = useCallback(async () => {
     await dispatch(loadUserQuestions(+userIdUrl));
   }, [dispatch]);
+
+  const { followerList, followingList ,followingIdList } = useAppSelector(
+    (state: RootState) => state.subscription
+  );
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_PUBLIC_URL}/user/${+userIdUrl}`).then(
@@ -114,14 +122,9 @@ const UserInfo: React.FC = () => {
       }
     );
     console.log("leaveuserEffect ");
-    initFollowings();
-    initFollowers();
+    initFollows();
     initQuestion();
   }, [setUserData]);
-
-  const { followerList, followingList } = useAppSelector(
-    (state: RootState) => state.subscription
-  );
 
   const router = useIonRouter();
 
@@ -134,6 +137,7 @@ const UserInfo: React.FC = () => {
   const toBlock = (e: any) => {
     e?.stopPropagation();
     presentAlert({
+      cssClass: "alert",
       header: "確認封鎖?",
       subHeader: "一經封鎖, 不能檢視用戶發言",
       buttons: [
@@ -180,6 +184,16 @@ const UserInfo: React.FC = () => {
       })
     );
   };
+
+  async function handleFollowUser() {
+      const following_id = +userIdUrl
+      await dispatch(followUser({following_id, user_id: user_id as number, username: user_username as string, page:'userInfo'}));
+    }
+
+  async function handleUnFollowUser() {
+      const following_id = +userIdUrl
+      await dispatch(unFollowUser({following_id, user_id: user_id as number, page:'userInfo'}));
+  }
 
   return (
     <IonPage>
@@ -263,10 +277,17 @@ const UserInfo: React.FC = () => {
                   封鎖
                 </IonButton>
               )}
-              <IonButton className="userInfo-button" size="small" shape="round">
-                <IonIcon slot="start" icon={paperPlaneOutline}></IonIcon>
-                分享
-              </IonButton>
+              {followingIdList.includes(+userIdUrl) ? 
+              <IonButton className="userInfo-button" size="small" shape="round" onClick={handleFollowUser}>
+                <IonIcon slot="start" icon={heartCircle}></IonIcon>
+                <IonText>關注</IonText>
+              </IonButton> : +userIdUrl !== user_id ?
+              <IonButton className="userInfo-button" size="small" shape="round" onClick={handleUnFollowUser}>
+                <IonIcon slot="start" icon={heartCircle}></IonIcon>
+                <IonText>取消關注</IonText>
+              </IonButton> :
+              <></>
+              }
             </div>
             <div className="d-flex flex-row pt-1 pb-1">
               <div
@@ -293,22 +314,22 @@ const UserInfo: React.FC = () => {
         {/* user information above */}
         {/* user history below */}
         <div style={{ padding: "0.5rem 1rem" }}>
-          <IonSegment onIonChange={segmentChangeAction}>
+          <IonSegment value={userSegment} onIonChange={segmentChangeAction}>
             <IonSegmentButton value="userIntro">
               <IonLabel>自我介紹</IonLabel>
             </IonSegmentButton>
-            <IonSegmentButton value="userArticle">
-              <IonLabel>文章</IonLabel>
+            <IonSegmentButton value="userPoints">
+              <IonLabel>積分</IonLabel>
             </IonSegmentButton>
             <IonSegmentButton value="userDiscuss">
-              <IonLabel>討論</IonLabel>
+              <IonLabel>問題</IonLabel>
             </IonSegmentButton>
           </IonSegment>
         </div>
         {userSegment === "userIntro" ? (
           <UserIntro userId={+userIdUrl} />
-        ) : userSegment === "userArticle" ? (
-          <UserArticles />
+        ) : userSegment === "userPoints" ? (
+          <UserPoints />
         ) : (
           <UserDiscussion userId={+userIdUrl} />
         )}

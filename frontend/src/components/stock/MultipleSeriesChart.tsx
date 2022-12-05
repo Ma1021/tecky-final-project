@@ -388,7 +388,7 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
       timeFrame === "1Y"
     ) {
       fetch(
-        `${process.env.REACT_APP_PUBLIC_URL}/stock/getDayDataFromMongoDB?symbol=${symbol}&timeFrame=${timeFrame}`
+        `${process.env.REACT_APP_PUBLIC_URL}/stock/getDayDataFromMongoAPI?symbol=${symbol}&timeFrame=${timeFrame}`
       )
         .then((res) => res.json())
         .then((result) => {

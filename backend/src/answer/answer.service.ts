@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from 'nest-knexjs';
 import { Knex } from "knex";
-import { Answer_DTO, Answer_Like_DTO } from './answer.dto'
+import { Answer_DTO, Answer_Like_DTO, Report_DTO } from './answer.dto'
 
 @Injectable()
 export class AnswerService {
@@ -47,11 +47,13 @@ export class AnswerService {
         }
     }
 
-    report(answer_id: number) {
+    report(report: Report_DTO) {
         try {
-            return this.knex('answers')
-            .update('is_reported', true)
-            .where('id', answer_id)
+            this.knex('answers').update('is_reported', true).where('id', report.target_id).then((response)=>{
+                if(response === 1) {
+                    return this.knex('reports').insert(report);
+                }
+            })
         } catch(err) {
             console.log('ban answer:', err);
         }

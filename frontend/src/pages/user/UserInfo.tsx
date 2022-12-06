@@ -25,7 +25,7 @@ import {
   personOutline,
   alertCircleOutline,
   lockOpenOutline,
-  heartCircle
+  heartCircle,
 } from "ionicons/icons";
 import Notification from "../../components/All/Notification";
 import { useEffect, useState, useCallback } from "react";
@@ -39,7 +39,7 @@ import {
   loadFollowers,
   followUser,
   unFollowUser,
-  loadFollowings
+  loadFollowings,
 } from "../../redux/subscription/subscriptionSlice";
 import { loadUserQuestions } from "../../redux/questions/questionSlice";
 import { useHistory } from "react-router";
@@ -82,16 +82,16 @@ const UserInfo: React.FC = () => {
   const user_id = useAppSelector((state) => {
     return state.auth?.user?.id;
   });
-  const user_username = useAppSelector((state)=>{
-    return state.auth.user?.username
-  })
+  const user_username = useAppSelector((state) => {
+    return state.auth.user?.username;
+  });
 
   const dispatch = useAppDispatch();
 
   // get user followers and following
   const initFollows = useCallback(async () => {
     await dispatch(loadFollowingsId(+userIdUrl));
-    await dispatch(loadFollowings(+userIdUrl))
+    await dispatch(loadFollowings(+userIdUrl));
     await dispatch(loadFollowers(+userIdUrl));
   }, [dispatch]);
 
@@ -99,7 +99,7 @@ const UserInfo: React.FC = () => {
     await dispatch(loadUserQuestions(+userIdUrl));
   }, [dispatch]);
 
-  const { followerList, followingList ,followingIdList } = useAppSelector(
+  const { followerList, followingList, followingIdList } = useAppSelector(
     (state: RootState) => state.subscription
   );
 
@@ -186,13 +186,26 @@ const UserInfo: React.FC = () => {
   };
 
   async function handleFollowUser() {
-      const following_id = +userIdUrl
-      await dispatch(followUser({following_id, user_id: user_id as number, username: user_username as string, page:'userInfo'}));
-    }
+    const following_id = +userIdUrl;
+    await dispatch(
+      followUser({
+        following_id,
+        user_id: user_id as number,
+        username: user_username as string,
+        page: "userInfo",
+      })
+    );
+  }
 
   async function handleUnFollowUser() {
-      const following_id = +userIdUrl
-      await dispatch(unFollowUser({following_id, user_id: user_id as number, page:'userInfo'}));
+    const following_id = +userIdUrl;
+    await dispatch(
+      unFollowUser({
+        following_id,
+        user_id: user_id as number,
+        page: "userInfo",
+      })
+    );
   }
 
   return (
@@ -207,7 +220,10 @@ const UserInfo: React.FC = () => {
                   text="返回"
                 ></IonBackButton>
               </IonButtons>
-              <IonSearchbar className="pt-0 pb-0 ion-margin"></IonSearchbar>
+              <IonSearchbar
+                className="pt-0 pb-0 ion-margin"
+                onClick={() => history.push("/search")}
+              ></IonSearchbar>
               {+userIdUrl === (user_id as number) ? (
                 <Notification />
               ) : (
@@ -277,17 +293,29 @@ const UserInfo: React.FC = () => {
                   封鎖
                 </IonButton>
               )}
-              {followingIdList.includes(+userIdUrl) ? 
-              <IonButton className="userInfo-button" size="small" shape="round" onClick={handleFollowUser}>
-                <IonIcon slot="start" icon={heartCircle}></IonIcon>
-                <IonText>關注</IonText>
-              </IonButton> : +userIdUrl !== user_id ?
-              <IonButton className="userInfo-button" size="small" shape="round" onClick={handleUnFollowUser}>
-                <IonIcon slot="start" icon={heartCircle}></IonIcon>
-                <IonText>取消關注</IonText>
-              </IonButton> :
-              <></>
-              }
+              {followingIdList.includes(+userIdUrl) ? (
+                <IonButton
+                  className="userInfo-button"
+                  size="small"
+                  shape="round"
+                  onClick={handleFollowUser}
+                >
+                  <IonIcon slot="start" icon={heartCircle}></IonIcon>
+                  <IonText>關注</IonText>
+                </IonButton>
+              ) : +userIdUrl !== user_id ? (
+                <IonButton
+                  className="userInfo-button"
+                  size="small"
+                  shape="round"
+                  onClick={handleUnFollowUser}
+                >
+                  <IonIcon slot="start" icon={heartCircle}></IonIcon>
+                  <IonText>取消關注</IonText>
+                </IonButton>
+              ) : (
+                <></>
+              )}
             </div>
             <div className="d-flex flex-row pt-1 pb-1">
               <div
@@ -318,10 +346,11 @@ const UserInfo: React.FC = () => {
             <IonSegmentButton value="userIntro">
               <IonLabel>自我介紹</IonLabel>
             </IonSegmentButton>
-            {+userIdUrl === user_id &&
-            <IonSegmentButton value="userPoints">
-              <IonLabel>積分</IonLabel>
-            </IonSegmentButton>}
+            {+userIdUrl === user_id && (
+              <IonSegmentButton value="userPoints">
+                <IonLabel>積分</IonLabel>
+              </IonSegmentButton>
+            )}
             <IonSegmentButton value="userDiscuss">
               <IonLabel>問題</IonLabel>
             </IonSegmentButton>

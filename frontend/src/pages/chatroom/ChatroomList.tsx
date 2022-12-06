@@ -83,23 +83,23 @@ const ChatroomList: React.FC = () => {
             <Title title="聊天室" />
           </IonToolbar>
         </IonHeader>
-        <div className="d-flex justify-content-center">
-          <SegmentTab value={chatroomSegment} onIonChange={onSegmentChange}>
-            <SegmentButton value="hosted">
-              <IonLabel>主持中</IonLabel>
-            </SegmentButton>
-            <SegmentButton value="entered">
-              <IonLabel>參與中</IonLabel>
-            </SegmentButton>
-            <SegmentButton value="recommendation">
-              <IonLabel>推薦</IonLabel>
-            </SegmentButton>
-            <SegmentButton value="all">
-              <IonLabel>所有</IonLabel>
-            </SegmentButton>
-          </SegmentTab>
-        </div>
         <IonContent>
+          <div className="d-flex justify-content-center">
+            <SegmentTab value={chatroomSegment} onIonChange={onSegmentChange}>
+              <SegmentButton value="hosted">
+                <IonLabel>主持中</IonLabel>
+              </SegmentButton>
+              <SegmentButton value="entered">
+                <IonLabel>參與中</IonLabel>
+              </SegmentButton>
+              <SegmentButton value="recommendation">
+                <IonLabel>推薦</IonLabel>
+              </SegmentButton>
+              <SegmentButton value="all">
+                <IonLabel>所有</IonLabel>
+              </SegmentButton>
+            </SegmentTab>
+          </div>
           <IonList>
             {chatroomSegment === "entered" ? (
               <ChatroomEntered />

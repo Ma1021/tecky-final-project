@@ -16,7 +16,6 @@ const Home: React.FC = () => {
   if (!!isAuthenticated) {
     return <Redirect to={{ pathname: "/discuss" }} />;
   }
-
   return (
     <>
       <IonPage>

@@ -84,33 +84,44 @@ const ChatroomList: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          <div className="d-flex justify-content-center">
-            <SegmentTab value={chatroomSegment} onIonChange={onSegmentChange}>
-              <SegmentButton value="hosted">
-                <IonLabel>主持中</IonLabel>
-              </SegmentButton>
-              <SegmentButton value="entered">
-                <IonLabel>參與中</IonLabel>
-              </SegmentButton>
-              <SegmentButton value="recommendation">
-                <IonLabel>推薦</IonLabel>
-              </SegmentButton>
-              <SegmentButton value="all">
-                <IonLabel>所有</IonLabel>
-              </SegmentButton>
-            </SegmentTab>
+          <div
+            style={{
+              position: "sticky",
+              top: 0,
+              zIndex: 5,
+              backgroundColor: "#111",
+            }}
+          >
+            <div className="d-flex justify-content-center">
+              <SegmentTab value={chatroomSegment} onIonChange={onSegmentChange}>
+                <SegmentButton value="hosted">
+                  <IonLabel>主持中</IonLabel>
+                </SegmentButton>
+                <SegmentButton value="entered">
+                  <IonLabel>參與中</IonLabel>
+                </SegmentButton>
+                <SegmentButton value="recommendation">
+                  <IonLabel>推薦</IonLabel>
+                </SegmentButton>
+                <SegmentButton value="all">
+                  <IonLabel>所有</IonLabel>
+                </SegmentButton>
+              </SegmentTab>
+            </div>
           </div>
-          <IonList>
-            {chatroomSegment === "entered" ? (
-              <ChatroomEntered />
-            ) : chatroomSegment === "recommendation" ? (
-              <ChatroomRecommend />
-            ) : chatroomSegment === "hosted" ? (
-              <ChatroomHosted />
-            ) : (
-              <ChatroomAll />
-            )}
-          </IonList>
+          <div className="d-flex justify-content-center">
+            <Chatlist>
+              {chatroomSegment === "entered" ? (
+                <ChatroomEntered />
+              ) : chatroomSegment === "recommendation" ? (
+                <ChatroomRecommend />
+              ) : chatroomSegment === "hosted" ? (
+                <ChatroomHosted />
+              ) : (
+                <ChatroomAll />
+              )}
+            </Chatlist>
+          </div>
         </IonContent>
       </IonPage>
     </>
@@ -146,5 +157,16 @@ export const SegmentOrganizer = styled.div`
     );
     --color-checked: #fff;
     font-weight: 800;
+  }
+`;
+
+export const Chatlist = styled(IonList)`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media (min-width: 768px) {
+    width: 85%;
   }
 `;

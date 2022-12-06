@@ -3,10 +3,6 @@ import { ChatroomAdd } from "./state";
 
 // get all chatroom
 export function loadChatroomsAll(chatInfo: ChatroomAdd[]) {
-  console.log({
-    type: "@@chatroom/LOAD_CHATROOMS_ALL" as const,
-    chatInfo: chatInfo,
-  });
   return {
     type: "@@chatroom/LOAD_CHATROOMS_ALL" as const,
     chatInfo: chatInfo,
@@ -14,28 +10,18 @@ export function loadChatroomsAll(chatInfo: ChatroomAdd[]) {
 }
 
 export function loadChatroomsAllStart() {
-  console.log({
-    type: "@@chatroom/LOAD_CHATROOMS_ALL_START" as const,
-  });
   return {
     type: "@@chatroom/LOAD_CHATROOMS_ALL_START" as const,
   };
 }
 
 export function loadChatroomsAllEnd() {
-  console.log({
-    type: "@@chatroom/LOAD_CHATROOMS_ALL_END" as const,
-  });
   return {
     type: "@@chatroom/LOAD_CHATROOMS_ALL_END" as const,
   };
 }
 
 export function loadChatroomsAllError(error: string) {
-  console.log({
-    type: "@@chatroom/LOAD_CHATROOMS_ALL_ERROR" as const,
-    error: error,
-  });
   return {
     type: "@@chatroom/LOAD_CHATROOMS_ALL_ERROR" as const,
     error: error,
@@ -64,10 +50,6 @@ export function fetchChatroomsAll(id: number) {
 }
 // get recommend chatroom
 export function loadChatroomsRecommend(chatInfo: ChatroomAdd[]) {
-  console.log({
-    type: "@@chatroom/LOAD_CHATROOMS_RECOMMEND" as const,
-    chatInfo,
-  });
   return {
     type: "@@chatroom/LOAD_CHATROOMS_RECOMMEND" as const,
     chatInfo,
@@ -75,28 +57,18 @@ export function loadChatroomsRecommend(chatInfo: ChatroomAdd[]) {
 }
 
 export function loadChatroomsRecommendStart() {
-  console.log({
-    type: "@@chatroom/LOAD_CHATROOMS_RECOMMEND_START" as const,
-  });
   return {
     type: "@@chatroom/LOAD_CHATROOMS_RECOMMEND_START" as const,
   };
 }
 
 export function loadChatroomsRecommendEnd() {
-  console.log({
-    type: "@@chatroom/LOAD_CHATROOMS_RECOMMEND_END" as const,
-  });
   return {
     type: "@@chatroom/LOAD_CHATROOMS_RECOMMEND_END" as const,
   };
 }
 
 export function loadChatroomsRecommendError(error: string) {
-  console.log({
-    type: "@@chatroom/LOAD_CHATROOMS_RECOMMEND_ERROR" as const,
-    error: error,
-  });
   return {
     type: "@@chatroom/LOAD_CHATROOMS_RECOMMEND_ERROR" as const,
     error: error,

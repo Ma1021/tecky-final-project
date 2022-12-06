@@ -8,6 +8,7 @@ import {
 } from "@ionic/react";
 import React, { useMemo } from "react";
 import { useEffect, useState } from "react";
+import styled from "styled-components";
 import { fetchChatroomsAll } from "../../redux/chatroomAdd/actions";
 import { ChatroomAdd } from "../../redux/chatroomAdd/state";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
@@ -25,13 +26,14 @@ const ChatroomAll: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchChatroomsAll(userId as number));
-  }, [dispatch]);
+    console.log("After fetch", chatInfo);
+    setFilteredChat(chatInfo);
+  }, []);
 
   const result = useMemo(() => {
     if (wordSearch.length > 0) {
-      console.log("wordSearch, ", wordSearch);
+      // console.log("wordSearch, ", worddSearch);
       const chatFilter = chatInfo.filter((chat) => {
-        console.log("filtering", chat);
         return (
           chat.name.replace(/\s/g, "").toLowerCase().includes(wordSearch) ||
           chat.introduction
@@ -42,8 +44,8 @@ const ChatroomAll: React.FC = () => {
       });
 
       setFilteredChat((chat) => {
-        console.log("chatFiltered", chatFilter);
-        console.log("chat", chat);
+        // console.log("chatFiltered", chatFilter);
+        // console.log("chat", chat);
         return chatFilter;
       });
     } else {
@@ -65,7 +67,7 @@ const ChatroomAll: React.FC = () => {
 
   return (
     <>
-      <IonSearchbar onIonChange={searchChatroom}></IonSearchbar>
+      <SearchResponsive onIonChange={searchChatroom}></SearchResponsive>
       <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
         <IonRefresherContent pullingText="下拉更新"></IonRefresherContent>
       </IonRefresher>
@@ -84,9 +86,11 @@ const ChatroomAll: React.FC = () => {
           // if have filter
           // if can load and without filter
           <>
-            {filteredChat.map((chatroom: ChatroomAdd) => (
-              <ChatroomAddCard key={chatroom.id} props={chatroom} />
-            ))}
+            {(filteredChat.length < 0 ? chatInfo : filteredChat).map(
+              (chatroom: ChatroomAdd) => (
+                <ChatroomAddCard key={chatroom.id} props={chatroom} />
+              )
+            )}
           </>
         ) : (
           // if no chatroom yet
@@ -102,3 +106,10 @@ const ChatroomAll: React.FC = () => {
 };
 
 export default React.memo(ChatroomAll);
+
+const SearchResponsive = styled(IonSearchbar)`
+  width: 100%;
+  @media (min-width: 768px) {
+    width: 85%;
+  }
+`;

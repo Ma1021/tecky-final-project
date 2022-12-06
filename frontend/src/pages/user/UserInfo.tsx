@@ -126,8 +126,6 @@ const UserInfo: React.FC = () => {
     initQuestion();
   }, [setUserData]);
 
-  const router = useIonRouter();
-
   const toEdit = (e: any) => {
     e?.stopPropagation();
     history.push(`/user/${user_id as number}/edit`);
@@ -321,7 +319,7 @@ const UserInfo: React.FC = () => {
               <div
                 className="flex-column text-align-center p-1 pr-2 border-right"
                 onClick={() => {
-                  router.push(`/user/subscription/${+userIdUrl}`);
+                  history.push(`/user/subscription/${+userIdUrl}`);
                 }}
               >
                 <div>{followingList.length}</div>
@@ -330,7 +328,7 @@ const UserInfo: React.FC = () => {
               <div
                 className="flex-column text-align-center p-1 pl-2"
                 onClick={() => {
-                  router.push(`/user/subscription/${+userIdUrl}`);
+                  history.push(`/user/subscription/${+userIdUrl}`);
                 }}
               >
                 <div>{followerList.length}</div>

@@ -34,7 +34,6 @@ interface MenuProps {}
 
 const Menu: React.FC<MenuProps> = () => {
   const history = useHistory();
-  const router = useIonRouter();
   const dispatch = useAppDispatch();
   const selector = useAppSelector((state) => state.auth.user);
   const [presentAlert] = useIonAlert();
@@ -66,7 +65,7 @@ const Menu: React.FC<MenuProps> = () => {
 
     // return <Redirect to="/home" />;
     // history.replace("/home");
-    router.push("/home", "root", "pop");
+    history.push("/home");
   };
 
   const confirmDeleteAccount = () =>
@@ -131,7 +130,7 @@ const Menu: React.FC<MenuProps> = () => {
 
   const toInfo = () => {
     console.log("toInfo");
-    router.push(`/user/${selector?.id}/info`, "forward", "push");
+    history.push(`/user/${selector?.id}/info`);
   };
 
   return (
@@ -235,7 +234,7 @@ const Menu: React.FC<MenuProps> = () => {
                   className="menu"
                   lines="none"
                   onClick={() =>
-                    router.push(`/analysis/${selector!.id}`, "forward", "push")
+                    history.push(`/analysis/${selector!.id}`)
                   }
                 >
                   <IonLabel>
@@ -245,7 +244,7 @@ const Menu: React.FC<MenuProps> = () => {
               )}
               {selector?.user_type === "admin" &&
                 <IonItem className="menu" lines="none" onClick={()=>{
-                  router.push(`/admin`, "forward", "push")
+                  history.push(`/admin`)
                 }}>
                   <IonLabel>
                     <IonIcon icon={people} ></IonIcon> 用戶管理

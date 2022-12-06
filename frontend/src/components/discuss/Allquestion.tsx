@@ -62,7 +62,8 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
     user_id = user.id;
   }
 
-  const [filteredQuestions, setFilteredQuestions] = useState(Array<Questions>);
+  // const [filteredQuestions, setFilteredQuestions] = useState(Array<Questions>);
+  const [keywordFilter, setKeywordFilter] = useState(Array<Questions>);
 
   const dispatch = useAppDispatch();
 
@@ -76,23 +77,23 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
   useEffect(() => {
     const word = props.keyword.replace(/\s/g, "").toLowerCase();
     
-    const keywordFilter = questionList.filter(
+    setKeywordFilter(questionList.filter(
         (question) =>
           question.stock.some(
             (stock) =>
               stock.name.replace(/\s/g, "").toLowerCase().includes(word) ||
               stock.symbol.toLowerCase().includes(word)
           ) || question.content.replace(/\s/g, "").toLowerCase().includes(word)
-    )
+    ))
     
-    setFilteredQuestions(
-      keywordFilter.filter((question)=>{
-        for(let blocked_id of blockedUserList) {
-          return question.asker_id !== blocked_id
-        }
-      })
-    )
-    
+    // setFilteredQuestions(
+    //   keywordFilter.filter((question)=>{
+    //     for(let blocked_id of blockedUserList) {
+    //       return question.asker_id !== blocked_id
+    //     }
+    //   })
+    // )
+
   }, [props.keyword, questionList]);
 
   return (
@@ -109,7 +110,7 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
           {questionList.length > 0 ? (
             <QuestionCard
               questions={
-                filteredQuestions.length > 0 ? filteredQuestions : questionList
+                keywordFilter.length > 0 ? keywordFilter : questionList
               }
             />
           ) : (

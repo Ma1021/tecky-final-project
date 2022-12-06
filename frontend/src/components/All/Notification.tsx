@@ -8,9 +8,8 @@ const Notification: React.FC = memo(() => {
   const history = useHistory();
   const [ amount, setAmount ] = useState(0);
 
-  const router = useIonRouter();
   let user_id: number
-
+  
   if(localStorage.getItem("auth_stockoverflow") !== null) {
     const user = JSON.parse(localStorage.getItem("auth_stockoverflow") as string).user || undefined;
     user_id = +user.id;
@@ -24,7 +23,7 @@ const Notification: React.FC = memo(() => {
 
   return (
     <>
-      <IonButtons className="pr-1 pt-1" onClick={() => router.push(`/inbox/${user_id}`, 'forward','push')}>
+      <IonButtons className="pr-1 pt-1" onClick={() => history.push(`/inbox/${user_id}`)}>
         <IonButton>
           {amount > 0 && <AmountTag>{amount}</AmountTag>}
           <IonIcon style={{color:'#fff'}} icon={notificationsOutline}></IonIcon>

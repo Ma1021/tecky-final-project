@@ -4,20 +4,12 @@ import { BlockListState } from "./state";
 
 // export function updateBlockUser(blockedUserList: BlockedUser[]) {
 export function updateBlockUser(blockedUserList: number[]) {
-  console.log({
-    type: "@@block/UPDATE_BLOCK" as const,
-    blockedUserList: [...blockedUserList],
-  });
   return {
     type: "@@block/UPDATE_BLOCK" as const,
     blockedUserList: [...blockedUserList],
   };
 }
 export function updateBlockUserError(error: string) {
-  console.log({
-    type: "@@block/UPDATE_BLOCK_ERROR" as const,
-    error: error,
-  });
   return {
     type: "@@block/UPDATE_BLOCK_ERROR" as const,
     error: error,
@@ -68,7 +60,6 @@ export function fetchUnblockList(unblock: {
   userId: number;
   unblockedUserId: number;
 }) {
-  console.log("unblock the user");
   return (dispatch: AppDispatch) => {
     fetch(
       `${process.env.REACT_APP_PUBLIC_URL}/user/${unblock.unblockedUserId}/unblock`,

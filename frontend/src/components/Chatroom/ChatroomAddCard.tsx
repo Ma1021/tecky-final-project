@@ -5,14 +5,11 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonCardContent,
-  IonCardSubtitle,
-  useIonRouter,
   IonButton,
   useIonToast,
 } from "@ionic/react";
 import { people } from "ionicons/icons";
 import React from "react";
-import { useHistory } from "react-router";
 import { ChatroomAdd, ChatroomAddState } from "../../redux/chatroomAdd/state";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import defaultGroupIcon from "../../img/logo.jpeg";
@@ -56,7 +53,7 @@ const ChatroomAddCard: React.FC<ChatroomAddCardProps> = (props) => {
   return (
     <>
       <QuestionContainer>
-        <div className="d-flex flex-row">
+        <div className="d-flex flex-row justify-content-center">
           <div className="ion-padding d-flex flex-column align-items-center">
             <IonAvatar
               style={{

@@ -12,6 +12,7 @@ import React from "react";
 import { useHistory } from "react-router";
 import { ChatroomList } from "../../redux/chatroomList/state";
 import defaultGroupIcon from "../../img/logo.jpeg";
+import { QuestionContainer } from "../discuss/QuestionCard";
 
 interface ChatroomDisplayCardProps {
   props: ChatroomList;
@@ -27,12 +28,12 @@ const ChatroomDisplayCard: React.FC<ChatroomDisplayCardProps> = (props) => {
 
   return (
     <>
-      <IonCard
+      <QuestionContainer
         data-id={props.props.chatroomid}
-        className="d-flex flex-row align-items-center"
+        className="d-flex flex-row align-items-center "
         onClick={directChatroom}
       >
-        <div className="d-flex flex-row">
+        <div className="d-flex flex-row justify-content-center">
           <div className="ion-padding d-flex flex-column align-items-center">
             <IonAvatar
               style={{
@@ -118,7 +119,7 @@ const ChatroomDisplayCard: React.FC<ChatroomDisplayCardProps> = (props) => {
             )}
           </div>
         </div>
-      </IonCard>
+      </QuestionContainer>
     </>
   );
 };

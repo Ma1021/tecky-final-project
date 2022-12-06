@@ -3,10 +3,6 @@ import { ChatroomList } from "./state";
 
 // get all chatroom
 export function loadChatroomsEntered(chatroomInfo: ChatroomList[]) {
-  console.log({
-    type: "@@chatroom/LOAD_CHATROOMS_ENTERED" as const,
-    chatroomInfo: chatroomInfo,
-  });
   return {
     type: "@@chatroom/LOAD_CHATROOMS_ENTERED" as const,
     chatroomInfo: chatroomInfo,

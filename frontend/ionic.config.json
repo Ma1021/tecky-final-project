@@ -3,5 +3,9 @@
   "integrations": {
     "capacitor": {}
   },
-  "type": "react"
+  "type": "react",
+  "server": {
+    "url": "http://192.168.16.1:8100",
+    "cleartext": true
+  }
 }

@@ -230,7 +230,7 @@ const Menu: React.FC<MenuProps> = () => {
                   <IonIcon icon={settingsOutline} ></IonIcon> 系統設定
                 </IonLabel>
               </IonItem>
-              {selector?.user_type === "kol" || "admin" && (
+              {selector?.user_type === "kol" && (
                 <IonItem
                   className="menu"
                   lines="none"

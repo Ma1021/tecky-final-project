@@ -91,7 +91,7 @@ const UserPoints: React.FC = memo(() => {
                         <IonText>{record.event}</IonText>
                         <IonText>{formatDate(record.created_at)}</IonText>
                       </div>
-                      <IonText className="point">{record.point > 0 ? '+'+record.point : '-'+record.point}</IonText>
+                      <IonText className="point">{record.point > 0 ? '+'+record.point : record.point}</IonText>
                     </div>
                   </IonItem>
         }):

@@ -109,18 +109,15 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
   const [items, setItems] = useState<Array<Questions>>([]);
   const [ is_bottom, setIsBottom ] = useState(false);
   const generateItems = () => {
-    const newItems = [];
+    const newItems = [] as any;
     for (let i = 0; i < 5; i++) {
       if(keywordFilter[items.length + i]) {
         newItems.push(keywordFilter[items.length + i]);
-      } else if(keywordFilter.length < items.length + i) {
-        setIsBottom(true);
       }
     }
-    setItems([...items, ...newItems]);
-  };  
 
-  console.log(is_bottom);
+    setTimeout(()=> setItems([...items, ...newItems]), 500);
+  };  
 
   return (
     <>
@@ -145,8 +142,13 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
           {is_bottom && <IonText style={{marginTop:20}}>已到底~</IonText>}
           <IonInfiniteScroll
             onIonInfinite={(ev)=>{
-              generateItems();
-              setTimeout(()=> ev.target.complete(), 500);
+              if(keywordFilter.length <= items.length ) {
+                setIsBottom(true);
+                ev.target.complete();
+              } else {
+                generateItems();
+                setTimeout(()=> ev.target.complete(), 500);
+              }
             }}
           >
             <IonInfiniteScrollContent></IonInfiniteScrollContent>

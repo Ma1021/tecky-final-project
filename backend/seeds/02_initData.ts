@@ -23,20 +23,11 @@ export async function seed(knex: Knex): Promise<void> {
 
   // Inserts seed entries
 
-  // await knex('stocks').insert([
-  //   { symbol: 'QQQ', name: 'Invesco QQQ Trust Series 1' },
-  //   { symbol: 'VOO', name: 'Vanguard 500 Index Fund ETF' },
-  //   { symbol: 'AAPL', name: 'Apple Inc. (AAPL)' },
-  //   { symbol: 'TSLA', name: 'Tesla, Inc. (TSLA)' },
-  // ]);
-
   // Insert users
   for (let user of users) {
     user.password_hash = await hashPassword(user.password_hash);
     await knex('users').insert(user);
   }
-
-  console.log('finished insert user');
 
   // get all user id
   const userRes = await knex('users').select('id');
@@ -76,20 +67,15 @@ export async function seed(knex: Knex): Promise<void> {
     }
   }
 
-  console.log('finished insert subscriptions');
-
   //Insert questions and answer start
   async function insertAnswer(question_id: number, asker_id: number) {
     // random a answer amount
-    console.log('enter insert answer');
     
     const amount = Math.floor(Math.random() * 6);
     for (let i = 0; i < amount; i++) {
       const content = answerContent[Math.floor(Math.random() * answerContent.length)];
       const answerer_id = user_idArray[Math.floor(Math.random() * user_idArray.length)].id;
       
-      console.log(content, answerer_id);
-
       if (asker_id === answerer_id) {
         return;
       }
@@ -104,7 +90,6 @@ export async function seed(knex: Knex): Promise<void> {
 
   // get all stock id
   const stockRes = await knex('stocks').select('id');
-  console.log(stockRes);
   
   const questionContent = [
     '依隻可以買嗎？',
@@ -115,6 +100,25 @@ export async function seed(knex: Knex): Promise<void> {
     '想開始月供股票，有咩推介？',
     '想買收息股，邊隻好？',
     '元宇宙仲有冇前景？',
+    '食飯時，聽到有路人甲乙吹水，話而家要買定啲收息高股票，儲夠15年一定會賺好多🤭',
+    '現在可以買入嗎?',
+    '無貨現價可入?',
+    '岩岩返家鄉，請問放唔放好？',
+    '有貨，應否先止賺？',
+    '短炒賺餐飯，買得過嗎？',
+    '世界盃可以帶動咩股？',
+    '可博嗎？',
+    '感覺不妙，好似隨時都會大崩咁！',
+    '新低啊，入唔入得過？',
+    '仲要跌到邊度？仲要跌幾多？',
+    '日日都跌！',
+    '可否高追？',
+    '跌到咁殘！值唔值得買？有冇人敢買？',
+    '有冇人持有依隻股？',
+    '最近有咩利好消息？',
+    '趁反彈係咪應該要走佬先？',
+    '呢隻真係勁！',
+    '諗住長線，依隻前景如何？'
   ];
 
   const answerContent = [
@@ -129,6 +133,9 @@ export async function seed(knex: Knex): Promise<void> {
     '長線既話可以入，短線唔好入住',
     '超長遠投資可入，短炒不了',
     '個市調整中，不需要急入貨',
+    '揸現金等買優質股，大把靚貨，唔好買埋D垃圾股',
+    '玩過山車咁，一日天堂一日地獄',
+    '入場要諗用咩做止蝕位，控制好風險'
   ];
 
   // get all user id without kol and admin
@@ -138,14 +145,19 @@ export async function seed(knex: Knex): Promise<void> {
 
   for (let i = 0; i < questionContent.length; i++) {
     const tag_number = await knex('tags').count('tag_id').first();
-    const stock_id = stockRes[Math.floor(Math.random() * stockRes.length)].id;
-    const asker_id =
-      normalUser[Math.floor(Math.random() * normalUser.length)].id;
+    const stock_id = [];
+    const tag_amount = Math.floor(Math.random() * 4);
+    for(let i = 0; i < tag_amount; i++) {
+      stock_id.push(stockRes[Math.floor(Math.random() * stockRes.length)].id)
+    }
+    const asker_id = normalUser[Math.floor(Math.random() * normalUser.length)].id;
 
     if (tag_number.count == 0) {
-      if (stock_id) {
+      if (stock_id[0]) {
         // insert tag id and stock id to tag table
-        await knex('tags').insert({ tag_id: 1, stock_id });
+        for(let id of stock_id) {
+          await knex('tags').insert({ tag_id: 1, stock_id:id });
+        }
       } else {
         await knex('tags').insert({ tag_id: 1, stock_id: null });
       }
@@ -162,12 +174,14 @@ export async function seed(knex: Knex): Promise<void> {
         .orderBy('tag_id', 'desc')
         .first();
 
-      if (stock_id) {
+      if (stock_id[0]) {
         // insert tag id and stock id to tag table
-        await knex('tags').insert({
-          tag_id: tag_id + 1,
-          stock_id,
-        });
+        for(let id of stock_id) {
+          await knex('tags').insert({
+            tag_id: tag_id + 1,
+            stock_id:id,
+          });
+        }
       } else {
         await knex('tags').insert({
           tag_id: tag_id + 1,
@@ -184,7 +198,6 @@ export async function seed(knex: Knex): Promise<void> {
     }
   }
 
-  console.log('finished insert question and answer');
   //Insert questions end
   
   await knex('notification_type').insert([

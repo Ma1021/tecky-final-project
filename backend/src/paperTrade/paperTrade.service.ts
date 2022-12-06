@@ -42,13 +42,6 @@ export class PaperTradeService {
         newBuyingPower = buyingPower + currentTransaction;
       }
 
-      await this.updateAccountDetail(
-        userID,
-        marketValue,
-        newBuyingPower,
-        account,
-      );
-
       // this.completeOrder(userID, symbol, isLong, price, quantity, account);
 
       return { message: 'Place order succeed.' };
@@ -76,12 +69,21 @@ export class PaperTradeService {
           order_price: price,
           quantity: quantity,
           order_place_time: new Date(),
-          order_status: 0,
+          order_status: 1,
           account: account,
         })
         .into('user_trades');
 
       await this.knex.delete('*').from('user_positions').where({ id: id });
+
+      await this.updateAccountDetailAfterOrder(
+        userID,
+        isLong,
+        price,
+        quantity,
+        account,
+      );
+
       return { message: 'Position closed.' };
     } catch (error) {
       console.log(error);
@@ -110,13 +112,6 @@ export class PaperTradeService {
       const currentTransaction = quantity * order_price;
 
       const newBuyingPower = buyingPower + currentTransaction;
-
-      await this.updateAccountDetail(
-        userID,
-        marketValue,
-        newBuyingPower,
-        account,
-      );
 
       return { message: 'Order cancelled.' };
     } catch (error) {
@@ -162,13 +157,6 @@ export class PaperTradeService {
         newMarketValue = marketValue - currentTransaction;
       }
 
-      await this.updateAccountDetail(
-        userID,
-        newMarketValue,
-        buyingPower,
-        account,
-      );
-
       return { message: 'Order completed.' };
     } catch (error) {
       console.log(error);
@@ -176,26 +164,26 @@ export class PaperTradeService {
     }
   }
 
-  // async getInProgressOrderList(userID: number, account: string) {
-  //   const result = await this.knex
-  //     .select([
-  //       'user_trades.id',
-  //       'user_trades.symbol',
-  //       'name',
-  //       'chinese_name',
-  //       'long',
-  //       'order_price',
-  //       'quantity',
-  //       'order_place_time',
-  //       'order_status',
-  //     ])
-  //     .from('user_trades')
-  //     .join('stock_info', 'user_trades.symbol', 'stock_info.symbol')
-  //     .where({ user_id: userID, order_complete_time: null, account: account })
-  //     .orderBy('order_place_time', 'desc');
+  async getInProgressOrderList(userID: number, account: string) {
+    const result = await this.knex
+      .select([
+        'user_trades.id',
+        'user_trades.symbol',
+        'name',
+        'chinese_name',
+        'long',
+        'order_price',
+        'quantity',
+        'order_place_time',
+        'order_status',
+      ])
+      .from('user_trades')
+      .join('stock_info', 'user_trades.symbol', 'stock_info.symbol')
+      .where({ user_id: userID, order_complete_time: null, account: account })
+      .orderBy('order_place_time', 'desc');
 
-  //   return result;
-  // }
+    return result;
+  }
 
   async getRecentOrderList(userID: number, account: string) {
     const result = await this.knex
@@ -242,16 +230,17 @@ export class PaperTradeService {
     return result;
   }
 
-  async getPositionList(userID: number, account: string) {
+  async getPositionList2(userID: number, account: string) {
+    // await this.getCurrentPriceAndUpdatePostgres(symbol);
     const result = await this.knex
       .select([
         'user_positions.id',
         'user_positions.symbol',
         'long',
         'name',
+        'user_positions.current_price',
         'chinese_name',
         'cost',
-        'user_positions.current_price',
         'quantity',
       ])
       .from('user_positions')
@@ -260,13 +249,11 @@ export class PaperTradeService {
 
     const resultArray = [];
     let totalMarketValue = 0;
-    result.forEach(
-      (obj) =>
-        (totalMarketValue =
-          totalMarketValue + obj.quantity * parseFloat(obj.current_price)),
-    );
+    result.forEach((obj) => {
+      totalMarketValue += obj.quantity * parseFloat(obj.current_price);
+    });
 
-    result.map((obj) => {
+    result.map(async (obj) => {
       const marketValue = obj.quantity * parseFloat(obj.current_price);
       const profit =
         (parseFloat(obj.current_price) - parseFloat(obj.cost)) * obj.quantity;
@@ -289,6 +276,34 @@ export class PaperTradeService {
         ratio: ratio,
       });
     });
+
+    return resultArray;
+  }
+
+  async getPositionList(userID: number, account: string) {
+    const result = await this.knex
+      .select([
+        'user_positions.id',
+        'user_positions.symbol',
+        'long',
+        'name',
+        'chinese_name',
+        'cost',
+        'quantity',
+      ])
+      .from('user_positions')
+      .join('stock_info', 'user_positions.symbol', 'stock_info.symbol')
+      .where({ user_id: userID, account: account });
+
+    const totalMarketValue = await Promise.all(
+      result.map(async (obj) => {
+        const currentPrice = await this.getCurrentPrice(obj.symbol);
+        return obj.quantity * currentPrice;
+      }),
+    );
+
+    const resultArray = await this.middleFunction(result, totalMarketValue);
+
     return resultArray;
   }
 
@@ -345,7 +360,7 @@ export class PaperTradeService {
           order_price: price,
           quantity: quantity,
           order_place_time: new Date(),
-          order_status: 0,
+          order_status: 1,
           account: account,
         })
         .into('user_trades');
@@ -395,7 +410,7 @@ export class PaperTradeService {
           symbol: symbol,
           long: isLong,
           cost: price,
-          current_price: 50,
+          current_price: price,
           quantity: quantity,
           account: account,
         })
@@ -420,13 +435,34 @@ export class PaperTradeService {
     }
   }
 
-  async updateAccountDetail(
+  async updateAccountDetailAfterOrder(
     userID: number,
-    newMarketValue: number,
-    newBuyingPower: number,
+    isLong: boolean,
+    price: number,
+    quantity: number,
     account: string,
   ) {
     try {
+      const selectResult = await this.getIndividualAccountDetail(
+        userID,
+        account,
+      );
+      let newMarketValue = 0,
+        newBuyingPower = 0;
+
+      const marketValue = selectResult[0].market_value,
+        buyingPower = selectResult[0].buying_power;
+
+      const currentTransaction = quantity * price;
+
+      if (isLong) {
+        newMarketValue = marketValue + currentTransaction;
+        newBuyingPower = buyingPower - currentTransaction;
+      } else {
+        newMarketValue = marketValue - currentTransaction;
+        newBuyingPower = buyingPower + currentTransaction;
+      }
+
       await this.knex
         .update({
           market_value: newMarketValue,
@@ -440,5 +476,94 @@ export class PaperTradeService {
       console.log(error);
       throw new Error(error);
     }
+  }
+
+  async placeOrder2(
+    userID: number,
+    symbol: string,
+    orderType: string,
+    price: number,
+    quantity: number,
+    account: string,
+  ) {
+    try {
+      let isLong = undefined;
+      orderType === 'long' ? (isLong = true) : (isLong = false);
+      await this.insertUserTradeRecord(
+        userID,
+        symbol,
+        isLong,
+        price,
+        quantity,
+        account,
+      );
+
+      await this.insertOrUpdateUserPosition(
+        userID,
+        symbol,
+        isLong,
+        price,
+        quantity,
+        account,
+      );
+
+      await this.updateAccountDetailAfterOrder(
+        userID,
+        isLong,
+        price,
+        quantity,
+        account,
+      );
+      return { message: 'Order placed.' };
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+
+  async getCurrentPrice(symbol: string) {
+    const res = await fetch(`http://35.213.167.63/mongo/${symbol}?period=day`);
+    const result = await res.json();
+
+    return result[result.length - 1].close;
+  }
+
+  async middleFunction(result, totalMarketValue) {
+    return await Promise.all(
+      result.map(async (obj) => {
+        const currentPrice = await this.getCurrentPrice(obj.symbol);
+        const marketValue = obj.quantity * currentPrice;
+        const profit = (currentPrice - parseFloat(obj.cost)) * obj.quantity;
+        const profitPercentage =
+          (profit / parseFloat(obj.cost) / obj.quantity) * 100;
+        const ratio = (marketValue / totalMarketValue) * 100;
+
+        return {
+          id: obj.id,
+          symbol: obj.symbol,
+          long: obj.long,
+          name: obj.name,
+          chineseName: obj.chinese_name,
+          cost: parseFloat(obj.cost),
+          marketValue: marketValue,
+          currentPrice: currentPrice,
+          quantity: obj.quantity,
+          profit: profit,
+          profitPercentage: profitPercentage,
+          ratio: ratio,
+        };
+      }),
+    );
+  }
+
+  async getCurrentPriceAndUpdatePostgres(symbol: string) {
+    const res = await fetch(`http://35.213.167.63/mongo/${symbol}?period=day`);
+    const result = await res.json();
+
+    await this.knex
+      .update({ current_price: result[result.length - 1].close })
+      .from('user_positions')
+      .where({ symbol: symbol });
+    return { message: 'Current price updated.' };
   }
 }

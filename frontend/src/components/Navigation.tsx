@@ -53,6 +53,9 @@ import KOL from "../pages/ranking/Ranking";
 // User Analysis pages
 import Analytics from "../pages/analytics/Analytics";
 
+// admin panel
+import AdminPanel from "../pages/adminPanel/AdminPanel";
+
 import PaperTradeAccountOverview from "../pages/paperTrade/PaperTradeAccountOverview";
 import IndividualAccount from "../pages/paperTrade/IndividualAccount";
 import PaperTradeOrder from "../pages/paperTrade/PaperTradeOrder";
@@ -77,6 +80,7 @@ const Navigation: React.FC = () => {
         <Route exact path="/inbox/:id" component={Inbox}></Route>
         <Route exact path="/chatroom/:id" component={ChatroomPage}></Route>
         <Route exact path="/analysis/:id" component={Analytics}></Route>
+        <Route exact path="/admin" component={AdminPanel}></Route>
         <Route
           exact
           path="/chatroom/:id/namelist"

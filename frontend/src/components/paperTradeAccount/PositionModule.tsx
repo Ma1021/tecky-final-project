@@ -1,5 +1,7 @@
 import { useIonAlert } from "@ionic/react";
 import React, { useEffect, useState } from "react";
+import { paperTradeUpdate } from "../../redux/paperTrade/paperTrade.action";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import "./PositionModule.css";
 
 interface PositionRow {
@@ -23,8 +25,9 @@ interface PositionModuleProps {
 
 const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
   const [userPosition, setUserPosition] = useState<PositionRow[]>([]);
-  const [isUpdate, setIsUpdate] = useState<boolean>(false);
   const [ionAlert] = useIonAlert();
+  const isUpdate = useAppSelector((state) => state.paperTrade.isUpdate);
+  const dispatch = useAppDispatch();
   const userID = 1;
 
   useEffect(() => {
@@ -33,9 +36,11 @@ const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
     )
       .then((res) => res.json())
       .then((result) => {
+        console.log(result);
+
         setUserPosition(result);
       });
-  }, [currentAccount, isUpdate]);
+  }, [isUpdate, currentAccount]);
 
   async function closePosition(
     id: number,
@@ -57,7 +62,7 @@ const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
     );
     const result = await res.json();
     console.log(result);
-    setIsUpdate(!isUpdate);
+    dispatch(paperTradeUpdate(isUpdate));
   }
 
   return (
@@ -89,7 +94,7 @@ const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
                               positionRecord.id,
                               userID,
                               positionRecord.symbol,
-                              positionRecord.long,
+                              !positionRecord.long,
                               positionRecord.currentPrice,
                               positionRecord.quantity,
                               currentAccount
@@ -132,7 +137,7 @@ const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
                               positionRecord.id,
                               userID,
                               positionRecord.symbol,
-                              positionRecord.long,
+                              !positionRecord.long,
                               positionRecord.currentPrice,
                               positionRecord.quantity,
                               currentAccount

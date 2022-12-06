@@ -16,6 +16,7 @@ import { useLocation } from "react-router";
 import AccountOverviewModule from "../../components/paperTradeAccount/AccountOverviewModule";
 import PaperTradeNavigator from "../../components/paperTradeAccount/PaperTradeNavigator";
 import PositionAndOrderModule from "../../components/paperTradeAccount/PositionAndOrderModule";
+import { useAppSelector } from "../../redux/store";
 
 export interface AccountDetailType {
   principal: number;
@@ -30,6 +31,7 @@ const IndividualAccount: React.FC = () => {
   const [currentAccount, setCurrentAccount] = useState(
     location.pathname.split("/")[location.pathname.split("/").length - 1]
   );
+  const isUpdate = useAppSelector((state) => state.paperTrade.isUpdate);
   const userID = 1;
 
   const [accountDetail, setAccountDetail] = useState<AccountDetailType>({
@@ -58,7 +60,7 @@ const IndividualAccount: React.FC = () => {
           totalProfitPercentage: totalProfitPercentage,
         });
       });
-  }, [currentAccount]);
+  }, [currentAccount, isUpdate]);
 
   return (
     <>
@@ -99,7 +101,6 @@ const IndividualAccount: React.FC = () => {
           <AccountOverviewModule accountDetail={accountDetail} />
 
           <PaperTradeNavigator currentAccount={currentAccount} />
-          <div style={{ height: "10px" }}></div>
 
           <PositionAndOrderModule currentAccount={currentAccount} />
         </IonContent>

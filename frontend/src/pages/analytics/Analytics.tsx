@@ -6,17 +6,14 @@ import {
   IonBackButton,
   IonContent,
   IonTitle,
-  IonText,
-  IonSegment,
-  IonSegmentButton,
-  IonLabel,
+  IonText
 } from "@ionic/react";
 import styled from "styled-components";
 import Canvas from "@antv/f2-react";
 import { Chart, Legend, Axis, Line, Tooltip, Point } from "@antv/f2";
 import { useEffect, useState } from "react";
-import GenderPie from "./GenderPie";
-import AgeChart from "./AgeChart";
+import GenderPie from "../../components/analytics/GenderPie";
+import AgeChart from "../../components/analytics/AgeChart";
 
 interface Data {
   date: string;

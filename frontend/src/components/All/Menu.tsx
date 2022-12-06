@@ -9,7 +9,6 @@ import {
   IonLabel,
   IonGrid,
   IonIcon,
-  IonButton,
   IonText,
   IonAccordion,
   IonAccordionGroup,
@@ -25,12 +24,11 @@ import {
   logOutOutline,
   trashOutline,
   statsChart,
+  people,
 } from "ionicons/icons";
 import "./Menu.css";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { logout, deleteAcc } from "../../redux/auth/actions";
-import { useState } from "react";
-// import { Redirect } from "react-router";
 
 interface MenuProps {}
 
@@ -232,12 +230,12 @@ const Menu: React.FC<MenuProps> = () => {
                   <IonIcon icon={settingsOutline} ></IonIcon> 系統設定
                 </IonLabel>
               </IonItem>
-              {selector?.user_type === "kol" && (
+              {selector?.user_type === "kol" || "admin" && (
                 <IonItem
                   className="menu"
                   lines="none"
                   onClick={() =>
-                    router.push(`/analysis/${selector.id}`, "forward", "push")
+                    router.push(`/analysis/${selector!.id}`, "forward", "push")
                   }
                 >
                   <IonLabel>
@@ -245,6 +243,14 @@ const Menu: React.FC<MenuProps> = () => {
                   </IonLabel>
                 </IonItem>
               )}
+              {selector?.user_type === "admin" &&
+                <IonItem className="menu" lines="none" onClick={()=>{
+                  router.push(`/admin`, "forward", "push")
+                }}>
+                  <IonLabel>
+                    <IonIcon icon={people} ></IonIcon> 用戶管理
+                  </IonLabel>
+                </IonItem>}
               <IonItem className="menu" lines="none">
                 <IonLabel onClick={logoutPage}>
                   <IonIcon icon={logOutOutline}></IonIcon>

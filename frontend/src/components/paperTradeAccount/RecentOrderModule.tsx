@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useAppSelector } from "../../redux/store";
 import "./RecentOrderModule.css";
 
 export interface RecentOrderType {
@@ -23,6 +24,7 @@ const RecentOrderModule: React.FC<RecentOrderModuleProps> = ({
   const [inProgressOrderList, setInProgressOrderList] = useState<
     RecentOrderType[]
   >([]);
+  const isUpdate = useAppSelector((state) => state.paperTrade.isUpdate);
   const userID = 1;
 
   useEffect(() => {
@@ -33,7 +35,7 @@ const RecentOrderModule: React.FC<RecentOrderModuleProps> = ({
       .then((result) => {
         setInProgressOrderList(result);
       });
-  }, [currentAccount]);
+  }, [currentAccount, isUpdate]);
 
   return (
     <>

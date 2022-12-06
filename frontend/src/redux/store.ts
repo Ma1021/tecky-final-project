@@ -12,6 +12,7 @@ import { chatroomRecordReducer } from "./chatroomRecord/reducer";
 import { chatroomAddReducer } from "./chatroomAdd/reducer";
 import { chatroomListReducer } from "./chatroomList/reducer";
 import { blockReducer } from "./block/reducer";
+import { paperTradeReducer } from "./paperTrade/paperTrade.reducer";
 
 export type RootState = ReturnType<typeof store.getState>;
 
@@ -26,6 +27,7 @@ export let store = configureStore({
     block: blockReducer,
     theme: themeReducer,
     subscription: subscriptionReducer,
+    paperTrade: paperTradeReducer,
   }),
 });
 

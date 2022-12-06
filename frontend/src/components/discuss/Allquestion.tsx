@@ -3,6 +3,9 @@ import {
   IonRefresherContent,
   RefresherEventDetail,
   IonSpinner,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
+  IonText,
 } from "@ionic/react";
 import { memo, useEffect, useState } from "react";
 import styled from "styled-components";
@@ -52,7 +55,7 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
   const { questionList, loading } = useAppSelector(
     (state) => state.question
   );
-  const { blockedUserList } = useAppSelector((state)=> state.block);
+  // const { blockedUserList } = useAppSelector((state)=> state.block);
   let user_id: number;
 
   if (localStorage.getItem("auth_stockoverflow")) {
@@ -96,6 +99,29 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
 
   }, [props.keyword, questionList]);
 
+  useEffect(()=>{
+    if(keywordFilter.length > 0) {
+      generateItems();
+    }
+  },[keywordFilter])
+
+  // infiniteScroll
+  const [items, setItems] = useState<Array<Questions>>([]);
+  const [ is_bottom, setIsBottom ] = useState(false);
+  const generateItems = () => {
+    const newItems = [];
+    for (let i = 0; i < 5; i++) {
+      if(keywordFilter[items.length + i]) {
+        newItems.push(keywordFilter[items.length + i]);
+      } else if(keywordFilter.length < items.length + i) {
+        setIsBottom(true);
+      }
+    }
+    setItems([...items, ...newItems]);
+  };  
+
+  console.log(is_bottom);
+
   return (
     <>
       <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
@@ -110,12 +136,21 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
           {questionList.length > 0 ? (
             <QuestionCard
               questions={
-                keywordFilter.length > 0 ? keywordFilter : questionList
+                items.length > 0 ? items : questionList
               }
             />
           ) : (
             <div style={{ marginTop: 10 }}>沒有問題</div>
           )}
+          {is_bottom && <IonText style={{marginTop:20}}>已到底~</IonText>}
+          <IonInfiniteScroll
+            onIonInfinite={(ev)=>{
+              generateItems();
+              setTimeout(()=> ev.target.complete(), 500);
+            }}
+          >
+            <IonInfiniteScrollContent></IonInfiniteScrollContent>
+          </IonInfiniteScroll>
         </QuestionContainer>
       )}
     </>

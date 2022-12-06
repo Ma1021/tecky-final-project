@@ -20,23 +20,23 @@ export async function seed(knex: Knex): Promise<void> {
   await knex('chatrooms').del();
   await knex('questions').del();
   await knex('users').del();
-  await knex('tags').del();
-  await knex('stocks').del();
 
   // Inserts seed entries
 
-  await knex('stocks').insert([
-    { symbol: 'QQQ', name: 'Invesco QQQ Trust Series 1' },
-    { symbol: 'VOO', name: 'Vanguard 500 Index Fund ETF' },
-    { symbol: 'AAPL', name: 'Apple Inc. (AAPL)' },
-    { symbol: 'TSLA', name: 'Tesla, Inc. (TSLA)' },
-  ]);
+  // await knex('stocks').insert([
+  //   { symbol: 'QQQ', name: 'Invesco QQQ Trust Series 1' },
+  //   { symbol: 'VOO', name: 'Vanguard 500 Index Fund ETF' },
+  //   { symbol: 'AAPL', name: 'Apple Inc. (AAPL)' },
+  //   { symbol: 'TSLA', name: 'Tesla, Inc. (TSLA)' },
+  // ]);
 
   // Insert users
   for (let user of users) {
     user.password_hash = await hashPassword(user.password_hash);
     await knex('users').insert(user);
   }
+
+  console.log('finished insert user');
 
   // get all user id
   const userRes = await knex('users').select('id');
@@ -76,16 +76,19 @@ export async function seed(knex: Knex): Promise<void> {
     }
   }
 
-  //Insert questions and answer start
+  console.log('finished insert subscriptions');
 
+  //Insert questions and answer start
   async function insertAnswer(question_id: number, asker_id: number) {
     // random a answer amount
+    console.log('enter insert answer');
+    
     const amount = Math.floor(Math.random() * 6);
     for (let i = 0; i < amount; i++) {
-      const content =
-        answerContent[Math.floor(Math.random() * answerContent.length)];
-      const answerer_id =
-        user_idArray[Math.floor(Math.random() * user_idArray.length)].id;
+      const content = answerContent[Math.floor(Math.random() * answerContent.length)];
+      const answerer_id = user_idArray[Math.floor(Math.random() * user_idArray.length)].id;
+      
+      console.log(content, answerer_id);
 
       if (asker_id === answerer_id) {
         return;
@@ -101,6 +104,8 @@ export async function seed(knex: Knex): Promise<void> {
 
   // get all stock id
   const stockRes = await knex('stocks').select('id');
+  console.log(stockRes);
+  
   const questionContent = [
     '依隻可以買嗎？',
     '點睇呢隻🙏',
@@ -178,6 +183,8 @@ export async function seed(knex: Knex): Promise<void> {
       insertAnswer(question_id[0].id, asker_id);
     }
   }
+
+  console.log('finished insert question and answer');
   //Insert questions end
   
   await knex('notification_type').insert([

@@ -18,7 +18,7 @@ export async function up(knex: Knex): Promise<void> {
     await knex.schema.createTable("stocks", (table)=>{
         table.increments("id");
         table.string("symbol").notNullable().unique();
-        table.string("name").notNullable().unique();
+        table.string("name").notNullable();
         table.timestamps(false, true);
     })
 

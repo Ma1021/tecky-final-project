@@ -8,6 +8,9 @@ import {
   IonItem,
   IonInput,
   IonLabel,
+  IonSearchbar,
+  IonToolbar,
+  IonTitle,
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 
@@ -23,6 +26,7 @@ const SearchPage: React.FC = () => {
     )
       .then((res) => res.json())
       .then((result) => {
+        console.log("result search", result);
         const resultArray = [];
         for (let i = 0; i < 10; i++) {
           const objKeyArr = Object.keys(result);
@@ -32,6 +36,9 @@ const SearchPage: React.FC = () => {
           resultArray.push({ [objKeyArr[i]]: result[objKeyArr[i]] });
         }
         setSearchResultArray(resultArray);
+      })
+      .catch((err) => {
+        console.log("err", err);
       });
   }, [searchWord]);
 
@@ -39,14 +46,24 @@ const SearchPage: React.FC = () => {
     <>
       <IonPage>
         <IonHeader>
-          <IonButtons slot="start">
-            <IonBackButton>Back</IonBackButton>
-          </IonButtons>
-          <IonInput
-            onIonChange={(e: any) => {
-              setSearchWord(e.detail.value);
-            }}
-          ></IonInput>
+          <IonToolbar>
+            <IonTitle className="p-0">
+              <div className=" d-flex justify-content-round align-items-center w100 h100">
+                <IonButtons slot="start">
+                  <IonBackButton
+                    defaultHref="/discuss"
+                    text="返回"
+                  ></IonBackButton>
+                </IonButtons>
+                <IonSearchbar
+                  className="pt-0 pb-0 ion-margin"
+                  onIonChange={(e: any) => {
+                    setSearchWord(e.detail.value);
+                  }}
+                ></IonSearchbar>
+              </div>
+            </IonTitle>
+          </IonToolbar>
         </IonHeader>
 
         <IonContent>

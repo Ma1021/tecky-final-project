@@ -28,21 +28,13 @@ export class StockController {
   async getIntraDayDataFromMongoDB(@Query('symbol') symbol: string) {
     return await this.stockService.getIntraDayDataFromMongoDB(symbol);
   }
-  @Get('/getMinuteDataFromMongoDB')
-  async getMinuteDataFromMongoDB(
+  @Get('/getMinuteDataFromMongoAPI')
+  async getMinuteDataFromMongoAPI(
     @Query('symbol') symbol: string,
     @Query('timeFrame') timeFrame: string,
   ) {
-    return await this.stockService.getMinuteDataFromMongoDB(symbol, timeFrame);
+    return await this.stockService.getMinuteDataFromMongoAPI(symbol, timeFrame);
   }
-
-  // @Get('/getDayDataFromMongoDB')
-  // async getDayDataFromMongoDB(
-  //   @Query('symbol') symbol: string,
-  //   @Query('timeFrame') timeFrame: string,
-  // ) {
-  //   return await this.appService.getDayDataFromMongoDB(symbol, timeFrame);
-  // }
 
   @Get('/getDayDataFromMongoAPI')
   async getDayDataFromMongoAPI(

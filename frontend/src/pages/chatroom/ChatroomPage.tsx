@@ -12,6 +12,8 @@ import {
   IonFooter,
   IonHeader,
   IonIcon,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
   IonInput,
   IonItem,
   IonModal,
@@ -60,6 +62,7 @@ const ChatroomPage: React.FC = () => {
   const [message, setMessage] = useState("");
   const [chatroomName, setChatroomName] = useState("");
   const [messageList, setMessageList] = useState<ChatroomRecord[]>([]);
+  const [listOffset, setListOffset] = useState(0);
   // const dispatch = useAppDispatch();
   const [presentToast] = useIonToast();
   const [loading, setLoading] = useState(true);
@@ -68,9 +71,7 @@ const ChatroomPage: React.FC = () => {
   const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
 
-  const contentRef = createRef<HTMLIonContentElement>();
-
-  // for scroll
+  // for scroll with new nsg
   const bottomRef = useRef<HTMLDivElement>(null);
   function scrollToBottom() {
     setTimeout(() => {
@@ -129,7 +130,10 @@ const ChatroomPage: React.FC = () => {
     })
       .then((res) => {
         res.json().then((json) => {
-          setMessageList(json);
+          setMessageList((json) => {
+            generateItems();
+            return json;
+          });
           setLoading(false);
         });
       })
@@ -144,8 +148,20 @@ const ChatroomPage: React.FC = () => {
       });
   }, [setMessageList, setLoading, roomId, userId]);
 
+  // for infinite scroll
+  const [items, setItems] = useState<ChatroomRecord[]>([]);
+  let loadedItems = 5;
+  const generateItems = () => {
+    const newItems = [] as any;
+    for (let i = 0; i < loadedItems; i++) {
+      newItems.push(messageList[i + 1]);
+    }
+    // setTimeout(() => {
+    setItems([...newItems, ...items]);
+    // }, 500);
+  };
+
   // 開新socket
-  let count = 0;
   useSocket(
     // why: prevent join room multiple times.
     useCallback(
@@ -166,11 +182,8 @@ const ChatroomPage: React.FC = () => {
           ) {
             return;
           }
-          console.log("socket times", count++);
           pushChatroom();
           setMessageList((msg) => {
-            console.log("newMessage", newMessage);
-            console.log("message list", msg);
             return [...msg, newMessage];
           });
           scrollToBottom();
@@ -330,7 +343,7 @@ const ChatroomPage: React.FC = () => {
                 handleBehavior="cycle"
                 isOpen={isOpen}
               >
-                <IonContent ref={contentRef} className="ion-padding-top">
+                <IonContent className="ion-padding-top">
                   <div className="ion-margin-top">
                     <ModalItem lines="full" onClick={findNameList}>
                       <IonIcon icon={readerOutline}></IonIcon>
@@ -376,7 +389,17 @@ const ChatroomPage: React.FC = () => {
           ) : (messageList as ChatroomRecord[]).length > 0 ? (
             // if can load
             <>
-              {(messageList as ChatroomRecord[]).map((record: ChatroomRecord) =>
+              <IonInfiniteScroll
+                position="top"
+                onIonInfinite={(ev) => {
+                  generateItems();
+                  setTimeout(() => ev.target.complete(), 500);
+                }}
+              >
+                <IonInfiniteScrollContent></IonInfiniteScrollContent>
+              </IonInfiniteScroll>
+              {/* {(messageList as ChatroomRecord[]).map((record: ChatroomRecord) => */}
+              {(items as ChatroomRecord[]).map((record: ChatroomRecord) =>
                 record.userid === (userId as number) ? (
                   <ChatSendBubble key={record.recordid} props={record} />
                 ) : (
@@ -411,7 +434,6 @@ const ChatroomPage: React.FC = () => {
             <IonIcon icon={send}></IonIcon>
           </IonButton>
         </ChatReplyContainer>
-        {/* )} */}
       </IonFooter>
     </IonPage>
   );

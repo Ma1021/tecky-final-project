@@ -283,10 +283,11 @@ export class ChatroomService {
     try {
       let result = await this.knex.raw(
         `
-        select chatroom.name from chatrooms where id = ?
+        select chatrooms.name from chatrooms where id = ?
         `,
         [id],
       );
+      console.log(result.rows[0]);
       return result.rows[0];
     } catch (error) {
       console.log(error.message);

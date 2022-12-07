@@ -29,6 +29,8 @@ import Title from "../../components/All/Title";
 import Menu from "../../components/All/Menu";
 
 const Discuss: React.FC = () => {
+  // unlock the orientation
+  window.screen.orientation.unlock();
   const [segment, setSegment] = useState("0");
   const [keyword, setKeyword] = useState("");
   let user;
@@ -45,14 +47,14 @@ const Discuss: React.FC = () => {
   const slideOpts = {
     initialSlide: 0,
     speed: 400,
-    loop: false
+    loop: false,
   };
 
   const handleSlideChange = async (event: any) => {
     let index: number = 0;
-    await event.target.getActiveIndex().then((value: any) => (index=value));
-    setSegment(''+index)
-  }
+    await event.target.getActiveIndex().then((value: any) => (index = value));
+    setSegment("" + index);
+  };
 
   const onSegmentChange = (e: any) => {
     setSegment(e.detail.value);
@@ -100,7 +102,14 @@ const Discuss: React.FC = () => {
         </IonHeader>
 
         <IonContent>
-          <div style={{position:'sticky', top:0, zIndex:5, backgroundColor:'#111'}}>
+          <div
+            style={{
+              position: "sticky",
+              top: 0,
+              zIndex: 5,
+              backgroundColor: "#111",
+            }}
+          >
             <div className="d-flex justify-content-center">
               <SegmentTab value={segment} onIonChange={onSegmentChange}>
                 <SegmentButton value="0">
@@ -133,15 +142,19 @@ const Discuss: React.FC = () => {
             </div>
           </div>
 
-          <IonSlides options={slideOpts} onIonSlideDidChange={(e) => handleSlideChange(e)} ref={slider}>
+          <IonSlides
+            options={slideOpts}
+            onIonSlideDidChange={(e) => handleSlideChange(e)}
+            ref={slider}
+          >
             <IonSlide>
               <Allquestion keyword={keyword} />
             </IonSlide>
             <IonSlide>
-              <MyQuestion keyword={keyword}/>
+              <MyQuestion keyword={keyword} />
             </IonSlide>
             <IonSlide>
-              <MyAnswer keyword={keyword}/>
+              <MyAnswer keyword={keyword} />
             </IonSlide>
           </IonSlides>
         </IonContent>

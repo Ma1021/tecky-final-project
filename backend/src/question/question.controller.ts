@@ -47,6 +47,13 @@ export class QuestionController {
     return this.questionService.findQuestionBySymbol(query.symbol.toUpperCase());
   }
 
+  // get stock symbol
+  @Get('/symbol/stock') 
+  getStockSymbol() {    
+    return this.questionService.symbol();
+  }
+  
+
   @Post()
   createQuestion(@Body() questions: Question_DTO, @Response() res) {    
     return this.questionService.create(questions).then(async (response)=>{
@@ -58,44 +65,6 @@ export class QuestionController {
         }
         res.status(HttpStatus.CREATED).json(question)
       }
-    })
-  }
-
-  @Put(':id')
-  async updateQuestion(@Param('id') question_id: string,  @Body() questions: Question_DTO, @Response() res) {
-    const { asker_id, content, stock_id } = questions;
-
-    if(!content) {
-      throw new HttpException('Missing content', HttpStatus.BAD_REQUEST)
-    }
-
-    if(!question_id) {
-      throw new HttpException('Missing question id', HttpStatus.BAD_REQUEST)
-    }
-
-    if(!asker_id) {
-      throw new HttpException('Missing asker id', HttpStatus.BAD_REQUEST)
-    } 
-
-    if(typeof asker_id !== 'number') {
-      throw new HttpException('Invalid asker id', HttpStatus.BAD_REQUEST)
-    }
-
-    for(let stockId of stock_id) {
-      if(typeof stockId !== 'number') {
-        throw new HttpException('Invalid tag id', HttpStatus.BAD_REQUEST)
-      }
-    }
-
-    //checking the question is exist or not
-    const question = await this.questionService.findOne(+question_id);
-
-    if(question.length <= 0) {
-      throw new HttpException('Question not found', HttpStatus.NOT_FOUND);
-    }
-
-    this.questionService.update(+question_id, questions).then((response)=>{
-      res.status(HttpStatus.ACCEPTED).json({message: 'Update question successfully'})
     })
   }
 

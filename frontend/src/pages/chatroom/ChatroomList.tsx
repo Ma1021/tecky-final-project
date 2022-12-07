@@ -46,16 +46,16 @@ const ChatroomList: React.FC = () => {
     detail: SegmentChangeEventDetail;
   }
 
-  const onSegmentChange = (e: any) => {
-    setChatroomSegment(e.detail.value);
-    slider.current!.slideTo(e.detail.value);
-  };
-
   const slider = useRef<HTMLIonSlidesElement>(null);
   const slideOpts = {
     initialSlide: 0,
     speed: 400,
     loop: false,
+  };
+
+  const onSegmentChange = (e: any) => {
+    setChatroomSegment(e.detail.value);
+    slider.current!.slideTo(e.detail.value);
   };
 
   const handleSlideChange = async (event: any) => {

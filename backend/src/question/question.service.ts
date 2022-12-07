@@ -38,7 +38,6 @@ export class QuestionService {
     inner join users on users.id = questions.asker_id
     full outer join answers on questions.id = answers.question_id
     where questions.is_ban = false
-    and answers.is_ban = false
     group by questions.id, users.id, tags.tag_id
     order by questions.created_at desc;
     `);
@@ -76,7 +75,6 @@ export class QuestionService {
       inner join users on users.id = questions.asker_id
       full outer join answers on questions.id = answers.question_id
       where questions.id = ? and questions.is_ban = false
-      and answers.is_ban = false
       group by questions.id, users.id, tags.tag_id
       order by questions.created_at desc;
       `,
@@ -116,7 +114,6 @@ export class QuestionService {
       inner join users on users.id = questions.asker_id
       full outer join answers on questions.id = answers.question_id
       where questions.asker_id = ? and questions.is_ban = false
-      and answers.is_ban = false
       group by questions.id, users.id, tags.tag_id
       order by questions.created_at desc;
     `,
@@ -205,7 +202,6 @@ export class QuestionService {
   async create(questions: Question_DTO) {
     try {      
       const { asker_id, content, stock_id } = questions;
-      console.log(questions);
       
       const tag_number = await this.knex('tags').count('tag_id').first();
 
@@ -250,40 +246,6 @@ export class QuestionService {
     }
   }
 
-  async update(question_id: number, questions: Question_DTO) {
-    const { asker_id, content, tag_id } = questions;
-
-    let newIdArr = questions.stock_id;
-    let oriIdArr = await this.knex('tags')
-      .select('stock_id')
-      .where('tag_id', tag_id);
-
-    for (let stockId of oriIdArr) {
-      const { stock_id } = stockId;
-
-      if (!newIdArr.includes(stock_id)) {
-        // if originId not exist in new id array, del it from tag table
-        await this.knex('tags')
-          .where('stock_id', stock_id)
-          .andWhere('tag_id', tag_id)
-          .del();
-      } else {
-        // if originId exist in new id array, remove the id from new id array
-        newIdArr = newIdArr.filter((id) => id != stock_id);
-      }
-    }
-
-    // insert the new id array which contain the id not exist in origin id array
-    for (let stock_id of newIdArr) {
-      await this.knex('tags').insert({ tag_id, stock_id });
-    }
-
-    return await this.knex('questions')
-      .where('id', question_id)
-      .update({ asker_id, content, tag_id })
-      .returning('*');
-  }
-
   async delete(question_id: number) {
     await this.knex('answers').where('question_id', question_id).del();
     return await this.knex('questions').where('id', question_id).del();
@@ -300,6 +262,22 @@ export class QuestionService {
     })  
     } catch(err) {
       console.log('report question:', err);
+    }
+  }
+
+  async symbol() {
+    try {
+      const stocks = ['AAPL', 'TSLA', 'NFLX', 'XPEV', 'BABA', 'BILI', 'TSM', 'FUTU', 'AMZN', 'AMD']
+      const stockRes = [];
+
+      for(let stock of stocks) {
+        const res = await this.knex('stocks').select('id as stock_id', 'symbol as stock_symbol', 'name as stock_name').where('symbol', stock)
+        stockRes.push(res[0]);
+      }
+
+      return stockRes;
+    } catch(err) {
+      console.log('get symbol', err);
     }
   }
 }

@@ -103,7 +103,7 @@ export class UserService {
         [+userIdDto.userId],
       );
       if (result.rows.length === 0) {
-        console.log('user service, blocker list', result);
+        // console.log('user service, blocker list', result);
         return [];
       }
       result = result.rows[0].blocked_list;

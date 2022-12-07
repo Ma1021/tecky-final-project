@@ -16,7 +16,7 @@ export class StockService {
     return 'Hello World';
   }
 
-  async getCurrentAndYesterdayPrice(symbol: string) {
+  async getCurrentAndYesterdayStockPrice(symbol: string) {
     try {
       const res = await fetch(
         `http://35.213.167.63/mongo/${symbol}?period=day`,
@@ -26,6 +26,21 @@ export class StockService {
       return {
         currentPrice: result[result.length - 1].close,
         yesterdayPrice: result[result.length - 2].close,
+      };
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+
+  async getCurrentAndYesterdayCryptoPrice(symbol: string) {
+    try {
+      const res = await fetch(`http://35.213.167.63/mongo/${symbol}`);
+      const result = await res.json();
+
+      return {
+        currentPrice: result[0].close,
+        yesterdayPrice: result[1].close,
       };
     } catch (error) {
       console.log(error);
@@ -45,7 +60,7 @@ export class StockService {
 
       for (const obj of stockResult) {
         const { currentPrice, yesterdayPrice } =
-          await this.getCurrentAndYesterdayPrice(obj.symbol);
+          await this.getCurrentAndYesterdayStockPrice(obj.symbol);
         obj['current_price'] = currentPrice;
         obj['yesterday_price'] = yesterdayPrice;
         obj['price_difference'] = currentPrice - yesterdayPrice;
@@ -57,10 +72,8 @@ export class StockService {
         .where({ user_id: userID });
 
       for (const obj of cryptoResult) {
-        const res = await fetch(`http://35.213.167.63/mongo/${obj.symbol}`);
-        const result = await res.json();
-        const currentPrice = result[0].close,
-          yesterdayPrice = result[1].close;
+        const { currentPrice, yesterdayPrice } =
+          await this.getCurrentAndYesterdayCryptoPrice(obj.symbol);
 
         obj['current_price'] = currentPrice;
         obj['yesterday_price'] = yesterdayPrice;
@@ -377,15 +390,6 @@ export class StockService {
       .from('stock_news')
       .join('stock_info', 'stock_info.id', 'stock_news.stock_id')
       .where({ symbol: symbol });
-
-    return result;
-  }
-
-  async getUserTradeRecordsFromPostgres(userID: string) {
-    const result = await this.knex
-      .select('*')
-      .from('user_trades')
-      .where({ user_id: userID });
 
     return result;
   }

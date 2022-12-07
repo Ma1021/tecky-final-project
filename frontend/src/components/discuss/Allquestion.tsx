@@ -10,7 +10,7 @@ import {
 import { memo, useEffect, useState } from "react";
 import styled from "styled-components";
 import QuestionCard from "./QuestionCard";
-import { RootState, useAppSelector, useAppDispatch } from "../../redux/store";
+import { useAppSelector, useAppDispatch } from "../../redux/store";
 
 import {
   loadQuestions,

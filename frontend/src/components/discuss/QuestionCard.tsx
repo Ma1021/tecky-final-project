@@ -5,6 +5,7 @@ import {
   IonCardContent,
   IonImg,
   IonIcon,
+  IonChip
 } from "@ionic/react";
 import { memo } from "react";
 import styled from "styled-components";
@@ -157,14 +158,15 @@ const TagContainer = styled.div`
   margin-top: 1rem;
 `;
 
-const StockTag = styled(IonText)`
+const StockTag = styled(IonChip)`
+  margin: 0;
   height: 1.8rem;
   line-height: 1.8rem;
   padding: 0rem 0.5rem;
   border-radius: 0.9rem;
   text-align: center;
   color: #fff;
-  font-weight: 600;
+  font-weight: 500;
   background-image: linear-gradient(
     to right bottom,
     #ffc748,

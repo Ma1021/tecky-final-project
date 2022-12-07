@@ -8,7 +8,7 @@ interface FollowerProps {
 
 const Follower: React.FC<FollowerProps> = (props: FollowerProps) => {
   const { followerList } = useAppSelector((state) => state.subscription);
-
+  
   return (
     <UserCardContainer>
       {followerList.length > 0 ? (

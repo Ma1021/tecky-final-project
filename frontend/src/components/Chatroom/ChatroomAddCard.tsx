@@ -40,12 +40,14 @@ const ChatroomAddCard: React.FC<ChatroomAddCardProps> = (props) => {
         message: "成功加入聊天室！",
         duration: 1500,
         position: "bottom",
+        color: "success",
       });
     } else {
       present({
         message: "再試一次！",
         duration: 1500,
         position: "bottom",
+        color: "danger",
       });
     }
   };
@@ -103,7 +105,12 @@ const ChatroomAddCard: React.FC<ChatroomAddCardProps> = (props) => {
               </IonCardTitle>
             </IonCardHeader>
             <IonCardContent>
-              <div className="d-flex flex-row">{props.props.introduction}</div>
+              <p
+                style={{ textOverflow: "ellipsis" }}
+                className="d-flex flex-row"
+              >
+                {props.props.introduction}
+              </p>
               <div style={{ textAlign: "end" }}>
                 <IonButton data-id={props.props.id} onClick={joinChat}>
                   加入

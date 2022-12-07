@@ -26,13 +26,15 @@ const ChatroomAll: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchChatroomsAll(userId as number));
-    console.log("After fetch", chatInfo);
-    setFilteredChat(chatInfo);
   }, []);
+
+  useEffect(() => {
+    setFilteredChat(chatInfo);
+    console.log(chatInfo);
+  }, [chatInfo]);
 
   const result = useMemo(() => {
     if (wordSearch.length > 0) {
-      // console.log("wordSearch, ", worddSearch);
       const chatFilter = chatInfo.filter((chat) => {
         return (
           chat.name.replace(/\s/g, "").toLowerCase().includes(wordSearch) ||

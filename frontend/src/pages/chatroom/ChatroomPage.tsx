@@ -51,7 +51,6 @@ import { ModalItem } from "../Inbox";
 import { useCounter } from "../../hooks/use-counter";
 
 const ChatroomPage: React.FC = () => {
-  useCounter();
   // get the new message
   const [message, setMessage] = useState("");
   const [chatroomName, setChatroomName] = useState("");

@@ -71,23 +71,7 @@ const ChatroomPage: React.FC = () => {
   const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
 
-  // for infinite scroll
-  const [items, setItems] = useState<ChatroomRecord[]>([]);
-  let loadedItems = 5;
-  const generateItems = () => {
-    const newItems = [];
-    for (let i = 0; i < loadedItems; i++) {
-      newItems.unshift(messageList[messageList.length - 1]);
-    }
-    setItems([...newItems, ...items]);
-  };
-
-  useEffect(() => {
-    generateItems();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // for scroll
+  // for scroll with new nsg
   const bottomRef = useRef<HTMLDivElement>(null);
   function scrollToBottom() {
     setTimeout(() => {
@@ -146,7 +130,10 @@ const ChatroomPage: React.FC = () => {
     })
       .then((res) => {
         res.json().then((json) => {
-          setMessageList(json);
+          setMessageList((json) => {
+            generateItems();
+            return json;
+          });
           setLoading(false);
         });
       })
@@ -160,6 +147,19 @@ const ChatroomPage: React.FC = () => {
         });
       });
   }, [setMessageList, setLoading, roomId, userId]);
+
+  // for infinite scroll
+  const [items, setItems] = useState<ChatroomRecord[]>([]);
+  let loadedItems = 5;
+  const generateItems = () => {
+    const newItems = [] as any;
+    for (let i = 0; i < loadedItems; i++) {
+      newItems.push(messageList[i + 1]);
+    }
+    // setTimeout(() => {
+    setItems([...newItems, ...items]);
+    // }, 500);
+  };
 
   // 開新socket
   useSocket(
@@ -398,7 +398,8 @@ const ChatroomPage: React.FC = () => {
               >
                 <IonInfiniteScrollContent></IonInfiniteScrollContent>
               </IonInfiniteScroll>
-              {(messageList as ChatroomRecord[]).map((record: ChatroomRecord) =>
+              {/* {(messageList as ChatroomRecord[]).map((record: ChatroomRecord) => */}
+              {(items as ChatroomRecord[]).map((record: ChatroomRecord) =>
                 record.userid === (userId as number) ? (
                   <ChatSendBubble key={record.recordid} props={record} />
                 ) : (

@@ -32,6 +32,11 @@ export function paperTradeReducer(
     //       },
     //     ],
     //   };
+    case "LOADING":
+      return {
+        ...oldState,
+        isLoading: !action.isLoading,
+      };
     default:
       return oldState;
   }
@@ -44,5 +49,3 @@ export function paperTradeReducer(
 //   const result = await res.json();
 //   return result[0];
 // }
-
-

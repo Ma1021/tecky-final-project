@@ -43,17 +43,16 @@ const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
   }, [currentAccount, isUpdate]);
 
   async function closePosition(
-    id: number,
     useID: number,
     symbol: string,
-    isLong: boolean,
+    orderDirection: boolean,
     price: number,
     quantity: number,
     account: string
   ) {
-    const data = { id, userID, symbol, isLong, price, quantity, account };
+    const data = { userID, symbol, orderDirection, price, quantity, account };
     const res = await fetch(
-      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/closePosition`,
+      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/placeOrder3`,
       {
         method: "POST",
         headers: { "Content-type": "application/json" },
@@ -91,7 +90,6 @@ const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
                           role: "confirm",
                           handler: () =>
                             closePosition(
-                              positionRecord.id,
                               userID,
                               positionRecord.symbol,
                               !(positionRecord.quantity > 0),
@@ -134,7 +132,6 @@ const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
                           role: "confirm",
                           handler: () =>
                             closePosition(
-                              positionRecord.id,
                               userID,
                               positionRecord.symbol,
                               !(positionRecord.quantity > 0),

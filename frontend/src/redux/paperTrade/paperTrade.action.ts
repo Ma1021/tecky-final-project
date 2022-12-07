@@ -24,6 +24,14 @@ export function placeOrder(
   };
 }
 
+export function loading(isLoading: boolean) {
+  return {
+    type: "LOADING" as const,
+    isLoading,
+  };
+}
+
 export type PaperTradeActionType =
   | ReturnType<typeof paperTradeUpdate>
-  | ReturnType<typeof placeOrder>;
+  | ReturnType<typeof placeOrder>
+  | ReturnType<typeof loading>;

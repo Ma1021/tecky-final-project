@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { IonLoading } from "@ionic/react";
 
 interface OrderRecordsType {
   id: number;
   symbol: string;
   name: string;
   chinese_name: string;
-  long: boolean;
   order_price: number;
   quantity: number;
   order_place_time: string;
@@ -23,19 +23,24 @@ const PaperTradeRecordsModule: React.FC<PaperTradeRecordsModuleProps> = ({
   currentAccount,
 }) => {
   const [orderRecords, setOrderRecords] = useState<OrderRecordsType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
+  // new 1 table approach
   useEffect(() => {
+    setIsLoading(!isLoading);
     fetch(
-      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getFullOrderList?userID=${userID}&account=${currentAccount}`
+      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getFullOrderList2?userID=${userID}&account=${currentAccount}`
     )
       .then((res) => res.json())
       .then((result) => {
-        setOrderRecords(result);
+        setOrderRecords(result.trades);
+        setIsLoading(!isLoading);
       });
   }, [currentAccount]);
 
   return (
     <>
+      <IonLoading isOpen={isLoading} message="載入中..." />
       <table className="order-table">
         <tbody>
           <tr>
@@ -45,18 +50,18 @@ const PaperTradeRecordsModule: React.FC<PaperTradeRecordsModuleProps> = ({
             <th className="order-table-column-name">下單時間</th>
           </tr>
           {orderRecords.map((order) => (
-            <>
+            <React.Fragment key={order.id}>
               <tr>
                 <td
                   className={
                     "progress-order-order-type " +
-                    (order.long === true ? "positive" : "negative")
+                    (order.quantity > 0 ? "positive" : "negative")
                   }
                 >
-                  {order.long === true ? "模擬買入" : "模擬賣出"}
+                  {order.quantity > 0 ? "模擬買入" : "模擬賣出"}
                 </td>
                 <td>{order.name}</td>
-                <td>{order.quantity}</td>
+                <td>{order.quantity > 0 ? order.quantity : -order.quantity}</td>
                 <td>{order.order_place_time.split("T")[0]}</td>
               </tr>
               <tr className="order-bottom-row">
@@ -78,9 +83,9 @@ const PaperTradeRecordsModule: React.FC<PaperTradeRecordsModuleProps> = ({
                 </td>
                 <td>{order.symbol}</td>
                 <td>{order.order_price}</td>
-                <td>{order.order_place_time.split("T")[1]}</td>
+                <td>{order.order_place_time.split("T")[1].slice(0, 8)}</td>
               </tr>
-            </>
+            </React.Fragment>
           ))}
         </tbody>
       </table>

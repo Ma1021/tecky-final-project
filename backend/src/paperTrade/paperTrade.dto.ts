@@ -8,7 +8,7 @@ export class PlaceOrderDTO {
   symbol: string;
 
   @IsNotEmpty()
-  orderType: string;
+  orderDirection: string;
 
   @IsNotEmpty()
   price: number;

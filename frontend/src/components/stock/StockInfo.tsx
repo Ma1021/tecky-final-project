@@ -1,5 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useAppSelector } from "../../redux/store";
+import { IonIcon } from "@ionic/react";
+import { heart, heartOutline } from "ionicons/icons";
 
 interface StockInfoType {
   symbol: string;
@@ -84,7 +86,7 @@ const StockInfo: React.FC<StockInfoProps> = ({ symbol }) => {
     )
       .then((res) => res.json())
       .then((result) => {
-        setIsSubscribed(result);
+        setIsSubscribed(result.subscribed);
       });
   }, []);
 
@@ -163,12 +165,21 @@ const StockInfo: React.FC<StockInfoProps> = ({ symbol }) => {
           <div className="subscribe-button-container">
             <button
               className="subscribe-button"
+              style={{
+                fontSize: "50px",
+                background: "transparent",
+                color: "#ffa73c",
+              }}
               onClickCapture={() => {
                 subscribe(userID, symbol);
                 setIsSubscribed(!isSubscribed);
               }}
             >
-              {isSubscribed ? "Unsubscribe" : "Subscribe"}
+              {isSubscribed ? (
+                <IonIcon icon={heart} />
+              ) : (
+                <IonIcon icon={heartOutline} />
+              )}
             </button>
           </div>
         </div>
@@ -511,6 +522,6 @@ async function subscribe(userID: number, symbol: string) {
       body: JSON.stringify(data),
     }
   );
-  const result = res.json();
+  const result = await res.json();
   console.log(result);
 }

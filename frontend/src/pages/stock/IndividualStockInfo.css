@@ -18,6 +18,15 @@
   margin: 0;
 } */
 
+.segment-container {
+  display: flex;
+  justify-content: center;
+}
+
+.top-section {
+  margin: 0 1rem;
+}
+
 .row-1 {
   display: flex;
   justify-content: space-between;

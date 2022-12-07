@@ -41,6 +41,7 @@ const StockList: React.FC = () => {
 
   useEffect(() => {
     try {
+      window.screen.orientation.lock("portrait");
       fetch(
         `${process.env.REACT_APP_PUBLIC_URL}/stock/getUserList?userID=${userID}`
       )

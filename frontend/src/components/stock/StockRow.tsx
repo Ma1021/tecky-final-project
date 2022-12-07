@@ -47,7 +47,11 @@ const StockRow: React.FC<StockRowProps> = ({
         <div
           className={
             "stock-row-column stock-price" +
-            (priceDifference > 0 ? " positive" : " negative")
+            (priceDifference === 0
+              ? ""
+              : priceDifference > 0
+              ? " positive"
+              : " negative")
           }
         >
           {currentPrice.toFixed(3)}
@@ -55,7 +59,11 @@ const StockRow: React.FC<StockRowProps> = ({
         <div
           className={
             "stock-row-column stock-other" +
-            (priceDifference > 0 ? " positive" : " negative")
+            (priceDifference === 0
+              ? ""
+              : priceDifference > 0
+              ? " positive"
+              : " negative")
           }
         >
           <div>{((priceDifference / yesterdayPrice) * 100).toFixed(2)}%</div>

@@ -1,5 +1,6 @@
 export interface PaperTradeState {
   isUpdate: boolean;
+  isLoading: boolean;
   account: {
     user_id: number;
     market_value: number;
@@ -38,6 +39,7 @@ export interface PaperTradeState {
 
 export const initPaperTrade: PaperTradeState = {
   isUpdate: false,
+  isLoading: false,
   account: {
     user_id: 1,
     market_value: 0,

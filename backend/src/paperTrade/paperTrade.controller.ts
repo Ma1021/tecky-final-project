@@ -130,4 +130,9 @@ export class PaperTradeController {
       account,
     );
   }
+
+  @Get('/getAccountList2')
+  async getAccountList2(@Query('userID') userID: number) {
+    return await this.paperTradeService.getAccountList2(userID);
+  }
 }

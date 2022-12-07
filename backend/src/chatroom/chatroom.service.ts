@@ -261,7 +261,7 @@ export class ChatroomService {
         , chatroom_record.chatroom as chatroomId
         , chatrooms.name as chatroomName
         from chatroom_record 
-        join users on chatroom_record.user = users.idjoin chatrooms on chatroom_record.chatroom = chatrooms.id
+        join users on chatroom_record.user = users.id join chatrooms on chatroom_record.chatroom = chatrooms.id
         where chatroom_record.chatroom = ?
         order by created_at
         `,

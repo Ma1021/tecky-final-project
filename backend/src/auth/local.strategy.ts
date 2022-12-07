@@ -21,8 +21,6 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     const user = await this.authService.validateUser(email, password);
     if (!user) {
       throw new HttpException('此用戶不存在', HttpStatus.UNAUTHORIZED);
-
-      // throw new UnauthorizedException();
     }
     return user;
   }

@@ -28,6 +28,7 @@ export class UserService {
       );
       let result = await newUser;
       let rows = result.rows;
+      console.log('created user service', rows[0]);
       return rows[0];
     } catch {
       (error) => {
@@ -236,11 +237,11 @@ export class UserService {
               })
               .where('user_id', subscription.user_id)
               .andWhere('following_id', subscription.following_id)
-              .returning('id')
+              .returning('id');
 
-              const max = Math.max(...res.map(obj => obj.id))
-              
-              return [{id:max}];  
+            const max = Math.max(...res.map((obj) => obj.id));
+
+            return [{ id: max }];
           } else {
             return await this.knex('subscriptions')
               .insert(subscription)

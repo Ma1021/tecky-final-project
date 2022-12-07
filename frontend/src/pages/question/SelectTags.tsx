@@ -1,4 +1,4 @@
-import React, { useState, memo } from "react";
+import React, { useState, memo, useEffect } from "react";
 import {
   IonContent,
   IonHeader,
@@ -16,6 +16,12 @@ import {
 } from "@ionic/react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
+
+interface stock {
+  stock_name: string
+  stock_symbol: string
+  stock_id: number
+}
 
 const SelectTags: React.FC = memo(() => {
   const data = [
@@ -60,20 +66,28 @@ const SelectTags: React.FC = memo(() => {
       stock_change_percent: +0.96,
     },
   ];
-  const [tags, setTags] = useState([...data]);
-  
+  const [tags, setTags] = useState([] as Array<stock>);
+
+  useEffect(()=>{
+    fetch(`${process.env.REACT_APP_PUBLIC_URL}/question/symbol/stock`)
+    .then(response => response.json())
+    .then(json => setTags(json))
+  },[])
+
   let handelInputChange = (e: Event) => {
     let search = "";
     const target = e.target as HTMLIonSearchbarElement;
     if (target) search = target.value!.toLowerCase();
     setTags(
-      data.filter(
+      tags.filter(
         (tag) =>
           tag.stock_name.toLowerCase().includes(search) ||
           tag.stock_symbol.toLowerCase().includes(search)
       )
     );
   };
+
+  
 
   const history = useHistory();
 
@@ -89,10 +103,10 @@ const SelectTags: React.FC = memo(() => {
       </IonHeader>
       <IonContent>
         <IonSearchbar onIonChange={(e) => handelInputChange(e)}></IonSearchbar>
-        <IonText style={{ paddingLeft: 15}}>推薦股票</IonText>
-        <IonList style={{marginTop: 10}}>
+        <IonText style={{ paddingLeft: 15 }}>熱門股票</IonText>
+        <IonList>
           {tags.map((tag) => {
-            const price_color = tag.stock_change> 0 ? "#48BC89" : "#F56080";
+            // const price_color = tag.stock_change > 0 ? "#48BC89" : "#F56080";
 
             return (
               <IonGrid key={tag.stock_id}>
@@ -111,13 +125,13 @@ const SelectTags: React.FC = memo(() => {
                     <IonText>{tag.stock_name}</IonText>
                     <IonText>{tag.stock_symbol}</IonText>
                   </StockInfo>
-                  <StockPrice size="3">
+                  {/* <StockPrice size="3">
                     <IonText>$ {tag.stock_price}</IonText>
                   </StockPrice>
                   <StockChang size="3" style={{ color: price_color }}>
                     <IonText>$ {tag.stock_change}</IonText>
                     <IonText>( {tag.stock_change_percent}% )</IonText>
-                  </StockChang>
+                  </StockChang> */}
                 </StockContainer>
               </IonGrid>
             );

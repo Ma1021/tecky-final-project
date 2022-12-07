@@ -26,6 +26,7 @@ import { Area } from "react-easy-crop/types";
 import "./ChatroomForm.css";
 import getCroppedImg, { dataURLToBlob } from "../../helper/cropImage";
 import { useAppSelector } from "../../redux/store";
+import { useHistory } from "react-router";
 
 const ChatroomForm: React.FC = () => {
   // form
@@ -43,7 +44,7 @@ const ChatroomForm: React.FC = () => {
   });
   const [intro, setIntro] = useState("");
   const [present] = useIonToast();
-  const router = useIonRouter();
+  const history = useHistory();
 
   //   cropper below
   const [imageCrop, setImageCrop] = useState("");
@@ -57,7 +58,7 @@ const ChatroomForm: React.FC = () => {
   const selector = useAppSelector((state) => state?.auth?.user?.id as number);
 
   // goback to previous page
-  const goBack = () => router.goBack();
+  const goBack = () => history.goBack();
   // ()=>{router.push("/chatroomList", "forward","replace")}
 
   // create chatroom +  update data
@@ -87,7 +88,7 @@ const ChatroomForm: React.FC = () => {
         position: "bottom",
       });
 
-      router.goBack();
+      history.goBack();
     } else {
       let json = await res.json();
       present({
@@ -162,7 +163,10 @@ const ChatroomForm: React.FC = () => {
             <IonTitle className="p-0">
               <div className=" d-flex justify-content-between align-items-center w100 ">
                 <IonButtons>
-                  <IonBackButton defaultHref="/chatroomList" text="返回"></IonBackButton>
+                  <IonBackButton
+                    defaultHref="/chatroomList"
+                    text="返回"
+                  ></IonBackButton>
                 </IonButtons>
                 開設聊天室
                 <IonButtons>

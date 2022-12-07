@@ -7,7 +7,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   birthday: Date;
 
-  gender: 'M' | 'F';
+  gender: 'M' | 'F' | null;
 
   @IsNotEmpty()
   @IsEmail()

@@ -35,7 +35,7 @@ const IndividualStockInfo: React.FC = () => {
         <IonHeader>
           <IonToolbar>
             <IonButtons slot="start">
-              <IonBackButton defaultHref="/stockList"></IonBackButton>
+              <IonBackButton defaultHref="/stockList" text='返回'></IonBackButton>
             </IonButtons>
           </IonToolbar>
         </IonHeader>

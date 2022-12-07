@@ -28,7 +28,7 @@ import MyQuestion from "../../components/discuss/Myquestion";
 import Title from "../../components/All/Title";
 import Menu from "../../components/All/Menu";
 
-const Discuss: React.FC = () => {
+const Discuss: React.FC = () => {  
   const [segment, setSegment] = useState("0");
   const [keyword, setKeyword] = useState("");
   let user;
@@ -45,14 +45,14 @@ const Discuss: React.FC = () => {
   const slideOpts = {
     initialSlide: 0,
     speed: 400,
-    loop: false
+    loop: false,
   };
 
   const handleSlideChange = async (event: any) => {
     let index: number = 0;
-    await event.target.getActiveIndex().then((value: any) => (index=value));
-    setSegment(''+index)
-  }
+    await event.target.getActiveIndex().then((value: any) => (index = value));
+    setSegment("" + index);
+  };
 
   const onSegmentChange = (e: any) => {
     setSegment(e.detail.value);
@@ -99,47 +99,60 @@ const Discuss: React.FC = () => {
           </IonToolbar>
         </IonHeader>
 
-        <div className="d-flex justify-content-center">
-          <SegmentTab value={segment} onIonChange={onSegmentChange}>
-            <SegmentButton value="0">
-              <IonLabel>所有問題</IonLabel>
-            </SegmentButton>
-            <SegmentButton value="1">
-              <IonLabel>我的問題</IonLabel>
-            </SegmentButton>
-            <SegmentButton value="2">
-              <IonLabel>我的答題</IonLabel>
-            </SegmentButton>
-          </SegmentTab>
-        </div>
-
-        <div className="d-flex justify-content-center">
-          <ToolContainer>
-            <SearchBar
-              value={keyword}
-              placeholder="輸入關鍵字搜索"
-              onIonChange={handleKeywordChange}
-            ></SearchBar>
-            <QuestionBtn
-              onClick={() => {
-                history.push("/discuss/createQuestion");
-              }}
-            >
-              提出問題
-            </QuestionBtn>
-          </ToolContainer>
-        </div>
-
         <IonContent>
-          <IonSlides options={slideOpts} onIonSlideDidChange={(e) => handleSlideChange(e)} ref={slider}>
+          <div
+            style={{
+              position: "sticky",
+              top: 0,
+              zIndex: 5,
+              backgroundColor: "#111",
+            }}
+          >
+            <div className="d-flex justify-content-center">
+              <SegmentTab value={segment} onIonChange={onSegmentChange}>
+                <SegmentButton value="0">
+                  <IonLabel>所有問題</IonLabel>
+                </SegmentButton>
+                <SegmentButton value="1">
+                  <IonLabel>我的問題</IonLabel>
+                </SegmentButton>
+                <SegmentButton value="2">
+                  <IonLabel>我的答題</IonLabel>
+                </SegmentButton>
+              </SegmentTab>
+            </div>
+
+            <div className="d-flex justify-content-center">
+              <ToolContainer>
+                <SearchBar
+                  value={keyword}
+                  placeholder="輸入關鍵字搜索"
+                  onIonChange={handleKeywordChange}
+                ></SearchBar>
+                <QuestionBtn
+                  onClick={() => {
+                    history.push("/discuss/createQuestion");
+                  }}
+                >
+                  提出問題
+                </QuestionBtn>
+              </ToolContainer>
+            </div>
+          </div>
+
+          <IonSlides
+            options={slideOpts}
+            onIonSlideDidChange={(e) => handleSlideChange(e)}
+            ref={slider}
+          >
             <IonSlide>
               <Allquestion keyword={keyword} />
             </IonSlide>
             <IonSlide>
-              <MyQuestion keyword={keyword}/>
+              <MyQuestion keyword={keyword} />
             </IonSlide>
             <IonSlide>
-              <MyAnswer keyword={keyword}/>
+              <MyAnswer keyword={keyword} />
             </IonSlide>
           </IonSlides>
         </IonContent>

@@ -12,6 +12,8 @@ import {
   IonFooter,
   IonHeader,
   IonIcon,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
   IonInput,
   IonItem,
   IonModal,
@@ -42,25 +44,18 @@ import {
   QuestionContainer,
 } from "../../components/discuss/Allquestion";
 import { useSocket } from "../../helper/use-socket";
-import {
-  fetchChatroomsRecord,
-  loadChatroomsRecord,
-  loadChatroomsRecordStart,
-} from "../../redux/chatroomRecord/actions";
 import { alertCircleOutline, exitOutline, readerOutline } from "ionicons/icons";
 import { ChatroomRecord } from "../../redux/chatroomRecord/state";
-import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { useAppSelector } from "../../redux/store";
 import { ModalItem } from "../Inbox";
 import { useCounter } from "../../hooks/use-counter";
 
 const ChatroomPage: React.FC = () => {
   useCounter();
-
   // get the new message
   const [message, setMessage] = useState("");
   const [chatroomName, setChatroomName] = useState("");
   const [messageList, setMessageList] = useState<ChatroomRecord[]>([]);
-  // const dispatch = useAppDispatch();
   const [presentToast] = useIonToast();
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
@@ -68,9 +63,7 @@ const ChatroomPage: React.FC = () => {
   const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
 
-  const contentRef = createRef<HTMLIonContentElement>();
-
-  // for scroll
+  // for scroll with new nsg
   const bottomRef = useRef<HTMLDivElement>(null);
   function scrollToBottom() {
     setTimeout(() => {
@@ -91,7 +84,6 @@ const ChatroomPage: React.FC = () => {
 
   // take previous chat record and display
   useEffect(() => {
-    // console.log("do use effect");
     if (!userId) {
       presentToast({
         message: "請登入",
@@ -134,7 +126,7 @@ const ChatroomPage: React.FC = () => {
         });
       })
       .catch((error) => {
-        console.log(`failed to load, ${error}`);
+        // console.log(`failed to load, ${error}`);
         presentToast({
           message: String(error),
           duration: 15000,
@@ -144,8 +136,44 @@ const ChatroomPage: React.FC = () => {
       });
   }, [setMessageList, setLoading, roomId, userId]);
 
+  useEffect(() => {
+    setIsTop(false);
+    if (messageList.length > 0) {
+      generateItems();
+    }
+  }, [messageList]);
+
+  // for infinite scroll
+  const [is_top, setIsTop] = useState(false);
+  const [items, setItems] = useState<ChatroomRecord[]>([]);
+  const generateItems = () => {
+    const newItems = [] as any;
+    let length = messageList.length - 1;
+    if (items.length === 0) {
+      for (let i = 10; i > 0; i--) {
+        if (messageList[length - (10 - i)]) {
+          newItems.unshift(messageList[length - (10 - i)]);
+        }
+      }
+      setItems([...newItems, ...items]);
+      setTimeout(() => {
+        scrollToBottom();
+      }, 500);
+    } else {
+      for (let i = 0; i < 10; i++) {
+        if (messageList[length - (items.length + i)] !== undefined) {
+          newItems.unshift(messageList[length - (items.length + i)]);
+        } else {
+          continue;
+        }
+      }
+      setTimeout(() => {
+        setItems([...newItems, ...items]);
+      }, 500);
+    }
+  };
+
   // 開新socket
-  let count = 0;
   useSocket(
     // why: prevent join room multiple times.
     useCallback(
@@ -166,13 +194,11 @@ const ChatroomPage: React.FC = () => {
           ) {
             return;
           }
-          console.log("socket times", count++);
-          pushChatroom();
-          setMessageList((msg) => {
-            console.log("newMessage", newMessage);
-            console.log("message list", msg);
-            return [...msg, newMessage];
-          });
+          // pushChatroom();
+          // setMessageList((msg) => {
+          //   return [...msg, newMessage];
+          // });
+          setItems((items) => [...items, newMessage]);
           scrollToBottom();
           return;
         };
@@ -188,6 +214,7 @@ const ChatroomPage: React.FC = () => {
   );
 
   const sendMessage = async () => {
+    console.log("messagelist", messageList);
     let res = await fetch(
       `${process.env.REACT_APP_PUBLIC_URL}/chatroom/${roomId}/message`,
       {
@@ -267,37 +294,38 @@ const ChatroomPage: React.FC = () => {
   };
 
   // push notifications function
-  const pushChatroom = async () => {
-    const chatroomMember = await fetch(
-      `${process.env.REACT_APP_PUBLIC_URL}/chatroom/${roomId}/namelist/push`
-    );
-    const chatroomMemberJson = await chatroomMember.json();
-    const notifier_token = [];
+  // const pushChatroom = async () => {
+  //   const chatroomMember = await fetch(
+  //     `${process.env.REACT_APP_PUBLIC_URL}/chatroom/${roomId}/namelist/push`
+  //   );
+  //   const chatroomMemberJson = await chatroomMember.json();
+  //   const notifier_token = [];
+  //   if (chatroomMemberJson.length > 0) {
+  //     for (let member of chatroomMemberJson) {
+  //       if (member.push_notification_token) {
+  //         notifier_token.push(member.push_notification_token);
+  //       }
+  //     }
+  //   }
 
-    for (let member of chatroomMemberJson) {
-      if (member.push_notification_token) {
-        notifier_token.push(member.push_notification_token);
-      }
-    }
-
-    // push notification
-    if (notifier_token.length > 0) {
-      await fetch(
-        `${process.env.REACT_APP_PUBLIC_URL}/notification/push_notification`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            notification_type_id: 4,
-            actor_id: userId,
-            actor_username: userName,
-            notifiers: notifier_token,
-            content: `${chatroomName}: ${messageList[messageList.length - 1]}`,
-          }),
-        }
-      );
-    }
-  };
+  //   // push notification
+  //   if (notifier_token.length > 0) {
+  //     await fetch(
+  //       `${process.env.REACT_APP_PUBLIC_URL}/notification/push_notification`,
+  //       {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify({
+  //           notification_type_id: 4,
+  //           actor_id: userId,
+  //           actor_username: userName,
+  //           notifiers: notifier_token,
+  //           content: `${chatroomName}: ${messageList[messageList.length - 1]}`,
+  //         }),
+  //       }
+  //     );
+  //   }
+  // };
 
   return (
     <IonPage>
@@ -330,7 +358,7 @@ const ChatroomPage: React.FC = () => {
                 handleBehavior="cycle"
                 isOpen={isOpen}
               >
-                <IonContent ref={contentRef} className="ion-padding-top">
+                <IonContent className="ion-padding-top">
                   <div className="ion-margin-top">
                     <ModalItem lines="full" onClick={findNameList}>
                       <IonIcon icon={readerOutline}></IonIcon>
@@ -376,7 +404,27 @@ const ChatroomPage: React.FC = () => {
           ) : (messageList as ChatroomRecord[]).length > 0 ? (
             // if can load
             <>
-              {(messageList as ChatroomRecord[]).map((record: ChatroomRecord) =>
+              <IonInfiniteScroll
+                position="top"
+                onIonInfinite={(ev) => {
+                  if (messageList.length <= items.length) {
+                    setIsTop(true);
+                    ev.target.complete();
+                  } else {
+                    generateItems();
+                    setTimeout(() => ev.target.complete(), 500);
+                  }
+                }}
+              >
+                <IonInfiniteScrollContent></IonInfiniteScrollContent>
+              </IonInfiniteScroll>
+              {is_top && (
+                <IonText style={{ display: "block", textAlign: "center" }}>
+                  已到頂~
+                </IonText>
+              )}
+              {/* {(messageList as ChatroomRecord[]).map((record: ChatroomRecord) => */}
+              {(items as ChatroomRecord[]).map((record: ChatroomRecord) =>
                 record.userid === (userId as number) ? (
                   <ChatSendBubble key={record.recordid} props={record} />
                 ) : (
@@ -411,7 +459,6 @@ const ChatroomPage: React.FC = () => {
             <IonIcon icon={send}></IonIcon>
           </IonButton>
         </ChatReplyContainer>
-        {/* )} */}
       </IonFooter>
     </IonPage>
   );

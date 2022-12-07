@@ -44,7 +44,7 @@ const MyAnswer: React.FC<QuestionProps> = memo((props: QuestionProps) => {
   useEffect(() => {
     const word = props.keyword.replace(/\s/g, "").toLowerCase();
     if (answererQuestionList.length > 0) {
-      const keywordFilter = answererQuestionList.filter(
+      setFilteredQuestions( answererQuestionList.filter(
         (question) =>
           question.stock.some(
             (stock) =>
@@ -52,15 +52,15 @@ const MyAnswer: React.FC<QuestionProps> = memo((props: QuestionProps) => {
               stock.symbol.toLowerCase().includes(word)
           ) ||
           question.content.replace(/\s/g, "").toLowerCase().includes(word)
-      )
+      ))
 
-      setFilteredQuestions(
-        keywordFilter.filter((question)=>{
-          for(let blocked_id of blockedUserList) {
-            return question.asker_id !== blocked_id
-          }
-        })
-      )
+      // setFilteredQuestions(
+      //   keywordFilter.filter((question)=>{
+      //     for(let blocked_id of blockedUserList) {
+      //       return question.asker_id !== blocked_id
+      //     }
+      //   })
+      // )
     }
   }, [props.keyword, answererQuestionList]);
 

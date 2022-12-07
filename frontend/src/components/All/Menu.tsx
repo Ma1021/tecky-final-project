@@ -9,7 +9,6 @@ import {
   IonLabel,
   IonGrid,
   IonIcon,
-  IonButton,
   IonText,
   IonAccordion,
   IonAccordionGroup,
@@ -25,18 +24,16 @@ import {
   logOutOutline,
   trashOutline,
   statsChart,
+  people,
 } from "ionicons/icons";
 import "./Menu.css";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { logout, deleteAcc } from "../../redux/auth/actions";
-import { useState } from "react";
-// import { Redirect } from "react-router";
 
 interface MenuProps {}
 
 const Menu: React.FC<MenuProps> = () => {
   const history = useHistory();
-  const router = useIonRouter();
   const dispatch = useAppDispatch();
   const selector = useAppSelector((state) => state.auth.user);
   const [presentAlert] = useIonAlert();
@@ -57,7 +54,7 @@ const Menu: React.FC<MenuProps> = () => {
     );
 
     dispatch(logout());
-    
+
     // web version
     localStorage.removeItem("auth_stockoverflow");
 
@@ -68,7 +65,7 @@ const Menu: React.FC<MenuProps> = () => {
 
     // return <Redirect to="/home" />;
     // history.replace("/home");
-    router.push("/home", "root", "pop");
+    history.push("/home", "root");
   };
 
   const confirmDeleteAccount = () =>
@@ -119,11 +116,9 @@ const Menu: React.FC<MenuProps> = () => {
       cssClass: "alert",
       header: "提示",
       message: "功能開發中敬請期待",
-      buttons: [
-        "確定",
-      ],
+      buttons: ["確定"],
     });
-  }
+  };
 
   const toEdit = (e: any) => {
     e?.stopPropagation();
@@ -133,7 +128,7 @@ const Menu: React.FC<MenuProps> = () => {
 
   const toInfo = () => {
     console.log("toInfo");
-    router.push(`/user/${selector?.id}/info`, "forward", "push");
+    history.push(`/user/${selector?.id}/info`, "forward");
   };
 
   return (
@@ -214,14 +209,22 @@ const Menu: React.FC<MenuProps> = () => {
                     <IonIcon icon={logoWhatsapp}></IonIcon> 客戶服務
                   </IonLabel>
                 </IonItem>
-                <div className="ion-padding" slot="content" onClick={servicePending}>
+                <div
+                  className="ion-padding"
+                  slot="content"
+                  onClick={servicePending}
+                >
                   <IonMenuToggle>
-                    <div className="w100" >申請成為KOL</div>
+                    <div className="w100">申請成為KOL</div>
                   </IonMenuToggle>
                 </div>
-                <div className="ion-padding" slot="content" onClick={servicePending}>
+                <div
+                  className="ion-padding"
+                  slot="content"
+                  onClick={servicePending}
+                >
                   <IonMenuToggle>
-                    <div className="w100" >其他查詢</div>
+                    <div className="w100">其他查詢</div>
                   </IonMenuToggle>
                 </div>
               </IonAccordion>
@@ -229,7 +232,7 @@ const Menu: React.FC<MenuProps> = () => {
             <IonMenuToggle>
               <IonItem className="menu" lines="none" onClick={servicePending}>
                 <IonLabel>
-                  <IonIcon icon={settingsOutline} ></IonIcon> 系統設定
+                  <IonIcon icon={settingsOutline}></IonIcon> 系統設定
                 </IonLabel>
               </IonItem>
               {selector?.user_type === "kol" && (
@@ -237,11 +240,24 @@ const Menu: React.FC<MenuProps> = () => {
                   className="menu"
                   lines="none"
                   onClick={() =>
-                    router.push(`/analysis/${selector.id}`, "forward", "push")
+                    history.push(`/analysis/${selector!.id}`, "forward")
                   }
                 >
                   <IonLabel>
                     <IonIcon icon={statsChart}></IonIcon> 數據分析
+                  </IonLabel>
+                </IonItem>
+              )}
+              {selector?.user_type === "admin" && (
+                <IonItem
+                  className="menu"
+                  lines="none"
+                  onClick={() => {
+                    history.push(`/admin`, "forward");
+                  }}
+                >
+                  <IonLabel>
+                    <IonIcon icon={people}></IonIcon> 用戶管理
                   </IonLabel>
                 </IonItem>
               )}

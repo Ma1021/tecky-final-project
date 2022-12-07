@@ -38,6 +38,7 @@ export class QuestionService {
     inner join users on users.id = questions.asker_id
     full outer join answers on questions.id = answers.question_id
     where questions.is_ban = false
+    and answers.is_ban = false
     group by questions.id, users.id, tags.tag_id
     order by questions.created_at desc;
     `);
@@ -75,6 +76,7 @@ export class QuestionService {
       inner join users on users.id = questions.asker_id
       full outer join answers on questions.id = answers.question_id
       where questions.id = ? and questions.is_ban = false
+      and answers.is_ban = false
       group by questions.id, users.id, tags.tag_id
       order by questions.created_at desc;
       `,
@@ -114,6 +116,7 @@ export class QuestionService {
       inner join users on users.id = questions.asker_id
       full outer join answers on questions.id = answers.question_id
       where questions.asker_id = ? and questions.is_ban = false
+      and answers.is_ban = false
       group by questions.id, users.id, tags.tag_id
       order by questions.created_at desc;
     `,
@@ -202,7 +205,8 @@ export class QuestionService {
   async create(questions: Question_DTO) {
     try {      
       const { asker_id, content, stock_id } = questions;
-            
+      console.log(questions);
+      
       const tag_number = await this.knex('tags').count('tag_id').first();
 
       if (tag_number.count == 0) {

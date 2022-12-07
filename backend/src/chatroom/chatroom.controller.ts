@@ -199,10 +199,9 @@ export class ChatroomController {
     @Param('id') id: number,
     @Body() joinChatroomDto: JoinChatroomDto,
   ) {
-    console.log(joinChatroomDto);
     try {
       let result = await this.chatroomService.findChatroomName(id);
-      // console.log('enter chatroom controller find one', result);
+      console.log('enter chatroom controller find one', result);
       return result;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);

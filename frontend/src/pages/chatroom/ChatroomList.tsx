@@ -7,9 +7,11 @@ import {
   IonPage,
   IonSegment,
   IonSegmentButton,
+  IonSlide,
+  IonSlides,
   IonToolbar,
 } from "@ionic/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Title from "../../components/All/Title";
 import ChatroomRecommend from "../../components/Chatroom/ChatroomRecommend";
 import ChatroomAll from "../../components/Chatroom/ChatroomAll";
@@ -44,9 +46,22 @@ const ChatroomList: React.FC = () => {
     detail: SegmentChangeEventDetail;
   }
 
-  const onSegmentChange = (event: IonSegmentCustomEvent) => {
-    let value = event.detail.value;
-    setChatroomSegment(value || "userIntro");
+  const onSegmentChange = (e: any) => {
+    setChatroomSegment(e.detail.value);
+    slider.current!.slideTo(e.detail.value);
+  };
+
+  const slider = useRef<HTMLIonSlidesElement>(null);
+  const slideOpts = {
+    initialSlide: 0,
+    speed: 400,
+    loop: false,
+  };
+
+  const handleSlideChange = async (event: any) => {
+    let index: number = 0;
+    await event.target.getActiveIndex().then((value: any) => (index = value));
+    setChatroomSegment("" + index);
   };
 
   // get all data first
@@ -83,34 +98,63 @@ const ChatroomList: React.FC = () => {
             <Title title="聊天室" />
           </IonToolbar>
         </IonHeader>
-        <div className="d-flex justify-content-center">
-          <SegmentTab value={chatroomSegment} onIonChange={onSegmentChange}>
-            <SegmentButton value="hosted">
-              <IonLabel>主持中</IonLabel>
-            </SegmentButton>
-            <SegmentButton value="entered">
-              <IonLabel>參與中</IonLabel>
-            </SegmentButton>
-            <SegmentButton value="recommendation">
-              <IonLabel>推薦</IonLabel>
-            </SegmentButton>
-            <SegmentButton value="all">
-              <IonLabel>所有</IonLabel>
-            </SegmentButton>
-          </SegmentTab>
-        </div>
         <IonContent>
-          <IonList>
-            {chatroomSegment === "entered" ? (
-              <ChatroomEntered />
-            ) : chatroomSegment === "recommendation" ? (
-              <ChatroomRecommend />
-            ) : chatroomSegment === "hosted" ? (
-              <ChatroomHosted />
-            ) : (
-              <ChatroomAll />
-            )}
-          </IonList>
+          <div
+            style={{
+              position: "sticky",
+              top: 0,
+              zIndex: 5,
+              backgroundColor: "#111",
+            }}
+          >
+            <div className="d-flex justify-content-center">
+              <SegmentTab value={chatroomSegment} onIonChange={onSegmentChange}>
+                <SegmentButton value="hosted">
+                  <IonLabel>主持中</IonLabel>
+                </SegmentButton>
+                <SegmentButton value="entered">
+                  <IonLabel>參與中</IonLabel>
+                </SegmentButton>
+                <SegmentButton value="recommendation">
+                  <IonLabel>推薦</IonLabel>
+                </SegmentButton>
+                <SegmentButton value="all">
+                  <IonLabel>所有</IonLabel>
+                </SegmentButton>
+              </SegmentTab>
+            </div>
+          </div>
+          <div className="d-flex justify-content-center">
+            <Chatlist>
+              {chatroomSegment === "entered" ? (
+                <ChatroomEntered />
+              ) : chatroomSegment === "recommendation" ? (
+                <ChatroomRecommend />
+              ) : chatroomSegment === "hosted" ? (
+                <ChatroomHosted />
+              ) : (
+                <ChatroomAll />
+              )}
+              {/* <IonSlides
+                options={slideOpts}
+                onIonSlideDidChange={(e) => handleSlideChange(e)}
+                ref={slider}
+              >
+                <IonSlide>
+                  <ChatroomEntered />
+                </IonSlide>
+                <IonSlide>
+                  <ChatroomRecommend />
+                </IonSlide>
+                <IonSlide>
+                  <ChatroomHosted />
+                </IonSlide>
+                <IonSlide>
+                  <ChatroomAll />
+                </IonSlide>
+              </IonSlides> */}
+            </Chatlist>
+          </div>
         </IonContent>
       </IonPage>
     </>
@@ -146,5 +190,16 @@ export const SegmentOrganizer = styled.div`
     );
     --color-checked: #fff;
     font-weight: 800;
+  }
+`;
+
+export const Chatlist = styled(IonList)`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media (min-width: 768px) {
+    width: 85%;
   }
 `;

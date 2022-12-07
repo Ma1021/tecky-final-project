@@ -27,7 +27,10 @@ export class AppController {
 
   @Get('/search')
   async searchFromRedis(@Query('keyword') keyword: string) {
-    return await this.appService.searchFromRedis(keyword);
+    console.log('search');
+    let result = await this.appService.searchFromRedis(keyword);
+    console.log('result is ,', result);
+    return result;
   }
 
   @UseGuards(LocalAuthGuard)

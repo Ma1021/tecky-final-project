@@ -15,6 +15,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { LoadingScreen, QuestionContainer } from "../discuss/Allquestion";
 import ChatroomDisplayCard from "./ChatroomDisplayCard";
+import styled from "styled-components";
 
 interface ChatroomEnteredProps {
   props: ChatroomListState;
@@ -48,9 +49,9 @@ const ChatroomHosted: React.FC = () => {
 
   return (
     <>
-      <IonButton expand="block" className="ion-margin" onClick={createChat}>
+      <ButtonResponsive className="m-3" expand="block" onClick={createChat}>
         開設聊天室
-      </IonButton>
+      </ButtonResponsive>
       <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
         <IonRefresherContent pullingText="下拉更新"></IonRefresherContent>
       </IonRefresher>
@@ -86,3 +87,10 @@ const ChatroomHosted: React.FC = () => {
 };
 
 export default ChatroomHosted;
+
+const ButtonResponsive = styled(IonButton)`
+  width: 80%;
+  @media (min-width: 768px) {
+    width: 85%;
+  }
+`;

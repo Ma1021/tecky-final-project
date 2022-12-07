@@ -73,34 +73,32 @@ export class StockService {
     return valueArray;
   }
 
-  async getMinuteDataFromMongoDB(symbol: string, timeFrame: string) {
+  async getMinuteDataFromMongoAPI(symbol: string, timeFrame: string) {
     const candlestickDataArray: CandlestickData[] = [];
     const lineDataArray: LineData[] = [];
     const volumeDataArray: VolumeData[] = [];
 
-    // const MongoDB = await connectMongoDB();
-    // const result = await MongoDB.db('stocks_price_data')
-    //   .collection(symbol)
-    //   .find({})
-    //   .toArray();
-    const result = [];
+    const res = await fetch(`http://35.213.167.63/mongo/${symbol}`);
+    const oldresult = await res.json();
+    const result = oldresult.slice(0, 500);
+    console.log(result.length);
 
     result.forEach((element) => {
       const volumeColor =
-        element.Close - element.Open > 0
+        element.close - element.open > 0
           ? 'rgba(38, 166, 155, 0.5)'
           : 'rgba(239, 83, 80, 0.5)';
       candlestickDataArray.push({
-        time: element.timestamp,
-        open: element.Open,
-        high: element.High,
-        low: element.Low,
-        close: element.Close,
+        time: element.time,
+        open: element.open,
+        high: element.high,
+        low: element.low,
+        close: element.close,
       });
-      lineDataArray.push({ time: element.timestamp, value: element.Close });
+      lineDataArray.push({ time: element.time, value: element.close });
       volumeDataArray.push({
-        time: element.timestamp,
-        value: element.Volume,
+        time: element.time,
+        value: element.volume,
         color: volumeColor,
       });
     });
@@ -170,8 +168,6 @@ export class StockService {
 
     console.log('fetching getMinuteDataFromMongoDB');
 
-    // await MongoDB.close();
-
     return {
       convertedLineDataArray,
       convertedCandlestickDataArray,
@@ -221,12 +217,20 @@ export class StockService {
     );
     const result = await res.json();
 
+    console.log(result.length);
+
     result.forEach((element) => {
       const volumeColor =
         element.close - element.open > 0
           ? 'rgba(38, 166, 155, 0.5)'
           : 'rgba(239, 83, 80, 0.5)';
-      candlestickDataArray.push(element);
+      candlestickDataArray.push({
+        time: element.time,
+        high: element.high,
+        open: element.open,
+        low: element.low,
+        close: element.close,
+      });
       lineDataArray.push({ time: element.time, value: element.close });
       volumeDataArray.push({
         time: element.time,
@@ -358,7 +362,7 @@ export class StockService {
         symbol,
       );
 
-      if (isSubscribed) {
+      if (isSubscribed.subscribed) {
         await this.knex
           .delete('*')
           .from('user_stocks')
@@ -383,6 +387,7 @@ export class StockService {
         .select('*')
         .from('user_stocks')
         .where({ user_id: userID, symbol: symbol });
+      console.log(selectResult);
 
       return { subscribed: selectResult.length > 0 };
     } catch (error) {

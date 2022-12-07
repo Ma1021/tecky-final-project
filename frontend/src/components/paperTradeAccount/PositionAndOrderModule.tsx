@@ -1,6 +1,6 @@
 import { IonSegment, IonSegmentButton } from "@ionic/react";
 import { useState } from "react";
-import InProgressOrderModule from "./InProgressOrderModule";
+// import InProgressOrderModule from "./InProgressOrderModule";
 import PositionModule from "./PositionModule";
 import RecentOrderModule from "./RecentOrderModule";
 

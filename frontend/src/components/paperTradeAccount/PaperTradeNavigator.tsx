@@ -32,14 +32,14 @@ const PaperTradeNavigator: React.FC<PaperTradeNavigatorProps> = ({
           >
             訂單紀錄
           </IonButton>
-          <IonButton
+          {/* <IonButton
             className="navigation-button"
             onClick={() => {
               history.push(`/paperTradeAnalysis/${currentAccount}/${userID}`);
             }}
           >
             資產分析
-          </IonButton>
+          </IonButton> */}
         </IonButtons>
       </div>
     </>

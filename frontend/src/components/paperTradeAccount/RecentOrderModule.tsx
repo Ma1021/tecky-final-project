@@ -6,12 +6,12 @@ export interface RecentOrderType {
   id: number;
   symbol: string;
   name: string;
-  chinese_name: string;
+  chineseName: string;
   long: boolean;
-  order_price: number;
+  orderPrice: number;
   quantity: number;
-  order_place_time: string;
-  order_status: number;
+  orderPlaceTime: string;
+  orderStatus: number;
 }
 
 interface RecentOrderModuleProps {
@@ -21,25 +21,43 @@ interface RecentOrderModuleProps {
 const RecentOrderModule: React.FC<RecentOrderModuleProps> = ({
   currentAccount,
 }) => {
-  const [inProgressOrderList, setInProgressOrderList] = useState<
-    RecentOrderType[]
-  >([]);
+  const [RecentOrderList, setRecentOrderList] = useState<RecentOrderType[]>([]);
+  // const recentOrderList = useAppSelector((state) => state.paperTrade.trades);
   const isUpdate = useAppSelector((state) => state.paperTrade.isUpdate);
   const userID = 1;
 
+  // new 1 table approach
   useEffect(() => {
     fetch(
-      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getRecentOrderList?userID=${userID}&account=${currentAccount}`
+      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getFullOrderList2?userID=${userID}&account=${currentAccount}`
     )
       .then((res) => res.json())
       .then((result) => {
-        setInProgressOrderList(result);
+        const newResult = result.trades.slice(0, 6).map((obj: any) => {
+          return {
+            id: obj.id,
+            symbol: obj.symbol,
+            name: obj.name,
+            chineseName: obj.chinese_name,
+            orderPrice: obj.order_price,
+            quantity: obj.quantity,
+            orderPlaceTime: obj.order_place_time,
+            orderStatus: obj.order_status,
+          };
+        });
+        setRecentOrderList(newResult);
       });
   }, [currentAccount, isUpdate]);
 
+  // redux approach
+  // useEffect(() => {
+  //   recentOrderList.map(() => {});
+  //   setInProgressOrderList(recentOrderList);
+  // }, [recentOrderList, isUpdate]);
+
   return (
     <>
-      {inProgressOrderList.length > 0 ? (
+      {RecentOrderList.length > 0 ? (
         <table className="order-table">
           <tbody>
             <tr>
@@ -48,41 +66,47 @@ const RecentOrderModule: React.FC<RecentOrderModuleProps> = ({
               <th className="order-table-column-name">數量/價格</th>
               <th className="order-table-column-name">下單時間</th>
             </tr>
-            {inProgressOrderList.map((inProgressOrder) => (
-              <React.Fragment key={inProgressOrder.id}>
+            {RecentOrderList.map((recentOrder) => (
+              <React.Fragment key={recentOrder.id}>
                 <tr className="order-upper-row">
                   <td
                     className={
                       "order-order-type " +
-                      (inProgressOrder.long === true ? "positive" : "negative")
+                      (recentOrder.quantity > 0 ? "positive" : "negative")
                     }
                   >
-                    {inProgressOrder.long === true ? "模擬買入" : "模擬賣出"}
+                    {recentOrder.quantity > 0 ? "模擬買入" : "模擬賣出"}
                   </td>
-                  <td>{inProgressOrder.chinese_name}</td>
-                  <td>{inProgressOrder.quantity}</td>
-                  <td>{inProgressOrder.order_place_time.split("T")[0]}</td>
+                  <td>{recentOrder.chineseName}</td>
+                  <td>
+                    {recentOrder.quantity > 0
+                      ? recentOrder.quantity
+                      : -recentOrder.quantity}
+                  </td>
+                  <td>{recentOrder.orderPlaceTime.split("T")[0]}</td>
                 </tr>
                 <tr className="order-bottom-row">
                   <td
                     className={
                       "order-stock-symbol " +
-                      (inProgressOrder.order_status === 0
+                      (recentOrder.orderStatus === 0
                         ? "pending"
-                        : inProgressOrder.order_status === 1
+                        : recentOrder.orderStatus === 1
                         ? "positive"
                         : "negative")
                     }
                   >
-                    {inProgressOrder.order_status === 0
+                    {recentOrder.orderStatus === 0
                       ? "等待成交"
-                      : inProgressOrder.order_status === 1
+                      : recentOrder.orderStatus === 1
                       ? "已成交"
                       : "訂單取消"}
                   </td>
-                  <td>{inProgressOrder.symbol}</td>
-                  <td>{inProgressOrder.order_price}</td>
-                  <td>{inProgressOrder.order_place_time.split("T")[1]}</td>
+                  <td>{recentOrder.symbol}</td>
+                  <td>{recentOrder.orderPrice}</td>
+                  <td>
+                    {recentOrder.orderPlaceTime.split("T")[1].slice(0, 8)}
+                  </td>
                 </tr>
               </React.Fragment>
             ))}

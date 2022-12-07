@@ -5,4 +5,25 @@ export function paperTradeUpdate(isUpdate: boolean) {
   };
 }
 
-export type PaperTradeActionType = ReturnType<typeof paperTradeUpdate>;
+export function placeOrder(
+  userID: number,
+  symbol: string,
+  orderType: string,
+  price: number,
+  quantity: number,
+  account: string
+) {
+  return {
+    type: "PLACE_ORDER" as const,
+    userID,
+    symbol,
+    orderType,
+    price,
+    quantity,
+    account,
+  };
+}
+
+export type PaperTradeActionType =
+  | ReturnType<typeof paperTradeUpdate>
+  | ReturnType<typeof placeOrder>;

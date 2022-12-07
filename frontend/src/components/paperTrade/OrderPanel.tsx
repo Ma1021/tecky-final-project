@@ -40,7 +40,7 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ currentAccount }) => {
               setCurrentTicker(e.detail.value);
             }}
           ></IonInput>
-          <IonButton>熱門股票</IonButton>
+          {/* <IonButton>熱門股票</IonButton> */}
         </IonItem>
 
         <IonItem>
@@ -71,7 +71,7 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ currentAccount }) => {
             onIonChange={(e: any) => setOrderType(e.detail.value)}
           >
             <IonSelectOption value="fix">限價單</IonSelectOption>
-            <IonSelectOption value="current">市價單</IonSelectOption>
+            {/* <IonSelectOption value="current">市價單</IonSelectOption> */}
           </IonSelect>
         </IonItem>
 
@@ -169,6 +169,16 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ currentAccount }) => {
           className="order-confirm-button"
           onClick={() => {
             dispatch(paperTradeUpdate(isUpdate));
+            // dispatch(
+            //   placeOrder(
+            //     userID,
+            //     currentTicker.toUpperCase(),
+            //     orderDirection,
+            //     orderPrice,
+            //     quantity,
+            //     currentAccount
+            //   )
+            // );
             placeOrder(
               userID,
               currentTicker.toUpperCase(),
@@ -182,7 +192,6 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ currentAccount }) => {
           {orderDirection === "long" ? "模擬買入" : "模擬賣出"}
         </IonButton>
       </IonList>
-      <h1>{currentTicker}</h1>
     </>
   );
 };
@@ -200,13 +209,13 @@ async function placeOrder(
   const data = {
     userID,
     symbol,
-    orderType: orderDirection,
+    orderDirection,
     price,
     quantity,
     account,
   };
   const res = await fetch(
-    `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/placeOrder`,
+    `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/placeOrder3`,
     {
       method: "POST",
       headers: { "Content-type": "application/json" },

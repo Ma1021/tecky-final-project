@@ -42,23 +42,35 @@ const IndividualAccount: React.FC = () => {
     totalProfitPercentage: 0,
   });
 
+  // useEffect(() => {
+  //   fetch(
+  //     `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getIndividualAccountDetail?userID=${userID}&account=${currentAccount}`
+  //   )
+  //     .then((res) => res.json())
+  //     .then((result) => {
+  //       const principal = result[0].market_value + result[0].buying_power;
+  //       const totalProfit = principal - 1000000;
+  //       const totalProfitPercentage = (totalProfit / 1000000) * 100;
+
+  //       setAccountDetail({
+  //         principal: principal,
+  //         marketValue: result[0].market_value,
+  //         buyingPower: result[0].buying_power,
+  //         totalProfit: totalProfit,
+  //         totalProfitPercentage: totalProfitPercentage,
+  //       });
+  //     });
+  // }, [currentAccount, isUpdate]);
+
+  // new approach
   useEffect(() => {
     fetch(
-      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getIndividualAccountDetail?userID=${userID}&account=${currentAccount}`
+      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getFullOrderList2?userID=${userID}&account=${currentAccount}`
     )
       .then((res) => res.json())
       .then((result) => {
-        const principal = result[0].market_value + result[0].buying_power;
-        const totalProfit = principal - 1000000;
-        const totalProfitPercentage = (totalProfit / 1000000) * 100;
-
-        setAccountDetail({
-          principal: principal,
-          marketValue: result[0].market_value,
-          buyingPower: result[0].buying_power,
-          totalProfit: totalProfit,
-          totalProfitPercentage: totalProfitPercentage,
-        });
+        console.log(result);
+        setAccountDetail(result.accountDetail);
       });
   }, [currentAccount, isUpdate]);
 

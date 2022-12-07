@@ -74,7 +74,7 @@ export async function seed(knex: Knex): Promise<void> {
       chinese_name: '以太坊',
     },
     {
-      id: 1,
+      id: 2,
       user_id: 1,
       symbol: 'BTCUSDT',
       name: 'Bitcoin',

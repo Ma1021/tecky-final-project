@@ -16,27 +16,61 @@ export class StockService {
     return 'Hello World';
   }
 
+  async getCurrentAndYesterdayPrice(symbol: string) {
+    try {
+      const res = await fetch(
+        `http://35.213.167.63/mongo/${symbol}?period=day`,
+      );
+      const result = await res.json();
+
+      return {
+        currentPrice: result[result.length - 1].close,
+        yesterdayPrice: result[result.length - 2].close,
+      };
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+
   async getUserList(userID: string) {
     console.log('getUserList');
 
-    const result = await this.knex
-      .select([
-        'stock_info.id',
-        'user_stocks.symbol',
-        'name',
-        'chinese_name',
-        'current_price',
-        'yesterday_price',
-      ])
-      .from('user_stocks')
-      .join('stock_info', 'user_stocks.symbol', 'stock_info.symbol')
-      .where({ user_id: userID });
-    result.map((stockObj) => {
-      stockObj['price_difference'] =
-        stockObj.current_price - stockObj.yesterday_price;
-    });
+    try {
+      const stockResult = await this.knex
+        .select(['stock_info.id', 'user_stocks.symbol', 'name', 'chinese_name'])
+        .from('user_stocks')
+        .join('stock_info', 'user_stocks.symbol', 'stock_info.symbol')
+        .where({ user_id: userID });
 
-    return result;
+      for (const obj of stockResult) {
+        const { currentPrice, yesterdayPrice } =
+          await this.getCurrentAndYesterdayPrice(obj.symbol);
+        obj['current_price'] = currentPrice;
+        obj['yesterday_price'] = yesterdayPrice;
+        obj['price_difference'] = currentPrice - yesterdayPrice;
+      }
+
+      const cryptoResult = await this.knex
+        .select('id', 'symbol', 'name', 'chinese_name')
+        .from('user_cryptos')
+        .where({ user_id: userID });
+
+      for (const obj of cryptoResult) {
+        const res = await fetch(`http://35.213.167.63/mongo/${obj.symbol}`);
+        const result = await res.json();
+        const currentPrice = result[0].close,
+          yesterdayPrice = result[1].close;
+
+        obj['current_price'] = currentPrice;
+        obj['yesterday_price'] = yesterdayPrice;
+        obj['price_difference'] = currentPrice - yesterdayPrice;
+      }
+      return { stockResult, cryptoResult };
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
   }
 
   async getAllDataFromStockInfo(stockSymbol: string) {

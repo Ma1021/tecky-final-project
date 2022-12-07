@@ -892,6 +892,9 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
           {direction === "portrait" ? "橫向顯示" : "直向顯示"}
         </button>
       </div>
+          <div className="time-frame-button-container">
+          </div>
+
       <div className="indicator-button-container">
         <button
           className={"indicator " + (indicators.SMA20 ? "isClicked" : "")}

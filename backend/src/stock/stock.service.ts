@@ -7,6 +7,7 @@ import {
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nest-knexjs';
 import { Knex } from 'knex';
+import fetch from 'node-fetch';
 
 @Injectable()
 export class StockService {

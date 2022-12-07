@@ -843,340 +843,33 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
     };
   }, [isSetChart, currentChartType]);
 
-  const [ direction, setDirection] = useState('portrait')
+  const [direction, setDirection] = useState("portrait");
 
   function landscape() {
     // lock screen to straight
-    if(direction === 'portrait') {
+    if (direction === "portrait") {
       window.screen.orientation.lock("landscape");
-      setDirection('landscape');
+      setDirection("landscape");
     } else {
       window.screen.orientation.lock("portrait");
-      setDirection('portrait');
+      setDirection("portrait");
     }
   }
 
   return (
     <>
       <hr />
-      <div className="button-container-1">
-        <div className="chart-type-button-container">
-          <button
-            className={
-              "chart-type " + (currentChartType.line ? "isClicked" : "")
-            }
-            onClick={() => {
-              setCurrentChartType({ line: true, candlestick: false });
-            }}
-          >
-            Line Chart
-          </button>
+      <div className="button-container-1"></div>
+      <div className="chart-type-button-container">
+        <button
+          className={"chart-type " + (currentChartType.line ? "isClicked" : "")}
+          onClick={() => {
+            setCurrentChartType({ line: true, candlestick: false });
+          }}
+        >
+          Line Chart
+        </button>
 
-<<<<<<< HEAD
-          <button
-            className={
-              "chart-type " + (currentChartType.candlestick ? "isClicked" : "")
-            }
-            onClick={() => {
-              setCurrentChartType({ line: false, candlestick: true });
-            }}
-          >
-            Candlestick Chart
-          </button>
-        </div>
-        <div className="time-frame-button-container">
-          <button
-            className={
-              "time-frame " + (currentTimeFrame.oneMinute ? "isClicked" : "")
-            }
-            onClick={() => {
-              setTimeFrame("1m");
-              setCurrentTimeFrame({
-                oneMinute: true,
-                fiveMinutes: false,
-                tenMinutes: false,
-                fifteenMinutes: false,
-                thirtyMinutes: false,
-                oneHour: false,
-                twoHours: false,
-                fourHours: false,
-                oneDay: false,
-                oneWeek: false,
-                oneMonth: false,
-                oneYear: false,
-              });
-            }}
-          >
-            1m
-          </button>
-          <button
-            className={
-              "time-frame " + (currentTimeFrame.fiveMinutes ? "isClicked" : "")
-            }
-            onClick={() => {
-              setTimeFrame("5m");
-              setCurrentTimeFrame({
-                oneMinute: false,
-                fiveMinutes: true,
-                tenMinutes: false,
-                fifteenMinutes: false,
-                thirtyMinutes: false,
-                oneHour: false,
-                twoHours: false,
-                fourHours: false,
-                oneDay: false,
-                oneWeek: false,
-                oneMonth: false,
-                oneYear: false,
-              });
-            }}
-          >
-            5m
-          </button>
-          <button
-            className={
-              "time-frame " + (currentTimeFrame.tenMinutes ? "isClicked" : "")
-            }
-            onClick={() => {
-              setTimeFrame("10m");
-              setCurrentTimeFrame({
-                oneMinute: false,
-                fiveMinutes: false,
-                tenMinutes: true,
-                fifteenMinutes: false,
-                thirtyMinutes: false,
-                oneHour: false,
-                twoHours: false,
-                fourHours: false,
-                oneDay: false,
-                oneWeek: false,
-                oneMonth: false,
-                oneYear: false,
-              });
-            }}
-          >
-            10m
-          </button>
-          <button
-            className={
-              "time-frame " +
-              (currentTimeFrame.fifteenMinutes ? "isClicked" : "")
-            }
-            onClick={() => {
-              setTimeFrame("15m");
-              setCurrentTimeFrame({
-                oneMinute: false,
-                fiveMinutes: false,
-                tenMinutes: false,
-                fifteenMinutes: true,
-                thirtyMinutes: false,
-                oneHour: false,
-                twoHours: false,
-                fourHours: false,
-                oneDay: false,
-                oneWeek: false,
-                oneMonth: false,
-                oneYear: false,
-              });
-            }}
-          >
-            15m
-          </button>
-          <button
-            className={
-              "time-frame " +
-              (currentTimeFrame.thirtyMinutes ? "isClicked" : "")
-            }
-            onClick={() => {
-              setTimeFrame("30m");
-              setCurrentTimeFrame({
-                oneMinute: false,
-                fiveMinutes: false,
-                tenMinutes: false,
-                fifteenMinutes: false,
-                thirtyMinutes: true,
-                oneHour: false,
-                twoHours: false,
-                fourHours: false,
-                oneDay: false,
-                oneWeek: false,
-                oneMonth: false,
-                oneYear: false,
-              });
-            }}
-          >
-            30m
-          </button>
-          <button
-            className={
-              "time-frame " + (currentTimeFrame.oneHour ? "isClicked" : "")
-            }
-            onClick={() => {
-              setTimeFrame("1h");
-              setCurrentTimeFrame({
-                oneMinute: false,
-                fiveMinutes: false,
-                tenMinutes: false,
-                fifteenMinutes: false,
-                thirtyMinutes: false,
-                oneHour: true,
-                twoHours: false,
-                fourHours: false,
-                oneDay: false,
-                oneWeek: false,
-                oneMonth: false,
-                oneYear: false,
-              });
-            }}
-          >
-            1h
-          </button>
-          <button
-            className={
-              "time-frame " + (currentTimeFrame.twoHours ? "isClicked" : "")
-            }
-            onClick={() => {
-              setTimeFrame("2h");
-              setCurrentTimeFrame({
-                oneMinute: false,
-                fiveMinutes: false,
-                tenMinutes: false,
-                fifteenMinutes: false,
-                thirtyMinutes: false,
-                oneHour: false,
-                twoHours: true,
-                fourHours: false,
-                oneDay: false,
-                oneWeek: false,
-                oneMonth: false,
-                oneYear: false,
-              });
-            }}
-          >
-            2h
-          </button>
-          <button
-            className={
-              "time-frame " + (currentTimeFrame.fourHours ? "isClicked" : "")
-            }
-            onClick={() => {
-              setTimeFrame("4h");
-              setCurrentTimeFrame({
-                oneMinute: false,
-                fiveMinutes: false,
-                tenMinutes: false,
-                fifteenMinutes: false,
-                thirtyMinutes: false,
-                oneHour: false,
-                twoHours: false,
-                fourHours: true,
-                oneDay: false,
-                oneWeek: false,
-                oneMonth: false,
-                oneYear: false,
-              });
-            }}
-          >
-            4h
-          </button>
-          <button
-            className={
-              "time-frame " + (currentTimeFrame.oneDay ? "isClicked" : "")
-            }
-            onClick={() => {
-              setTimeFrame("1D");
-              setCurrentTimeFrame({
-                oneMinute: false,
-                fiveMinutes: false,
-                tenMinutes: false,
-                fifteenMinutes: false,
-                thirtyMinutes: false,
-                oneHour: false,
-                twoHours: false,
-                fourHours: false,
-                oneDay: true,
-                oneWeek: false,
-                oneMonth: false,
-                oneYear: false,
-              });
-            }}
-          >
-            1D
-          </button>
-          <button
-            className={
-              "time-frame " + (currentTimeFrame.oneWeek ? "isClicked" : "")
-            }
-            onClick={() => {
-              setTimeFrame("1W");
-              setCurrentTimeFrame({
-                oneMinute: false,
-                fiveMinutes: false,
-                tenMinutes: false,
-                fifteenMinutes: false,
-                thirtyMinutes: false,
-                oneHour: false,
-                twoHours: false,
-                fourHours: false,
-                oneDay: false,
-                oneWeek: true,
-                oneMonth: false,
-                oneYear: false,
-              });
-            }}
-          >
-            1W
-          </button>
-          <button
-            className={
-              "time-frame " + (currentTimeFrame.oneMonth ? "isClicked" : "")
-            }
-            onClick={() => {
-              setTimeFrame("1M");
-              setCurrentTimeFrame({
-                oneMinute: false,
-                fiveMinutes: false,
-                tenMinutes: false,
-                fifteenMinutes: false,
-                thirtyMinutes: false,
-                oneHour: false,
-                twoHours: false,
-                fourHours: false,
-                oneDay: false,
-                oneWeek: false,
-                oneMonth: true,
-                oneYear: false,
-              });
-            }}
-          >
-            1M
-          </button>
-          <button
-            className={
-              "time-frame " + (currentTimeFrame.oneYear ? "isClicked" : "")
-            }
-            onClick={() => {
-              setTimeFrame("1Y");
-              setCurrentTimeFrame({
-                oneMinute: false,
-                fiveMinutes: false,
-                tenMinutes: false,
-                fifteenMinutes: false,
-                thirtyMinutes: false,
-                oneHour: false,
-                twoHours: false,
-                fourHours: false,
-                oneDay: false,
-                oneWeek: false,
-                oneMonth: false,
-                oneYear: true,
-              });
-            }}
-          >
-            1Y
-          </button>
-        </div>
-=======
         <button
           className={
             "chart-type " + (currentChartType.candlestick ? "isClicked" : "")
@@ -1187,10 +880,17 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
         >
           Candlestick Chart
         </button>
-        <button style={{background:'var(--ion-color-primary)', color:'#fff', fontWeight:500, borderRadius:5}} onClick={landscape}>
-          {direction === 'portrait' ? '橫向顯示' : '直向顯示'}
+        <button
+          style={{
+            background: "var(--ion-color-primary)",
+            color: "#fff",
+            fontWeight: 500,
+            borderRadius: 5,
+          }}
+          onClick={landscape}
+        >
+          {direction === "portrait" ? "橫向顯示" : "直向顯示"}
         </button>
->>>>>>> 154cbaa3286fbb1211b010586b2ca9cda9b38177
       </div>
       <div className="indicator-button-container">
         <button

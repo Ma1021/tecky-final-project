@@ -68,7 +68,6 @@ const Navigation: React.FC = () => {
 
   return (
     <IonReactRouter>
-      {/* <Menu /> */}
       <IonRouterOutlet>
         <Route exact path="/register" component={Register}></Route>
         <Route exact path="/login" component={Login}></Route>
@@ -118,7 +117,7 @@ const Navigation: React.FC = () => {
         <Route exact path="/redirect">
           <Redirect to="/discuss" />
         </Route>
-
+      
         <IonTabs>
           <IonRouterOutlet>
             <Route

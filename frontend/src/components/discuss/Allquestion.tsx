@@ -3,6 +3,9 @@ import {
   IonRefresherContent,
   RefresherEventDetail,
   IonSpinner,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
+  IonText,
 } from "@ionic/react";
 import { memo, useEffect, useState } from "react";
 import styled from "styled-components";
@@ -52,7 +55,7 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
   const { questionList, loading } = useAppSelector(
     (state) => state.question
   );
-  const { blockedUserList } = useAppSelector((state)=> state.block);
+  // const { blockedUserList } = useAppSelector((state)=> state.block);
   let user_id: number;
 
   if (localStorage.getItem("auth_stockoverflow")) {
@@ -62,7 +65,8 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
     user_id = user.id;
   }
 
-  const [filteredQuestions, setFilteredQuestions] = useState(Array<Questions>);
+  // const [filteredQuestions, setFilteredQuestions] = useState(Array<Questions>);
+  const [keywordFilter, setKeywordFilter] = useState(Array<Questions>);
 
   const dispatch = useAppDispatch();
 
@@ -76,24 +80,44 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
   useEffect(() => {
     const word = props.keyword.replace(/\s/g, "").toLowerCase();
     
-    const keywordFilter = questionList.filter(
+    setKeywordFilter(questionList.filter(
         (question) =>
           question.stock.some(
             (stock) =>
               stock.name.replace(/\s/g, "").toLowerCase().includes(word) ||
               stock.symbol.toLowerCase().includes(word)
           ) || question.content.replace(/\s/g, "").toLowerCase().includes(word)
-    )
+    ))
     
-    setFilteredQuestions(
-      keywordFilter.filter((question)=>{
-        for(let blocked_id of blockedUserList) {
-          return question.asker_id !== blocked_id
-        }
-      })
-    )
-    
+    // setFilteredQuestions(
+    //   keywordFilter.filter((question)=>{
+    //     for(let blocked_id of blockedUserList) {
+    //       return question.asker_id !== blocked_id
+    //     }
+    //   })
+    // )
+
   }, [props.keyword, questionList]);
+
+  useEffect(()=>{
+    if(keywordFilter.length > 0) {
+      generateItems();
+    }
+  },[keywordFilter])
+
+  // infiniteScroll
+  const [items, setItems] = useState<Array<Questions>>([]);
+  const [ is_bottom, setIsBottom ] = useState(false);
+  const generateItems = () => {
+    const newItems = [] as any;
+    for (let i = 0; i < 5; i++) {
+      if(keywordFilter[items.length + i]) {
+        newItems.push(keywordFilter[items.length + i]);
+      }
+    }
+
+    setTimeout(()=> setItems([...items, ...newItems]), 500);
+  };  
 
   return (
     <>
@@ -109,12 +133,26 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
           {questionList.length > 0 ? (
             <QuestionCard
               questions={
-                filteredQuestions.length > 0 ? filteredQuestions : questionList
+                items.length > 0 ? items : questionList
               }
             />
           ) : (
             <div style={{ marginTop: 10 }}>沒有問題</div>
           )}
+          {is_bottom && <IonText style={{marginTop:20}}>已到底~</IonText>}
+          <IonInfiniteScroll
+            onIonInfinite={(ev)=>{
+              if(keywordFilter.length <= items.length ) {
+                setIsBottom(true);
+                ev.target.complete();
+              } else {
+                generateItems();
+                setTimeout(()=> ev.target.complete(), 500);
+              }
+            }}
+          >
+            <IonInfiniteScrollContent></IonInfiniteScrollContent>
+          </IonInfiniteScroll>
         </QuestionContainer>
       )}
     </>

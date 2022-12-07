@@ -102,7 +102,6 @@ const QuestionCard: React.FC<QuestionsProps> = memo((props: QuestionsProps) => {
               )}
 
               <AnswerAmount>
-                <IonText style={{fontSize:12, color:'#999', marginRight:10}}>舉報</IonText>
                 <IonIcon icon={chatboxEllipses} />
                 <IonText>{reverseAnswer.length}</IonText>
               </AnswerAmount>

@@ -14,7 +14,7 @@ import {
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { useAppDispatch } from "../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import {
   loadAnswererQuestions,
   loadAskerQuestions,
@@ -33,6 +33,9 @@ const Discuss: React.FC = () => {
   const [keyword, setKeyword] = useState("");
   let user;
   let user_id: number;
+  const { questionList, loading } = useAppSelector(
+    (state) => state.question
+  );
 
   if (localStorage.getItem("auth_stockoverflow") !== null) {
     user =

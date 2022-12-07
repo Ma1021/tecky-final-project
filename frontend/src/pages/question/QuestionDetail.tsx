@@ -15,7 +15,8 @@ import {
   IonFooter,
   IonSpinner,
   useIonToast,
-  useIonAlert
+  useIonAlert,
+  IonChip
 } from "@ionic/react";
 import { memo, useCallback, useEffect, useState } from "react";
 import { useLocation, useHistory } from "react-router-dom";
@@ -438,9 +439,9 @@ const QuestionDetail: React.FC = memo(() => {
               {question.stock.map((stock) => {
                 if (stock) {
                   return (
-                    <IonText className="stockTag" key={stock.id}>
+                    <IonChip className="stockTag" key={stock.id}>
                       #{stock.symbol}
-                    </IonText>
+                    </IonChip>
                   );
                 }
               })}
@@ -616,7 +617,9 @@ const ContentContainer = styled.div`
     margin-top: 1rem;
 
     .stockTag {
+      margin:0;
       padding: 0.3rem 0.6rem;
+      height: 1.8rem;
       border-radius: 0.9rem;
       text-align: center;
       background-image: linear-gradient(

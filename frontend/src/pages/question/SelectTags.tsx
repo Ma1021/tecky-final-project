@@ -61,7 +61,7 @@ const SelectTags: React.FC = memo(() => {
     },
   ];
   const [tags, setTags] = useState([...data]);
-
+  
   let handelInputChange = (e: Event) => {
     let search = "";
     const target = e.target as HTMLIonSearchbarElement;
@@ -89,10 +89,10 @@ const SelectTags: React.FC = memo(() => {
       </IonHeader>
       <IonContent>
         <IonSearchbar onIonChange={(e) => handelInputChange(e)}></IonSearchbar>
-        <IonText style={{ paddingLeft: 15 }}>熱門股票</IonText>
-        <IonList>
+        <IonText style={{ paddingLeft: 15}}>推薦股票</IonText>
+        <IonList style={{marginTop: 10}}>
           {tags.map((tag) => {
-            const price_color = tag.stock_change > 0 ? "#48BC89" : "#F56080";
+            const price_color = tag.stock_change> 0 ? "#48BC89" : "#F56080";
 
             return (
               <IonGrid key={tag.stock_id}>

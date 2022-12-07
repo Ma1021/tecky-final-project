@@ -841,6 +841,19 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
     };
   }, [isSetChart, currentChartType]);
 
+  const [ direction, setDirection] = useState('portrait')
+
+  function landscape() {
+    // lock screen to straight
+    if(direction === 'portrait') {
+      window.screen.orientation.lock("landscape");
+      setDirection('landscape');
+    } else {
+      window.screen.orientation.lock("portrait");
+      setDirection('portrait');
+    }
+  }
+
   return (
     <>
       <hr />
@@ -864,6 +877,9 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
           }}
         >
           Candlestick Chart
+        </button>
+        <button style={{background:'var(--ion-color-primary)', color:'#fff', fontWeight:500, borderRadius:5}} onClick={landscape}>
+          {direction === 'portrait' ? '橫向顯示' : '直向顯示'}
         </button>
       </div>
       <div className="time-frame-button-container">

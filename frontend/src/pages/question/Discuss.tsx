@@ -28,9 +28,7 @@ import MyQuestion from "../../components/discuss/Myquestion";
 import Title from "../../components/All/Title";
 import Menu from "../../components/All/Menu";
 
-const Discuss: React.FC = () => {
-  // unlock the orientation
-  window.screen.orientation.unlock();
+const Discuss: React.FC = () => {  
   const [segment, setSegment] = useState("0");
   const [keyword, setKeyword] = useState("");
   let user;

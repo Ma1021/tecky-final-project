@@ -257,11 +257,16 @@ export const deleteAnswer = createAsyncThunk<Question, {question_id: number, ans
             body: JSON.stringify({answer_id:+data.answer_id, user_id:data.user_id})
         })
 
+        console.log('delete like');
+        
         const res: Response = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/answer/${data.answer_id}`, {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' }
         })
         const json = await res.json();
+
+
+        console.log('delete answer');
 
         thunkAPI.dispatch(loadQuestion(data.question_id));
         thunkAPI.dispatch(loadQuestions());
@@ -272,6 +277,8 @@ export const deleteAnswer = createAsyncThunk<Question, {question_id: number, ans
             headers: { 'Content-Type': 'application/json' },
             body:JSON.stringify({target_id: +data.answer_id, target_type_id: 2})
         })        
+
+        console.log('delete notification');
 
         return json[0];
       } catch (err) {

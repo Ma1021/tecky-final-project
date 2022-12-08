@@ -23,7 +23,7 @@ export class AnswerService {
         try {
             // delete likes
             await this.knex('ans_likes').where('answer_id', +answer_id).del();
-
+            
             return await this.knex('answers').where('id', +answer_id).del();
         } catch(err) {
             console.log(err);

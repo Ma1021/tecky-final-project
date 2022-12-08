@@ -57,7 +57,7 @@ const QuestionDetail: React.FC = memo(() => {
   const user_id = +user.id;
   const { blockedUserList } = useAppSelector((state)=> state.block);
   const [answerFilter, setAnswerFilter] = useState([] as any)
-
+  
   useEffect(() => {
     if (!question_id) return;
     dispatch(loadQuestion(+question_id));
@@ -156,7 +156,8 @@ const QuestionDetail: React.FC = memo(() => {
           text: "確定",
           handler: () =>
             dispatch(deleteAnswer(obj)).then(() => {
-              toastPresent("刪除回應成功", 1500);
+              toastPresent("刪除回應成功", 1500)
+              dispatch(loadQuestion(+question.id));
             }),
         },
       ],

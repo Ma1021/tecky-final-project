@@ -49,6 +49,22 @@ export async function seed(knex: Knex): Promise<void> {
       current_price: 300,
       yesterday_price: 250,
     },
+    {
+      id: 6,
+      symbol: 'ETHUSDT',
+      name: 'Ethereum',
+      chinese_name: '以太幣',
+      current_price: 300,
+      yesterday_price: 250,
+    },
+    {
+      id: 7,
+      symbol: 'BTCUSDT',
+      name: 'Bitcoin',
+      chinese_name: '比特幣',
+      current_price: 300,
+      yesterday_price: 250,
+    },
   ]);
 
   await knex('user_stocks').insert([

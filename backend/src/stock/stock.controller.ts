@@ -28,7 +28,7 @@ export class StockController {
   async getIntraDayDataFromMongoDB(@Query('symbol') symbol: string) {
     return await this.stockService.getIntraDayDataFromMongoDB(symbol);
   }
-  
+
   @Get('/getMinuteDataFromMongoAPI')
   async getMinuteDataFromMongoAPI(
     @Query('symbol') symbol: string,
@@ -71,6 +71,12 @@ export class StockController {
   ) {
     return await this.stockService.getCryptoDataFromMongoAPI(symbol, timeFrame);
   }
+
+  @Get('/getHighLowFromMongoAPI')
+  async getHighLowFromMongoAPI(@Query('symbol') symbol: string) {
+    return await this.stockService.getHighLowFromMongoAPI(symbol);
+  }
+
   // @Get('kafka-test')
   // testKafka() {
   //   return this.client.emit('medium.rocks', {

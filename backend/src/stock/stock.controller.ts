@@ -64,8 +64,11 @@ export class StockController {
   }
 
   @Get('/getCryptoDataFromMongoAPI')
-  async getCryptoDataFromMongoAPI(@Query('symbol') symbol: string) {
-    return await this.stockService.getCryptoDataFromMongoAPI(symbol);
+  async getCryptoDataFromMongoAPI(
+    @Query('symbol') symbol: string,
+    @Query('timeFrame') timeFrame: string,
+  ) {
+    return await this.stockService.getCryptoDataFromMongoAPI(symbol, timeFrame);
   }
   // @Get('kafka-test')
   // testKafka() {

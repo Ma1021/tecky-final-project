@@ -28,6 +28,7 @@ export class StockController {
   async getIntraDayDataFromMongoDB(@Query('symbol') symbol: string) {
     return await this.stockService.getIntraDayDataFromMongoDB(symbol);
   }
+  
   @Get('/getMinuteDataFromMongoAPI')
   async getMinuteDataFromMongoAPI(
     @Query('symbol') symbol: string,

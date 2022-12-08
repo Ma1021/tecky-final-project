@@ -360,12 +360,8 @@ const QuestionDetail: React.FC = memo(() => {
     handleReport(url, status, obj);
   }
 
-  function hideTabs() {
-    const tabsEl = document.querySelector('ion-tab-bar');
-    if (tabsEl) {
-      tabsEl.hidden = true;
-    }
-  }
+  const path = history.location.pathname
+  const url = `${process.env.REACT_APP_PUBLIC_URL}${path}`
   
   // export function showTabs() {
   //   const tabsEl = document.querySelector('ion-tab-bar');
@@ -452,7 +448,7 @@ const QuestionDetail: React.FC = memo(() => {
               <IonIcon icon={chatboxEllipses} />
               <IonText style={{ fontSize: 14 }}>{question.answer !== null ? question.answer.length : 0}</IonText>
             </div>
-            <WhatsappShareButton url="分享問題： https://google.com">
+            <WhatsappShareButton url={`分享問題： ${url}`}>
               <IonIcon icon={shareSocial}></IonIcon>
             </WhatsappShareButton>
           </div>

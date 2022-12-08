@@ -90,9 +90,9 @@ const StockList: React.FC = () => {
             <SegmentButton value="watchList">
               <IonLabel>自選</IonLabel>
             </SegmentButton>
-            <SegmentButton value="crypto">
+            {/* <SegmentButton value="crypto">
               <IonLabel>Crypto</IonLabel>
-            </SegmentButton>
+            </SegmentButton> */}
             <SegmentButton value="all">
               <IonLabel>所有股票</IonLabel>
             </SegmentButton>

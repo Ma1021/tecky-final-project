@@ -8,9 +8,10 @@ import {
   IonSegment,
   IonSegmentButton,
   IonLabel,
+  IonRefresher,
 } from "@ionic/react";
 import { useState } from "react";
-import { useLocation } from "react-router";
+import { useHistory, useLocation } from "react-router";
 import MainChart from "../../components/stock/MultipleSeriesChart";
 import StockForum from "../../components/stock/StockForum";
 import StockNews from "../../components/stock/StockNews";
@@ -28,6 +29,10 @@ const IndividualStockInfo: React.FC = () => {
   const onSegmentChange = (e: any) => {
     setSegment(e.detail.value);
   };
+
+  function refresh() {
+    window.location.reload();
+  }
 
   return (
     <>
@@ -65,6 +70,7 @@ const IndividualStockInfo: React.FC = () => {
         </div>
 
         <IonContent>
+          <IonRefresher slot="fixed" onIonRefresh={refresh}></IonRefresher>
           {segment === "stockInfo" && (
             <>
               <div className="stock-info-section">

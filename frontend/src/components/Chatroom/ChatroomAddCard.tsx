@@ -71,7 +71,7 @@ const ChatroomAddCard: React.FC<ChatroomAddCardProps> = (props) => {
                 }}
               />
             </IonAvatar>
-            <div
+            {/* <div
               className="d-flex flex-row align-items-center justify-content-end"
               style={{
                 boxSizing: "border-box",
@@ -96,7 +96,7 @@ const ChatroomAddCard: React.FC<ChatroomAddCardProps> = (props) => {
               >
                 {(props.props.member_count as number) + 1}
               </span>
-            </div>
+            </div> */}
           </div>
           <div style={{ flexGrow: 1 }}>
             <IonCardHeader className="d-flex flex-row align-items-center">

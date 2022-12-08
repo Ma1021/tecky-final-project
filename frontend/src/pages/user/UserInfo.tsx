@@ -120,7 +120,7 @@ const UserInfo: React.FC = () => {
   }, [setUserData]);
 
   const toEdit = (e: any) => {
-    e?.stopPropagation();
+    // e?.stopPropagation();
     history.push(`/user/${user_id as number}/edit`);
   };
 

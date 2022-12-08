@@ -64,7 +64,7 @@ const ChatroomDisplayCard: React.FC<ChatroomDisplayCardProps> = (props) => {
                 // backgroundColor: "red",
               }}
             >
-              <IonIcon
+              {/* <IonIcon
                 style={{ fontSize: "16px" }}
                 icon={people}
                 className="pr-1"
@@ -77,7 +77,7 @@ const ChatroomDisplayCard: React.FC<ChatroomDisplayCardProps> = (props) => {
                 }}
               >
                 {(props.props.member_count as number) + 1}
-              </span>
+              </span> */}
             </div>
           </div>
           <div className="d-flex flex-column" style={{ flexGrow: 1 }}>

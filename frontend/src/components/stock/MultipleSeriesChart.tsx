@@ -584,8 +584,8 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol, refresh }) => {
         to: range.to - 6,
       });
       MACDChart?.timeScale().setVisibleLogicalRange({
-        from: range.from - 24,
-        to: range.to - 24,
+        from: range.from - 25,
+        to: range.to - 25,
       });
     });
 

@@ -77,6 +77,11 @@ export class StockController {
     return await this.stockService.getHighLowFromMongoAPI(symbol);
   }
 
+  @Get('/getCryptoAllDataFromMongoAPI')
+  async getCryptoAllDataFromMongoAPI(@Query('symbol') symbol: string) {
+    return await this.stockService.getCryptoAllDataFromMongoAPI(symbol);
+  }
+
   // @Get('kafka-test')
   // testKafka() {
   //   return this.client.emit('medium.rocks', {

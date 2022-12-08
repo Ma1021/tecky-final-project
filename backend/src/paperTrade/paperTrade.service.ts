@@ -432,10 +432,23 @@ export class PaperTradeService {
   }
 
   async getCurrentPrice(symbol: string) {
-    const res = await fetch(`http://35.213.167.63/mongo/${symbol}?period=day`);
-    const result = await res.json();
+    try {
+      const res = await fetch(
+        `http://35.213.167.63/mongo/${symbol}?period=day`,
+      );
+      const result = await res.json();
 
-    return result[result.length - 1].close;
+      let currentPrice = undefined;
+
+      result['detail'] === 'Not Found'
+        ? (currentPrice = 0)
+        : (currentPrice = result[result.length - 1].close);
+
+      return currentPrice;
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
   }
 
   async getStockName(symbol: string) {
@@ -629,116 +642,137 @@ export class PaperTradeService {
 
   // new
   async getFullOrderList2(userID: number, account: string) {
-    const result = await this.knex
-      .select(
-        'trade_records.id',
-        'account',
-        'name',
-        'chinese_name',
-        'order_place_time',
-        'order_price',
-        'order_status',
-        'trade_records.symbol',
-        'quantity',
-        'order_market_value',
-      )
-      .from('trade_records')
-      .join('stock_info', 'trade_records.symbol', 'stock_info.symbol')
-      .where({ user_id: userID, account: account })
-      .orderBy('order_place_time', 'desc');
+    try {
+      console.log('userID', userID, 'account', account);
 
-    const symbolMap = new Map();
-    for (const obj of result) {
-      symbolMap.set(obj.symbol, true);
-    }
+      const result = await this.knex
+        .select(
+          'trade_records.id',
+          'account',
+          'name',
+          'chinese_name',
+          'order_place_time',
+          'order_price',
+          'order_status',
+          'trade_records.symbol',
+          'quantity',
+          'order_market_value',
+        )
+        .from('trade_records')
+        .join('stock_info', 'trade_records.symbol', 'stock_info.symbol')
+        .where({ user_id: userID, account: account })
+        .orderBy('order_place_time', 'desc');
 
-    const initPrincipal = 1000000;
-    const positions = [];
+      const initPrincipal = 1000000;
+      const positions = [];
 
-    let currentTotalMarketValue = 0,
-      buyingPower = initPrincipal;
+      if (result.length === 0) {
+        return {
+          accountDetail: {
+            principal: initPrincipal,
+            marketValue: 0,
+            buyingPower: initPrincipal,
+            totalProfit: 0,
+            totalProfitPercentage: 0,
+          },
+          positions,
+          trades: result,
+        };
+      }
 
-    for (const symbol of symbolMap.keys()) {
-      const currentPrice = await this.getCurrentPrice(symbol);
-      const quantity = (
-        await this.knex
-          .select(this.knex.raw('SUM(quantity)'))
-          .from('trade_records')
-          .where({ symbol: symbol })
-      )[0];
-
-      currentTotalMarketValue += currentPrice * quantity.sum;
-    }
-
-    for (const symbol of symbolMap.keys()) {
-      let id = 0,
-        cost = 0,
-        quantity = 0,
-        name = '',
-        chineseName = '',
-        currentStockMarketValue = 0,
-        orderStockMarketValue = 0,
-        currentPrice = 0,
-        profit = 0,
-        profitPercentage = 0,
-        ratio = 0,
-        totalQuantity = 0,
-        stockOrderMarketValue = 0;
-
+      const symbolMap = new Map();
       for (const obj of result) {
-        if (obj.symbol === symbol) {
-          id = obj.id;
-          name = obj.name;
-          chineseName = obj.chinese_name;
-          currentPrice = await this.getCurrentPrice(symbol);
-          totalQuantity += obj.quantity;
-          stockOrderMarketValue += obj.order_market_value;
+        symbolMap.set(obj.symbol, true);
+      }
+
+      let currentTotalMarketValue = 0,
+        buyingPower = initPrincipal;
+
+      for (const symbol of symbolMap.keys()) {
+        const currentPrice = await this.getCurrentPrice(symbol);
+        const quantity = (
+          await this.knex
+            .select(this.knex.raw('SUM(quantity)'))
+            .from('trade_records')
+            .where({ symbol: symbol })
+        )[0];
+
+        currentTotalMarketValue += currentPrice * quantity.sum;
+      }
+
+      for (const symbol of symbolMap.keys()) {
+        let id = 0,
+          cost = 0,
+          quantity = 0,
+          name = '',
+          chineseName = '',
+          currentStockMarketValue = 0,
+          orderStockMarketValue = 0,
+          currentPrice = 0,
+          profit = 0,
+          profitPercentage = 0,
+          ratio = 0,
+          totalQuantity = 0,
+          stockOrderMarketValue = 0;
+
+        for (const obj of result) {
+          if (obj.symbol === symbol) {
+            id = obj.id;
+            name = obj.name;
+            chineseName = obj.chinese_name;
+            currentPrice = await this.getCurrentPrice(symbol);
+            totalQuantity += obj.quantity;
+            stockOrderMarketValue += obj.order_market_value;
+          }
         }
+
+        buyingPower += stockOrderMarketValue;
+        cost = stockOrderMarketValue / totalQuantity;
+
+        quantity = totalQuantity;
+        orderStockMarketValue = cost * quantity;
+        currentStockMarketValue = currentPrice * quantity;
+        profit = currentStockMarketValue - orderStockMarketValue;
+        profitPercentage = (profit / orderStockMarketValue) * 100;
+        ratio = (currentStockMarketValue / currentTotalMarketValue) * 100;
+
+        if (quantity === 0) {
+          continue;
+        }
+
+        positions.push({
+          id,
+          name,
+          chineseName,
+          symbol,
+          currentMarketValue: currentStockMarketValue,
+          currentPrice,
+          quantity,
+          cost,
+          profit,
+          profitPercentage,
+          ratio,
+        });
       }
 
-      buyingPower += stockOrderMarketValue;
-      cost = stockOrderMarketValue / totalQuantity;
-
-      quantity = totalQuantity;
-      orderStockMarketValue = cost * quantity;
-      currentStockMarketValue = currentPrice * quantity;
-      profit = currentStockMarketValue - orderStockMarketValue;
-      profitPercentage = (profit / orderStockMarketValue) * 100;
-      ratio = (currentStockMarketValue / currentTotalMarketValue) * 100;
-
-      if (ratio === 0) {
-        continue;
-      }
-
-      positions.push({
-        id,
-        name,
-        chineseName,
-        symbol,
-        currentMarketValue: currentStockMarketValue,
-        currentPrice,
-        quantity,
-        cost,
-        profit,
-        profitPercentage,
-        ratio,
-      });
+      return {
+        accountDetail: {
+          principal: currentTotalMarketValue + buyingPower,
+          marketValue: currentTotalMarketValue,
+          buyingPower,
+          totalProfit: currentTotalMarketValue + buyingPower - initPrincipal,
+          totalProfitPercentage:
+            ((currentTotalMarketValue + buyingPower - initPrincipal) /
+              initPrincipal) *
+            100,
+        },
+        positions,
+        trades: result,
+      };
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
     }
-
-    return {
-      accountDetail: {
-        principal: currentTotalMarketValue + buyingPower,
-        marketValue: currentTotalMarketValue,
-        buyingPower,
-        totalProfit: currentTotalMarketValue + buyingPower - initPrincipal,
-        totalProfitPercentage:
-          ((currentTotalMarketValue + buyingPower - initPrincipal) /
-            initPrincipal) *
-          100,
-      },
-      positions,
-      trades: result,
-    };
   }
 
   async placeOrder3(

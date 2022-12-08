@@ -72,13 +72,6 @@ const UserInfo: React.FC = () => {
     .replace("/user/", "")
     .replace("/info", "");
 
-  // console.log("userIdUrl", userIdUrl);
-  // console.log("blockList initiate in userInfo", blockList);
-  // console.log(
-  //   "blockList initiate, block true false",
-  //   blockList.includes(+userIdUrl)
-  // );
-
   const user_id = useAppSelector((state) => {
     return state.auth?.user?.id;
   });
@@ -211,17 +204,17 @@ const UserInfo: React.FC = () => {
       <IonHeader className="ion-no-border">
         <IonToolbar>
           <IonTitle className="p-0">
-            <div className=" d-flex justify-content-round align-items-center w100 h100">
+            <div className=" d-flex justify-content-between align-items-center w100 h100">
               <IonButtons>
                 <IonBackButton
                   defaultHref="/discuss"
                   text="返回"
                 ></IonBackButton>
               </IonButtons>
-              <IonSearchbar
+              {/* <IonSearchbar
                 className="pt-0 pb-0 ion-margin"
                 onClick={() => history.push("/search")}
-              ></IonSearchbar>
+              ></IonSearchbar> */}
               {+userIdUrl === (user_id as number) ? (
                 <Notification />
               ) : (

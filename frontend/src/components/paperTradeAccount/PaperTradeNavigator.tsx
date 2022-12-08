@@ -1,5 +1,6 @@
 import { IonButtons, IonButton } from "@ionic/react";
 import { useHistory } from "react-router";
+import { useAppSelector } from "../../redux/store";
 import "./PaperTradeNavigator.css";
 
 interface PaperTradeNavigatorProps {
@@ -10,7 +11,7 @@ const PaperTradeNavigator: React.FC<PaperTradeNavigatorProps> = ({
   currentAccount,
 }) => {
   const history = useHistory();
-  const userID = 1;
+  const userID = useAppSelector((state) => state.auth.user!.id);
 
   return (
     <>

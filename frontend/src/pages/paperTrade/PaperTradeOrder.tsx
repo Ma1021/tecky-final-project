@@ -8,15 +8,19 @@ import {
   IonSelect,
   IonSelectOption,
   IonButtons,
+  IonButton,
   IonBackButton,
+  IonIcon,
   IonTitle,
 } from "@ionic/react";
+import { chevronBackOutline } from "ionicons/icons";
 import { useState } from "react";
-import { useLocation } from "react-router";
+import { useHistory, useLocation } from "react-router";
 import OrderPanel from "../../components/paperTrade/OrderPanel";
 import PositionAndOrderModule from "../../components/paperTradeAccount/PositionAndOrderModule";
 
 const PaperTradeOrder: React.FC = () => {
+  const history = useHistory();
   const location = useLocation();
   const account =
     location.pathname.split("/")[location.pathname.split("/").length - 1];
@@ -35,11 +39,19 @@ const PaperTradeOrder: React.FC = () => {
         >
           <IonToolbar>
             <IonButtons slot="start">
-              <IonBackButton
+              <IonButton
+                onClick={() => {
+                  history.replace(`/individualAccount/${currentAccount}`);
+                }}
+              >
+                <IonIcon icon={chevronBackOutline} />
+                Back
+              </IonButton>
+              {/* <IonBackButton
                 defaultHref={`/individualAccount/${currentAccount}`}
               >
                 Back
-              </IonBackButton>
+              </IonBackButton> */}
             </IonButtons>
             <IonTitle>模擬交易</IonTitle>
           </IonToolbar>

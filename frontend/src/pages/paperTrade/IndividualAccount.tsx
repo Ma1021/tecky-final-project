@@ -10,6 +10,7 @@ import {
   IonButtons,
   IonBackButton,
   IonTitle,
+  IonLoading,
 } from "@ionic/react";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router";
@@ -31,8 +32,9 @@ const IndividualAccount: React.FC = () => {
   const [currentAccount, setCurrentAccount] = useState(
     location.pathname.split("/")[location.pathname.split("/").length - 1]
   );
+  const [isLoading, setIsLoading] = useState(true);
   const isUpdate = useAppSelector((state) => state.paperTrade.isUpdate);
-  const userID = 1;
+  const userID = useAppSelector((state) => state.auth.user!.id);
 
   const [accountDetail, setAccountDetail] = useState<AccountDetailType>({
     principal: 0,
@@ -64,6 +66,7 @@ const IndividualAccount: React.FC = () => {
 
   // new approach
   useEffect(() => {
+    setIsLoading(true);
     fetch(
       `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getFullOrderList2?userID=${userID}&account=${currentAccount}`
     )
@@ -71,10 +74,13 @@ const IndividualAccount: React.FC = () => {
       .then((result) => {
         console.log(result);
         setAccountDetail(result.accountDetail);
+        setIsLoading(false);
       });
   }, [currentAccount, isUpdate]);
 
-  return (
+  return isLoading ? (
+    <IonLoading isOpen={isLoading} message={"載入中..."}></IonLoading>
+  ) : (
     <>
       <IonPage>
         <IonHeader

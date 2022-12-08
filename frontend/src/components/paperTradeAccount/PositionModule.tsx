@@ -1,4 +1,4 @@
-import { useIonAlert } from "@ionic/react";
+import { IonLoading, useIonAlert } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import { paperTradeUpdate } from "../../redux/paperTrade/paperTrade.action";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
@@ -26,11 +26,13 @@ const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
   const [userPosition, setUserPosition] = useState<PositionRow[]>([]);
   const [ionAlert] = useIonAlert();
   const isUpdate = useAppSelector((state) => state.paperTrade.isUpdate);
+  const [isLoading, setIsLoading] = useState(true);
+  const userID = useAppSelector((state) => state.auth.user!.id);
   const dispatch = useAppDispatch();
-  const userID = 1;
 
   // new 1 table approach
   useEffect(() => {
+    setIsLoading(true);
     fetch(
       `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getFullOrderList2?userID=${userID}&account=${currentAccount}`
     )
@@ -39,6 +41,7 @@ const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
         console.log(result.positions);
 
         setUserPosition(result.positions);
+        setIsLoading(false);
       });
   }, [currentAccount, isUpdate]);
 
@@ -64,7 +67,9 @@ const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
     dispatch(paperTradeUpdate(isUpdate));
   }
 
-  return (
+  return isLoading ? (
+    <IonLoading isOpen={isLoading} message={"載入中..."} />
+  ) : (
     <>
       {userPosition.length > 0 ? (
         <table className="position-table">

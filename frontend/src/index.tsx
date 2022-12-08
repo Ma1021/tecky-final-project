@@ -12,11 +12,11 @@ const root = createRoot(container!);
 // 用provider 包住既component先可以攞到data
 
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <Provider store={store}>
+    <App />
+  </Provider>
+  // </React.StrictMode>
 );
 
 // If you want your app to work offline and load faster, you can change

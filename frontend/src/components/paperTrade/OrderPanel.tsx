@@ -42,8 +42,8 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ currentAccount }) => {
   const [principal, setPrincipal] = useState(0);
   const [positions, setPositions] = useState<PositionType[]>([]);
   const isUpdate = useAppSelector((state) => state.paperTrade.isUpdate);
+  const userID = useAppSelector((state) => state.auth.user!.id);
   const dispatch = useAppDispatch();
-  const userID = 1;
   let ownedTickets = 0;
 
   for (const position of positions) {
@@ -58,6 +58,8 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ currentAccount }) => {
     )
       .then((res) => res.json())
       .then((result) => {
+        console.log(result);
+
         setPrincipal(result.accountDetail.principal);
         setPositions(result.positions);
       });
@@ -65,10 +67,14 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ currentAccount }) => {
 
   useEffect(() => {
     fetch(
-      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getCurrentPrice?symbol=${currentTicker}`
+      `${
+        process.env.REACT_APP_PUBLIC_URL
+      }/paperTrade/getCurrentPrice?symbol=${currentTicker.toUpperCase()}`
     )
       .then((res) => res.json())
       .then((result) => {
+        console.log(result);
+
         setCurrentPrice(result);
       });
   }, [currentTicker]);
@@ -78,19 +84,19 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ currentAccount }) => {
       <IonList>
         <IonItem>
           <IonLabel className="order-panel-label">代碼</IonLabel>
-          {/* <IonSearchbar
-            debounce={1000}
+          <IonSearchbar
+            debounce={2000}
             onIonChange={(e: any) => {
               setCurrentTicker(e.detail.value);
             }}
-          /> */}
-          <IonInput
+          />
+          {/* <IonInput
             onIonChange={(e: any) => {
               setTimeout(() => {
                 setCurrentTicker(e.detail.value);
-              }, 1000);
+              }, 5000);
             }}
-          ></IonInput>
+          ></IonInput> */}
           {/* <IonButton>熱門股票</IonButton> */}
         </IonItem>
 
@@ -189,7 +195,7 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ currentAccount }) => {
         <IonItem>
           {orderDirection === "long" ? (
             <IonLabel>{`最大可買 ${
-              orderPrice <= 0
+              orderPrice <= 0 || principal === undefined
                 ? ""
                 : isNaN(Math.floor(principal / orderPrice))
                 ? ""
@@ -208,7 +214,7 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ currentAccount }) => {
 
         <IonItem>
           <IonLabel>{`金額 ${
-            isNaN(orderPrice * quantity)
+            isNaN(orderPrice * quantity) || principal === undefined
               ? ""
               : quantity > Math.floor(principal / orderPrice)
               ? "購買力不足"

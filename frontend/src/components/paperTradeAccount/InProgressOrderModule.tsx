@@ -1,5 +1,6 @@
 import { useIonAlert } from "@ionic/react";
 import React, { useEffect, useState } from "react";
+import { useAppSelector } from "../../redux/store";
 import "./InProgressOrderModule.css";
 
 export interface InProgressOrderType {
@@ -26,7 +27,7 @@ const InProgressOrderModule: React.FC<InProgressOrderModuleProps> = ({
   >([]);
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
   const [ionAlert] = useIonAlert();
-  const userID = 1;
+  const userID = useAppSelector((state) => state.auth.user!.id);
 
   useEffect(() => {
     fetch(

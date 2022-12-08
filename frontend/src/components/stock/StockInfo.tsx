@@ -78,7 +78,7 @@ const StockInfo: React.FC<StockInfoProps> = ({ symbol }) => {
   });
   const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
   const isChinese = useAppSelector((state) => state.theme.isChinese);
-  const userID = 1;
+  const userID = useAppSelector((state) => state.auth.user!.id);
 
   useEffect(() => {
     fetch(
@@ -101,7 +101,7 @@ const StockInfo: React.FC<StockInfoProps> = ({ symbol }) => {
           symbol: result[0].symbol,
           name: result[0].name,
           chineseName: result[0].chinese_name,
-          status: "收盤價 11/04 16:00:00 美東",
+          status: new Date().toLocaleString("en-US"),
           icons: [],
           currentPrice: result[0].current_price,
           high: 27.03,
@@ -131,7 +131,7 @@ const StockInfo: React.FC<StockInfoProps> = ({ symbol }) => {
           minTradingUnit: 1,
         });
       });
-  }, [stockInfo]);
+  }, []);
 
   const currentPriceDifference = useMemo(
     () => stockInfo.currentPrice - stockInfo.close,

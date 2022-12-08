@@ -1,3 +1,4 @@
+import { IonLoading } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../../redux/store";
 import "./RecentOrderModule.css";
@@ -22,12 +23,14 @@ const RecentOrderModule: React.FC<RecentOrderModuleProps> = ({
   currentAccount,
 }) => {
   const [RecentOrderList, setRecentOrderList] = useState<RecentOrderType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   // const recentOrderList = useAppSelector((state) => state.paperTrade.trades);
   const isUpdate = useAppSelector((state) => state.paperTrade.isUpdate);
-  const userID = 1;
+  const userID = useAppSelector((state) => state.auth.user!.id);
 
   // new 1 table approach
   useEffect(() => {
+    setIsLoading(true);
     fetch(
       `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getFullOrderList2?userID=${userID}&account=${currentAccount}`
     )
@@ -46,6 +49,7 @@ const RecentOrderModule: React.FC<RecentOrderModuleProps> = ({
           };
         });
         setRecentOrderList(newResult);
+        setIsLoading(false);
       });
   }, [currentAccount, isUpdate]);
 
@@ -55,7 +59,9 @@ const RecentOrderModule: React.FC<RecentOrderModuleProps> = ({
   //   setInProgressOrderList(recentOrderList);
   // }, [recentOrderList, isUpdate]);
 
-  return (
+  return isLoading ? (
+    <IonLoading isOpen={true} message={"載入中..."} />
+  ) : (
     <>
       {RecentOrderList.length > 0 ? (
         <table className="order-table">

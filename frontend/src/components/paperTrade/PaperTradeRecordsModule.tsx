@@ -1,3 +1,4 @@
+import { IonLoading } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 
 interface OrderRecordsType {
@@ -22,19 +23,24 @@ const PaperTradeRecordsModule: React.FC<PaperTradeRecordsModuleProps> = ({
   currentAccount,
 }) => {
   const [orderRecords, setOrderRecords] = useState<OrderRecordsType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // new 1 table approach
   useEffect(() => {
+    setIsLoading(true);
     fetch(
       `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getFullOrderList2?userID=${userID}&account=${currentAccount}`
     )
       .then((res) => res.json())
       .then((result) => {
         setOrderRecords(result.trades);
+        setIsLoading(false);
       });
   }, [currentAccount]);
 
-  return (
+  return isLoading ? (
+    <IonLoading isOpen={isLoading} message={"載入中..."} />
+  ) : (
     <>
       <table className="order-table">
         <tbody>

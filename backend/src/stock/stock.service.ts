@@ -86,11 +86,15 @@ export class StockService {
     }
   }
 
-  async getAllDataFromStockInfo(stockSymbol: string) {
+  async getAllDataFromStockInfo(symbol: string) {
     const result = await this.knex
       .select('*')
       .from('stock_info')
-      .where({ symbol: stockSymbol });
+      .where({ symbol: symbol });
+
+    const { currentPrice, yesterdayPrice } =
+      await this.getCurrentAndYesterdayStockPrice(symbol);
+    console.log(result);
 
     return result;
   }
@@ -564,7 +568,11 @@ function changeTimeFrame(
         5,
         candlestickDataArray,
       );
-      convertedVolumeDataArray = convertVolumeDataArray(5, volumeArray);
+      convertedVolumeDataArray = convertVolumeDataArray(
+        5,
+        volumeArray,
+        candlestickDataArray,
+      );
       return {
         convertedLineDataArray,
         convertedCandlestickDataArray,
@@ -576,7 +584,11 @@ function changeTimeFrame(
         10,
         candlestickDataArray,
       );
-      convertedVolumeDataArray = convertVolumeDataArray(10, volumeArray);
+      convertedVolumeDataArray = convertVolumeDataArray(
+        10,
+        volumeArray,
+        candlestickDataArray,
+      );
       return {
         convertedLineDataArray,
         convertedCandlestickDataArray,
@@ -588,7 +600,11 @@ function changeTimeFrame(
         15,
         candlestickDataArray,
       );
-      convertedVolumeDataArray = convertVolumeDataArray(15, volumeArray);
+      convertedVolumeDataArray = convertVolumeDataArray(
+        15,
+        volumeArray,
+        candlestickDataArray,
+      );
       return {
         convertedLineDataArray,
         convertedCandlestickDataArray,
@@ -600,7 +616,11 @@ function changeTimeFrame(
         30,
         candlestickDataArray,
       );
-      convertedVolumeDataArray = convertVolumeDataArray(30, volumeArray);
+      convertedVolumeDataArray = convertVolumeDataArray(
+        30,
+        volumeArray,
+        candlestickDataArray,
+      );
       return {
         convertedLineDataArray,
         convertedCandlestickDataArray,
@@ -612,7 +632,11 @@ function changeTimeFrame(
         60,
         candlestickDataArray,
       );
-      convertedVolumeDataArray = convertVolumeDataArray(60, volumeArray);
+      convertedVolumeDataArray = convertVolumeDataArray(
+        60,
+        volumeArray,
+        candlestickDataArray,
+      );
       return {
         convertedLineDataArray,
         convertedCandlestickDataArray,
@@ -624,7 +648,11 @@ function changeTimeFrame(
         120,
         candlestickDataArray,
       );
-      convertedVolumeDataArray = convertVolumeDataArray(120, volumeArray);
+      convertedVolumeDataArray = convertVolumeDataArray(
+        120,
+        volumeArray,
+        candlestickDataArray,
+      );
       return {
         convertedLineDataArray,
         convertedCandlestickDataArray,
@@ -636,7 +664,11 @@ function changeTimeFrame(
         240,
         candlestickDataArray,
       );
-      convertedVolumeDataArray = convertVolumeDataArray(240, volumeArray);
+      convertedVolumeDataArray = convertVolumeDataArray(
+        240,
+        volumeArray,
+        candlestickDataArray,
+      );
       return {
         convertedLineDataArray,
         convertedCandlestickDataArray,
@@ -651,27 +683,40 @@ function changeTimeFrame(
   }
 }
 
-function convertVolumeDataArray(timeFrame: number, array: VolumeData[]) {
+function convertVolumeDataArray(
+  timeFrame: number,
+  volumeArray: VolumeData[],
+  candelstickArray: CandlestickData[],
+) {
   const newVolumeDataArray: VolumeData[] = [];
   if (timeFrame < 389) {
-    for (let i = 0; i < array.length; i = i + 389) {
-      const dayArray = array.slice(i, i + 389);
-      for (let i = 0; i < dayArray.length; i = i + timeFrame) {
-        const slicedArray = dayArray.slice(i, i + timeFrame);
+    for (let i = 0; i < volumeArray.length; i = i + 389) {
+      const dayVolumeArray = volumeArray.slice(i, i + 389),
+        dayCandlestickArray = candelstickArray.slice(i, i + 389);
+      for (let i = 0; i < dayVolumeArray.length; i = i + timeFrame) {
+        const slicedVolumeArray = dayVolumeArray.slice(i, i + timeFrame),
+          sliceCandlestickArray = dayCandlestickArray.slice(i, i + timeFrame);
         let totalVolume = 0;
-        for (const volumeObj of slicedArray) {
+        for (const volumeObj of slicedVolumeArray) {
           totalVolume += volumeObj.value;
         }
+        const color =
+          sliceCandlestickArray[sliceCandlestickArray.length - 1].close -
+            sliceCandlestickArray[0].open >
+          0
+            ? 'rgba(38, 166, 155, 0.5)'
+            : 'rgba(239, 83, 80, 0.5)';
+
         newVolumeDataArray.push({
-          time: slicedArray[0].time,
+          time: slicedVolumeArray[0].time,
           value: totalVolume,
-          color: 'rgb(46, 255, 3)',
+          color: color,
         });
       }
     }
     return newVolumeDataArray;
   }
-  return array;
+  return volumeArray;
 }
 
 function convertLineDataArray(timeFrame: number, array: LineData[]) {

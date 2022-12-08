@@ -4,12 +4,14 @@ import {
   IonToolbar,
   IonContent,
   IonText,
+  IonLoading,
 } from "@ionic/react";
 import { useEffect, useState } from "react";
 import PaperTradeAccountModule from "../../components/paperTradeAccount/PaperTradeAccountModule";
 import Title from "../../components/All/Title";
 import Menu from "../../components/All/Menu";
 import "./PaperTradeAccountOverview.css";
+import { useAppSelector } from "../../redux/store";
 
 interface UserAccountType {
   id: number;
@@ -21,7 +23,8 @@ interface UserAccountType {
 
 const PaperTradeAccountOverview: React.FC = () => {
   const [userAccountList, setUserAccountList] = useState<UserAccountType[]>([]);
-  const userID = 1;
+  const [isLoading, setIsLoading] = useState(true);
+  const userID = useAppSelector((state) => state.auth.user!.id);
 
   // useEffect(() => {
   //   fetch(
@@ -34,6 +37,7 @@ const PaperTradeAccountOverview: React.FC = () => {
   // }, []);
 
   useEffect(() => {
+    setIsLoading(true);
     fetch(
       `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getAccountList2?userID=${userID}`
     )
@@ -42,10 +46,13 @@ const PaperTradeAccountOverview: React.FC = () => {
         console.log(result);
 
         setUserAccountList(result);
+        setIsLoading(false);
       });
   }, []);
 
-  return (
+  return isLoading ? (
+    <IonLoading isOpen={isLoading} message={"載入中..."} />
+  ) : (
     <>
       <Menu />
       <IonPage>

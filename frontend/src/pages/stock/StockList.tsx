@@ -10,6 +10,7 @@ import {
   IonToolbar,
   IonText,
   IonLoading,
+  IonSearchbar,
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -23,6 +24,7 @@ import StockRow from "../../components/stock/StockRow";
 import Title from "../../components/All/Title";
 import "./StockList.css";
 import { useAppSelector } from "../../redux/store";
+import { useHistory } from "react-router";
 
 const StockList: React.FC = () => {
   const [stockList, setStockList] = useState<StockInfo[]>([]);
@@ -69,7 +71,7 @@ const StockList: React.FC = () => {
       console.log(error);
     }
   }, []);
-
+  const history = useHistory();
   return (
     <IonPage>
       <IonHeader
@@ -96,7 +98,10 @@ const StockList: React.FC = () => {
               <IonLabel>所有股票</IonLabel>
             </SegmentButton>
           </SegmentTab>
-
+          <IonSearchbar
+            className="pt-0 pb-0 ion-margin"
+            onClick={() => history.push("/search")}
+          ></IonSearchbar>
           <IonButtons
             className="d-flex align-items-center"
             style={{ padding: "0rem 0.5rem" }}

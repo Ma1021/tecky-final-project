@@ -9,6 +9,7 @@ export const loadQuestions = createAsyncThunk<Question[]>("question/loadQuestion
           headers: { "Content-Type": "application/json" },
         });
         const json = await res.json();
+        
         return json
       } catch(err) {
         return thunkAPI.rejectWithValue(err);

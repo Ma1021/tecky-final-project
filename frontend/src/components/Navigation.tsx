@@ -74,12 +74,32 @@ const Navigation: React.FC = () => {
           <Route exact={true} path="/login" component={Login}></Route>
           <Route exact={true} path="/home" component={Home}></Route>
           <Route exact={true} path="/search" component={SearchPage}></Route>
-          <Route exact={true} path="/user/:id/info/" component={UserInfo}></Route>
-          <Route exact={true} path="/user/:id/edit/" component={UserEdit}></Route>
-          <Route exact={true} path="/question/:id" component={QuestionDetail}></Route>
+          <Route
+            exact={true}
+            path="/user/:id/info/"
+            component={UserInfo}
+          ></Route>
+          <Route
+            exact={true}
+            path="/user/:id/edit/"
+            component={UserEdit}
+          ></Route>
+          <Route
+            exact={true}
+            path="/question/:id"
+            component={QuestionDetail}
+          ></Route>
           <Route exact={true} path="/inbox/:id" component={Inbox}></Route>
-          <Route exact={true} path="/chatroom/:id" component={ChatroomPage}></Route>
-          <Route exact={true} path="/analysis/:id" component={Analytics}></Route>
+          <Route
+            exact={true}
+            path="/chatroom/:id"
+            component={ChatroomPage}
+          ></Route>
+          <Route
+            exact={true}
+            path="/analysis/:id"
+            component={Analytics}
+          ></Route>
           <Route exact={true} path="/admin" component={AdminPanel}></Route>
           <Route
             exact={true}
@@ -91,7 +111,11 @@ const Navigation: React.FC = () => {
             path="/user/subscription/:id"
             component={Subscription}
           ></Route>
-          <Route exact={true} path="/chatroom/create" component={ChatroomForm}></Route>
+          <Route
+            exact={true}
+            path="/chatroom/create"
+            component={ChatroomForm}
+          ></Route>
           <Route
             exact={true}
             path="/individualStockInfo/:symbol"
@@ -141,8 +165,16 @@ const Navigation: React.FC = () => {
                 path="/paperTrade"
                 component={PaperTradeAccountOverview}
               ></Route>
-              <Route exact={true} path="/stockList" component={StockList}></Route>
-              <Route exact={true} path="/chatroomList" component={ChatroomList}></Route>
+              <Route
+                exact={true}
+                path="/stockList"
+                component={StockList}
+              ></Route>
+              <Route
+                exact={true}
+                path="/chatroomList"
+                component={ChatroomList}
+              ></Route>
               <Route exact={true} path="/discuss" component={Discuss}></Route>
               <Route exact={true} path="/kol" component={KOL}></Route>
               <Route exact={true} path="/">
@@ -155,7 +187,7 @@ const Navigation: React.FC = () => {
               className="tabBar"
               onIonTabsWillChange={(e) => setSelectedTab(e.detail.tab)}
             >
-              {/* <IonTabButton
+              <IonTabButton
                 tab="paperTrade"
                 href="/paperTrade"
                 className="tabButton"
@@ -164,7 +196,7 @@ const Navigation: React.FC = () => {
                   icon={selectedTab === "paperTrade" ? wallet : walletOutline}
                 />
                 <IonLabel>模擬交易</IonLabel>
-              </IonTabButton> */}
+              </IonTabButton>
               <IonTabButton
                 tab="stockList"
                 href="/stockList"

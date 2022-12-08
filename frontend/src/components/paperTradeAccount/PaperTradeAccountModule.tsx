@@ -26,7 +26,6 @@ const PaperTradeAccountModule: React.FC<PaperTradeAccountModuleProps> = ({
         >
           <div className="top-row">
             <div className="title-icon-container">
-              <div className="icon-container">Icon</div>
               <div className="title-container">
                 {account === "US" && "美股模擬賬戶"}
                 {account === "HK" && "港股模擬賬戶"}

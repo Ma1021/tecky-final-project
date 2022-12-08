@@ -1,5 +1,6 @@
 export function dataURLToBlob(fileDataURL: string, filename: string) {
   let arr = fileDataURL.split(",");
+  console.log(arr);
   let mime = (arr as any)[0].match(/:(.*?);/)[1],
     bstr = atob(arr[1]),
     n = bstr.length,

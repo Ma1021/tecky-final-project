@@ -66,17 +66,21 @@ const ChatroomForm: React.FC = () => {
     e.preventDefault();
     let data = getValues();
     // console.log("data befroe edited", data);
-    if (croppedImage !== null) {
-      data.icon = croppedImage;
-    }
     data.introduction = intro;
-    let filename = `${new Date().toISOString()}_${data.host}`;
-    let file = dataURLToBlob(data.icon, filename);
     let formData = new FormData();
     formData.append("name", data.name);
     formData.append("introduction", data.introduction);
     formData.append("host", selector.toString());
-    formData.append("icon", file);
+    if (croppedImage !== null) {
+      data.icon = croppedImage;
+      console.log(data.icon);
+      let filename = `${new Date().toISOString()}_${data.host}`;
+      let file = dataURLToBlob(data.icon, filename);
+      formData.append("icon", file);
+    } else {
+      data.icon = null as any;
+    }
+    console.log(formData);
     let res = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/chatroom`, {
       method: "POST",
       body: formData,

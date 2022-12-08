@@ -67,19 +67,22 @@ const UserEdit: React.FC = () => {
   const updateUser = async (e: any) => {
     e.preventDefault();
     // handle form data before sending
-    let filename = `${new Date().toISOString()}_user${user?.id}`;
-    let file = null;
-    if (icon !== undefined && icon !== null) {
-      file = dataURLToBlob(icon, filename);
-    }
     let formData = new FormData();
-    if (file !== null) {
-      formData.append("icon", file);
-    }
     formData.append("introduction", intro as string);
     formData.append("username", username as string);
     formData.append("birthday", birthday as string);
     formData.append("gender", gender as string);
+    if (
+      icon !== undefined &&
+      icon !== null &&
+      icon !==
+        "https://cdn5.vectorstock.com/i/1000x1000/54/19/gray-wolf-cartoon-wolf-grey-the-nature-vector-20325419.jpg"
+    ) {
+      let filename = `${new Date().toISOString()}_user${user?.id}`;
+      console.log(icon, filename);
+      let file = dataURLToBlob(icon, filename);
+      formData.append("icon", file);
+    }
 
     let res = await fetch(
       `${process.env.REACT_APP_PUBLIC_URL}/user/${user?.id}/update`,
@@ -233,10 +236,8 @@ const UserEdit: React.FC = () => {
                       <IonIcon size="large" icon={image}></IonIcon>
                     </>
                   ) : croppedImage == null ? (
-                    // <div>
                     <img src={icon} alt="user icon upload" />
                   ) : (
-                    // </div>
                     <div>
                       <img src={croppedImage} alt="user icon uploaded" />
                     </div>

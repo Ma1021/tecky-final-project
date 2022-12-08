@@ -15,20 +15,32 @@ interface UserAccountType {
   id: number;
   account: string;
   principal: number;
-  total_profit: number;
-  total_profit_percentage: number;
+  totalProfit: number;
+  totalProfitPercentage: number;
 }
 
 const PaperTradeAccountOverview: React.FC = () => {
   const [userAccountList, setUserAccountList] = useState<UserAccountType[]>([]);
   const userID = 1;
 
+  // useEffect(() => {
+  //   fetch(
+  //     `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getAccountList?userID=${userID}`
+  //   )
+  //     .then((res) => res.json())
+  //     .then((result) => {
+  //       setUserAccountList(result);
+  //     });
+  // }, []);
+
   useEffect(() => {
     fetch(
-      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getAccountList?userID=${userID}`
+      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getAccountList2?userID=${userID}`
     )
       .then((res) => res.json())
       .then((result) => {
+        console.log(result);
+
         setUserAccountList(result);
       });
   }, []);
@@ -59,8 +71,8 @@ const PaperTradeAccountOverview: React.FC = () => {
                   key={obj.id}
                   account={obj.account}
                   principal={obj.principal}
-                  totalProfit={obj.total_profit}
-                  totalProfitPercentage={obj.total_profit_percentage}
+                  totalProfit={obj.totalProfit}
+                  totalProfitPercentage={obj.totalProfitPercentage}
                 />
               ))}
             </div>

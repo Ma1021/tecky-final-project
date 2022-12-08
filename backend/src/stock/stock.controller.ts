@@ -49,11 +49,6 @@ export class StockController {
     return await this.stockService.getNewsFromPostgres(symbol);
   }
 
-  @Get('/getUserTradeRecords')
-  async getUserTradeRecordsFromPostgres(@Query('userID') userID: string) {
-    return await this.stockService.getUserTradeRecordsFromPostgres(userID);
-  }
-
   @Post('/subscribeStock')
   async subscribeStock(@Body() order: { userID: number; symbol: string }) {
     const { userID, symbol } = order;
@@ -68,6 +63,10 @@ export class StockController {
     return await this.stockService.checkUserStockSubscription(userID, symbol);
   }
 
+  @Get('/getCryptoDataFromMongoAPI')
+  async getCryptoDataFromMongoAPI(@Query('symbol') symbol: string) {
+    return await this.stockService.getCryptoDataFromMongoAPI(symbol);
+  }
   // @Get('kafka-test')
   // testKafka() {
   //   return this.client.emit('medium.rocks', {

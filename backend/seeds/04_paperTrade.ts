@@ -5,6 +5,7 @@ export async function seed(knex: Knex): Promise<void> {
   await knex('user_positions').del();
   await knex('user_trades').del();
   await knex('user_paper_trade_accounts').del();
+  await knex('user_cryptos').del();
 
   // Inserts seed entries
   // await knex('user_positions').insert([
@@ -61,6 +62,23 @@ export async function seed(knex: Knex): Promise<void> {
       market_value: 1000000,
       buying_power: 1000000,
       account: 'crypto',
+    },
+  ]);
+
+  await knex('user_cryptos').insert([
+    {
+      id: 1,
+      user_id: 1,
+      symbol: 'ETHUSDT',
+      name: 'Ethereum',
+      chinese_name: '以太坊',
+    },
+    {
+      id: 2,
+      user_id: 1,
+      symbol: 'BTCUSDT',
+      name: 'Bitcoin',
+      chinese_name: '比特幣',
     },
   ]);
 

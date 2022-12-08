@@ -644,7 +644,8 @@ export class PaperTradeService {
       )
       .from('trade_records')
       .join('stock_info', 'trade_records.symbol', 'stock_info.symbol')
-      .where({ user_id: userID, account: account });
+      .where({ user_id: userID, account: account })
+      .orderBy('order_place_time', 'desc');
 
     const symbolMap = new Map();
     for (const obj of result) {
@@ -655,7 +656,19 @@ export class PaperTradeService {
     const positions = [];
 
     let currentTotalMarketValue = 0,
-      buyingPower = 1000000;
+      buyingPower = initPrincipal;
+
+    for (const symbol of symbolMap.keys()) {
+      const currentPrice = await this.getCurrentPrice(symbol);
+      const quantity = (
+        await this.knex
+          .select(this.knex.raw('SUM(quantity)'))
+          .from('trade_records')
+          .where({ symbol: symbol })
+      )[0];
+
+      currentTotalMarketValue += currentPrice * quantity.sum;
+    }
 
     for (const symbol of symbolMap.keys()) {
       let id = 0,
@@ -682,9 +695,8 @@ export class PaperTradeService {
           stockOrderMarketValue += obj.order_market_value;
         }
       }
-      currentTotalMarketValue += currentPrice * totalQuantity;
-      buyingPower += stockOrderMarketValue;
 
+      buyingPower += stockOrderMarketValue;
       cost = stockOrderMarketValue / totalQuantity;
 
       quantity = totalQuantity;
@@ -762,5 +774,23 @@ export class PaperTradeService {
       .into('trade_records');
 
     return { message: 'Order placed.' };
+  }
+
+  async getAccountList2(userID: number) {
+    const USAccount = (await this.getFullOrderList2(userID, 'US'))
+      .accountDetail;
+    const HKAccount = (await this.getFullOrderList2(userID, 'HK'))
+      .accountDetail;
+    const cryptoAccount = (await this.getFullOrderList2(userID, 'crypto'))
+      .accountDetail;
+
+    USAccount['id'] = 1;
+    HKAccount['id'] = 2;
+    cryptoAccount['id'] = 3;
+    USAccount['account'] = 'US';
+    HKAccount['account'] = 'HK';
+    cryptoAccount['account'] = 'crypto';
+
+    return [USAccount, HKAccount, cryptoAccount];
   }
 }

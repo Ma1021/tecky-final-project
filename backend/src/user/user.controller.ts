@@ -36,14 +36,13 @@ export class UserController {
       if (createUserDto.password !== createUserDto.rePassword) {
         throw new Error('密碼不一致');
       }
-      const emailCheck = new RegExp(
-        '/^[A-Z0-9._%+_]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i',
-      );
+      const emailCheck = new RegExp(/^[A-Z0-9._%+_]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
       if (!emailCheck.test(createUserDto.email)) {
+        console.log(!emailCheck.test(createUserDto.email));
         throw new Error('請輸入正確的電郵');
       }
       const passwordCheck = new RegExp(
-        '/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*W)(?!.* ).{8,16}$/',
+        /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/,
       );
       if (!passwordCheck.test(createUserDto.password)) {
         throw new Error(
@@ -86,7 +85,11 @@ export class UserController {
     } catch (err) {
       if (err.constraint == 'users_email_unique') {
         throw new HttpException('此電郵已登記', HttpStatus.CONFLICT);
-      } else if (err.message.includes('密碼不一致')) {
+      } else if (
+        err.message.includes('密碼不一致') ||
+        err.message.includes('正確的電郵') ||
+        err.message.includes('要有8-16個字,包括最少一')
+      ) {
         throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
       }
       console.log(err.message);

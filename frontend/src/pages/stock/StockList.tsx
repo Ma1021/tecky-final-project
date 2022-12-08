@@ -26,6 +26,7 @@ const StockList: React.FC = () => {
   const userID = 1;
   const [stockList, setStockList] = useState<StockInfo[]>([]);
   const [stockList2, setStockList2] = useState<StockInfo[]>([]);
+  const [cryptoList, setCryptoList] = useState([]);
   const [initStockList, setInitStockList] = useState<StockInfo[]>([]);
   const [sortBySymbol, setSortBySymbol] = useState<0 | 1 | 2>(0);
   const [sortByPrice, setSortByPrice] = useState<0 | 1 | 2>(0);
@@ -49,13 +50,16 @@ const StockList: React.FC = () => {
         .then((result) => {
           console.log(result);
 
-          setStockList(result);
-          setInitStockList(JSON.parse(JSON.stringify(result)));
+          setStockList(result.stockResult);
+          setCryptoList(result.cryptoResult);
+          setInitStockList(JSON.parse(JSON.stringify(result.stockResult)));
         });
       fetch(`${process.env.REACT_APP_PUBLIC_URL}/stock/getUserList?userID=2`)
         .then((response) => response.json())
         .then((result) => {
-          setStockList2(result);
+          console.log(result);
+
+          setStockList2(result.stockResult);
         });
     } catch (error) {
       console.log(error);
@@ -78,6 +82,9 @@ const StockList: React.FC = () => {
         <SegmentTab value={segment} onIonChange={onSegmentChange}>
           <SegmentButton value="watchList">
             <IonLabel>自選</IonLabel>
+          </SegmentButton>
+          <SegmentButton value="crypto">
+            <IonLabel>Crypto</IonLabel>
           </SegmentButton>
           <SegmentButton value="all">
             <IonLabel>所有股票</IonLabel>
@@ -200,7 +207,25 @@ const StockList: React.FC = () => {
                 priceDifference={item.price_difference}
               />
             ))
-          : stockList2.map((item) => (
+          : null}
+
+        {segment === "crypto"
+          ? cryptoList.map((item: any) => (
+              <StockRow
+                key={item.id}
+                symbol={item.symbol}
+                id={item.id}
+                name={item.name}
+                chineseName={item.chinese_name}
+                currentPrice={item.current_price}
+                yesterdayPrice={item.yesterday_price}
+                priceDifference={item.price_difference}
+              />
+            ))
+          : null}
+
+        {segment === "all"
+          ? stockList2.map((item) => (
               <StockRow
                 key={item.stock_id}
                 symbol={item.symbol}
@@ -211,7 +236,8 @@ const StockList: React.FC = () => {
                 yesterdayPrice={item.yesterday_price}
                 priceDifference={item.price_difference}
               />
-            ))}
+            ))
+          : null}
       </IonContent>
     </IonPage>
   );

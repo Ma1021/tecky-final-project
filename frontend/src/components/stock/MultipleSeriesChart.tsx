@@ -380,15 +380,11 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
     ) {
       return;
     }
+    console.log(symbol.endsWith("USDT"));
 
-    if (
-      timeFrame === "1D" ||
-      timeFrame === "1W" ||
-      timeFrame === "1M" ||
-      timeFrame === "1Y"
-    ) {
+    if (symbol.endsWith("USDT")) {
       fetch(
-        `${process.env.REACT_APP_PUBLIC_URL}/stock/getDayDataFromMongoAPI?symbol=${symbol}&timeFrame=${timeFrame}`
+        `${process.env.REACT_APP_PUBLIC_URL}/stock/getCryptoDataFromMongoAPI?symbol=${symbol}`
       )
         .then((res) => res.json())
         .then((result) => {
@@ -409,33 +405,63 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
           MACDSlow.setData(result.slowLineResultArray);
           MACDHistogram.setData(result.histogramResultArray);
         });
-      console.log("data set into series");
     } else {
-      fetch(
-        `${process.env.REACT_APP_PUBLIC_URL}/stock/getMinuteDataFromMongoAPI?symbol=${symbol}&timeFrame=${timeFrame}`
-      )
-        .then((res) => res.json())
-        .then((result) => {
-          console.log(result);
+      if (
+        timeFrame === "1D" ||
+        timeFrame === "1W" ||
+        timeFrame === "1M" ||
+        timeFrame === "1Y"
+      ) {
+        fetch(
+          `${process.env.REACT_APP_PUBLIC_URL}/stock/getDayDataFromMongoAPI?symbol=${symbol}&timeFrame=${timeFrame}`
+        )
+          .then((res) => res.json())
+          .then((result) => {
+            lineSeries.setData(result.convertedLineDataArray);
+            candlestickSeries.setData(result.convertedCandlestickDataArray);
+            volumeSeries.setData(result.convertedVolumeDataArray);
+            SMA20.setData(result.lineSMA20Array);
+            SMA50.setData(result.lineSMA50Array);
+            SMA100.setData(result.lineSMA100Array);
+            SMA250.setData(result.lineSMA250Array);
+            EMA20.setData(result.lineEMA20Array);
+            EMA50.setData(result.lineEMA50Array);
+            EMA100.setData(result.lineEMA100Array);
+            EMA250.setData(result.lineEMA250Array);
+            RSI7.setData(result.lineRSI7Array);
+            RSI14.setData(result.lineRSI14Array);
+            MACDFast.setData(result.fastLineResultArray);
+            MACDSlow.setData(result.slowLineResultArray);
+            MACDHistogram.setData(result.histogramResultArray);
+          });
+        console.log("data set into series");
+      } else {
+        fetch(
+          `${process.env.REACT_APP_PUBLIC_URL}/stock/getMinuteDataFromMongoAPI?symbol=${symbol}&timeFrame=${timeFrame}`
+        )
+          .then((res) => res.json())
+          .then((result) => {
+            console.log(result);
 
-          lineSeries.setData(result.convertedLineDataArray);
-          candlestickSeries.setData(result.convertedCandlestickDataArray);
-          volumeSeries.setData(result.convertedVolumeDataArray);
-          SMA20.setData(result.lineSMA20Array);
-          SMA50.setData(result.lineSMA50Array);
-          SMA100.setData(result.lineSMA100Array);
-          SMA250.setData(result.lineSMA250Array);
-          EMA20.setData(result.lineEMA20Array);
-          EMA50.setData(result.lineEMA50Array);
-          EMA100.setData(result.lineEMA100Array);
-          EMA250.setData(result.lineEMA250Array);
-          RSI7.setData(result.lineRSI7Array);
-          RSI14.setData(result.lineRSI14Array);
-          MACDFast.setData(result.fastLineResultArray);
-          MACDSlow.setData(result.slowLineResultArray);
-          MACDHistogram.setData(result.histogramResultArray);
-        });
-      console.log("data set into series");
+            lineSeries.setData(result.convertedLineDataArray);
+            candlestickSeries.setData(result.convertedCandlestickDataArray);
+            volumeSeries.setData(result.convertedVolumeDataArray);
+            SMA20.setData(result.lineSMA20Array);
+            SMA50.setData(result.lineSMA50Array);
+            SMA100.setData(result.lineSMA100Array);
+            SMA250.setData(result.lineSMA250Array);
+            EMA20.setData(result.lineEMA20Array);
+            EMA50.setData(result.lineEMA50Array);
+            EMA100.setData(result.lineEMA100Array);
+            EMA250.setData(result.lineEMA250Array);
+            RSI7.setData(result.lineRSI7Array);
+            RSI14.setData(result.lineRSI14Array);
+            MACDFast.setData(result.fastLineResultArray);
+            MACDSlow.setData(result.slowLineResultArray);
+            MACDHistogram.setData(result.histogramResultArray);
+          });
+        console.log("data set into series");
+      }
     }
     setIsSetData(!isSetData);
   }, [isFetch, timeFrame]);
@@ -892,6 +918,8 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
           {direction === "portrait" ? "橫向顯示" : "直向顯示"}
         </button>
       </div>
+      <div className="time-frame-button-container"></div>
+
       <div className="indicator-button-container">
         <button
           className={"indicator " + (indicators.SMA20 ? "isClicked" : "")}

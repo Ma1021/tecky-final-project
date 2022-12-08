@@ -16,27 +16,74 @@ export class StockService {
     return 'Hello World';
   }
 
+  async getCurrentAndYesterdayStockPrice(symbol: string) {
+    try {
+      const res = await fetch(
+        `http://35.213.167.63/mongo/${symbol}?period=day`,
+      );
+      const result = await res.json();
+
+      return {
+        currentPrice: result[result.length - 1].close,
+        yesterdayPrice: result[result.length - 2].close,
+      };
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+
+  async getCurrentAndYesterdayCryptoPrice(symbol: string) {
+    try {
+      const res = await fetch(`http://35.213.167.63/mongo/${symbol}`);
+      const result = await res.json();
+
+      return {
+        currentPrice: result[0].close,
+        yesterdayPrice: result[1].close,
+      };
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+
   async getUserList(userID: string) {
     console.log('getUserList');
 
-    const result = await this.knex
-      .select([
-        'stock_info.id',
-        'user_stocks.symbol',
-        'name',
-        'chinese_name',
-        'current_price',
-        'yesterday_price',
-      ])
-      .from('user_stocks')
-      .join('stock_info', 'user_stocks.symbol', 'stock_info.symbol')
-      .where({ user_id: userID });
-    result.map((stockObj) => {
-      stockObj['price_difference'] =
-        stockObj.current_price - stockObj.yesterday_price;
-    });
+    try {
+      const stockResult = await this.knex
+        .select(['stock_info.id', 'user_stocks.symbol', 'name', 'chinese_name'])
+        .from('user_stocks')
+        .join('stock_info', 'user_stocks.symbol', 'stock_info.symbol')
+        .where({ user_id: userID });
 
-    return result;
+      for (const obj of stockResult) {
+        const { currentPrice, yesterdayPrice } =
+          await this.getCurrentAndYesterdayStockPrice(obj.symbol);
+        obj['current_price'] = currentPrice;
+        obj['yesterday_price'] = yesterdayPrice;
+        obj['price_difference'] = currentPrice - yesterdayPrice;
+      }
+
+      const cryptoResult = await this.knex
+        .select('id', 'symbol', 'name', 'chinese_name')
+        .from('user_cryptos')
+        .where({ user_id: userID });
+
+      for (const obj of cryptoResult) {
+        const { currentPrice, yesterdayPrice } =
+          await this.getCurrentAndYesterdayCryptoPrice(obj.symbol);
+
+        obj['current_price'] = currentPrice;
+        obj['yesterday_price'] = yesterdayPrice;
+        obj['price_difference'] = currentPrice - yesterdayPrice;
+      }
+      return { stockResult, cryptoResult };
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
   }
 
   async getAllDataFromStockInfo(stockSymbol: string) {
@@ -347,15 +394,6 @@ export class StockService {
     return result;
   }
 
-  async getUserTradeRecordsFromPostgres(userID: string) {
-    const result = await this.knex
-      .select('*')
-      .from('user_trades')
-      .where({ user_id: userID });
-
-    return result;
-  }
-
   async subscribeStock(userID: number, symbol: string) {
     try {
       const isSubscribed = await this.checkUserStockSubscription(
@@ -394,6 +432,119 @@ export class StockService {
     } catch (error) {
       throw new Error(error);
     }
+  }
+
+  async getCryptoDataFromMongoAPI(symbol: string) {
+    const candlestickDataArray: CandlestickData[] = [];
+    const lineDataArray: LineData[] = [];
+    const volumeDataArray: VolumeData[] = [];
+    const res = await fetch(`http://35.213.167.63/mongo/${symbol}`);
+    const result = await res.json();
+    result.reverse();
+
+    result.forEach((element) => {
+      const volumeColor =
+        element.close - element.open > 0
+          ? 'rgba(38, 166, 155, 0.5)'
+          : 'rgba(239, 83, 80, 0.5)';
+      candlestickDataArray.push({
+        time: element.time,
+        high: element.high,
+        open: element.open,
+        low: element.low,
+        close: element.close,
+      });
+      lineDataArray.push({ time: element.time, value: element.close });
+      volumeDataArray.push({
+        time: element.time,
+        value: element.volume,
+        color: volumeColor,
+      });
+    });
+
+    const {
+      convertedLineDataArray,
+      convertedCandlestickDataArray,
+      convertedVolumeDataArray,
+    } = changeTimeFrame(
+      '1D',
+      lineDataArray,
+      candlestickDataArray,
+      volumeDataArray,
+    );
+
+    const lineSMA20Array = calculateSMA(convertedLineDataArray, 20);
+    const lineSMA50Array = calculateSMA(convertedLineDataArray, 50);
+    const lineSMA100Array = calculateSMA(convertedLineDataArray, 100);
+    const lineSMA250Array = calculateSMA(convertedLineDataArray, 250);
+
+    const lineEMA20Array = calculateEMA(
+      convertedLineDataArray,
+      20,
+      lineSMA20Array,
+      2 / 21,
+    );
+    const lineEMA50Array = calculateEMA(
+      convertedLineDataArray,
+      50,
+      lineSMA50Array,
+      2 / 51,
+    );
+    const lineEMA100Array = calculateEMA(
+      convertedLineDataArray,
+      100,
+      lineSMA100Array,
+      2 / 101,
+    );
+    const lineEMA250Array = calculateEMA(
+      convertedLineDataArray,
+      250,
+      lineSMA250Array,
+      2 / 251,
+    );
+
+    const lineRSI7Array = calculateRSI(convertedLineDataArray, 7);
+    const lineRSI14Array = calculateRSI(convertedLineDataArray, 14);
+
+    const counterDaySMA12 = calculateSMA(convertedLineDataArray, 12);
+    const K12 = 2 / (12 + 1);
+    const lineEMA12Array = calculateEMA(
+      convertedLineDataArray,
+      12,
+      counterDaySMA12,
+      K12,
+    );
+    const counterDaySMA26 = calculateSMA(convertedLineDataArray, 26);
+    const K26 = 2 / (26 + 1);
+    const lineEMA26Array = calculateEMA(
+      convertedLineDataArray,
+      26,
+      counterDaySMA26,
+      K26,
+    );
+    const { fastLineResultArray, slowLineResultArray, histogramResultArray } =
+      calculateMACD(lineEMA12Array, lineEMA26Array);
+
+    console.log('fetching getDayDataFromMongoAPI');
+
+    return {
+      convertedLineDataArray,
+      convertedCandlestickDataArray,
+      convertedVolumeDataArray,
+      lineSMA20Array,
+      lineSMA50Array,
+      lineSMA100Array,
+      lineSMA250Array,
+      lineEMA20Array,
+      lineEMA50Array,
+      lineEMA100Array,
+      lineEMA250Array,
+      lineRSI7Array,
+      lineRSI14Array,
+      fastLineResultArray,
+      slowLineResultArray,
+      histogramResultArray,
+    };
   }
 }
 

@@ -9,7 +9,6 @@ import { useAppSelector } from "../redux/store";
 
 const Home: React.FC = () => {
   // lock screen to straight
-  window.screen.orientation.lock("portrait");
   const history = useHistory();
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   console.log("isAuthenticated", isAuthenticated);

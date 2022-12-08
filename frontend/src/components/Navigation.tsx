@@ -62,11 +62,16 @@ import PaperTradeOrder from "../pages/paperTrade/PaperTradeOrder";
 import PaperTradeRecords from "../pages/paperTrade/PaperTradeRecords";
 import PaperTradeAnalysis from "../pages/paperTrade/PaperTradeAnalysis";
 import SearchPage from "../pages/Search";
+import { useAppSelector } from "../redux/store";
 
 const Navigation: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState("discuss");
+  const userToken = useAppSelector(state=>state.auth.token)
+  // if(userToken)
+
 
   return (
+    userToken !== null ?
     <IonReactRouter>
       <Switch>
         <IonRouterOutlet animated={false}>
@@ -236,6 +241,18 @@ const Navigation: React.FC = () => {
             </IonTabBar>
           </IonTabs>
         </IonRouterOutlet>
+      </Switch>
+    </IonReactRouter>
+    :
+    <IonReactRouter>
+      <Switch>
+        <IonRouterOutlet animated={false}>
+          <Route exact={true} path="/register" component={Register}></Route>
+          <Route exact={true} path="/login" component={Login}></Route>
+          <Route exact={true} path="/home" component={Home}></Route>
+          <Route path="/*" component={Home}></Route>
+
+          </IonRouterOutlet>
       </Switch>
     </IonReactRouter>
   );

@@ -53,11 +53,11 @@ const App: React.FC = () => {
       console.log("Navigation: authJson after parse", localAuthJson);
       if (!localAuthJson.user || !localAuthJson.token) {
         console.log("not logged in");
-        return;
+      } else{
+        dispatch(login(localAuthJson.user, localAuthJson.token));
+        dispatch(fetchGetBlockList(+localAuthJson.user.id));
+        console.log("blockList initiate", blockList);
       }
-      dispatch(login(localAuthJson.user, localAuthJson.token));
-      dispatch(fetchGetBlockList(+localAuthJson.user.id));
-      console.log("blockList initiate", blockList);
     }
   }, []);
 

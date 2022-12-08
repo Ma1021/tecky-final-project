@@ -212,10 +212,7 @@ const UserInfo: React.FC = () => {
                   text="返回"
                 ></IonBackButton>
               </IonButtons>
-              {/* <IonSearchbar
-                className="pt-0 pb-0 ion-margin"
-                onClick={() => history.push("/search")}
-              ></IonSearchbar> */}
+
               {+userIdUrl === (user_id as number) ? (
                 <Notification />
               ) : (

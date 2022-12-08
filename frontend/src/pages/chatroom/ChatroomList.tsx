@@ -7,9 +7,11 @@ import {
   IonPage,
   IonSegment,
   IonSegmentButton,
+  IonSlide,
+  IonSlides,
   IonToolbar,
 } from "@ionic/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Title from "../../components/All/Title";
 import ChatroomRecommend from "../../components/Chatroom/ChatroomRecommend";
 import ChatroomAll from "../../components/Chatroom/ChatroomAll";
@@ -44,9 +46,22 @@ const ChatroomList: React.FC = () => {
     detail: SegmentChangeEventDetail;
   }
 
-  const onSegmentChange = (event: IonSegmentCustomEvent) => {
-    let value = event.detail.value;
-    setChatroomSegment(value || "userIntro");
+  const slider = useRef<HTMLIonSlidesElement>(null);
+  const slideOpts = {
+    initialSlide: 0,
+    speed: 400,
+    loop: false,
+  };
+
+  const onSegmentChange = (e: any) => {
+    setChatroomSegment(e.detail.value);
+    slider.current!.slideTo(e.detail.value);
+  };
+
+  const handleSlideChange = async (event: any) => {
+    let index: number = 0;
+    await event.target.getActiveIndex().then((value: any) => (index = value));
+    setChatroomSegment("" + index);
   };
 
   // get all data first
@@ -120,6 +135,24 @@ const ChatroomList: React.FC = () => {
               ) : (
                 <ChatroomAll />
               )}
+              {/* <IonSlides
+                options={slideOpts}
+                onIonSlideDidChange={(e) => handleSlideChange(e)}
+                ref={slider}
+              >
+                <IonSlide>
+                  <ChatroomEntered />
+                </IonSlide>
+                <IonSlide>
+                  <ChatroomRecommend />
+                </IonSlide>
+                <IonSlide>
+                  <ChatroomHosted />
+                </IonSlide>
+                <IonSlide>
+                  <ChatroomAll />
+                </IonSlide>
+              </IonSlides> */}
             </Chatlist>
           </div>
         </IonContent>

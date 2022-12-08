@@ -6,17 +6,16 @@ import "./PositionModule.css";
 
 interface PositionRow {
   id: number;
-  name: string;
-  long: boolean;
-  chineseName: string;
-  marketValue: number;
-  currentPrice: number;
-  profit: number;
-  ratio: number;
-  quantity: number;
   symbol: string;
+  name: string;
+  chineseName: string;
+  currentMarketValue: number;
+  currentPrice: number;
   cost: number;
+  quantity: number;
+  profit: number;
   profitPercentage: number;
+  ratio: number;
 }
 
 interface PositionModuleProps {
@@ -30,30 +29,30 @@ const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
   const dispatch = useAppDispatch();
   const userID = 1;
 
+  // new 1 table approach
   useEffect(() => {
     fetch(
-      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getPositionList?userID=${userID}&account=${currentAccount}`
+      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/getFullOrderList2?userID=${userID}&account=${currentAccount}`
     )
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
+        console.log(result.positions);
 
-        setUserPosition(result);
+        setUserPosition(result.positions);
       });
-  }, [isUpdate, currentAccount]);
+  }, [currentAccount, isUpdate]);
 
   async function closePosition(
-    id: number,
     useID: number,
     symbol: string,
-    isLong: boolean,
+    orderDirection: boolean,
     price: number,
     quantity: number,
     account: string
   ) {
-    const data = { id, userID, symbol, isLong, price, quantity, account };
+    const data = { userID, symbol, orderDirection, price, quantity, account };
     const res = await fetch(
-      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/closePosition`,
+      `${process.env.REACT_APP_PUBLIC_URL}/paperTrade/placeOrder3`,
       {
         method: "POST",
         headers: { "Content-type": "application/json" },
@@ -91,10 +90,9 @@ const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
                           role: "confirm",
                           handler: () =>
                             closePosition(
-                              positionRecord.id,
                               userID,
                               positionRecord.symbol,
-                              !positionRecord.long,
+                              !(positionRecord.quantity > 0),
                               positionRecord.currentPrice,
                               positionRecord.quantity,
                               currentAccount
@@ -105,7 +103,7 @@ const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
                   }}
                 >
                   <td className="no-center">{positionRecord.chineseName}</td>
-                  <td>{positionRecord.marketValue.toFixed(2)}</td>
+                  <td>{positionRecord.currentMarketValue.toFixed(2)}</td>
                   <td>{positionRecord.currentPrice.toFixed(2)}</td>
                   <td
                     className={
@@ -134,10 +132,9 @@ const PositionModule: React.FC<PositionModuleProps> = ({ currentAccount }) => {
                           role: "confirm",
                           handler: () =>
                             closePosition(
-                              positionRecord.id,
                               userID,
                               positionRecord.symbol,
-                              !positionRecord.long,
+                              !(positionRecord.quantity > 0),
                               positionRecord.currentPrice,
                               positionRecord.quantity,
                               currentAccount

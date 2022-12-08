@@ -21,6 +21,7 @@ import {
   loadFollowingsId,
   loadFollowers,
 } from "../../redux/subscription/subscriptionSlice";
+import { useHistory } from "react-router";
 
 export interface User {
   id: number;
@@ -34,10 +35,8 @@ const Subscription: React.FC = () => {
   const [segment, setSegment] = useState("follower");
   const [keyword, setKeyword] = useState("");
 
-  const { user } = JSON.parse(
-    localStorage.getItem("auth_stockoverflow") as string
-  );
-  const user_id = +user.id;
+  const history = useHistory();
+  const userIdUrl = history.location.pathname.slice(19)
 
   const onSegmentChange = (e: any) => {
     setSegment(e.detail.value);
@@ -46,15 +45,15 @@ const Subscription: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const initFollowings = useCallback(async () => {
-    await dispatch(loadFollowings(user_id));
+    await dispatch(loadFollowings(+userIdUrl));
   }, [dispatch]);
 
   const initFollowingsId = useCallback(async () => {
-    await dispatch(loadFollowingsId(user_id));
+    await dispatch(loadFollowingsId(+userIdUrl));
   }, [dispatch]);
 
   const initFollowers = useCallback(async () => {
-    await dispatch(loadFollowers(user_id));
+    await dispatch(loadFollowers(+userIdUrl));
   }, [dispatch]);
 
   useEffect(() => {
@@ -72,26 +71,28 @@ const Subscription: React.FC = () => {
       <IonHeader translucent={true} collapse="fade">
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref="/discuss" />
+            <IonBackButton defaultHref="/discuss"  text='返回'/>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent>
         <Container>
-          <IonSegment value={segment} onIonChange={onSegmentChange}>
-            <IonSegmentButton value="follower">
-              <IonLabel>我的粉絲</IonLabel>
-            </IonSegmentButton>
-            <IonSegmentButton value="following">
-              <IonLabel>關注中</IonLabel>
-            </IonSegmentButton>
-          </IonSegment>
+          <div style={{position:'sticky', top:0, zIndex:5, backgroundColor:'#111', width:'100%', display:'flex', flexDirection:'column', alignItems:'center'}}>
+            <IonSegment value={segment} onIonChange={onSegmentChange}>
+              <IonSegmentButton value="follower">
+                <IonLabel>粉絲</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton value="following">
+                <IonLabel>關注中</IonLabel>
+              </IonSegmentButton>
+            </IonSegment>
 
-          <IonSearchbar
-            value={keyword}
-            placeholder="搜索用戶"
-            onIonChange={handleKeywordChange}
-          ></IonSearchbar>
+            <IonSearchbar
+              value={keyword}
+              placeholder="搜索用戶"
+              onIonChange={handleKeywordChange}
+            ></IonSearchbar>
+          </div>
 
           {segment === "follower" ? (
             <Follower keyword={keyword} />

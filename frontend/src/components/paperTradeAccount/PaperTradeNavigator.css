@@ -3,6 +3,7 @@
   margin: 0;
 }
 
-ion-button.navigation-button {
-  width: 33.3vw;
-}
+
+  ion-button.navigation-button {
+    width: 50vw;
+  }

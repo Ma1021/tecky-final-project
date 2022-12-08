@@ -49,11 +49,7 @@ const ChatroomHosted: React.FC = () => {
 
   return (
     <>
-      <ButtonResponsive
-        expand="block"
-        className="ion-margin"
-        onClick={createChat}
-      >
+      <ButtonResponsive className="m-3" expand="block" onClick={createChat}>
         開設聊天室
       </ButtonResponsive>
       <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
@@ -93,7 +89,7 @@ const ChatroomHosted: React.FC = () => {
 export default ChatroomHosted;
 
 const ButtonResponsive = styled(IonButton)`
-  width: 100%;
+  width: 80%;
   @media (min-width: 768px) {
     width: 85%;
   }

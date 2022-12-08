@@ -86,17 +86,13 @@ const RegisterLoop: React.FC = () => {
   });
 
   let main = async (json: any) => {
-    // console.log("before dispatch json ", json);
     await dispatching(json);
     await gettingStorage();
-    // return <Redirect to="/discuss" />;
-
     history.replace("/discuss");
   };
 
   let blockedList = useAppSelector((state) => state.block);
   let dispatching = (json: any) => {
-    // console.log("dispatching");
     dispatch(registerAuth(json.user, json.token.access_token));
     dispatch(fetchGetBlockList(+json.user.id));
     console.log(blockedList);
@@ -331,8 +327,10 @@ const RegisterLoop: React.FC = () => {
       });
       return;
     }
-    // console.log(data);
-    // console.log(process.env.REACT_APP_PUBLIC_URL);
+    if (data.gender === "") {
+      data.gender = null as any;
+    }
+    console.log("dataform", JSON.stringify(data));
     const res = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/user`, {
       method: "POST",
       headers: {
@@ -458,20 +456,6 @@ const RegisterLoop: React.FC = () => {
               name="email"
               as={<IonLabel style={{ color: "red" }}></IonLabel>}
             />
-            {/* 去俾user揀做邊種用戶 */}
-            {/* <IonItem >
-                  <IonLabel position="floating">身份</IonLabel>
-                  <IonRadioGroup {...register("identity", { required: true })}>
-                    <IonItem lines="full">
-                      <IonLabel>超級股神</IonLabel>
-                      <IonRadio value="1"></IonRadio>
-                    </IonItem>
-                    <IonItem lines="full">
-                      <IonLabel>精明用家</IonLabel>
-                      <IonRadio value="2"></IonRadio>
-                    </IonItem>
-                  </IonRadioGroup>
-                </IonItem>*/}
             <IonItem lines="full">
               <IonLabel position="floating">密碼</IonLabel>
               <IonInput
@@ -483,7 +467,7 @@ const RegisterLoop: React.FC = () => {
                     value:
                       /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/,
                     message:
-                      "密碼需要有8-16個字,包括最少一個數字, 一個大楷字母, 一個小楷字母及符號",
+                      "密碼需要有8-16個字,包括最少一個數字,一個大楷字母,一個小楷字母及符號",
                   },
                 })}
               ></IonInput>
@@ -506,7 +490,7 @@ const RegisterLoop: React.FC = () => {
                     value:
                       /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/,
                     message:
-                      "密碼需要有8-16個字,包括最少一個數字, 一個大楷字母, 一個小楷字母及符號",
+                      "密碼需要有8-16個字,包括最少一個數字,一個大楷字母,一個小楷字母及符號",
                   },
                 })}
               ></IonInput>

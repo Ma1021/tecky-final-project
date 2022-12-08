@@ -35,29 +35,31 @@ const IndividualStockInfo: React.FC = () => {
         <IonHeader>
           <IonToolbar>
             <IonButtons slot="start">
-              <IonBackButton defaultHref="/stockList"></IonBackButton>
+              <IonBackButton defaultHref="/stockList" text='返回'></IonBackButton>
             </IonButtons>
           </IonToolbar>
         </IonHeader>
 
-        <SegmentTab
-          className="segment-tab"
-          value={segment}
-          onIonChange={onSegmentChange}
-        >
-          <SegmentButton value="stockInfo">
-            <IonLabel>股票資訊</IonLabel>
-          </SegmentButton>
-          <SegmentButton value="stockForum">
-            <IonLabel>問題</IonLabel>
-          </SegmentButton>
-          <SegmentButton value="stockNews">
-            <IonLabel>新聞</IonLabel>
-          </SegmentButton>
-          <SegmentButton value="stockAnalysis">
+        <div className="segment-container">
+          <SegmentTab
+            className="segment-tab"
+            value={segment}
+            onIonChange={onSegmentChange}
+          >
+            <SegmentButton value="stockInfo">
+              <IonLabel>股票資訊</IonLabel>
+            </SegmentButton>
+            <SegmentButton value="stockForum">
+              <IonLabel>問題</IonLabel>
+            </SegmentButton>
+            <SegmentButton value="stockNews">
+              <IonLabel>新聞</IonLabel>
+            </SegmentButton>
+            {/* <SegmentButton value="stockAnalysis">
             <IonLabel>分析</IonLabel>
-          </SegmentButton>
-        </SegmentTab>
+          </SegmentButton> */}
+          </SegmentTab>
+        </div>
 
         <IonContent>
           {segment === "stockInfo" && (

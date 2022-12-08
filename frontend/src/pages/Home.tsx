@@ -8,6 +8,8 @@ import { useAppSelector } from "../redux/store";
 // import Notification from "../components/All/Notification";
 
 const Home: React.FC = () => {
+  // lock screen to straight
+  window.screen.orientation.lock("portrait");
   const history = useHistory();
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   console.log("isAuthenticated", isAuthenticated);

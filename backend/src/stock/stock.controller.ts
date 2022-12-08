@@ -28,21 +28,13 @@ export class StockController {
   async getIntraDayDataFromMongoDB(@Query('symbol') symbol: string) {
     return await this.stockService.getIntraDayDataFromMongoDB(symbol);
   }
-  @Get('/getMinuteDataFromMongoDB')
-  async getMinuteDataFromMongoDB(
+  @Get('/getMinuteDataFromMongoAPI')
+  async getMinuteDataFromMongoAPI(
     @Query('symbol') symbol: string,
     @Query('timeFrame') timeFrame: string,
   ) {
-    return await this.stockService.getMinuteDataFromMongoDB(symbol, timeFrame);
+    return await this.stockService.getMinuteDataFromMongoAPI(symbol, timeFrame);
   }
-
-  // @Get('/getDayDataFromMongoDB')
-  // async getDayDataFromMongoDB(
-  //   @Query('symbol') symbol: string,
-  //   @Query('timeFrame') timeFrame: string,
-  // ) {
-  //   return await this.appService.getDayDataFromMongoDB(symbol, timeFrame);
-  // }
 
   @Get('/getDayDataFromMongoAPI')
   async getDayDataFromMongoAPI(
@@ -55,11 +47,6 @@ export class StockController {
   @Get('/getNewsFromPostgres')
   async getNewsFromPostgres(@Query('symbol') symbol: string) {
     return await this.stockService.getNewsFromPostgres(symbol);
-  }
-
-  @Get('/getUserTradeRecords')
-  async getUserTradeRecordsFromPostgres(@Query('userID') userID: string) {
-    return await this.stockService.getUserTradeRecordsFromPostgres(userID);
   }
 
   @Post('/subscribeStock')
@@ -76,6 +63,10 @@ export class StockController {
     return await this.stockService.checkUserStockSubscription(userID, symbol);
   }
 
+  @Get('/getCryptoDataFromMongoAPI')
+  async getCryptoDataFromMongoAPI(@Query('symbol') symbol: string) {
+    return await this.stockService.getCryptoDataFromMongoAPI(symbol);
+  }
   // @Get('kafka-test')
   // testKafka() {
   //   return this.client.emit('medium.rocks', {

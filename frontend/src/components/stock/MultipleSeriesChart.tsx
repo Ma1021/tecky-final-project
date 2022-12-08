@@ -380,15 +380,11 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
     ) {
       return;
     }
+    console.log(symbol.endsWith("USDT"));
 
-    if (
-      timeFrame === "1D" ||
-      timeFrame === "1W" ||
-      timeFrame === "1M" ||
-      timeFrame === "1Y"
-    ) {
+    if (symbol.endsWith("USDT")) {
       fetch(
-        `${process.env.REACT_APP_PUBLIC_URL}/stock/getDayDataFromMongoAPI?symbol=${symbol}&timeFrame=${timeFrame}`
+        `${process.env.REACT_APP_PUBLIC_URL}/stock/getCryptoDataFromMongoAPI?symbol=${symbol}`
       )
         .then((res) => res.json())
         .then((result) => {
@@ -409,31 +405,63 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
           MACDSlow.setData(result.slowLineResultArray);
           MACDHistogram.setData(result.histogramResultArray);
         });
-      console.log("data set into series");
     } else {
-      fetch(
-        `${process.env.REACT_APP_PUBLIC_URL}/stock/getMinuteDataFromMongoDB?symbol=${symbol}&timeFrame=${timeFrame}`
-      )
-        .then((res) => res.json())
-        .then((result) => {
-          lineSeries.setData(result.convertedLineDataArray);
-          candlestickSeries.setData(result.convertedCandlestickDataArray);
-          volumeSeries.setData(result.convertedVolumeDataArray);
-          SMA20.setData(result.lineSMA20Array);
-          SMA50.setData(result.lineSMA50Array);
-          SMA100.setData(result.lineSMA100Array);
-          SMA250.setData(result.lineSMA250Array);
-          EMA20.setData(result.lineEMA20Array);
-          EMA50.setData(result.lineEMA50Array);
-          EMA100.setData(result.lineEMA100Array);
-          EMA250.setData(result.lineEMA250Array);
-          RSI7.setData(result.lineRSI7Array);
-          RSI14.setData(result.lineRSI14Array);
-          MACDFast.setData(result.fastLineResultArray);
-          MACDSlow.setData(result.slowLineResultArray);
-          MACDHistogram.setData(result.histogramResultArray);
-        });
-      console.log("data set into series");
+      if (
+        timeFrame === "1D" ||
+        timeFrame === "1W" ||
+        timeFrame === "1M" ||
+        timeFrame === "1Y"
+      ) {
+        fetch(
+          `${process.env.REACT_APP_PUBLIC_URL}/stock/getDayDataFromMongoAPI?symbol=${symbol}&timeFrame=${timeFrame}`
+        )
+          .then((res) => res.json())
+          .then((result) => {
+            lineSeries.setData(result.convertedLineDataArray);
+            candlestickSeries.setData(result.convertedCandlestickDataArray);
+            volumeSeries.setData(result.convertedVolumeDataArray);
+            SMA20.setData(result.lineSMA20Array);
+            SMA50.setData(result.lineSMA50Array);
+            SMA100.setData(result.lineSMA100Array);
+            SMA250.setData(result.lineSMA250Array);
+            EMA20.setData(result.lineEMA20Array);
+            EMA50.setData(result.lineEMA50Array);
+            EMA100.setData(result.lineEMA100Array);
+            EMA250.setData(result.lineEMA250Array);
+            RSI7.setData(result.lineRSI7Array);
+            RSI14.setData(result.lineRSI14Array);
+            MACDFast.setData(result.fastLineResultArray);
+            MACDSlow.setData(result.slowLineResultArray);
+            MACDHistogram.setData(result.histogramResultArray);
+          });
+        console.log("data set into series");
+      } else {
+        fetch(
+          `${process.env.REACT_APP_PUBLIC_URL}/stock/getMinuteDataFromMongoAPI?symbol=${symbol}&timeFrame=${timeFrame}`
+        )
+          .then((res) => res.json())
+          .then((result) => {
+            console.log(result);
+
+            lineSeries.setData(result.convertedLineDataArray);
+            candlestickSeries.setData(result.convertedCandlestickDataArray);
+            volumeSeries.setData(result.convertedVolumeDataArray);
+            SMA20.setData(result.lineSMA20Array);
+            SMA50.setData(result.lineSMA50Array);
+            SMA100.setData(result.lineSMA100Array);
+            SMA250.setData(result.lineSMA250Array);
+            EMA20.setData(result.lineEMA20Array);
+            EMA50.setData(result.lineEMA50Array);
+            EMA100.setData(result.lineEMA100Array);
+            EMA250.setData(result.lineEMA250Array);
+            RSI7.setData(result.lineRSI7Array);
+            RSI14.setData(result.lineRSI14Array);
+            MACDFast.setData(result.fastLineResultArray);
+            MACDSlow.setData(result.slowLineResultArray);
+            MACDHistogram.setData(result.histogramResultArray);
+          });
+        console.log("data set into series");
+      }
     }
     setIsSetData(!isSetData);
   }, [isFetch, timeFrame]);
@@ -540,8 +568,8 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
         to: range.to - 6,
       });
       MACDChart?.timeScale().setVisibleLogicalRange({
-        from: range.from - 25,
-        to: range.to - 25,
+        from: range.from - 24,
+        to: range.to - 24,
       });
     });
 
@@ -841,10 +869,23 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
     };
   }, [isSetChart, currentChartType]);
 
+  const [direction, setDirection] = useState("portrait");
+
+  function landscape() {
+    // lock screen to straight
+    if (direction === "portrait") {
+      window.screen.orientation.lock("landscape");
+      setDirection("landscape");
+    } else {
+      window.screen.orientation.lock("portrait");
+      setDirection("portrait");
+    }
+  }
+
   return (
     <>
       <hr />
-      {/* <div className="button-container-1"> */}
+      <div className="button-container-1"></div>
       <div className="chart-type-button-container">
         <button
           className={"chart-type " + (currentChartType.line ? "isClicked" : "")}
@@ -865,298 +906,20 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
         >
           Candlestick Chart
         </button>
-      </div>
-      <div className="time-frame-button-container">
         <button
-          className={
-            "time-frame " + (currentTimeFrame.oneMinute ? "isClicked" : "")
-          }
-          onClick={() => {
-            setTimeFrame("1m");
-            setCurrentTimeFrame({
-              oneMinute: true,
-              fiveMinutes: false,
-              tenMinutes: false,
-              fifteenMinutes: false,
-              thirtyMinutes: false,
-              oneHour: false,
-              twoHours: false,
-              fourHours: false,
-              oneDay: false,
-              oneWeek: false,
-              oneMonth: false,
-              oneYear: false,
-            });
+          style={{
+            background: "var(--ion-color-primary)",
+            color: "#fff",
+            fontWeight: 500,
+            borderRadius: 5,
           }}
+          onClick={landscape}
         >
-          1m
-        </button>
-        <button
-          className={
-            "time-frame " + (currentTimeFrame.fiveMinutes ? "isClicked" : "")
-          }
-          onClick={() => {
-            setTimeFrame("5m");
-            setCurrentTimeFrame({
-              oneMinute: false,
-              fiveMinutes: true,
-              tenMinutes: false,
-              fifteenMinutes: false,
-              thirtyMinutes: false,
-              oneHour: false,
-              twoHours: false,
-              fourHours: false,
-              oneDay: false,
-              oneWeek: false,
-              oneMonth: false,
-              oneYear: false,
-            });
-          }}
-        >
-          5m
-        </button>
-        <button
-          className={
-            "time-frame " + (currentTimeFrame.tenMinutes ? "isClicked" : "")
-          }
-          onClick={() => {
-            setTimeFrame("10m");
-            setCurrentTimeFrame({
-              oneMinute: false,
-              fiveMinutes: false,
-              tenMinutes: true,
-              fifteenMinutes: false,
-              thirtyMinutes: false,
-              oneHour: false,
-              twoHours: false,
-              fourHours: false,
-              oneDay: false,
-              oneWeek: false,
-              oneMonth: false,
-              oneYear: false,
-            });
-          }}
-        >
-          10m
-        </button>
-        <button
-          className={
-            "time-frame " + (currentTimeFrame.fifteenMinutes ? "isClicked" : "")
-          }
-          onClick={() => {
-            setTimeFrame("15m");
-            setCurrentTimeFrame({
-              oneMinute: false,
-              fiveMinutes: false,
-              tenMinutes: false,
-              fifteenMinutes: true,
-              thirtyMinutes: false,
-              oneHour: false,
-              twoHours: false,
-              fourHours: false,
-              oneDay: false,
-              oneWeek: false,
-              oneMonth: false,
-              oneYear: false,
-            });
-          }}
-        >
-          15m
-        </button>
-        <button
-          className={
-            "time-frame " + (currentTimeFrame.thirtyMinutes ? "isClicked" : "")
-          }
-          onClick={() => {
-            setTimeFrame("30m");
-            setCurrentTimeFrame({
-              oneMinute: false,
-              fiveMinutes: false,
-              tenMinutes: false,
-              fifteenMinutes: false,
-              thirtyMinutes: true,
-              oneHour: false,
-              twoHours: false,
-              fourHours: false,
-              oneDay: false,
-              oneWeek: false,
-              oneMonth: false,
-              oneYear: false,
-            });
-          }}
-        >
-          30m
-        </button>
-        <button
-          className={
-            "time-frame " + (currentTimeFrame.oneHour ? "isClicked" : "")
-          }
-          onClick={() => {
-            setTimeFrame("1h");
-            setCurrentTimeFrame({
-              oneMinute: false,
-              fiveMinutes: false,
-              tenMinutes: false,
-              fifteenMinutes: false,
-              thirtyMinutes: false,
-              oneHour: true,
-              twoHours: false,
-              fourHours: false,
-              oneDay: false,
-              oneWeek: false,
-              oneMonth: false,
-              oneYear: false,
-            });
-          }}
-        >
-          1h
-        </button>
-        <button
-          className={
-            "time-frame " + (currentTimeFrame.twoHours ? "isClicked" : "")
-          }
-          onClick={() => {
-            setTimeFrame("2h");
-            setCurrentTimeFrame({
-              oneMinute: false,
-              fiveMinutes: false,
-              tenMinutes: false,
-              fifteenMinutes: false,
-              thirtyMinutes: false,
-              oneHour: false,
-              twoHours: true,
-              fourHours: false,
-              oneDay: false,
-              oneWeek: false,
-              oneMonth: false,
-              oneYear: false,
-            });
-          }}
-        >
-          2h
-        </button>
-        <button
-          className={
-            "time-frame " + (currentTimeFrame.fourHours ? "isClicked" : "")
-          }
-          onClick={() => {
-            setTimeFrame("4h");
-            setCurrentTimeFrame({
-              oneMinute: false,
-              fiveMinutes: false,
-              tenMinutes: false,
-              fifteenMinutes: false,
-              thirtyMinutes: false,
-              oneHour: false,
-              twoHours: false,
-              fourHours: true,
-              oneDay: false,
-              oneWeek: false,
-              oneMonth: false,
-              oneYear: false,
-            });
-          }}
-        >
-          4h
-        </button>
-        <button
-          className={
-            "time-frame " + (currentTimeFrame.oneDay ? "isClicked" : "")
-          }
-          onClick={() => {
-            setTimeFrame("1D");
-            setCurrentTimeFrame({
-              oneMinute: false,
-              fiveMinutes: false,
-              tenMinutes: false,
-              fifteenMinutes: false,
-              thirtyMinutes: false,
-              oneHour: false,
-              twoHours: false,
-              fourHours: false,
-              oneDay: true,
-              oneWeek: false,
-              oneMonth: false,
-              oneYear: false,
-            });
-          }}
-        >
-          1D
-        </button>
-        <button
-          className={
-            "time-frame " + (currentTimeFrame.oneWeek ? "isClicked" : "")
-          }
-          onClick={() => {
-            setTimeFrame("1W");
-            setCurrentTimeFrame({
-              oneMinute: false,
-              fiveMinutes: false,
-              tenMinutes: false,
-              fifteenMinutes: false,
-              thirtyMinutes: false,
-              oneHour: false,
-              twoHours: false,
-              fourHours: false,
-              oneDay: false,
-              oneWeek: true,
-              oneMonth: false,
-              oneYear: false,
-            });
-          }}
-        >
-          1W
-        </button>
-        <button
-          className={
-            "time-frame " + (currentTimeFrame.oneMonth ? "isClicked" : "")
-          }
-          onClick={() => {
-            setTimeFrame("1M");
-            setCurrentTimeFrame({
-              oneMinute: false,
-              fiveMinutes: false,
-              tenMinutes: false,
-              fifteenMinutes: false,
-              thirtyMinutes: false,
-              oneHour: false,
-              twoHours: false,
-              fourHours: false,
-              oneDay: false,
-              oneWeek: false,
-              oneMonth: true,
-              oneYear: false,
-            });
-          }}
-        >
-          1M
-        </button>
-        <button
-          className={
-            "time-frame " + (currentTimeFrame.oneYear ? "isClicked" : "")
-          }
-          onClick={() => {
-            setTimeFrame("1Y");
-            setCurrentTimeFrame({
-              oneMinute: false,
-              fiveMinutes: false,
-              tenMinutes: false,
-              fifteenMinutes: false,
-              thirtyMinutes: false,
-              oneHour: false,
-              twoHours: false,
-              fourHours: false,
-              oneDay: false,
-              oneWeek: false,
-              oneMonth: false,
-              oneYear: true,
-            });
-          }}
-        >
-          1Y
+          {direction === "portrait" ? "橫向顯示" : "直向顯示"}
         </button>
       </div>
-      {/* </div> */}
+      <div className="time-frame-button-container"></div>
+
       <div className="indicator-button-container">
         <button
           className={"indicator " + (indicators.SMA20 ? "isClicked" : "")}

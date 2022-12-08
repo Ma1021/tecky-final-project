@@ -52,13 +52,13 @@ export async function seed(knex: Knex): Promise<void> {
   ]);
 
   await knex('user_stocks').insert([
-    { id: 1, user_id: 1, symbol: 'TSLA' },
-    { id: 2, user_id: 1, symbol: 'GOOG' },
-    { id: 3, user_id: 1, symbol: 'GME' },
-    { id: 4, user_id: 1, symbol: 'MSFT' },
-    { id: 5, user_id: 1, symbol: 'AAPL' },
-    { id: 6, user_id: 2, symbol: 'TSLA' },
-    { id: 7, user_id: 2, symbol: 'AAPL' },
+    { user_id: 1, symbol: 'TSLA' },
+    { user_id: 1, symbol: 'GOOG' },
+    { user_id: 1, symbol: 'AAPL' },
+    { user_id: 2, symbol: 'TSLA' },
+    { user_id: 2, symbol: 'GOOG' },
+    { user_id: 2, symbol: 'GME' },
+    { user_id: 2, symbol: 'AAPL' },
   ]);
 
   await knex('user_trades').insert([

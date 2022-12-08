@@ -14,7 +14,7 @@ import {
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { useAppDispatch } from "../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import {
   loadAnswererQuestions,
   loadAskerQuestions,
@@ -28,11 +28,14 @@ import MyQuestion from "../../components/discuss/Myquestion";
 import Title from "../../components/All/Title";
 import Menu from "../../components/All/Menu";
 
-const Discuss: React.FC = () => {
+const Discuss: React.FC = () => {  
   const [segment, setSegment] = useState("0");
   const [keyword, setKeyword] = useState("");
   let user;
   let user_id: number;
+  const { questionList, loading } = useAppSelector(
+    (state) => state.question
+  );
 
   if (localStorage.getItem("auth_stockoverflow") !== null) {
     user =
@@ -45,14 +48,14 @@ const Discuss: React.FC = () => {
   const slideOpts = {
     initialSlide: 0,
     speed: 400,
-    loop: false
+    loop: false,
   };
 
   const handleSlideChange = async (event: any) => {
     let index: number = 0;
-    await event.target.getActiveIndex().then((value: any) => (index=value));
-    setSegment(''+index)
-  }
+    await event.target.getActiveIndex().then((value: any) => (index = value));
+    setSegment("" + index);
+  };
 
   const onSegmentChange = (e: any) => {
     setSegment(e.detail.value);
@@ -100,7 +103,14 @@ const Discuss: React.FC = () => {
         </IonHeader>
 
         <IonContent>
-          <div style={{position:'sticky', top:0, zIndex:5, backgroundColor:'#111'}}>
+          <div
+            style={{
+              position: "sticky",
+              top: 0,
+              zIndex: 5,
+              backgroundColor: "#111",
+            }}
+          >
             <div className="d-flex justify-content-center">
               <SegmentTab value={segment} onIonChange={onSegmentChange}>
                 <SegmentButton value="0">
@@ -133,15 +143,19 @@ const Discuss: React.FC = () => {
             </div>
           </div>
 
-          <IonSlides options={slideOpts} onIonSlideDidChange={(e) => handleSlideChange(e)} ref={slider}>
+          <IonSlides
+            options={slideOpts}
+            onIonSlideDidChange={(e) => handleSlideChange(e)}
+            ref={slider}
+          >
             <IonSlide>
               <Allquestion keyword={keyword} />
             </IonSlide>
             <IonSlide>
-              <MyQuestion keyword={keyword}/>
+              <MyQuestion keyword={keyword} />
             </IonSlide>
             <IonSlide>
-              <MyAnswer keyword={keyword}/>
+              <MyAnswer keyword={keyword} />
             </IonSlide>
           </IonSlides>
         </IonContent>

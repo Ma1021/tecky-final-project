@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import fetch from 'node-fetch';
 
 @Injectable()
 export class AppService {
@@ -12,7 +13,6 @@ export class AppService {
     const result = await res.json();
 
     result.detail === 'Not Found' ? (finalResult = {}) : (finalResult = result);
-    console.log(finalResult);
 
     return finalResult;
   }

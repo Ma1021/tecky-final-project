@@ -13,10 +13,9 @@ import {
   IonAccordion,
   IonAccordionGroup,
   IonList,
-  useIonRouter,
   useIonAlert,
 } from "@ionic/react";
-import { useHistory } from "react-router";
+import { Redirect, useHistory } from "react-router";
 import {
   pencilOutline,
   settingsOutline,
@@ -62,9 +61,6 @@ const Menu: React.FC<MenuProps> = () => {
     //   "after useEffect and set localStorage",
     //   localStorage.getItem("auth_stockoverflow")
     // );
-
-    // return <Redirect to="/home" />;
-    // history.replace("/home");
     history.push("/home", "root");
   };
 
@@ -100,14 +96,14 @@ const Menu: React.FC<MenuProps> = () => {
     );
     dispatch(deleteAcc());
     // web version
-    localStorage.setItem("auth_stockoverflow", "");
+    localStorage.removeItem("auth_stockoverflow");
     // console.log(
     //   "after useEffect and set localStorage",
     //   localStorage.getItem("auth_stockoverflow")
     // );
-
-    // return <Redirect to="/home" />;
-    // history.replace("/home");
+    history.push("/home", "root");
+    // <Navigate to="/home" replace={true} />;
+    // history.push("/home");
     // router.push("/home", "forward", "push");
   };
 

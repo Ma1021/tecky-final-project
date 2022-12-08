@@ -8,12 +8,12 @@ export class PaperTradeController {
 
   @Post('/placeOrder')
   async placeOrder(@Body() order: PlaceOrderDTO) {
-    const { userID, symbol, orderType, price, quantity, account } = order;
+    const { userID, symbol, orderDirection, price, quantity, account } = order;
 
     return await this.paperTradeService.placeOrder2(
       userID,
       symbol,
-      orderType,
+      orderDirection,
       price,
       quantity,
       account,
@@ -95,5 +95,44 @@ export class PaperTradeController {
   @Get('/getCurrentPrice')
   async getCurrentPrice(@Query('symbol') symbol: string) {
     return this.paperTradeService.getCurrentPrice(symbol);
+  }
+
+  @Get('/getStockName')
+  async getStockName(@Query('symbol') symbol: string) {
+    return this.paperTradeService.getStockName(symbol);
+  }
+
+  @Get('/updateAccountDetail')
+  async updateAccountDetail(@Query('userID') userID: number) {
+    return await this.paperTradeService.getCurrentPriceAndUpdatePostgres(
+      userID,
+    );
+  }
+
+  @Get('/getFullOrderList2')
+  async getFullOrderList2(
+    @Query('userID') userID: number,
+    @Query('account') account: string,
+  ) {
+    return await this.paperTradeService.getFullOrderList2(userID, account);
+  }
+
+  @Post('/placeOrder3')
+  async placeOrder3(@Body() order: PlaceOrderDTO) {
+    const { userID, symbol, orderDirection, price, quantity, account } = order;
+
+    return await this.paperTradeService.placeOrder3(
+      userID,
+      symbol,
+      orderDirection,
+      price,
+      quantity,
+      account,
+    );
+  }
+
+  @Get('/getAccountList2')
+  async getAccountList2(@Query('userID') userID: number) {
+    return await this.paperTradeService.getAccountList2(userID);
   }
 }

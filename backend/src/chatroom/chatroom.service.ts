@@ -261,7 +261,7 @@ export class ChatroomService {
         , chatroom_record.chatroom as chatroomId
         , chatrooms.name as chatroomName
         from chatroom_record 
-        join users on chatroom_record.user = users.idjoin chatrooms on chatroom_record.chatroom = chatrooms.id
+        join users on chatroom_record.user = users.id join chatrooms on chatroom_record.chatroom = chatrooms.id
         where chatroom_record.chatroom = ?
         order by created_at
         `,
@@ -283,10 +283,11 @@ export class ChatroomService {
     try {
       let result = await this.knex.raw(
         `
-        select chatroom.name from chatrooms where id = ?
+        select chatrooms.name from chatrooms where id = ?
         `,
         [id],
       );
+      console.log(result.rows[0]);
       return result.rows[0];
     } catch (error) {
       console.log(error.message);

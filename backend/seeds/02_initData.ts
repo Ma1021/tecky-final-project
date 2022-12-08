@@ -70,12 +70,14 @@ export async function seed(knex: Knex): Promise<void> {
   //Insert questions and answer start
   async function insertAnswer(question_id: number, asker_id: number) {
     // random a answer amount
-    
+
     const amount = Math.floor(Math.random() * 6);
     for (let i = 0; i < amount; i++) {
-      const content = answerContent[Math.floor(Math.random() * answerContent.length)];
-      const answerer_id = user_idArray[Math.floor(Math.random() * user_idArray.length)].id;
-      
+      const content =
+        answerContent[Math.floor(Math.random() * answerContent.length)];
+      const answerer_id =
+        user_idArray[Math.floor(Math.random() * user_idArray.length)].id;
+
       if (asker_id === answerer_id) {
         return;
       }
@@ -90,7 +92,7 @@ export async function seed(knex: Knex): Promise<void> {
 
   // get all stock id
   const stockRes = await knex('stocks').select('id');
-  
+
   const questionContent = [
     '依隻可以買嗎？',
     '點睇呢隻🙏',
@@ -118,7 +120,7 @@ export async function seed(knex: Knex): Promise<void> {
     '最近有咩利好消息？',
     '趁反彈係咪應該要走佬先？',
     '呢隻真係勁！',
-    '諗住長線，依隻前景如何？'
+    '諗住長線，依隻前景如何？',
   ];
 
   const answerContent = [
@@ -135,7 +137,7 @@ export async function seed(knex: Knex): Promise<void> {
     '個市調整中，不需要急入貨',
     '揸現金等買優質股，大把靚貨，唔好買埋D垃圾股',
     '玩過山車咁，一日天堂一日地獄',
-    '入場要諗用咩做止蝕位，控制好風險'
+    '入場要諗用咩做止蝕位，控制好風險',
   ];
 
   // get all user id without kol and admin
@@ -147,16 +149,17 @@ export async function seed(knex: Knex): Promise<void> {
     const tag_number = await knex('tags').count('tag_id').first();
     const stock_id = [];
     const tag_amount = Math.floor(Math.random() * 4);
-    for(let i = 0; i < tag_amount; i++) {
-      stock_id.push(stockRes[Math.floor(Math.random() * stockRes.length)].id)
+    for (let i = 0; i < tag_amount; i++) {
+      stock_id.push(stockRes[Math.floor(Math.random() * stockRes.length)].id);
     }
-    const asker_id = normalUser[Math.floor(Math.random() * normalUser.length)].id;
+    const asker_id =
+      normalUser[Math.floor(Math.random() * normalUser.length)].id;
 
     if (tag_number.count == 0) {
       if (stock_id[0]) {
         // insert tag id and stock id to tag table
-        for(let id of stock_id) {
-          await knex('tags').insert({ tag_id: 1, stock_id:id });
+        for (let id of stock_id) {
+          await knex('tags').insert({ tag_id: 1, stock_id: id });
         }
       } else {
         await knex('tags').insert({ tag_id: 1, stock_id: null });
@@ -176,10 +179,10 @@ export async function seed(knex: Knex): Promise<void> {
 
       if (stock_id[0]) {
         // insert tag id and stock id to tag table
-        for(let id of stock_id) {
+        for (let id of stock_id) {
           await knex('tags').insert({
             tag_id: tag_id + 1,
-            stock_id:id,
+            stock_id: id,
           });
         }
       } else {
@@ -199,7 +202,7 @@ export async function seed(knex: Knex): Promise<void> {
   }
 
   //Insert questions end
-  
+
   await knex('notification_type').insert([
     { action_type: 'create question', action_desc: '提出問題：' },
     { action_type: 'create answer', action_desc: '回覆了你：' },

@@ -71,8 +71,8 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
   const [ is_bottom, setIsBottom ] = useState(false);
   const dispatch = useAppDispatch();
 
-  function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
-    dispatch(loadQuestions());
+  async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
+    await dispatch(loadQuestions());
     if (!loading) {
       event.detail.complete();
     }

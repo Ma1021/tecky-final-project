@@ -6,6 +6,7 @@ import {
   unFollowUser,
 } from "../../redux/subscription/subscriptionSlice";
 import { useAppSelector, useAppDispatch } from "../../redux/store";
+import { useHistory } from "react-router";
 
 interface SubscriptionProps {
   page: string;
@@ -22,13 +23,19 @@ const UserCard: React.FC<SubscriptionProps> = (props: SubscriptionProps) => {
     username: string
   }
 
+  const { user } = JSON.parse(
+    localStorage.getItem("auth_stockoverflow") as string
+  );
+
   if (localStorage.getItem("auth_stockoverflow")) {
-    const { user } = JSON.parse(
-      localStorage.getItem("auth_stockoverflow") as string
-    );
-    user_id = user.id;
+    if(user.id) {
+      user_id = user.id;
+    }
     dataUser = user;
   }
+
+  const history = useHistory();
+  const userIdUrl = history.location.pathname.slice(19) 
 
   async function handleFollowUser(e: any) {
     e.preventDefault();
@@ -49,7 +56,7 @@ const UserCard: React.FC<SubscriptionProps> = (props: SubscriptionProps) => {
         user_id,
       })
     );
-  }
+  }  
 
   return (
     <Card data-user_id={props.user.user_id}>
@@ -60,10 +67,10 @@ const UserCard: React.FC<SubscriptionProps> = (props: SubscriptionProps) => {
           <IonText>{props.user.introduction}</IonText>
         </div>
       </div>
-      {props.page === "follower" &&
+      {props.page === "follower" && +userIdUrl ===  user.id &&
       !followingIdList.includes(props.user.user_id) ? (
         <IonButton onClick={handleFollowUser}>關注</IonButton>
-      ) : (
+      ) : +userIdUrl ===  user.id && (
         <IonButton onClick={handleUnFollowUser}>取消關注</IonButton>
       )}
     </Card>

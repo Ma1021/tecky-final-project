@@ -58,7 +58,6 @@ export async function seed(knex: Knex): Promise<void> {
     { user_id: 2, symbol: 'TSLA' },
     { user_id: 2, symbol: 'GOOG' },
     { user_id: 2, symbol: 'GME' },
-    { user_id: 2, symbol: 'MSFT' },
     { user_id: 2, symbol: 'AAPL' },
   ]);
 

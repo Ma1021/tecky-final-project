@@ -66,8 +66,9 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
   }
 
   // const [filteredQuestions, setFilteredQuestions] = useState(Array<Questions>);
-  const [keywordFilter, setKeywordFilter] = useState(Array<Questions>);
-
+  const [ keywordFilter, setKeywordFilter ] = useState<Array<Questions>>([]);
+  const [ items, setItems ] = useState<Array<Questions>>([]);
+  const [ is_bottom, setIsBottom ] = useState(false);
   const dispatch = useAppDispatch();
 
   function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
@@ -106,8 +107,7 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
   },[keywordFilter])
 
   // infiniteScroll
-  const [items, setItems] = useState<Array<Questions>>([]);
-  const [ is_bottom, setIsBottom ] = useState(false);
+
   const generateItems = () => {
     const newItems = [] as any;
     for (let i = 0; i < 5; i++) {
@@ -133,7 +133,7 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
           {questionList.length > 0 ? (
             <QuestionCard
               questions={
-                items.length > 0 ? items : questionList
+                keywordFilter.length > 0 ? keywordFilter : questionList
               }
             />
           ) : (

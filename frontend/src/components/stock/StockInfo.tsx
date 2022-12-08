@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useAppSelector } from "../../redux/store";
 import { IonIcon } from "@ionic/react";
 import { heart, heartOutline } from "ionicons/icons";
+import { useLocation } from "react-router";
 
 interface StockInfoProps {
   symbol: string;
@@ -47,6 +48,7 @@ const StockInfo: React.FC<StockInfoProps> = ({ symbol, refresh }) => {
   const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
   const isChinese = useAppSelector((state) => state.theme.isChinese);
   const userID = useAppSelector((state) => state.auth.user!.id);
+  const location = useLocation();
 
   useEffect(() => {
     fetch(
@@ -59,17 +61,28 @@ const StockInfo: React.FC<StockInfoProps> = ({ symbol, refresh }) => {
   }, []);
 
   useEffect(() => {
-    fetch(
-      `${process.env.REACT_APP_PUBLIC_URL}/stock/getHighLowFromMongoAPI?symbol=${symbol}`
-    )
-      .then((res) => res.json())
-      .then((result) => {
-        console.log(result);
-        result["status"] = new Date().toLocaleString("en-US");
-        setNewStockInfo(result);
-        console.log(result.todayOpen - result.yesterdayPrice > 0);
-      });
-  }, [refresh]);
+    if (location.pathname.endsWith("USDT")) {
+      fetch(
+        `${process.env.REACT_APP_PUBLIC_URL}/stock/getCryptoAllDataFromMongoAPI?symbol=${symbol}`
+      )
+        .then((res) => res.json())
+        .then((result) => {
+          console.log(result);
+          result["status"] = new Date().toLocaleString("en-US");
+          setNewStockInfo(result);
+        });
+    } else {
+      fetch(
+        `${process.env.REACT_APP_PUBLIC_URL}/stock/getHighLowFromMongoAPI?symbol=${symbol}`
+      )
+        .then((res) => res.json())
+        .then((result) => {
+          console.log(result);
+          result["status"] = new Date().toLocaleString("en-US");
+          setNewStockInfo(result);
+        });
+    }
+  }, [refresh, symbol]);
 
   return (
     <>

@@ -628,13 +628,72 @@ export class StockService {
     };
   }
 
-  async getAllDataFromMongoAPI(symbol: string) {
-    const { yesterdayPrice, currentPrice } =
-      await this.getCurrentAndYesterdayStockPrice(symbol);
+  async getCryptoAllDataFromMongoAPI(symbol: string) {
+    const knexResult = await this.knex
+      .select('*')
+      .from('stock_info')
+      .where({ symbol: symbol });
 
-    console.log(yesterdayPrice, currentPrice);
+    const res = await fetch(`http://35.213.167.63/mongo/${symbol}`);
+    const result = await res.json();
+    const todayOpen = result[result.length - 1].open;
 
-    return { yesterdayPrice, currentPrice };
+    let totalVolume = 0;
+    const historyHigh = result.reduce((prev, current) => {
+      if (prev > current.high) {
+        return prev;
+      }
+
+      return current.high;
+    }, -9999);
+
+    const historyLow = result.reduce((prev, current) => {
+      if (prev < current.low) {
+        return prev;
+      }
+
+      return current.low;
+    }, 999999999);
+
+    const todayHigh = result.reduce((prev, current) => {
+      if (prev > current.high) {
+        return prev;
+      }
+
+      return current.high;
+    }, -99999);
+
+    const todayLow = result.reduce((prev, current) => {
+      if (prev < current.low) {
+        return prev;
+      }
+
+      return current.low;
+    }, 9999999);
+
+    result.forEach((obj) => {
+      totalVolume += obj.volume;
+    });
+
+    return {
+      symbol: symbol,
+      name: knexResult[0].name,
+      chineseName: knexResult[0].chinese_name,
+      yesterdayPrice: result[result.length - 1].close,
+      currentPrice: result[0].close,
+      priceDifference: result[0].close - result[result.length - 1].close,
+      priceDifferencePercentage:
+        ((result[0].close - result[result.length - 1].close) /
+          result[result.length - 1].close) *
+        100,
+      todayOpen: todayOpen,
+      todayHigh: todayHigh,
+      todayLow: todayLow,
+      historyHigh: historyHigh,
+      historyLow: historyLow,
+      volume: totalVolume,
+      turnover: totalVolume * result[result.length - 1].close,
+    };
   }
 }
 

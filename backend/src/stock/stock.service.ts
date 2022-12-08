@@ -111,13 +111,12 @@ export class StockService {
       new Date().getMonth() + 1
     }-${new Date().getDate()}`;
 
-    console.log(today);
-
     if (symbol.endsWith('USDT')) {
       result
         .filter((element) => {
-          element.time >= new Date(today).getTime() / 1000;
+          return element.time >= new Date(today).getTime() / 1000;
         })
+        .reverse()
         .slice(0, 389)
         .forEach((element) => {
           valueArray.push(element.close);
@@ -125,7 +124,7 @@ export class StockService {
     } else {
       if (
         result.filter((element) => {
-          element.time >= new Date(today).getTime() / 1000;
+          return element.time >= new Date(today).getTime() / 1000;
         }).length > 0
       ) {
         result

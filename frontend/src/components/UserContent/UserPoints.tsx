@@ -37,7 +37,7 @@ const UserPoints: React.FC = memo(() => {
     });
   },[])
 
-  const done = (recordList.totalPoints/1000)*100
+  const done = +((recordList.totalPoints/1000)*100).toFixed(2)
   const point = recordList.totalPoints
 
   useEffect(()=>{    

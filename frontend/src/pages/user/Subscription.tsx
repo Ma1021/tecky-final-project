@@ -71,16 +71,16 @@ const Subscription: React.FC = () => {
       <IonHeader translucent={true} collapse="fade">
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref="/discuss" />
+            <IonBackButton defaultHref="/discuss"  text='返回'/>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent>
         <Container>
-          <div style={{position:'sticky', top:0, zIndex:5, backgroundColor:'#111', width:'100%'}}>
+          <div style={{position:'sticky', top:0, zIndex:5, backgroundColor:'#111', width:'100%', display:'flex', flexDirection:'column', alignItems:'center'}}>
             <IonSegment value={segment} onIonChange={onSegmentChange}>
               <IonSegmentButton value="follower">
-                <IonLabel>我的粉絲</IonLabel>
+                <IonLabel>粉絲</IonLabel>
               </IonSegmentButton>
               <IonSegmentButton value="following">
                 <IonLabel>關注中</IonLabel>

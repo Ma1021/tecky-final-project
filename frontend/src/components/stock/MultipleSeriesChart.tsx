@@ -13,9 +13,10 @@ import "./MultipleSeriesChart.css";
 
 interface NewProps {
   symbol: string;
+  refresh: boolean;
 }
 
-const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
+const MultipleSeriesChart: React.FC<NewProps> = ({ symbol, refresh }) => {
   const [mainChart, setMainChart] = useState<IChartApi | null>(null);
   const [RSIChart, setRSIChart] = useState<IChartApi | null>(null);
   const [MACDChart, setMACDChart] = useState<IChartApi | null>(null);
@@ -479,7 +480,7 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
       }
     }
     setIsSetData(!isSetData);
-  }, [isFetch, timeFrame]);
+  }, [isFetch, timeFrame, refresh]);
 
   // apply options to chart and series
   useEffect(() => {
@@ -885,8 +886,6 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
   }, [isSetChart, currentChartType]);
 
   const [direction, setDirection] = useState("portrait");
-
-
 
   return (
     <>

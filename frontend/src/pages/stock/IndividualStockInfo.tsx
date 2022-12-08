@@ -25,13 +25,15 @@ const IndividualStockInfo: React.FC = () => {
   const symbol =
     location.pathname.split("/")[location.pathname.split("/").length - 1];
   const [segment, setSegment] = useState("stockInfo");
+  const [refresh, setRefresh] = useState<boolean>(false);
 
   const onSegmentChange = (e: any) => {
     setSegment(e.detail.value);
   };
 
-  function refresh() {
-    window.location.reload();
+  function onRefresh(e: any) {
+    setRefresh(!refresh);
+    e.target.complete();
   }
 
   return (
@@ -70,14 +72,14 @@ const IndividualStockInfo: React.FC = () => {
         </div>
 
         <IonContent>
-          <IonRefresher slot="fixed" onIonRefresh={refresh}></IonRefresher>
+          <IonRefresher slot="fixed" onIonRefresh={onRefresh}></IonRefresher>
           {segment === "stockInfo" && (
             <>
               <div className="stock-info-section">
-                <StockInfo symbol={symbol!} />
+                <StockInfo symbol={symbol!} refresh={refresh} />
               </div>
               <div className="chart-section">
-                <MainChart symbol={symbol!} />
+                <MainChart symbol={symbol!} refresh={refresh} />
               </div>{" "}
             </>
           )}

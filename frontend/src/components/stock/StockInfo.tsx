@@ -5,6 +5,7 @@ import { heart, heartOutline } from "ionicons/icons";
 
 interface StockInfoProps {
   symbol: string;
+  refresh: boolean;
 }
 
 interface NewStockInfoType {
@@ -25,7 +26,7 @@ interface NewStockInfoType {
   turnover: number;
 }
 
-const StockInfo: React.FC<StockInfoProps> = ({ symbol }) => {
+const StockInfo: React.FC<StockInfoProps> = ({ symbol, refresh }) => {
   const [newStockInfo, setNewStockInfo] = useState<NewStockInfoType>({
     status: "",
     symbol: "",
@@ -68,7 +69,7 @@ const StockInfo: React.FC<StockInfoProps> = ({ symbol }) => {
         setNewStockInfo(result);
         console.log(result.todayOpen - result.yesterdayPrice > 0);
       });
-  }, [newStockInfo]);
+  }, [refresh]);
 
   return (
     <>

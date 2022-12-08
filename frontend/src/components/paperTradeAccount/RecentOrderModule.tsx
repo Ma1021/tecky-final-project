@@ -36,7 +36,7 @@ const RecentOrderModule: React.FC<RecentOrderModuleProps> = ({
     )
       .then((res) => res.json())
       .then((result) => {
-        const newResult = result.trades.slice(0, 6).map((obj: any) => {
+        const newResult = result.trades.slice(0, 5).map((obj: any) => {
           return {
             id: obj.id,
             symbol: obj.symbol,

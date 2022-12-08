@@ -208,7 +208,14 @@ const Menu: React.FC<MenuProps> = () => {
                 <div
                   className="ion-padding"
                   slot="content"
-                  onClick={servicePending}
+                  onClick={()=>{
+                    presentAlert({
+                      cssClass: "alert",
+                      header: "提示",
+                      message: "未夠積分",
+                      buttons: ["確定"],
+                    })
+                  }}
                 >
                   <IonMenuToggle>
                     <div className="w100">申請成為KOL</div>

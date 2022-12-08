@@ -120,8 +120,9 @@ const UserInfo: React.FC = () => {
   }, [setUserData]);
 
   const toEdit = (e: any) => {
-    // e?.stopPropagation();
-    history.push(`/user/${user_id as number}/edit`);
+    e?.stopPropagation();
+    console.log("enter to edit");
+    history.push(`/user/${user_id as number}/edit`, "forward");
   };
 
   // block user

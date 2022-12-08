@@ -75,8 +75,8 @@ const UserEdit: React.FC = () => {
     if (
       icon !== undefined &&
       icon !== null &&
-      icon !==
-        "https://cdn5.vectorstock.com/i/1000x1000/54/19/gray-wolf-cartoon-wolf-grey-the-nature-vector-20325419.jpg"
+      typeof icon === "string" &&
+      !icon.startsWith("http")
     ) {
       let filename = `${new Date().toISOString()}_user${user?.id}`;
       console.log(icon, filename);

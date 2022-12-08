@@ -13542,7 +13542,7 @@ for (let symbol in symbolList) {
 }
 
 for (let crypto of cryptolist) {
-  let newText = crypto.replace(/@miniTicker/i, '');
+  let newText = crypto.replace(/@miniTicker/i, '').toUpperCase();
   finallist.push(newText);
 }
 

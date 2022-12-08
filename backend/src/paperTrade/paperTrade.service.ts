@@ -644,6 +644,8 @@ export class PaperTradeService {
   async getFullOrderList2(userID: number, account: string) {
     try {
       console.log('userID', userID, 'account', account);
+      const initPrincipal = 1000000;
+      const positions = [];
 
       const result = await this.knex
         .select(
@@ -662,9 +664,6 @@ export class PaperTradeService {
         .join('stock_info', 'trade_records.symbol', 'stock_info.symbol')
         .where({ user_id: userID, account: account })
         .orderBy('order_place_time', 'desc');
-
-      const initPrincipal = 1000000;
-      const positions = [];
 
       if (result.length === 0) {
         return {

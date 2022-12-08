@@ -384,7 +384,7 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
 
     if (symbol.endsWith("USDT")) {
       fetch(
-        `${process.env.REACT_APP_PUBLIC_URL}/stock/getCryptoDataFromMongoAPI?symbol=${symbol}`
+        `${process.env.REACT_APP_PUBLIC_URL}/stock/getCryptoDataFromMongoAPI?symbol=${symbol}&timeFrame=${currentTimeFrame}`
       )
         .then((res) => res.json())
         .then((result) => {
@@ -404,6 +404,21 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol }) => {
           MACDFast.setData(result.fastLineResultArray);
           MACDSlow.setData(result.slowLineResultArray);
           MACDHistogram.setData(result.histogramResultArray);
+
+          // setCurrentTimeFrame({
+          //   oneMinute: true,
+          //   fiveMinutes: false,
+          //   tenMinutes: false,
+          //   fifteenMinutes: false,
+          //   thirtyMinutes: false,
+          //   oneHour: false,
+          //   twoHours: false,
+          //   fourHours: false,
+          //   oneDay: false,
+          //   oneWeek: false,
+          //   oneMonth: false,
+          //   oneYear: false,
+          // });
         });
     } else {
       if (

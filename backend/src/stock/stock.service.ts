@@ -438,7 +438,7 @@ export class StockService {
     }
   }
 
-  async getCryptoDataFromMongoAPI(symbol: string) {
+  async getCryptoDataFromMongoAPI(symbol: string, timeFrame: string) {
     const candlestickDataArray: CandlestickData[] = [];
     const lineDataArray: LineData[] = [];
     const volumeDataArray: VolumeData[] = [];
@@ -471,7 +471,7 @@ export class StockService {
       convertedCandlestickDataArray,
       convertedVolumeDataArray,
     } = changeTimeFrame(
-      '1D',
+      timeFrame,
       lineDataArray,
       candlestickDataArray,
       volumeDataArray,

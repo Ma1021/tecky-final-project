@@ -8,6 +8,19 @@ for (let symbol in symbolList) {
     seedArray.push(object)
 }
 
+let cryptolist = ['ethbtc@miniTicker', 'ltcbtc@miniTicker', 'bnbbtc@miniTicker', 'neobtc@miniTicker', 'eoseth@miniTicker', 'bnbeth@miniTicker', 'btcusdt@miniTicker', 'ethusdt@miniTicker', 'lrcbtc@miniTicker', 'qtumbtc@miniTicker', 'omgbtc@miniTicker', 'zrxbtc@miniTicker', 'kncbtc@miniTicker', 'funbtc@miniTicker', 'iotabtc@miniTicker', 'linkbtc@miniTicker', 'linketh@miniTicker', 'mtlbtc@miniTicker', 'eosbtc@miniTicker', 'etcbtc@miniTicker', 'zecbtc@miniTicker', 'bntbtc@miniTicker', 'dashbtc@miniTicker', 'trxbtc@miniTicker', 'trxeth@miniTicker', 'xrpbtc@miniTicker', 'xrpeth@miniTicker', 'enjbtc@miniTicker', 'storjbtc@miniTicker', 'bnbusdt@miniTicker', 'nulsbtc@miniTicker', 'xmrbtc@miniTicker', 'xmreth@miniTicker', 'batbtc@miniTicker', 'neousdt@miniTicker', 'btsbtc@miniTicker', 'manabtc@miniTicker', 'adabtc@miniTicker', 'adaeth@miniTicker', 'xlmbtc@miniTicker', 'lendbtc@miniTicker', 'ltceth@miniTicker', 'ltcusdt@miniTicker', 'wavesbtc@miniTicker', 'gtobtc@miniTicker', 'rlcbtc@miniTicker', 'iostbtc@miniTicker', 'blzbtc@miniTicker', 'zilbtc@miniTicker', 'ontbtc@miniTicker', 'qtumusdt@miniTicker', 'adausdt@miniTicker', 'xrpusdt@miniTicker', 'repbtc@miniTicker', 'eosusdt@miniTicker', 'thetabtc@miniTicker', 'iotausdt@miniTicker', 'xlmusdt@miniTicker', 'iotxbtc@miniTicker', 'ontusdt@miniTicker', 'trxusdt@miniTicker', 'etcusdt@miniTicker', 'icxusdt@miniTicker', 'denteth@miniTicker', 'nulsusdt@miniTicker', 'vetbtc@miniTicker', 'vetusdt@miniTicker', 'dockbtc@miniTicker', 'rvnbtc@miniTicker', 'mithbtc@miniTicker', 'renbtc@miniTicker', 'linkusdt@miniTicker', 'wavesusdt@miniTicker', 'ongusdt@miniTicker', 'hotusdt@miniTicker', 'zilusdt@miniTicker', 'zrxusdt@miniTicker', 'fetbtc@miniTicker', 'fetusdt@miniTicker', 'batusdt@miniTicker', 'xmrusdt@miniTicker', 'zecusdt@miniTicker', 'iostusdt@miniTicker', 'celrbtc@miniTicker', 'celrusdt@miniTicker', 'dashusdt@miniTicker', 'omgusdt@miniTicker', 'thetausdt@miniTicker', 'enjusdt@miniTicker', 'mithusdt@miniTicker', 'maticbtc@miniTicker', 'maticusdt@miniTicker', 'atombtc@miniTicker', 'atomusdt@miniTicker', 'tfuelbtc@miniTicker', 'tfuelusdt@miniTicker', 'onebtc@miniTicker', 'oneusdt@miniTicker', 'ftmbtc@miniTicker', 'ftmusdt@miniTicker', 'algobtc@miniTicker', 'algousdt@miniTicker', 'gtousdt@miniTicker', 'dogebtc@miniTicker', 'dogeusdt@miniTicker', 'duskbtc@miniTicker', 'duskusdt@miniTicker', 'ankrbtc@miniTicker', 'ankrusdt@miniTicker', 'winusdt@miniTicker', 'cosbtc@miniTicker', 'cosusdt@miniTicker', 'mtlusdt@miniTicker', 'tomobtc@miniTicker', 'tomousdt@miniTicker', 'dentusdt@miniTicker', 'mftusdt@miniTicker', 'keyusdt@miniTicker', 'dockusdt@miniTicker', 'wanusdt@miniTicker', 'funusdt@miniTicker', 'cvcusdt@miniTicker', 'chzbtc@miniTicker', 'chzusdt@miniTicker', 'bandbtc@miniTicker', 'bandusdt@miniTicker', 'bnbbusd@miniTicker', 'btcbusd@miniTicker', 'busdusdt@miniTicker', 'beamusdt@miniTicker', 'xtzbtc@miniTicker', 'xtzusdt@miniTicker', 'renusdt@miniTicker', 'rvnusdt@miniTicker', 'hbarbtc@miniTicker', 'hbarusdt@miniTicker', 'nknbtc@miniTicker', 'nknusdt@miniTicker', 'xrpbusd@miniTicker', 'ethbusd@miniTicker', 'ltcbusd@miniTicker', 'linkbusd@miniTicker', 'etcbusd@miniTicker', 'stxbtc@miniTicker', 'stxusdt@miniTicker', 'kavabtc@miniTicker', 'kavausdt@miniTicker', 'arpabtc@miniTicker', 'arpausdt@miniTicker', 'trxbusd@miniTicker', 'eosbusd@miniTicker', 'iotxusdt@miniTicker', 'rlcusdt@miniTicker', 'xlmbusd@miniTicker', 'adabusd@miniTicker', 'ctxcbtc@miniTicker', 'ctxcusdt@miniTicker', 'bchbtc@miniTicker', 'bchusdt@miniTicker', 'bchbusd@miniTicker', 'troybtc@miniTicker', 'troyusdt@miniTicker', 'vetbusd@miniTicker', 'ognbtc@miniTicker', 'ognusdt@miniTicker', 'drepusdt@miniTicker', 'icxbusd@miniTicker', 'btsusdt@miniTicker', 'bntusdt@miniTicker', 'ltobtc@miniTicker', 'ltousdt@miniTicker', 'atombusd@miniTicker', 'dashbusd@miniTicker', 'neobusd@miniTicker', 'wavesbusd@miniTicker', 'xtzbusd@miniTicker', 'batbusd@miniTicker', 'enjbusd@miniTicker', 'ontbusd@miniTicker', 'mblusdt@miniTicker', 'cotibtc@miniTicker', 'cotiusdt@miniTicker', 'algobusd@miniTicker', 'xmrbusd@miniTicker', 'stptbtc@miniTicker', 'stptusdt@miniTicker', 'databusd@miniTicker', 'datausdt@miniTicker', 'solbtc@miniTicker', 'solusdt@miniTicker', 'solbusd@miniTicker']
+let finallist = []
+
+for (let crypto of cryptolist) {
+    let newText = crypto.replace(/@miniTicker/i, "");
+    finallist.push(newText)
+}
+
+for (let symbol in finallist) {
+    let object = { 'symbol': finallist[symbol], 'name': finallist[symbol] }
+    seedArray.push(object)
+}
+
 export async function seed(knex: Knex): Promise<void> {
     // Deletes ALL existing entries
     await knex("stocks").del();
@@ -15,3 +28,4 @@ export async function seed(knex: Knex): Promise<void> {
     // Inserts seed entries
     await knex("table_name").insert(seedArray);
 };
+

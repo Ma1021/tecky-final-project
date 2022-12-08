@@ -35,7 +35,11 @@ const UserCard: React.FC<SubscriptionProps> = (props: SubscriptionProps) => {
   }
 
   const history = useHistory();
-  const userIdUrl = history.location.pathname.slice(19) 
+  const userIdUrl = history.location.pathname.slice(19)
+  
+  const getProfile = (e: any) => {              
+    history.push(`/user/${e.target.parentNode.parentNode.dataset.user_id}/info`);
+  };
 
   async function handleFollowUser(e: any) {
     e.preventDefault();
@@ -61,7 +65,7 @@ const UserCard: React.FC<SubscriptionProps> = (props: SubscriptionProps) => {
   return (
     <Card data-user_id={props.user.user_id}>
       <div className="userContent">
-        <IonImg src={props.user.avatar} />
+        <IonImg src={props.user.avatar} onClick={getProfile}/>
         <div className="userInfo">
           <IonText>{props.user.username}</IonText>
           <IonText>{props.user.introduction}</IonText>

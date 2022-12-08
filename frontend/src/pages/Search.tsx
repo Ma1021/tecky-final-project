@@ -13,12 +13,19 @@ import {
   IonTitle,
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+
+// http://localhost:8100/individualStockInfo/GOOG
 
 const SearchPage: React.FC = () => {
   const [searchWord, setSearchWord] = useState("");
   const [searchResultArray, setSearchResultArray] = useState<Object[]>([]);
 
+  const history = useHistory();
+
   useEffect(() => {
+    const resultArray = [] as any;
+
     fetch(
       `${
         process.env.REACT_APP_PUBLIC_URL
@@ -26,15 +33,13 @@ const SearchPage: React.FC = () => {
     )
       .then((res) => res.json())
       .then((result) => {
-        console.log("result search", result);
-        const resultArray = [];
         for (let i = 0; i < 10; i++) {
           const objKeyArr = Object.keys(result);
           if (objKeyArr[i] === undefined) {
-            return;
+            break;
           }
           resultArray.push({ [objKeyArr[i]]: result[objKeyArr[i]] });
-        }
+        }        
         setSearchResultArray(resultArray);
       })
       .catch((err) => {
@@ -67,11 +72,10 @@ const SearchPage: React.FC = () => {
         </IonHeader>
 
         <IonContent>
-          {searchWord}
           <IonList>
             {searchResultArray.length > 0
               ? searchResultArray.map((searchResult) => (
-                  <IonItem>
+                  <IonItem onClick={() => history.push(`/individualStockInfo/${Object.keys(searchResult)}`)}>
                     <IonLabel>{Object.keys(searchResult)}</IonLabel>
                     <IonLabel>{Object.entries(searchResult)[0][1]}</IonLabel>
                   </IonItem>

@@ -33,33 +33,16 @@ const Discuss: React.FC = () => {
   const [keyword, setKeyword] = useState("");
   let user;
   let user_id: number;
-  const { questionList, loading } = useAppSelector(
-    (state) => state.question
-  );
 
   if (localStorage.getItem("auth_stockoverflow") !== null) {
     user =
-      JSON.parse(localStorage.getItem("auth_stockoverflow") as string).user ||
-      undefined;
+      JSON.parse(localStorage.getItem("auth_stockoverflow") as string).user || undefined;
     user_id = +user.id;
   }
 
-  const slider = useRef<HTMLIonSlidesElement>(null);
-  const slideOpts = {
-    initialSlide: 0,
-    speed: 400,
-    loop: false,
-  };
-
-  const handleSlideChange = async (event: any) => {
-    let index: number = 0;
-    await event.target.getActiveIndex().then((value: any) => (index = value));
-    setSegment("" + index);
-  };
-
   const onSegmentChange = (e: any) => {
     setSegment(e.detail.value);
-    slider.current!.slideTo(e.detail.value);
+    // slider.current!.slideTo(e.detail.value);
   };
 
   function handleKeywordChange(e: any) {
@@ -102,48 +85,41 @@ const Discuss: React.FC = () => {
           </IonToolbar>
         </IonHeader>
 
+        <div className="d-flex justify-content-center">
+            <SegmentTab value={segment} onIonChange={onSegmentChange}>
+              <SegmentButton value="0">
+                <IonLabel>所有問題</IonLabel>
+              </SegmentButton>
+              <SegmentButton value="1">
+                <IonLabel>我的問題</IonLabel>
+              </SegmentButton>
+              <SegmentButton value="2">
+                <IonLabel>我的答題</IonLabel>
+              </SegmentButton>
+            </SegmentTab>
+        </div>
+
+        <div className="d-flex justify-content-center">
+          <ToolContainer>
+            <SearchBar
+              value={keyword}
+              placeholder="輸入關鍵字搜索"
+              onIonChange={handleKeywordChange}
+            ></SearchBar>
+            <QuestionBtn
+              onClick={() => {
+                history.push("/discuss/createQuestion");
+              }}
+            >
+              提出問題
+            </QuestionBtn>
+          </ToolContainer>
+        </div>
+
+
+
         <IonContent>
-          <div
-            style={{
-              position: "sticky",
-              top: 0,
-              zIndex: 5,
-              backgroundColor: "#111",
-            }}
-          >
-            <div className="d-flex justify-content-center">
-              <SegmentTab value={segment} onIonChange={onSegmentChange}>
-                <SegmentButton value="0">
-                  <IonLabel>所有問題</IonLabel>
-                </SegmentButton>
-                <SegmentButton value="1">
-                  <IonLabel>我的問題</IonLabel>
-                </SegmentButton>
-                <SegmentButton value="2">
-                  <IonLabel>我的答題</IonLabel>
-                </SegmentButton>
-              </SegmentTab>
-            </div>
-
-            <div className="d-flex justify-content-center">
-              <ToolContainer>
-                <SearchBar
-                  value={keyword}
-                  placeholder="輸入關鍵字搜索"
-                  onIonChange={handleKeywordChange}
-                ></SearchBar>
-                <QuestionBtn
-                  onClick={() => {
-                    history.push("/discuss/createQuestion");
-                  }}
-                >
-                  提出問題
-                </QuestionBtn>
-              </ToolContainer>
-            </div>
-          </div>
-
-          <IonSlides
+          {/* <IonSlides
             options={slideOpts}
             onIonSlideDidChange={(e) => handleSlideChange(e)}
             ref={slider}
@@ -157,7 +133,11 @@ const Discuss: React.FC = () => {
             <IonSlide>
               <MyAnswer keyword={keyword} />
             </IonSlide>
-          </IonSlides>
+          </IonSlides> */}
+
+          {segment === "0" && <Allquestion keyword={keyword} />}
+          {segment === "1" && <MyQuestion keyword={keyword} />}
+          {segment === "2" && <MyAnswer keyword={keyword} />}
         </IonContent>
       </IonPage>
     </>

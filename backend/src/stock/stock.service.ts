@@ -18,14 +18,17 @@ export class StockService {
 
   async getCurrentAndYesterdayStockPrice(symbol: string) {
     try {
-      const res = await fetch(
+      const yesterdayRes = await fetch(
         `http://35.213.167.63/mongo/${symbol}?period=day`,
       );
-      const result = await res.json();
+      const yesterdayResult = await yesterdayRes.json();
+
+      const currentRes = await fetch(`http://35.213.167.63/mongo/${symbol}`);
+      const currentResult = await currentRes.json();
 
       return {
-        currentPrice: result[result.length - 1].close,
-        yesterdayPrice: result[result.length - 2].close,
+        yesterdayPrice: yesterdayResult[yesterdayResult.length - 1].close,
+        currentPrice: currentResult[currentResult.length - 1].close,
       };
     } catch (error) {
       console.log(error);
@@ -549,6 +552,89 @@ export class StockService {
       slowLineResultArray,
       histogramResultArray,
     };
+  }
+
+  async getHighLowFromMongoAPI(symbol: string) {
+    const knexResult = await this.knex
+      .select('*')
+      .from('stock_info')
+      .where({ symbol: symbol });
+
+    const res = await fetch(`http://35.213.167.63/mongo/${symbol}?period=day`);
+    const result = await res.json();
+
+    let totalVolume = 0;
+    const historyHigh = result.reduce((prev, current) => {
+      if (prev > current.high) {
+        return prev;
+      }
+
+      return current.high;
+    }, -9999);
+
+    const historyLow = result.reduce((prev, current) => {
+      if (prev < current.low) {
+        return prev;
+      }
+
+      return current.low;
+    }, 999999999);
+
+    const currentRes = await fetch(`http://35.213.167.63/mongo/${symbol}`);
+    const currentResult = await currentRes.json();
+    const todayOpen = currentResult[0].open;
+
+    const todayHigh = currentResult.reduce((prev, current) => {
+      if (prev > current.high) {
+        return prev;
+      }
+
+      return current.high;
+    }, -99999);
+
+    const todayLow = currentResult.reduce((prev, current) => {
+      if (prev < current.low) {
+        return prev;
+      }
+
+      return current.low;
+    }, 9999999);
+
+    currentResult.forEach((obj) => {
+      totalVolume += obj.volume;
+    });
+
+    return {
+      symbol: symbol,
+      name: knexResult[0].name,
+      chineseName: knexResult[0].chinese_name,
+      yesterdayPrice: result[result.length - 1].close,
+      currentPrice: currentResult[currentResult.length - 1].close,
+      priceDifference:
+        currentResult[currentResult.length - 1].close -
+        result[result.length - 1].close,
+      priceDifferencePercentage:
+        ((currentResult[currentResult.length - 1].close -
+          result[result.length - 1].close) /
+          result[result.length - 1].close) *
+        100,
+      todayOpen: todayOpen,
+      todayHigh: todayHigh,
+      todayLow: todayLow,
+      historyHigh: historyHigh,
+      historyLow: historyLow,
+      volume: totalVolume,
+      turnover: totalVolume * currentResult[currentResult.length - 1].close,
+    };
+  }
+
+  async getAllDataFromMongoAPI(symbol: string) {
+    const { yesterdayPrice, currentPrice } =
+      await this.getCurrentAndYesterdayStockPrice(symbol);
+
+    console.log(yesterdayPrice, currentPrice);
+
+    return { yesterdayPrice, currentPrice };
   }
 }
 

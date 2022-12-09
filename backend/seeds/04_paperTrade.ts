@@ -41,29 +41,29 @@ export async function seed(knex: Knex): Promise<void> {
   //   },
   // ]);
 
-  await knex('user_paper_trade_accounts').insert([
-    {
-      id: 1,
-      user_id: 1,
-      market_value: 0,
-      buying_power: 1000000,
-      account: 'US',
-    },
-    {
-      id: 2,
-      user_id: 1,
-      market_value: 500000,
-      buying_power: 0,
-      account: 'HK',
-    },
-    {
-      id: 3,
-      user_id: 1,
-      market_value: 1000000,
-      buying_power: 1000000,
-      account: 'crypto',
-    },
-  ]);
+  // await knex('user_paper_trade_accounts').insert([
+  //   {
+  //     id: 1,
+  //     user_id: 1,
+  //     market_value: 0,
+  //     buying_power: 1000000,
+  //     account: 'US',
+  //   },
+  //   {
+  //     id: 2,
+  //     user_id: 1,
+  //     market_value: 500000,
+  //     buying_power: 0,
+  //     account: 'HK',
+  //   },
+  //   {
+  //     id: 3,
+  //     user_id: 1,
+  //     market_value: 1000000,
+  //     buying_power: 1000000,
+  //     account: 'crypto',
+  //   },
+  // ]);
 
   await knex('user_cryptos').insert([
     {
@@ -79,6 +79,62 @@ export async function seed(knex: Knex): Promise<void> {
       symbol: 'BTCUSDT',
       name: 'Bitcoin',
       chinese_name: '比特幣',
+    },
+    {
+      id: 3,
+      user_id: 1,
+      symbol: 'DOGEUSDT',
+      name: 'DogeCoin',
+      chinese_name: '狗狗幣',
+    },
+    {
+      id: 4,
+      user_id: 2,
+      symbol: 'ETHUSDT',
+      name: 'Ethereum',
+      chinese_name: '以太坊',
+    },
+    {
+      id: 5,
+      user_id: 2,
+      symbol: 'BTCUSDT',
+      name: 'Bitcoin',
+      chinese_name: '比特幣',
+    },
+    {
+      id: 6,
+      user_id: 2,
+      symbol: 'DOGEUSDT',
+      name: 'DogeCoin',
+      chinese_name: '狗狗幣',
+    },
+    {
+      id: 7,
+      user_id: 2,
+      symbol: 'XRPUSDT',
+      name: 'XRP',
+      chinese_name: '瑞波幣',
+    },
+    {
+      id: 8,
+      user_id: 2,
+      symbol: 'LTCUSDT',
+      name: 'LiteCoin',
+      chinese_name: '萊特幣',
+    },
+    {
+      id: 9,
+      user_id: 2,
+      symbol: 'FILUSDT',
+      name: 'FileCoin',
+      chinese_name: '文件幣',
+    },
+    {
+      id: 10,
+      user_id: 2,
+      symbol: 'BNBUSDT',
+      name: 'BNB',
+      chinese_name: '幣安幣',
     },
   ]);
 

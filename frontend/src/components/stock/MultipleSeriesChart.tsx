@@ -913,17 +913,6 @@ const MultipleSeriesChart: React.FC<NewProps> = ({ symbol, refresh }) => {
           >
             Candlestick Chart
           </button>
-          {/* <button
-            style={{
-              background: "var(--ion-color-primary)",
-              color: "#fff",
-              fontWeight: 500,
-              borderRadius: 5,
-            }}
-            onClick={landscape}
-          >
-            {direction === "portrait" ? "橫向顯示" : "直向顯示"}
-          </button> */}
         </div>
         <div className="time-frame-button-container">
           <button

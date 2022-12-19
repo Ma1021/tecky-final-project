@@ -11,7 +11,7 @@ import {
   IonRefresher,
 } from "@ionic/react";
 import { useState } from "react";
-import { useHistory, useLocation } from "react-router";
+import { useLocation } from "react-router";
 import MainChart from "../../components/stock/MultipleSeriesChart";
 import StockForum from "../../components/stock/StockForum";
 import StockNews from "../../components/stock/StockNews";

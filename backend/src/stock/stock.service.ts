@@ -105,25 +105,42 @@ export class StockService {
   async getIntraDayDataFromMongoDB(symbol: string) {
     const valueArray: number[] = [];
 
-    // const MongoDB = await connectMongoDB();
-    // const result = await MongoDB.db('stocks_price_data')
-    //   .collection(symbol)
-    //   .find({})
-    //   .toArray();
+    const res = await fetch(`http://35.213.167.63/mongo/${symbol}`);
+    const result = await res.json();
+    const today = `${new Date().getFullYear()}-${
+      new Date().getMonth() + 1
+    }-${new Date().getDate()}`;
 
-    const result = [];
-
-    result
-      .filter(
-        (element) =>
-          element.timestamp >= new Date('2022-11-08').getTime() / 1000,
-      )
-      .slice(0, 389)
-      .forEach((element) => {
-        valueArray.push(element.Close);
-      });
-
-    // await MongoDB.close();
+    if (symbol.endsWith('USDT')) {
+      result
+        .filter((element) => {
+          return element.time >= new Date(today).getTime() / 1000;
+        })
+        .reverse()
+        .slice(0, 389)
+        .forEach((element) => {
+          valueArray.push(element.close);
+        });
+    } else {
+      if (
+        result.filter((element) => {
+          return element.time >= new Date(today).getTime() / 1000;
+        }).length > 0
+      ) {
+        result
+          .filter((element) => element.time >= new Date().getTime() / 1000)
+          .slice(result.length - 390, result.length - 1)
+          .forEach((element) => {
+            valueArray.push(element.close);
+          });
+      } else {
+        result
+          .slice(result.length - 390, result.length - 1)
+          .forEach((element) => {
+            valueArray.push(element.close);
+          });
+      }
+    }
 
     return valueArray;
   }

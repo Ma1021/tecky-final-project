@@ -39,7 +39,7 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ currentAccount }) => {
   const [orderType, setOrderType] = useState("fix");
   const [orderPrice, setOrderPrice] = useState<number>(0);
   const [quantity, setQuantity] = useState<number>(0);
-  const [principal, setPrincipal] = useState(0);
+  const [principal, setPrincipal] = useState(1000000);
   const [positions, setPositions] = useState<PositionType[]>([]);
   const isUpdate = useAppSelector((state) => state.paperTrade.isUpdate);
   const userID = useAppSelector((state) => state.auth.user!.id);
@@ -83,8 +83,10 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ currentAccount }) => {
     <>
       <IonList>
         <IonItem>
-          <IonLabel className="order-panel-label">代碼</IonLabel>
+          {/* <IonLabel className="order-panel-label">代碼</IonLabel> */}
           <IonSearchbar
+            searchIcon="undefined"
+            placeholder="代碼"
             debounce={2000}
             onIonChange={(e: any) => {
               setCurrentTicker(e.detail.value);
@@ -110,13 +112,13 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ currentAccount }) => {
           >
             模擬買入
           </IonButton>
-          <IonButton
+          {/* <IonButton
             color={orderDirection === "short" ? "danger" : "undefined"}
             // className={orderDirection === "short" ? "short" : ""}
             onClick={() => setOrderDirection("short")}
           >
             模擬賣出
-          </IonButton>
+          </IonButton> */}
           {/* </IonButtons> */}
         </IonItem>
 

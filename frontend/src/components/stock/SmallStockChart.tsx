@@ -440,7 +440,9 @@ const SmallStockChart: React.FC<SmallStockChartProps> = ({
     : (borderColor = "rgb(255, 99, 132");
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_PUBLIC_URL}/stock/getIntraDayDataFromMongoDB?symbol=${symbol}`)
+    fetch(
+      `${process.env.REACT_APP_PUBLIC_URL}/stock/getIntraDayDataFromMongoDB?symbol=${symbol}`
+    )
       .then((response) => response.json())
       .then((result: number[]) => {
         setStockDataPoints(result);
@@ -453,6 +455,7 @@ const SmallStockChart: React.FC<SmallStockChartProps> = ({
       {
         data: stockDataPoints,
         borderColor: borderColor,
+        borderWidth: 0.5,
       },
     ],
   };

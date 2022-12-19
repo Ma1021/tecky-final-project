@@ -725,7 +725,7 @@ export class PaperTradeService {
           }
         }
 
-        buyingPower += stockOrderMarketValue;
+        buyingPower -= stockOrderMarketValue;
         cost = stockOrderMarketValue / totalQuantity;
 
         quantity = totalQuantity;
@@ -812,18 +812,18 @@ export class PaperTradeService {
   async getAccountList2(userID: number) {
     const USAccount = (await this.getFullOrderList2(userID, 'US'))
       .accountDetail;
-    const HKAccount = (await this.getFullOrderList2(userID, 'HK'))
-      .accountDetail;
+    // const HKAccount = (await this.getFullOrderList2(userID, 'HK'))
+    //   .accountDetail;
     const cryptoAccount = (await this.getFullOrderList2(userID, 'crypto'))
       .accountDetail;
 
     USAccount['id'] = 1;
-    HKAccount['id'] = 2;
+    // HKAccount['id'] = 2;
     cryptoAccount['id'] = 3;
     USAccount['account'] = 'US';
-    HKAccount['account'] = 'HK';
+    // HKAccount['account'] = 'HK';
     cryptoAccount['account'] = 'crypto';
 
-    return [USAccount, HKAccount, cryptoAccount];
+    return [USAccount, cryptoAccount];
   }
 }

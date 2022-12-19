@@ -25,6 +25,7 @@ import Title from "../../components/All/Title";
 import "./StockList.css";
 import { useAppSelector } from "../../redux/store";
 import { useHistory } from "react-router";
+import SearchIcon from "../../components/All/SearchIcon";
 
 const StockList: React.FC = () => {
   const [stockList, setStockList] = useState<StockInfo[]>([]);
@@ -87,6 +88,7 @@ const StockList: React.FC = () => {
         <IonLoading isOpen={isLoading} message={"載入中..."} />
       ) : (
         <IonContent>
+          <SearchIcon />
           <SegmentTab value={segment} onIonChange={onSegmentChange}>
             <SegmentButton value="watchList">
               <IonLabel>自選</IonLabel>

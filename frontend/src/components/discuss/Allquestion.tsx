@@ -2,10 +2,7 @@ import {
   IonRefresher,
   IonRefresherContent,
   RefresherEventDetail,
-  IonSpinner,
-  IonInfiniteScroll,
-  IonInfiniteScrollContent,
-  IonText,
+  IonSpinner
 } from "@ionic/react";
 import { memo, useEffect, useState } from "react";
 import styled from "styled-components";
@@ -67,12 +64,12 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
 
   // const [filteredQuestions, setFilteredQuestions] = useState(Array<Questions>);
   const [ keywordFilter, setKeywordFilter ] = useState<Array<Questions>>([]);
-  const [ items, setItems ] = useState<Array<Questions>>([]);
-  const [ is_bottom, setIsBottom ] = useState(false);
   const dispatch = useAppDispatch();
 
   function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
+    console.log('loading');
     dispatch(loadQuestions());
+    
     if (!loading) {
       event.detail.complete();
     }
@@ -89,39 +86,11 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
               stock.symbol.toLowerCase().includes(word)
           ) || question.content.replace(/\s/g, "").toLowerCase().includes(word)
     ))
-    
-    // setFilteredQuestions(
-    //   keywordFilter.filter((question)=>{
-    //     for(let blocked_id of blockedUserList) {
-    //       return question.asker_id !== blocked_id
-    //     }
-    //   })
-    // )
-
   }, [props.keyword, questionList]);
-
-  useEffect(()=>{
-    if(keywordFilter.length > 0) {
-      generateItems();
-    }
-  },[keywordFilter])
-
-  // infiniteScroll
-
-  const generateItems = () => {
-    const newItems = [] as any;
-    for (let i = 0; i < 5; i++) {
-      if(keywordFilter[items.length + i]) {
-        newItems.push(keywordFilter[items.length + i]);
-      }
-    }
-
-    setTimeout(()=> setItems([...items, ...newItems]), 500);
-  };  
 
   return (
     <>
-      <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+      <IonRefresher disabled={false} slot="fixed" onIonRefresh={handleRefresh} >
         <IonRefresherContent pullingText="下拉更新"></IonRefresherContent>
       </IonRefresher>
       {loading ? (
@@ -137,22 +106,8 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
               }
             />
           ) : (
-            <div style={{ marginTop: 10 }}>沒有問題</div>
+            <div style={{ marginTop: 10 }}>未有問題</div>
           )}
-          {is_bottom && <IonText style={{marginTop:20}}>已到底~</IonText>}
-          <IonInfiniteScroll
-            onIonInfinite={(ev)=>{
-              if(keywordFilter.length <= items.length ) {
-                setIsBottom(true);
-                ev.target.complete();
-              } else {
-                generateItems();
-                setTimeout(()=> ev.target.complete(), 500);
-              }
-            }}
-          >
-            <IonInfiniteScrollContent></IonInfiniteScrollContent>
-          </IonInfiniteScroll>
         </QuestionContainer>
       )}
     </>

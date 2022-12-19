@@ -32,14 +32,14 @@ const MyQuestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
 
   const dispatch = useAppDispatch();
 
-  function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
+  function handleRefresh(event: CustomEvent<RefresherEventDetail>) {    
     if(user_id) {
       dispatch(loadAskerQuestions(user_id));
     }
     if (!loading) {
       event.detail.complete();
     }
-  }
+  }  
 
   useEffect(() => {
     const word = props.keyword.replace(/\s/g, "").toLowerCase();
@@ -56,7 +56,7 @@ const MyQuestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
         )
       );
     }
-  }, [props.keyword]);
+  }, [props.keyword, askerQuestionList]);
 
   return (
     <>

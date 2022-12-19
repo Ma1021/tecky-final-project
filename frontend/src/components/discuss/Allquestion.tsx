@@ -2,16 +2,18 @@ import {
   IonRefresher,
   IonRefresherContent,
   RefresherEventDetail,
-  IonSpinner
+  IonSpinner,
+  IonProgressBar,
 } from "@ionic/react";
 import { memo, useEffect, useState } from "react";
 import styled from "styled-components";
 import QuestionCard from "./QuestionCard";
 import { useAppSelector, useAppDispatch } from "../../redux/store";
 
-import {
-  loadQuestions,
-} from "../../redux/questions/questionSlice";
+import { loadQuestions } from "../../redux/questions/questionSlice";
+import { API_ORIGIN } from "../../helper/api";
+import { useGet } from "../../hooks/use-get";
+import { Question } from "../../redux/questions/state";
 
 export interface Questions {
   id: number;
@@ -49,9 +51,9 @@ interface QuestionProps {
 
 // memo 防止父組件更新時子組件也更新的問題，改善效能 （只能用在純html的component）
 const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
-  const { questionList, loading } = useAppSelector(
-    (state) => state.question
-  );
+  const { state: questionList, loading } = useGet<Question[]>("/question", []);
+
+  // const { questionList, loading } = useAppSelector((state) => state.question);
   // const { blockedUserList } = useAppSelector((state)=> state.block);
   let user_id: number;
 
@@ -63,13 +65,13 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
   }
 
   // const [filteredQuestions, setFilteredQuestions] = useState(Array<Questions>);
-  const [ keywordFilter, setKeywordFilter ] = useState<Array<Questions>>([]);
+  const [keywordFilter, setKeywordFilter] = useState<Array<Questions>>([]);
   const dispatch = useAppDispatch();
 
   function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
-    console.log('loading');
+    console.log("loading");
     dispatch(loadQuestions());
-    
+
     if (!loading) {
       event.detail.complete();
     }
@@ -77,23 +79,27 @@ const Allquestion: React.FC<QuestionProps> = memo((props: QuestionProps) => {
 
   useEffect(() => {
     const word = props.keyword.replace(/\s/g, "").toLowerCase();
-    
-    setKeywordFilter(questionList.filter(
+
+    setKeywordFilter(
+      questionList.filter(
         (question) =>
           question.stock.some(
             (stock) =>
               stock.name.replace(/\s/g, "").toLowerCase().includes(word) ||
               stock.symbol.toLowerCase().includes(word)
           ) || question.content.replace(/\s/g, "").toLowerCase().includes(word)
-    ))
+      )
+    );
   }, [props.keyword, questionList]);
 
   return (
     <>
-      <IonRefresher disabled={false} slot="fixed" onIonRefresh={handleRefresh} >
+      <IonRefresher disabled={false} slot="fixed" onIonRefresh={handleRefresh}>
         <IonRefresherContent pullingText="下拉更新"></IonRefresherContent>
       </IonRefresher>
-      {loading ? (
+      {loading ? <IonProgressBar type="indeterminate"></IonProgressBar> : null}
+      <div>len: {questionList.length}</div>
+      {loading && questionList.length == 0 ? (
         <LoadingScreen>
           <IonSpinner name="crescent" /> 載入中...
         </LoadingScreen>

@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+  mongodb:
+    image: mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./mongodb/db:/data/db
+    networks:
+      dev_dae:
+        ipv4_address: 172.1.0.31
+
+networks:
+  dev_dae:
+    external:
+      name: dev_dae

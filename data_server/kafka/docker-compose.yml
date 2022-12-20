@@ -1,0 +1,52 @@
+version: '2'
+services:
+  kafka-1:
+    image: debezium/kafka:latest
+    container_name: kafka-1
+    hostname: kafka-1
+    restart: always
+    networks:
+      dae:
+        ipv4_address: 172.1.0.11
+    ports:
+      - 19092:9092
+      - 19093:9093
+    environment:
+      - CLUSTER_ID=5Yr1SIgYQz-b-dgRabWx4g
+      - BROKER_ID=1
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka-1:9093,2@kafka-2:9093,3@kafka-3:9093
+  kafka-2:
+    image: debezium/kafka:latest
+    container_name: kafka-2
+    hostname: kafka-2
+    restart: always
+    networks:
+      dae:
+        ipv4_address: 172.1.0.12
+    ports:
+      - 29092:9092
+      - 29093:9093
+    environment:
+      - CLUSTER_ID=5Yr1SIgYQz-b-dgRabWx4g
+      - BROKER_ID=2
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka-1:9093,2@kafka-2:9093,3@kafka-3:9093
+  kafka-3:
+    image: debezium/kafka:latest
+    container_name: kafka-3
+    hostname: kafka-3
+    restart: always
+    networks:
+      dae:
+        ipv4_address: 172.1.0.13
+    ports:
+      - 39092:9092
+      - 39093:9093
+    environment:
+      - CLUSTER_ID=5Yr1SIgYQz-b-dgRabWx4g
+      - BROKER_ID=3
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka-1:9093,2@kafka-2:9093,3@kafka-3:9093
+
+networks:
+  dev_dae:
+    external:
+      name: dev_dae

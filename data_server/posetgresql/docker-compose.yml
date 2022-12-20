@@ -1,0 +1,32 @@
+version: '3.1'
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    hostname: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: stockoverflow
+      POSTGRES_PASSWORD: stockoverflow
+      POSTGRES_DB: stockoverflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    networks:
+      dev_dae:
+        ipv4_address: 172.1.0.61
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8100:8080
+        
+networks:
+  dae:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.1.0.0/24

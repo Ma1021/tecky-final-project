@@ -1,0 +1,12 @@
+version: '3'
+services:
+  crypto_kafka_docker:
+    image: crypto_kafka_docker
+    container_name: crypto_kafka_producer
+    hostname: crypto_kafka_producer
+    restart: always
+
+networks:
+  dev_dae:
+    external:
+      name: dev_dae

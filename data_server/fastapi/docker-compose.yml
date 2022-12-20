@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  mongo_server:
+    image: mongo_server
+    restart: always
+    ports:
+      - "8000:8000"
+
+networks:
+  dev_dae:
+    external:
+      name: dev_dae

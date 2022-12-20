@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+  redis:
+    image: docker.io/bitnami/redis:7.0
+    container_name: redis
+    hostname: redis
+    restart: always
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - '6379:6379'
+    networks:
+      dev_dae:
+        ipv4_address: 172.1.0.41
+volumes:
+  redis_data:
+    driver: local
+
+networks:
+  dev_dae:
+    external:
+      name: dev_dae

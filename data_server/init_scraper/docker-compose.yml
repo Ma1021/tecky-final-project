@@ -1,0 +1,14 @@
+version: '3'
+services:
+  scraper:
+    image: stock_scraper_docker
+    container_name: stock_scraper_docker
+    hostname: stock_scraper_docker
+    networks:
+      dev_dae:
+        ipv4_address: 172.1.0.51
+
+networks:
+  dev_dae:
+    external:
+      name: dev_dae
